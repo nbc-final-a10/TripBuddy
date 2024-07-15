@@ -3,7 +3,6 @@ import Header from "@/components/public/Header";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import InstallPromptHandler from "@/components/pwa/InstallPromptHandler";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -42,7 +41,6 @@ export default function RootLayout({
                 <Header />
                 {children}
                 <Footer />
-                <InstallPromptHandler/>
             </body>
         </html>
     );
