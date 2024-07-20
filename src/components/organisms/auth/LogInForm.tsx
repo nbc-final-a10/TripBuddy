@@ -1,6 +1,8 @@
 "use client";
 
 import { useAuth } from "@/hooks/auth.hooks";
+import { showAlert } from "@/utils/openCustomAlert";
+import { emailRegex } from "@/utils/regexs";
 import clsx from "clsx";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -21,10 +23,12 @@ function LogInForm() {
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
 
-        // if (!email || !password) return showAlert("caution", "이메일, 비밀번호를 모두 입력해주세요");
-        // if (/\s/.test(email) || /\s/.test(password)) return showAlert("caution", "공백을 포함할 수 없습니다!");
-        // if (!emailRegex.test(email)) return showAlert("caution", "유효한 이메일 주소를 입력하세요!");
-        // if (password.length < 8 || password.length > 15) return showAlert("caution", "비밀번호는 8~15 글자로 해야합니다!");
+        if (!email || !password) return showAlert("caution", "이메일, 비밀번호를 모두 입력해주세요");
+        if (/\s/.test(email) || /\s/.test(password))
+            return showAlert("caution", "공백을 포함할 수 없습니다!");
+        if (!emailRegex.test(email)) return showAlert("caution", "유효한 이메일 주소를 입력하세요!");
+        if (password.length < 8 || password.length > 15)
+            return showAlert("caution", "비밀번호는 8~15 글자로 해야합니다!");
 
         logIn(email, password);
         form.reset();
@@ -35,9 +39,9 @@ function LogInForm() {
         const formData = new FormData(form);
         const email = formData.get("email") as string;
 
-        // if (!email) return showAlert("caution", "빈 값이 없도록 해주세요");
-        // if (/\s/.test(email)) return showAlert("caution", "공백을 포함할 수 없습니다!");
-        // if (!emailRegex.test(email)) return showAlert("caution", "유효한 이메일 주소를 입력하세요!");
+        if (!email) return showAlert("caution", "빈 값이 없도록 해주세요");
+        if (/\s/.test(email)) return showAlert("caution", "공백을 포함할 수 없습니다!");
+        if (!emailRegex.test(email)) return showAlert("caution", "유효한 이메일 주소를 입력하세요!");
 
         sendingResetEmail(email);
         form.reset();
@@ -103,31 +107,3 @@ function LogInForm() {
     );
 }
 export default LogInForm;
-
-// const createQueryString = useCallback(
-//     (name: string, value: string) => {
-//         const params = new URLSearchParams(searchParams.toString());
-//         params.set(name, value);
-
-//         return params.toString();
-//     },
-//     [searchParams]
-// );
-
-// useEffect(() => {
-//     if (!isRecoverPassword) router.push(pathname + "?" + createQueryString("mode", "login"));
-//     else router.push(pathname + "?" + createQueryString("mode", "recover"));
-// }, [pathname, createQueryString, router, isRecoverPassword]);
-
-// // 이벤트
-// useEffect(() => {
-//     if (!router) return;
-//     const handlePopState = () => {
-//         router.push("/login?mode=login");
-//         setIsRecoverPassword(false);
-//     };
-//     window.addEventListener("popstate", handlePopState);
-//     return () => {
-//         window.removeEventListener("popstate", handlePopState);
-//     };
-// }, [router]);
