@@ -5,7 +5,7 @@ import { AuthContext } from '@/contexts/auth.context';
 import { QueryClient, useQuery } from '@tanstack/react-query';
 import { useContext } from 'react';
 
-export const useAuthContext = () => {
+export const useAuth = () => {
     const context = useContext(AuthContext);
 
     if (context === undefined || context === null) {
