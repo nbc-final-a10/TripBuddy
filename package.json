@@ -1,32 +1,38 @@
 {
-  "name": "final_project",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "genTypes": "npx supabase gen types typescript --project-id \"pedixhwyfardtsanotrp\" --schema public > types/supabase.ts"
-  },
-  "dependencies": {
-    "@supabase/ssr": "^0.4.0",
-    "@supabase/supabase-js": "^2.44.3",
-    "next": "14.2.5",
-    "next-pwa": "^5.6.0",
-    "react": "^18",
-    "react-dom": "^18",
-    "supabase": ">=1.8.1"
-  },
-  "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.5",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5",
-    "webpack": "^5.93.0"
-  }
+    "name": "final_project",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint",
+        "genTypes": "npx supabase gen types typescript --project-id \"pedixhwyfardtsanotrp\" --schema public > src/types/supabase.ts"
+    },
+    "dependencies": {
+        "@supabase/ssr": "^0.4.0",
+        "@supabase/supabase-js": "^2.44.3",
+        "@tanstack/react-query": "^5.51.9",
+        "@tanstack/react-query-devtools": "^5.51.9",
+        "next": "14.2.5",
+        "next-pwa": "^5.6.0",
+        "react": "^18",
+        "react-dom": "^18",
+        "supabase": ">=1.8.1",
+        "zustand": "^4.5.4"
+    },
+    "devDependencies": {
+        "@types/node": "^20",
+        "@types/react": "^18",
+        "@types/react-dom": "^18",
+        "eslint": "^8",
+        "eslint-config-next": "14.2.5",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-prettier": "^5.2.1",
+        "postcss": "^8",
+        "prettier": "^3.3.3",
+        "tailwindcss": "^3.4.1",
+        "typescript": "^5",
+        "webpack": "^5.93.0"
+    }
 }
