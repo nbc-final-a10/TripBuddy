@@ -1,8 +1,8 @@
 "use client";
 
 import { useAuth } from "@/hooks/auth.hooks";
-import { showAlert } from "@/utils/openCustomAlert";
 import { emailRegex } from "@/utils/regexs";
+import { showAlert } from "@/utils/ui/openCustomAlert";
 import clsx from "clsx";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";

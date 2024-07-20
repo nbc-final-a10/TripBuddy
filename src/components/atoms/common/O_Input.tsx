@@ -1,5 +1,5 @@
 "use client";
-import { tailwindMerge } from "@/utils/tailwind_merge";
+import { tailwindMerge } from "@/utils/ui/tailwind_merge";
 // import { cn } from "@/lib/utils";
 import * as React from "react";
 import { FaEye, FaRegEyeSlash } from "react-icons/fa";
