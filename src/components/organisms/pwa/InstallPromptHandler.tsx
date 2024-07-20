@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 // Todo: PWA가 이미 설치된 경우 버튼 동작 안 함 => 사용자에게 설치 여부 alert 알림 주기
 // Todo: 모바일 브라우저(사파리, 크롬)에서 PWA 설치 버튼 안 먹히는 증상 해결
@@ -51,7 +51,7 @@ const InstallPromptHandler = () => {
                     홈 화면에 추가하기
                 </button>
             </>
-        )
+        );
     }
 };
 

@@ -1,6 +1,11 @@
-"use client";
-import { isServer, QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+'use client';
+import {
+    isServer,
+    QueryClient,
+    QueryClientProvider,
+} from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import React from 'react';
 
 function makeQueryClient() {
     return new QueryClient({
@@ -36,7 +41,9 @@ function QueryProvider({ children }: { children: React.ReactNode }) {
     return (
         <QueryClientProvider client={queryClient}>
             {children}
-            <ReactQueryDevtools initialIsOpen={process.env.NEXT_PUBLIC_RUN_MODE === "local"} />
+            <ReactQueryDevtools
+                initialIsOpen={process.env.NEXT_PUBLIC_RUN_MODE === 'local'}
+            />
         </QueryClientProvider>
     );
 }
