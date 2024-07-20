@@ -1,10 +1,11 @@
+import { PUBLIC_URL } from "@/constants/common.constant";
 import { cookies } from "next/headers";
 
 export async function getUserServer(): Promise<any | null> {
     const cookieStore = cookies();
     const cookiesArray = cookieStore.getAll();
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/buddy`, {
+    const response = await fetch(`${PUBLIC_URL}/api/auth/buddy`, {
         method: "GET",
         next: {
             tags: ["user"],

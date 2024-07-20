@@ -1,6 +1,8 @@
 
+import { PUBLIC_URL } from "@/constants/common.constant";
+
 export async function getUserClient(initialBuddy: any): Promise<any | null> {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/buddy`, {
+    const response = await fetch(`${PUBLIC_URL}/api/auth/buddy`, {
         method: "GET",
         next: {
             tags: ["user"],

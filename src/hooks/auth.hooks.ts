@@ -1,8 +1,7 @@
 import { getUserClient } from '@/api-services/auth/getUserClient';
-import { getUserServer } from '@/api-services/auth/getUserServer';
-import { QUERY_KEY_USER } from '@/constants/auth.constans';
+import { QUERY_KEY_USER } from '@/constants/auth.constant';
 import { AuthContext } from '@/contexts/auth.context';
-import { QueryClient, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useContext } from 'react';
 
 export const useAuth = () => {
@@ -15,12 +14,7 @@ export const useAuth = () => {
     return context;
 };
 
-export async function usePrefetchBuddy(queryClient: QueryClient) {
-    return await queryClient.prefetchQuery({
-        queryKey: [QUERY_KEY_USER],
-        queryFn: () => getUserServer(),
-    });
-}
+// 서버쪽 쿼리는 작성 금지
 
 export function useBuddyQuery(initialBuddy: any) {
     return useQuery({
