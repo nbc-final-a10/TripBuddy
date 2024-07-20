@@ -1,6 +1,6 @@
 "use client";
-import GoogleLogInButton from "./GoogleLogInButton";
-import KaKaoLogInButton from "./KaKaoLogInButton";
+import GoogleLogInButton from "../../atoms/GoogleLogInButton";
+import KaKaoLogInButton from "../../atoms/KaKaoLogInButton";
 
 function AuthPageBottom() {
     return (

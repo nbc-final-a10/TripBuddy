@@ -1,6 +1,6 @@
-import AuthPageBottom from "@/components/auth/AuthPageBottom";
-import AuthPageWrapper from "@/components/auth/AuthPageWrapper";
-import LogInForm from "@/components/auth/LogInForm";
+import AuthPageBottom from "@/components/molecules/auth/AuthPageBottom";
+import AuthPageWrapper from "@/components/molecules/AuthPageWrapper";
+import LogInForm from "@/components/organisms/auth/LogInForm";
 
 import Link from "next/link";
 
