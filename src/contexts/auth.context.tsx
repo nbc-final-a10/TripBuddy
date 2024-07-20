@@ -1,6 +1,7 @@
 'use client';
 
-import { QUERY_KEY_USER } from '@/constants/auth.constans';
+import { QUERY_KEY_USER } from '@/constants/auth.constant';
+import { PUBLIC_URL } from '@/constants/common.constant';
 import { useBuddyQuery } from '@/hooks/auth.hooks';
 import { showAlert } from '@/utils/openCustomAlert';
 import { Provider } from '@supabase/supabase-js';
@@ -64,13 +65,10 @@ export function AuthProvider({
 
         try {
             const data = { email, password };
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/login`,
-                {
-                    method: 'POST',
-                    body: JSON.stringify(data),
-                },
-            );
+            const response = await fetch(`${PUBLIC_URL}/api/auth/login`, {
+                method: 'POST',
+                body: JSON.stringify(data),
+            });
             if (!response.ok) {
                 throw new Error('fetch 실패');
             }
@@ -98,12 +96,9 @@ export function AuthProvider({
             return showAlert('caution', '로그인하고 눌러주세요');
 
         try {
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/logout`,
-                {
-                    method: 'DELETE',
-                },
-            );
+            const response = await fetch(`${PUBLIC_URL}/api/auth/logout`, {
+                method: 'DELETE',
+            });
             if (!response.ok) {
                 throw new Error('fetch 실패');
             }
@@ -124,13 +119,10 @@ export function AuthProvider({
 
         try {
             const payload = { name, email, password };
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/signup`,
-                {
-                    method: 'POST',
-                    body: JSON.stringify(payload),
-                },
-            );
+            const response = await fetch(`${PUBLIC_URL}/api/auth/signup`, {
+                method: 'POST',
+                body: JSON.stringify(payload),
+            });
             if (!response.ok) {
                 throw new Error('fetch 실패');
             }
@@ -153,7 +145,7 @@ export function AuthProvider({
         async provider => {
             try {
                 const response = await fetch(
-                    `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/provider?provider=${provider}`,
+                    `${PUBLIC_URL}/api/auth/provider?provider=${provider}`,
                 );
                 if (!response.ok) {
                     throw new Error('fetch 실패');
@@ -171,7 +163,7 @@ export function AuthProvider({
     const sendingResetEmail = async (email: string) => {
         try {
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/recover-redirect`,
+                `${PUBLIC_URL}/api/auth/recover-redirect`,
                 {
                     method: 'POST',
                     body: JSON.stringify({ email }),
@@ -191,13 +183,10 @@ export function AuthProvider({
 
     const resetPassword = async (password: string) => {
         try {
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/recover`,
-                {
-                    method: 'POST',
-                    body: JSON.stringify({ password }),
-                },
-            );
+            const response = await fetch(`${PUBLIC_URL}/api/auth/recover`, {
+                method: 'POST',
+                body: JSON.stringify({ password }),
+            });
             const data = await response.json();
             if (
                 data.error ===
