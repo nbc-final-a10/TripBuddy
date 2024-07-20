@@ -13,7 +13,7 @@ export default function LogInPage() {
 
             <p className="text-sm text-gray-500">
                 Create account?{" "}
-                <Link href="/signup" className="text-turtleGreen">
+                <Link href="/signup" className="text-blue-500">
                     Sign up
                 </Link>
             </p>

@@ -91,7 +91,7 @@ function LogInForm() {
                 </div>
 
                 <SubmitButton
-                    className="bg-turtleGreen w-[70%] text-white rounded-lg px-4 py-2 text-foreground"
+                    className="bg-sky-200 w-[70%] text-white rounded-lg px-4 py-2 text-foreground"
                     type="submit"
                     pendingText="로딩..."
                     pending={isPending}
