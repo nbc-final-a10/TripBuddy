@@ -7,7 +7,7 @@ export async function POST(req: Request) {
 
     const { email } = await req.json();
 
-    console.log('recover-redirect 에서 받은 이메일 =>', email);
+    // console.log("recover-redirect 에서 받은 이메일 =>", email);
 
     const supabase = createClient();
 
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     });
 
     if (error) {
-        console.log('recover-redirect 에서 에러 발생 =>', error);
+        // console.log("recover-redirect 에서 에러 발생 =>", error);
         redirect('/');
     }
     revalidatePath('/recover');

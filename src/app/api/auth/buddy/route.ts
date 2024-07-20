@@ -2,31 +2,6 @@ import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-    // let hasCookie = false;
-    // const cookieStore = cookies();
-    // const cookiesArray = cookieStore.getAll();
-
-    // console.log("cookiesArray ====>", cookiesArray);
-
-    // if (cookiesArray.length === 0) {
-    //     hasCookie = false;
-    // } else {
-    //     const authToken = cookiesArray.map((cookie) => {
-    //         if (cookie.name.startsWith("sb-ngtnbcqokvtyrilhkwpz-auth-token")) {
-    //             return true;
-    //         }
-    //         return false;
-    //     });
-    //     hasCookie = authToken.every((cookie) => cookie);
-    // }
-
-    // // console.log("authToken ====>", hasCookie);
-
-    // if (!hasCookie) {
-    //     return NextResponse.json({ data: { user: "cookie not found" } }, { status: 200 });
-    // }
-    //sb-ngtnbcqokvtyrilhkwpz-auth-token.0
-
     const supabase = createClient();
     const {
         data: { user },
@@ -55,9 +30,9 @@ export async function GET() {
     }
 
     const { data: userData, error: userError } = await supabase
-        .from('users')
+        .from('buddies')
         .select('*')
-        .eq('id', user.id)
+        .eq('buddy_id', user.id)
         .single();
 
     if (userError) {
