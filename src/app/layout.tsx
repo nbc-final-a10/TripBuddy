@@ -43,8 +43,8 @@ export default function RootLayout({
                 <QueryProvider>
                     <Header />
                     {children}
+                    <Footer />
                 </QueryProvider>
-                <Footer />
             </body>
         </html>
     );
