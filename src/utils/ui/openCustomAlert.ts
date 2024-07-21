@@ -1,18 +1,18 @@
-import CustomAlert from "@/components/organisms/common/CustomAlert";
-import React from "react";
-import ReactDOM from "react-dom/client";
+import CustomAlert from '@/components/organisms/common/CustomAlert';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 
 let alertContainer: HTMLDivElement | null = null;
 let root: ReactDOM.Root | null = null;
 
 export function showAlert(
-    title: "success" | "caution" | "error", // 얼러트 타이틀
+    title: 'success' | 'caution' | 'error', // 얼러트 타이틀
     description: string, // 얼러트 설명
     onConfirm?: () => void, // 얼러트 콜백
-    isConfirm?: boolean // 버튼 확인,취소 두개 보여질 것인지
+    isConfirm?: boolean, // 버튼 확인,취소 두개 보여질 것인지
 ): void {
     if (!alertContainer) {
-        alertContainer = document.createElement("div");
+        alertContainer = document.createElement('div');
         document.body.appendChild(alertContainer);
         root = ReactDOM.createRoot(alertContainer);
     }
@@ -39,7 +39,7 @@ export function showAlert(
                 isConfirm: isConfirm,
                 onClose: handleConfirm,
                 onJustClose: onClose,
-            })
+            }),
         );
     }
 }

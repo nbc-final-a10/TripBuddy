@@ -1,18 +1,20 @@
-import { PUBLIC_URL } from "@/constants/common.constant";
-import { cookies } from "next/headers";
+import { PUBLIC_URL } from '@/constants/common.constant';
+import { cookies } from 'next/headers';
 
 export async function getUserServer(): Promise<any | null> {
     const cookieStore = cookies();
     const cookiesArray = cookieStore.getAll();
 
     const response = await fetch(`${PUBLIC_URL}/api/auth/buddy`, {
-        method: "GET",
+        method: 'GET',
         next: {
-            tags: ["user"],
+            tags: ['user'],
         },
         // cache: "no-store",
         headers: {
-            Cookie: cookiesArray.map((cookie) => `${cookie.name}=${cookie.value}`).join(";"),
+            Cookie: cookiesArray
+                .map(cookie => `${cookie.name}=${cookie.value}`)
+                .join(';'),
         },
     });
 
@@ -20,7 +22,7 @@ export async function getUserServer(): Promise<any | null> {
         const error = await response.json();
 
         const message = error.data.user;
-        if (message === "Auth session missing!") {
+        if (message === 'Auth session missing!') {
             return null;
         }
     }

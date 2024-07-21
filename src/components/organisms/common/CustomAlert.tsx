@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
 interface CustomAlertProps {
-    title: "success" | "caution" | "error";
+    title: 'success' | 'caution' | 'error';
     description: string;
     isConfirm?: boolean;
     onClose?: () => void;
@@ -9,8 +9,8 @@ interface CustomAlertProps {
 }
 
 function CustomAlert({
-    title = "success",
-    description = "성공했습니다!",
+    title = 'success',
+    description = '성공했습니다!',
     isConfirm = false,
     onClose = () => {},
     onJustClose,
@@ -22,7 +22,9 @@ function CustomAlert({
                     <div className="flex flex-col items-center gap-2 w-full">
                         <h2
                             className={`text-2xl font-bold w-full text-center ${
-                                title === "success" ? "text-lime-400" : "text-red-400"
+                                title === 'success'
+                                    ? 'text-lime-400'
+                                    : 'text-red-400'
                             }`}
                         >
                             {title}

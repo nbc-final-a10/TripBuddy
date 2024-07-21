@@ -1,6 +1,6 @@
-import React from "react";
+import { PropsWithChildren } from 'react';
 
-function AuthPageWrapper({ children }: { children: React.ReactNode }) {
+function AuthPageWrapper({ children }: PropsWithChildren) {
     return (
         <div className="flex justify-center items-center min-h-dvh bg-gray-50 max-w-[375px] mx-auto">
             <section className="h-dvh w-full flex flex-col items-center justify-center my-0 mx-auto bg-white">
