@@ -1,5 +1,4 @@
 import { getUserServer } from '@/api-services/auth/getUserServer';
-import { QUERY_KEY_USER } from '@/constants/auth.constant';
 import { AuthProvider } from '@/contexts/auth.context';
 import {
     HydrationBoundary,
@@ -8,6 +7,7 @@ import {
 } from '@tanstack/react-query';
 import { PropsWithChildren, Suspense } from 'react';
 import Loading from './loading';
+import { QUERY_KEY_USER } from '@/constants/query.constants';
 
 async function ProvidersLayout({ children }: PropsWithChildren) {
     const queryClient = new QueryClient();

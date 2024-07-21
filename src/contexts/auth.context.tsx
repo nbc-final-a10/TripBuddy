@@ -1,7 +1,7 @@
 'use client';
 
-import { QUERY_KEY_USER } from '@/constants/auth.constant';
 import { PUBLIC_URL } from '@/constants/common.constant';
+import { QUERY_KEY_USER } from '@/constants/query.constants';
 import { useBuddyQuery } from '@/hooks/auth.hooks';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { Provider } from '@supabase/supabase-js';
