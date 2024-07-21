@@ -1,5 +1,5 @@
 import { getUserClient } from '@/api-services/auth/getUserClient';
-import { QUERY_KEY_USER } from '@/constants/auth.constant';
+import { QUERY_KEY_USER } from '@/constants/query.constants';
 import { AuthContext } from '@/contexts/auth.context';
 import { useQuery } from '@tanstack/react-query';
 import { useContext } from 'react';

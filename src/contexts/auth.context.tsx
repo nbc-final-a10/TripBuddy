@@ -1,6 +1,6 @@
 'use client';
 
-import { PUBLIC_URL } from '@/constants/common.constant';
+import { PUBLIC_URL } from '@/constants/common.constants';
 import { QUERY_KEY_USER } from '@/constants/query.constants';
 import { useBuddyQuery } from '@/hooks/auth.hooks';
 import { showAlert } from '@/utils/ui/openCustomAlert';
