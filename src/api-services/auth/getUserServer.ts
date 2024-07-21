@@ -1,4 +1,4 @@
-import { PUBLIC_URL } from '@/constants/common.constant';
+import { PUBLIC_URL } from '@/constants/common.constants';
 import { cookies } from 'next/headers';
 
 export async function getUserServer(): Promise<any | null> {

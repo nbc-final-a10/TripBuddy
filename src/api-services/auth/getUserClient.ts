@@ -1,4 +1,4 @@
-import { PUBLIC_URL } from '@/constants/common.constant';
+import { PUBLIC_URL } from '@/constants/common.constants';
 
 export async function getUserClient(initialBuddy: any): Promise<any | null> {
     const response = await fetch(`${PUBLIC_URL}/api/auth/buddy`, {
