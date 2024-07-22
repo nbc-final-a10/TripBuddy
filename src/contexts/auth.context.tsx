@@ -45,7 +45,6 @@ export function AuthProvider({
     children,
     // initialBuddy,
 }: PropsWithChildren) {
-    // 이니셜 버디를 쿼리에 주입하므로, 초기 버디 값이 있는지 주의깊게 추적 필요
     const { data: buddy, isPending, error } = useBuddyQuery();
 
     const isLoggedIn = !!buddy;
