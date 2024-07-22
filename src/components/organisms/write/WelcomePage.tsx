@@ -3,7 +3,7 @@ import WelcomeMessage from '@/components/molecules/write/WelcomeMessage';
 import WelcomeSelectBuddyCounts from '@/components/molecules/write/WelcomeSelectBuddyCounts';
 import React from 'react';
 
-const WelcomePage = () => {
+const WelcomePage: React.FC = () => {
     return (
         <div className="flex flex-col items-center">
             <WelcomeMessage />
@@ -11,7 +11,6 @@ const WelcomePage = () => {
             <div className="mt-10 xl:mt-0 flex justify-center">
                 <WelcomeImage />
             </div>
-            <div className="mt-4" />
             <WelcomeSelectBuddyCounts />
         </div>
     );

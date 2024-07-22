@@ -11,10 +11,7 @@ const useNextButton = (initialStep: number, buttonText: string = '다음') => {
 
     const NextButton = () => (
         <>
-            <button
-                onClick={handleNext}
-                className="mt-4 px-4 py-2 bg-yellow-500 text-black text-2xl rounded"
-            >
+            <button onClick={handleNext} className="text-2xl">
                 {buttonText}
             </button>
         </>

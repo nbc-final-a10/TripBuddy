@@ -10,15 +10,20 @@ const WritePage: React.FC = () => {
 
     return (
         <>
-            <div style={{ flex: 1 }}>
+            <div
+                style={{
+                    flex: 1,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                }}
+            >
                 {step === 0 && <WelcomePage />}
                 {step === 1 && <NextPage />}
             </div>
             <div
                 style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    width: '100%',
+                    marginTop: '20px',
                     display: 'flex',
                     justifyContent: 'center',
                 }}
