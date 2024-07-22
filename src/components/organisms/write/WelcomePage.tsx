@@ -7,9 +7,11 @@ const WelcomePage = () => {
     return (
         <div className="flex flex-col items-center">
             <WelcomeMessage />
-            <div className="mt-10 xl:mt-0 xl:ml-10">
+            <div className="mt-4" />
+            <div className="mt-10 xl:mt-0 flex justify-center">
                 <WelcomeImage />
             </div>
+            <div className="mt-4" />
             <WelcomeSelectBuddyCounts />
         </div>
     );

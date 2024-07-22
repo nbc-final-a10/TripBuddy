@@ -10,11 +10,21 @@ const WritePage: React.FC = () => {
 
     return (
         <>
-            <div>
+            <div style={{ flex: 1 }}>
                 {step === 0 && <WelcomePage />}
                 {step === 1 && <NextPage />}
             </div>
-            <NextButton />
+            <div
+                style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                }}
+            >
+                <NextButton />
+            </div>
         </>
     );
 };
