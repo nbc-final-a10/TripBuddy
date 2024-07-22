@@ -1,5 +1,3 @@
-import Footer from '@/components/molecules/Footer';
-import Header from '@/components/molecules/Header';
 import QueryProvider from '@/providers/QueryProvider';
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
