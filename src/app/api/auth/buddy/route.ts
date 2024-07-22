@@ -12,7 +12,7 @@ export async function GET() {
         if (error.message === 'Auth session missing!')
             return NextResponse.json(
                 { data: { user: 'Auth session missing!' } },
-                { status: 200 },
+                { status: 401 },
             );
 
         if (error.message === 'Unauthorized')

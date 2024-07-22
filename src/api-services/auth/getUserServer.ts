@@ -25,6 +25,7 @@ export async function getUserServer(): Promise<any | null> {
         if (message === 'Auth session missing!') {
             return null;
         }
+        return null;
     }
 
     const data = await response.json();

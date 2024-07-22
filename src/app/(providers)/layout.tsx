@@ -8,6 +8,7 @@ import {
 import { PropsWithChildren, Suspense } from 'react';
 import Loading from './loading';
 import { QUERY_KEY_USER } from '@/constants/query.constants';
+import { Buddy } from '@/types/Auth.types';
 
 async function ProvidersLayout({ children }: PropsWithChildren) {
     const queryClient = new QueryClient();
@@ -17,18 +18,12 @@ async function ProvidersLayout({ children }: PropsWithChildren) {
     });
     const dehydratedState = dehydrate(queryClient);
 
-    const initialBuddy = queryClient.getQueryData<any | undefined>([
-        QUERY_KEY_USER,
-    ]);
-
     return (
         <main className="bg-slate-50 xl:bg-white">
             <section className="w-[375px] mx-auto bg-white xl:w-[1280px] ">
                 <Suspense fallback={<Loading />}>
                     <HydrationBoundary state={dehydratedState}>
-                        <AuthProvider initialBuddy={initialBuddy}>
-                            {children}
-                        </AuthProvider>
+                        <AuthProvider>{children}</AuthProvider>
                     </HydrationBoundary>
                 </Suspense>
             </section>

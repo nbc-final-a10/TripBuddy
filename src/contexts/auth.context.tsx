@@ -9,9 +9,9 @@ import { Provider } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { PropsWithChildren, createContext, useEffect } from 'react';
-interface AuthProviderProps {
-    initialBuddy?: Buddy | undefined;
-}
+// interface AuthProviderProps {
+//     initialBuddy: Buddy | null;
+// }
 
 export type AuthContextValue = {
     isLoggedIn: boolean;
@@ -37,21 +37,21 @@ const initialValue: AuthContextValue = {
     sendingResetEmail: () => {},
 };
 
+//PropsWithChildren<AuthProviderProps>
+
 export const AuthContext = createContext<AuthContextValue>(initialValue);
 
 export function AuthProvider({
     children,
-    initialBuddy,
-}: PropsWithChildren<AuthProviderProps>) {
+    // initialBuddy,
+}: PropsWithChildren) {
     // 이니셜 버디를 쿼리에 주입하므로, 초기 버디 값이 있는지 주의깊게 추적 필요
-    const { data: buddy, isPending, error } = useBuddyQuery(initialBuddy);
+    const { data: buddy, isPending, error } = useBuddyQuery();
 
     const isLoggedIn = !!buddy;
 
     const router = useRouter();
     const queryClient = useQueryClient();
-
-    // console.log("isPending ====>", userIsPending);
 
     const logIn: AuthContextValue['logIn'] = async (email, password) => {
         if (buddy) return showAlert('caution', '이미 로그인 되어 있어요');
@@ -99,7 +99,7 @@ export function AuthProvider({
         } catch (error) {
             console.error(error);
         }
-        queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
+        // queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
         router.replace('/login');
     };
 
@@ -145,7 +145,7 @@ export function AuthProvider({
                 }
                 const data = await response.json();
 
-                queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
+                // queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
                 router.replace(data.url);
                 showAlert('success', '로그인 성공');
             } catch (error) {
@@ -201,6 +201,10 @@ export function AuthProvider({
             router.refresh();
         }
     };
+
+    useEffect(() => {
+        console.log('isPending ====>', isPending);
+    }, [isPending]);
 
     useEffect(() => {
         console.log('buddy ====>', buddy);
