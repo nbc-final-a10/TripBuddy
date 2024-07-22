@@ -9,7 +9,7 @@ const WritePage: React.FC = () => {
     const { NextButton, step } = useNextButton(0, '다음');
 
     return (
-        <>
+        <section className="h-dvh flex flex-col justify-center items-center">
             <div
                 style={{
                     flex: 1,
@@ -30,7 +30,7 @@ const WritePage: React.FC = () => {
             >
                 <NextButton />
             </div>
-        </>
+        </section>
     );
 };
 
