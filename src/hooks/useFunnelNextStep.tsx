@@ -10,8 +10,10 @@ const useNextButton = (
     const [step, setStep] = useState(initialStep);
 
     const handleNext = useCallback(() => {
-        setStep(prevStep => prevStep + 1);
-    }, [setStep]);
+        if (step < limit) {
+            setStep(prevStep => prevStep + 1);
+        }
+    }, [setStep, step, limit]);
 
     const NextButton = ({ className }: { className: string }) => (
         <button onClick={handleNext} className={className}>
