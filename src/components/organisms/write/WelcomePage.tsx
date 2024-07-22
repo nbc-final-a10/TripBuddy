@@ -1,14 +1,17 @@
+import WelcomeImage from '@/components/molecules/write/WelcomeImage';
+import WelcomeMessage from '@/components/molecules/write/WelcomeMessage';
+import WelcomeSelectBuddyCounts from '@/components/molecules/write/WelcomeSelectBuddyCounts';
 import React from 'react';
-import WelcomeMessage from '../../atoms/write/WelcomeMessage';
-import WelcomeImage from '../../atoms/write/WelcomeImage';
 
-const WelcomePage: React.FC = () => {
+const WelcomePage = ({ setStep }: { setStep: (step: number) => void }) => {
     return (
         <div className="flex flex-col items-center">
             <WelcomeMessage />
             <div className="mt-10 xl:mt-0 xl:ml-10">
                 <WelcomeImage />
             </div>
+            <WelcomeSelectBuddyCounts />
+            <button onClick={() => setStep(1)}>다음</button>
         </div>
     );
 };
