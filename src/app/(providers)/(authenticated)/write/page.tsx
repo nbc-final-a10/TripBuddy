@@ -6,7 +6,7 @@ import useNextButton from '@/hooks/useFunnelNextStep';
 import React from 'react';
 
 const WritePage: React.FC = () => {
-    const { NextButton, step } = useNextButton(0, '다음');
+    const { NextButton, step } = useNextButton(0, '다음', 4);
 
     return (
         <section className="h-dvh flex flex-col justify-center items-center">
@@ -28,7 +28,7 @@ const WritePage: React.FC = () => {
                     justifyContent: 'center',
                 }}
             >
-                <NextButton />
+                <NextButton className="text-2xl bg-main-color font-bold py-2 px-4 rounded" />
             </div>
         </section>
     );
