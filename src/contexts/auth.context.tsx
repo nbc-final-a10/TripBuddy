@@ -3,7 +3,7 @@
 import { PUBLIC_URL } from '@/constants/common.constants';
 import { QUERY_KEY_USER } from '@/constants/query.constants';
 import { useBuddyQuery } from '@/hooks/auth.hooks';
-import { Buddy } from '@/types/auth.types';
+import { Buddy } from '@/types/Auth.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { Provider } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
