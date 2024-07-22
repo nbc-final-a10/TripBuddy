@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback } from 'react';
 
 const useNextButton = (step: number, setStep: (step: number) => void) => {
@@ -6,12 +8,14 @@ const useNextButton = (step: number, setStep: (step: number) => void) => {
     }, [step, setStep]);
 
     const NextButton = () => (
-        <button
-            onClick={handleNext}
-            className="mt-4 px-4 py-2 bg-secondary-color text-white rounded"
-        >
-            다음
-        </button>
+        <div className="flex justify-center">
+            <button
+                onClick={handleNext}
+                className="mt-4 px-4 py-2 bg-yellow-500 text-black text-2xl rounded"
+            >
+                다음
+            </button>
+        </div>
     );
 
     return NextButton;

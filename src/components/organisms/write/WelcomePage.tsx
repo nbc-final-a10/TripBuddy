@@ -3,7 +3,7 @@ import WelcomeMessage from '@/components/molecules/write/WelcomeMessage';
 import WelcomeSelectBuddyCounts from '@/components/molecules/write/WelcomeSelectBuddyCounts';
 import React from 'react';
 
-const WelcomePage = ({ setStep }: { setStep: (step: number) => void }) => {
+const WelcomePage = () => {
     return (
         <div className="flex flex-col items-center">
             <WelcomeMessage />
@@ -11,7 +11,6 @@ const WelcomePage = ({ setStep }: { setStep: (step: number) => void }) => {
                 <WelcomeImage />
             </div>
             <WelcomeSelectBuddyCounts />
-            <button onClick={() => setStep(1)}>다음</button>
         </div>
     );
 };
