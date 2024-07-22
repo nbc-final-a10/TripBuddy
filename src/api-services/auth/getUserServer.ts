@@ -29,7 +29,7 @@ export async function getUserServer(): Promise<any | null> {
 
     const data = await response.json();
 
-    const buddy = data.data.user;
+    const buddy = data.user;
 
     return buddy;
 }

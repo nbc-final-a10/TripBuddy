@@ -8,7 +8,7 @@ import { showAlert } from '@/utils/ui/openCustomAlert';
 import { Provider } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { PropsWithChildren, createContext } from 'react';
+import { PropsWithChildren, createContext, useEffect } from 'react';
 interface AuthProviderProps {
     initialBuddy?: Buddy | undefined;
 }
@@ -54,8 +54,7 @@ export function AuthProvider({
     // console.log("isPending ====>", userIsPending);
 
     const logIn: AuthContextValue['logIn'] = async (email, password) => {
-        if (buddy?.userTableInfo)
-            return showAlert('caution', '이미 로그인 되어 있어요');
+        if (buddy) return showAlert('caution', '이미 로그인 되어 있어요');
         if (!email || !password)
             return showAlert('caution', '이메일, 비밀번호 모두 채워 주세요.');
 
@@ -88,8 +87,7 @@ export function AuthProvider({
     };
 
     const logOut: AuthContextValue['logOut'] = async () => {
-        if (!buddy?.userTableInfo)
-            return showAlert('caution', '로그인하고 눌러주세요');
+        if (!buddy) return showAlert('caution', '로그인하고 눌러주세요');
 
         try {
             const response = await fetch(`${PUBLIC_URL}/api/auth/logout`, {
@@ -110,8 +108,7 @@ export function AuthProvider({
         email,
         password,
     ) => {
-        if (buddy?.userTableInfo)
-            return showAlert('caution', '이미 로그인 되어 있어요');
+        if (buddy) return showAlert('caution', '이미 로그인 되어 있어요');
 
         try {
             const payload = { name, email, password };
@@ -205,10 +202,14 @@ export function AuthProvider({
         }
     };
 
+    useEffect(() => {
+        console.log('buddy ====>', buddy);
+    }, [buddy]);
+
     const value: AuthContextValue = {
         isLoggedIn,
         isPending,
-        buddy: error ? null : (buddy?.userTableInfo as any | null),
+        buddy: error ? null : (buddy as any | null),
         logIn,
         logOut,
         signUp,

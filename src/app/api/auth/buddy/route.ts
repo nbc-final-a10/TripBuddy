@@ -29,7 +29,7 @@ export async function GET() {
         );
     }
 
-    const { data: userData, error: userError } = await supabase
+    const { data: buddy, error: userError } = await supabase
         .from('buddies')
         .select('*')
         .eq('buddy_id', user.id)
@@ -43,11 +43,5 @@ export async function GET() {
         );
     }
 
-    //dd
-    const response = {
-        ...user,
-        userTableInfo: userData,
-    };
-
-    return NextResponse.json({ data: { user: response } }, { status: 200 });
+    return NextResponse.json({ user: buddy }, { status: 200 });
 }
