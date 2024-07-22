@@ -2,7 +2,7 @@
 
 import NextPage from '@/components/organisms/write/NextPage';
 import WelcomePage from '@/components/organisms/write/WelcomePage';
-import useNextButton from '@/hooks/useFennelNextStep';
+import useNextButton from '@/hooks/useFunnelNextStep';
 import React, { useState } from 'react';
 
 const WritePage: React.FC = () => {
