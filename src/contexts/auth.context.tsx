@@ -3,29 +3,26 @@
 import { PUBLIC_URL } from '@/constants/common.constants';
 import { QUERY_KEY_USER } from '@/constants/query.constants';
 import { useBuddyQuery } from '@/hooks/auth.hooks';
+import { Buddy } from '@/types/auth.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { Provider } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { PropsWithChildren, createContext } from 'react';
-
-// export const useAuth = () => useContext(AuthContext);
-
-// interface AuthProviderProps {
-//     initialMe?: Me | undefined;
-// }
+interface AuthProviderProps {
+    initialBuddy?: Buddy | undefined;
+}
 
 export type AuthContextValue = {
     isLoggedIn: boolean;
     isPending: boolean;
-    buddy: any | null;
+    buddy: Buddy | null;
     logIn: (email: string, password: string) => void;
     logOut: () => void;
     signUp: (name: string, email: string, password: string) => void;
     loginWithProvider: (provider: Provider) => void;
     resetPassword: (password: string) => void;
     sendingResetEmail: (email: string) => void;
-    // setMeClient: (me: Me | null) => void;
 };
 
 const initialValue: AuthContextValue = {
@@ -38,7 +35,6 @@ const initialValue: AuthContextValue = {
     loginWithProvider: () => {},
     resetPassword: () => {},
     sendingResetEmail: () => {},
-    // setMeClient: () => {},
 };
 
 export const AuthContext = createContext<AuthContextValue>(initialValue);
@@ -46,7 +42,7 @@ export const AuthContext = createContext<AuthContextValue>(initialValue);
 export function AuthProvider({
     children,
     initialBuddy,
-}: PropsWithChildren<any>) {
+}: PropsWithChildren<AuthProviderProps>) {
     // 이니셜 버디를 쿼리에 주입하므로, 초기 버디 값이 있는지 주의깊게 추적 필요
     const { data: buddy, isPending, error } = useBuddyQuery(initialBuddy);
 
@@ -91,7 +87,7 @@ export function AuthProvider({
         }
     };
 
-    const logOut = async () => {
+    const logOut: AuthContextValue['logOut'] = async () => {
         if (!buddy?.userTableInfo)
             return showAlert('caution', '로그인하고 눌러주세요');
 
@@ -160,7 +156,9 @@ export function AuthProvider({
             }
         };
 
-    const sendingResetEmail = async (email: string) => {
+    const sendingResetEmail: AuthContextValue['sendingResetEmail'] = async (
+        email: string,
+    ) => {
         try {
             const response = await fetch(
                 `${PUBLIC_URL}/api/auth/recover-redirect`,
@@ -181,7 +179,9 @@ export function AuthProvider({
         }
     };
 
-    const resetPassword = async (password: string) => {
+    const resetPassword: AuthContextValue['resetPassword'] = async (
+        password: string,
+    ) => {
         try {
             const response = await fetch(`${PUBLIC_URL}/api/auth/recover`, {
                 method: 'POST',
@@ -204,26 +204,6 @@ export function AuthProvider({
             router.refresh();
         }
     };
-
-    // const setMeClient = (me: Me | null) => {
-    //     // setMe(me);
-    //     queryClient.invalidateQueries({ queryKey: ["user"] });
-    // };
-
-    // 아래는 서버사이드에서 처리하기 때문에 주석처리
-    // useEffect(() => {
-    //     fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/me`).then(async (response) => {
-    //         if (response.status === 200) {
-    //             const { data } = await response.json();
-    //             setMe(data);
-    //         }
-    //     });
-    // }, []);
-
-    // 여기는 나중에 지우기
-    // useEffect(() => {
-    //     console.log("me 변경됨 ===>", me);
-    // }, [me]);
 
     const value: AuthContextValue = {
         isLoggedIn,
