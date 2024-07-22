@@ -1,8 +1,10 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
-const useNextButton = (step: number, setStep: (step: number) => void) => {
+const useNextButton = (initialStep: number, buttonText: string = '다음') => {
+    const [step, setStep] = useState(initialStep);
+
     const handleNext = useCallback(() => {
         setStep(step + 1);
     }, [step, setStep]);
@@ -13,12 +15,12 @@ const useNextButton = (step: number, setStep: (step: number) => void) => {
                 onClick={handleNext}
                 className="mt-4 px-4 py-2 bg-yellow-500 text-black text-2xl rounded"
             >
-                다음
+                {buttonText}
             </button>
         </div>
     );
 
-    return NextButton;
+    return { NextButton, step };
 };
 
 export default useNextButton;

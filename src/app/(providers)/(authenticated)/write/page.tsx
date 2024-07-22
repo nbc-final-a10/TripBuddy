@@ -3,11 +3,10 @@
 import NextPage from '@/components/organisms/write/NextPage';
 import WelcomePage from '@/components/organisms/write/WelcomePage';
 import useNextButton from '@/hooks/useFunnelNextStep';
-import React, { useState } from 'react';
+import React from 'react';
 
 const WritePage: React.FC = () => {
-    const [step, setStep] = useState(0);
-    const NextButton = useNextButton(step, setStep);
+    const { NextButton, step } = useNextButton(0, '다음');
 
     return (
         <>
