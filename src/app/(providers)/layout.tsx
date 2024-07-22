@@ -8,7 +8,6 @@ import {
 import { PropsWithChildren, Suspense } from 'react';
 import Loading from './loading';
 import { QUERY_KEY_USER } from '@/constants/query.constants';
-import { Buddy } from '@/types/Auth.types';
 
 async function ProvidersLayout({ children }: PropsWithChildren) {
     const queryClient = new QueryClient();
