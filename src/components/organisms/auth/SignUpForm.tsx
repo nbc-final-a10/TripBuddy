@@ -18,30 +18,30 @@ function SignUpForm() {
         const formData = new FormData(form);
         const name = formData.get('name') as string;
         const email = formData.get('email') as string;
-        const passwordOne = formData.get('password') as string;
-        const passwordTwo = formData.get('passwordConfirm') as string;
+        const password = formData.get('password') as string;
+        const passwordConfirm = formData.get('passwordConfirm') as string;
 
-        if (!name || !email || !passwordOne || !passwordTwo)
+        if (!name || !email || !password || !passwordConfirm)
             return alert('빈 값이 없도록 해주세요');
 
-        if (validateWhiteSpace([name, email, passwordOne, passwordTwo]))
+        if (validateWhiteSpace([name, email, password, passwordConfirm]))
             return showAlert('caution', '공백을 포함할 수 없습니다!');
 
         if (!emailRegex.test(email))
             return showAlert('caution', '유효한 이메일 주소를 입력하세요!');
 
-        if (!passwordOne || !passwordTwo)
+        if (!password || !passwordConfirm)
             return showAlert('caution', '비밀번호를 입력해주세요!');
 
-        if (passwordOne.length < 8 || passwordOne.length > 15)
+        if (password.length < 8 || password.length > 15)
             return showAlert('caution', '비밀번호는 8~15 글자로 해야합니다!');
 
-        if (passwordOne !== passwordTwo)
+        if (password !== passwordConfirm)
             return showAlert('caution', '비밀번호가 일치하지 않습니다!');
 
         form.reset();
 
-        signUp(name, email, passwordOne);
+        signUp(name, email, password);
     };
 
     return (
