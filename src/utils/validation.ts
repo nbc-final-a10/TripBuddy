@@ -5,13 +5,19 @@ export const validateWhiteSpace = (inputs: string[]) =>
     inputs.some(input => /\s/.test(input));
 
 export const authValidation = (
-    email?: string,
-    name?: string,
+    email: string,
+    name: string = 'x',
     password?: string,
     passwordConfirm?: string,
 ) => {
-    if (!name || !email || !password || !passwordConfirm)
-        return showAlert('caution', '빈 값이 없도록 해주세요');
+    if (!email) return showAlert('caution', '이메일을 입력해주세요');
+
+    if (!name) return showAlert('caution', '이름을 입력해주세요');
+
+    if (!password) return showAlert('caution', '비밀번호를 입력해주세요');
+
+    if (!passwordConfirm)
+        return showAlert('caution', '비밀번호 확인을 입력해주세요');
 
     if (validateWhiteSpace([name, email, password, passwordConfirm]))
         return showAlert('caution', '공백을 포함할 수 없습니다!');

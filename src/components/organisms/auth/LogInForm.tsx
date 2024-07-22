@@ -8,6 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 import { Input } from '../../atoms/common/O_Input';
 import { SubmitButton } from '../../atoms/common/O_Submit-button';
+import { authValidation } from '@/utils/validation';
 
 function LogInForm() {
     const { isPending, logIn, sendingResetEmail } = useAuth();
@@ -25,16 +26,19 @@ function LogInForm() {
         const email = formData.get('email') as string;
         const password = formData.get('password') as string;
 
-        if (!email || !password)
-            return showAlert('caution', '이메일, 비밀번호를 모두 입력해주세요');
-        if (/\s/.test(email) || /\s/.test(password))
-            return showAlert('caution', '공백을 포함할 수 없습니다!');
-        if (!emailRegex.test(email))
-            return showAlert('caution', '유효한 이메일 주소를 입력하세요!');
-        if (password.length < 8 || password.length > 15)
-            return showAlert('caution', '비밀번호는 8~15 글자로 해야합니다!');
+        authValidation(email, password);
 
-        logIn(email, password);
+        // if (!email || !password)
+        //     return showAlert('caution', '이메일, 비밀번호를 모두 입력해주세요');
+        // if (/\s/.test(email) || /\s/.test(password))
+        //     return showAlert('caution', '공백을 포함할 수 없습니다!');
+        // if (!emailRegex.test(email))
+        //     return showAlert('caution', '유효한 이메일 주소를 입력하세요!');
+        // if (password.length < 8 || password.length > 15)
+        //     return showAlert('caution', '비밀번호는 8~15 글자로 해야합니다!');
+
+        // logIn(email, password);
+
         form.reset();
     };
 
@@ -43,13 +47,16 @@ function LogInForm() {
         const formData = new FormData(form);
         const email = formData.get('email') as string;
 
-        if (!email) return showAlert('caution', '빈 값이 없도록 해주세요');
-        if (/\s/.test(email))
-            return showAlert('caution', '공백을 포함할 수 없습니다!');
-        if (!emailRegex.test(email))
-            return showAlert('caution', '유효한 이메일 주소를 입력하세요!');
+        // if (!email) return showAlert('caution', '빈 값이 없도록 해주세요');
+        // if (/\s/.test(email))
+        //     return showAlert('caution', '공백을 포함할 수 없습니다!');
+        // if (!emailRegex.test(email))
+        //     return showAlert('caution', '유효한 이메일 주소를 입력하세요!');
 
-        sendingResetEmail(email);
+        // sendingResetEmail(email);
+
+        authValidation(email);
+
         form.reset();
     };
 
