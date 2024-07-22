@@ -40,11 +40,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={inter.className}>
-                <QueryProvider>
-                    <Header />
-                    {children}
-                    <Footer />
-                </QueryProvider>
+                <QueryProvider>{children}</QueryProvider>
             </body>
         </html>
     );
