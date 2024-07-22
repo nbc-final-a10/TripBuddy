@@ -1,8 +1,10 @@
+'use client';
+
 // Todo: PWA가 이미 설치된 경우 버튼 동작 안 함 => 사용자에게 설치 여부 alert 알림 주기
 // Todo: 안드로이드 기기에서도 else문으로 넘어감.
 // Todo: 웹 브라우저에서도 기존에 설치된 경우 else문으로 넘어감.
 
-"use client";
+'use client';
 
 import useCheckPwa from '@/hooks/useCheckPwa';
 import { useEffect, useState } from 'react';
@@ -73,9 +75,7 @@ const InstallPromptHandler = () => {
                     홈 화면에 추가하기
                 </button>
             )}
-            {isIos && (
-                <p>iOS 기기에서는 Safari 브라우저의 공유 버튼을 눌러 "홈 화면에 추가"를 선택하세요.</p>
-            )}
+            ;
         </>
     );
 };

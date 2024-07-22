@@ -1,1 +1,1 @@
-## Getting Started
+![김병준_최종프로젝트_커밍순_240721-001 (1)](https://github.com/user-attachments/assets/0e61a1c0-6ef7-43fc-b9d7-14de101e7dd2)
