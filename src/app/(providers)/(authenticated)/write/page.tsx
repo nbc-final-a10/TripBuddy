@@ -26,9 +26,11 @@ const WritePage: React.FC = () => {
                     marginTop: '20px',
                     display: 'flex',
                     justifyContent: 'center',
+                    width: '100%',
+                    position: 'relative',
                 }}
             >
-                <NextButton className="text-2xl bg-main-color font-bold py-2 px-4 rounded" />
+                <NextButton className="text-2xl bg-main-color font-bold py-2 px-4 rounded w-[150px] xl:w-[300px]" />
             </div>
         </section>
     );
