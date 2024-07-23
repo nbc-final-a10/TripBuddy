@@ -62,18 +62,22 @@ export function AuthProvider({
                 body: JSON.stringify(data),
             });
             if (!response.ok) {
-                throw new Error('fetch 실패');
-            }
-            const { error } = await response.json();
+                const { error } = await response.json();
 
-            if (error) {
-                if (error === 'Invalid login credentials') {
-                    return showAlert(
-                        'caution',
-                        '이메일, 비밀번호를 확인해주세요.',
-                    );
+                if (error) {
+                    if (error === 'Invalid login credentials') {
+                        return showAlert(
+                            'caution',
+                            '이메일, 비밀번호를 확인해주세요.',
+                        );
+                    }
+                    if (error === 'Invalid login credentials')
+                        return showAlert(
+                            'caution',
+                            '이메일, 비밀번호를 확인해주세요.',
+                        );
+                    return showAlert('caution', error);
                 }
-                return showAlert('caution', error);
             }
 
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
@@ -98,7 +102,7 @@ export function AuthProvider({
         } catch (error) {
             console.error(error);
         }
-        // queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
         router.replace('/login');
     };
 

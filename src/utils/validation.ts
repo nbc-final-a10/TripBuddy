@@ -44,7 +44,11 @@ export const authValidation = (
             return false;
         }
     }
-    if (password !== undefined && password !== passwordConfirm) {
+    if (
+        password !== undefined &&
+        passwordConfirm !== undefined &&
+        password !== passwordConfirm
+    ) {
         showAlert('caution', '비밀번호가 일치하지 않습니다!');
         return false;
     }

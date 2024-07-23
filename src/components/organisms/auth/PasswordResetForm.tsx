@@ -1,6 +1,6 @@
 'use client';
 
-import { Input } from '@/components/atoms/common/O_Input';
+import Input from '@/components/atoms/common/O_Input';
 import { SubmitButton } from '@/components/atoms/common/O_Submit-button';
 import { useAuth } from '@/hooks/auth.hooks';
 import { authValidation } from '@/utils/validation';

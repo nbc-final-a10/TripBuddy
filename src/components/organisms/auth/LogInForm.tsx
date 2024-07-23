@@ -4,9 +4,9 @@ import { useAuth } from '@/hooks/auth.hooks';
 import clsx from 'clsx';
 import { useSearchParams } from 'next/navigation';
 import { FormEvent, useState } from 'react';
-import { Input } from '../../atoms/common/O_Input';
 import { SubmitButton } from '../../atoms/common/O_Submit-button';
 import { authValidation } from '@/utils/validation';
+import Input from '@/components/atoms/common/O_Input';
 
 function LogInForm() {
     const { isPending, logIn, sendingResetEmail } = useAuth();
