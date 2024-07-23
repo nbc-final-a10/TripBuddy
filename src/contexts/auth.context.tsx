@@ -54,8 +54,6 @@ export function AuthProvider({
 
     const logIn: AuthContextValue['logIn'] = async (email, password) => {
         if (buddy) return showAlert('caution', '이미 로그인 되어 있어요');
-        if (!email || !password)
-            return showAlert('caution', '이메일, 비밀번호 모두 채워 주세요.');
 
         try {
             const data = { email, password };
