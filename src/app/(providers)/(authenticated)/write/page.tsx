@@ -6,10 +6,6 @@ import WelcomePage from '@/components/organisms/write/WelcomePage';
 import useNextButton from '@/hooks/useFunnelNextStep';
 import React from 'react';
 
-// interface ProgressIndicatorProps {
-//     step: number;
-// }
-
 const WritePage: React.FC = () => {
     const { NextButton, step } = useNextButton(0, '다음', 4);
 
@@ -19,13 +15,7 @@ const WritePage: React.FC = () => {
                 <ProgressIndicator step={step} />
             </div>
             <section className="h-dvh flex flex-col items-center">
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'flex-start',
-                        alignItems: 'flex-start',
-                    }}
-                >
+                <div className="flex flex-col items-center">
                     {step === 0 && <WelcomePage />}
                     {step === 1 && <SelectDestinationPage />}
                 </div>
