@@ -1,13 +1,16 @@
 'use client';
-
-// Todo: PWA가 이미 설치된 경우 버튼 동작 안 함 => 사용자에게 설치 여부 alert 알림 주기
-// Todo: 안드로이드 기기에서도 else문으로 넘어감.
-// Todo: 웹 브라우저에서도 기존에 설치된 경우 else문으로 넘어감.
-
-'use client';
-
 import useCheckPwa from '@/hooks/useCheckPwa';
 import { useEffect, useState } from 'react';
+
+// TypeScript 인터페이스 정의
+interface BeforeInstallPromptEvent extends Event {
+    readonly platforms: string[];
+    readonly userChoice: Promise<{
+        outcome: 'accepted' | 'dismissed';
+        platform: string;
+    }>;
+    prompt(): Promise<void>;
+}
 
 const InstallPromptHandler = () => {
     const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null);
@@ -43,6 +46,7 @@ const InstallPromptHandler = () => {
     }, [isPwa]);
 
     const handleInstallClick = () => {
+        console.log('버튼 클릭되었음');
         if (deferredPrompt) {
             (deferredPrompt as any).prompt();
             (deferredPrompt as any).userChoice.then((choiceResult: any) => {
@@ -58,25 +62,45 @@ const InstallPromptHandler = () => {
         }
     };
 
+    useEffect(() => {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js', { type: 'module' }).then(
+                function (registration) {
+                    console.log(
+                        'Service Worker registered with scope:',
+                        registration.scope,
+                    );
+                },
+                function (error) {
+                    console.log('Service Worker registration failed:', error);
+                },
+            );
+        }
+
+        const handler = (e: BeforeInstallPromptEvent) => {
+            console.log('beforeinstallprompt 이벤트 발생', e);
+            e.preventDefault();
+            setDeferredPrompt(e);
+        };
+
+        window.addEventListener('beforeinstallprompt', handler as any);
+
+        return () => {
+            window.removeEventListener('beforeinstallprompt', handler as any);
+        };
+    }, []);
+
     if (isPwa) {
         return null;
     }
 
     return (
-        <>
-            {!isIos && !isAndroid && (
-                <p>이 브라우저에서는 설치를 지원하지 않습니다.</p>
-            )}
-            {isAndroid && (
-                <button
-                    onClick={handleInstallClick}
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md"
-                >
-                    홈 화면에 추가하기
-                </button>
-            )}
-            ;
-        </>
+        <button
+            onClick={handleInstallClick}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md"
+        >
+            홈 화면에 추가하기
+        </button>
     );
 };
 
