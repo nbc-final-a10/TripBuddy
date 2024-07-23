@@ -21,7 +21,7 @@ const useNextButton = (
         </button>
     );
 
-    return { NextButton, step };
+    return { NextButton, step, setStep };
 };
 
 export default useNextButton;

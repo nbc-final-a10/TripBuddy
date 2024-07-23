@@ -1,7 +1,8 @@
+import ProgressIndicator from '@/components/molecules/write/ProgressIndicator';
+import SelectDestinationDescription from '@/components/molecules/write/SelectDestinationDescription';
 import React, { useState } from 'react';
 
-const TravelSelector = () => {
-    const [step, setStep] = useState(0);
+const SelectDestinationPage = () => {
     const [selectedRegion, setSelectedRegion] = useState('국내');
     const [selectedLocation, setSelectedLocation] = useState('');
 
@@ -13,26 +14,9 @@ const TravelSelector = () => {
         setSelectedLocation(location);
     };
 
-    const handleNextStep = () => {
-        setStep(prevStep => prevStep + 1);
-    };
-
     return (
         <div className="flex flex-col h-screen">
-            {/* Header */}
-            <div className="flex items-center p-4">
-                <h1 className="text-lg font-bold">여행지를 선택해주세요</h1>
-            </div>
-
-            {/* Progress Indicator */}
-            <div className="flex justify-center mb-4">
-                {[...Array(5)].map((_, index) => (
-                    <div
-                        key={index}
-                        className={`h-2 w-2 rounded-full mx-1 ${index <= step ? 'bg-gray-500' : 'bg-gray-200'}`}
-                    ></div>
-                ))}
-            </div>
+            <SelectDestinationDescription />
 
             {/* Title and Subtitle */}
             <div className="text-center mb-4">
@@ -98,18 +82,8 @@ const TravelSelector = () => {
                     </div>
                 ))}
             </div>
-
-            {/* Next Button */}
-            <div className="flex justify-center mt-4">
-                <button
-                    onClick={handleNextStep}
-                    className="text-2xl bg-gray-700 text-white font-bold py-2 px-8 rounded"
-                >
-                    다음
-                </button>
-            </div>
         </div>
     );
 };
 
-export default TravelSelector;
+export default SelectDestinationPage;
