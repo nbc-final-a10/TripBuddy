@@ -25,6 +25,11 @@ const LocationSearchPage = () => {
         setSelectedChips(prev => (prev === label ? null : label));
     };
 
+    // 선택된 칩의 하위 위치 찾기
+    const selectedSubLocation = selectedLocation.subLocations?.find(
+        subLocation => subLocation.name === selectedChips,
+    )?.subLocations;
+
     return (
         <main className="p-4">
             <section className="mb-2">
@@ -66,8 +71,8 @@ const LocationSearchPage = () => {
                 </div>
             </section>
 
-            <section className="py-3 overflow-x-auto">
-                <ul className="flex flex-nowrap gap-2 py-3 whitespace-nowrap mb-3">
+            <section className="py-3">
+                <ul className="flex flex-nowrap gap-2 py-3 whitespace-nowrap mb-5 overflow-x-auto">
                     {selectedLocation.subLocations?.map(subLocation => (
                         <li key={subLocation.name}>
                             <Chip
@@ -80,18 +85,23 @@ const LocationSearchPage = () => {
                         </li>
                     ))}
                 </ul>
-                <ul>
-                    {/* {selectedLocation.subLocations.subLocation.map((subLocation))} */}
-                    <section className="flex items-center border-b border-gray-300 pb-3">
-                        <div className="w-9 h-9 bg-gray-300 mr-2 rounded-full"></div>
-                        <div>
-                            <h3 className="text-sm">지역이나 나라</h3>
-                            <p className="text-sm text-gray-500">
-                                한국이나 대륙 이름
-                            </p>
-                        </div>
-                    </section>
-                </ul>
+                <div className="my-3">
+                    {selectedSubLocation &&
+                        selectedSubLocation.map(loc => (
+                            <div
+                                key={loc.name}
+                                className="flex items-center border-b border-gray-300 pb-3 mt-3"
+                            >
+                                <div className="w-9 h-9 bg-gray-300 mr-2 rounded-full"></div>
+                                <div>
+                                    <h3 className="text-sm">{loc.name}</h3>
+                                    <p className="text-sm text-gray-500">
+                                        {selectedChips}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                </div>
             </section>
             <button className="flex mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:hidden">
                 검색 결과 보기
