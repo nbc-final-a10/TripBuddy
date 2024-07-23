@@ -7,7 +7,10 @@ import useNextButton from '@/hooks/useFunnelNextStep';
 import React from 'react';
 
 const WritePage: React.FC = () => {
-    const { NextButton, step } = useNextButton(0, '다음', 4);
+    const { NextButton, step } = useNextButton({
+        buttonText: '다음',
+        limit: 4,
+    });
 
     return (
         <>
