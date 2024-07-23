@@ -1,11 +1,25 @@
 'use client';
 
+import { buddyThemes, tripThemes } from '@/data/themes';
 import { useAuth } from '@/hooks/auth.hooks';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import { useEffect } from 'react';
+import { ChangeEvent, FormEvent, useEffect } from 'react';
 
 function TestPage() {
     const { logOut } = useAuth();
+
+    const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        const selectedOptions = Array.from(event.target.selectedOptions);
+        if (selectedOptions.length > 3) {
+            selectedOptions.forEach(option => (option.selected = false));
+            alert('최대 3개의 테마만 선택할 수 있습니다.');
+        }
+    };
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log('테스트 알림 확인');
+    };
 
     useEffect(() => {
         showAlert('success', '테스트 알림입니다.', {
@@ -25,7 +39,7 @@ function TestPage() {
                 </button>
             </div>
 
-            <form>
+            <form onSubmit={handleSubmit}>
                 <label htmlFor="nickname">닉네임</label>
                 <input type="text" id="nickname" />
 
@@ -38,9 +52,25 @@ function TestPage() {
                 <label htmlFor="birth">생년월일</label>
                 <input type="date" id="birth" />
 
-                <select>
-                    <option value="male">남자</option>
-                    <option value="female">여자</option>
+                <label htmlFor="mbti">MBTI</label>
+                <input type="text" id="mbti" />
+
+                <label htmlFor="buddyTheme">선호버디테마</label>
+                <select id="buddyTheme" onChange={handleSelectChange}>
+                    {buddyThemes.map(theme => (
+                        <option key={theme} value={theme}>
+                            {theme}
+                        </option>
+                    ))}
+                </select>
+
+                <label htmlFor="tripTheme">선호여행테마</label>
+                <select id="tripTheme" onChange={handleSelectChange}>
+                    {tripThemes.map(theme => (
+                        <option key={theme} value={theme}>
+                            {theme}
+                        </option>
+                    ))}
                 </select>
             </form>
         </div>
