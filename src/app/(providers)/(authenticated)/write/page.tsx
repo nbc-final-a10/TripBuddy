@@ -14,21 +14,24 @@ const WritePage: React.FC<ProgressIndicatorProps> = () => {
     const { NextButton, step } = useNextButton(0, '다음', 4);
 
     return (
-        <section className="h-dvh flex flex-col  items-center">
-            <ProgressIndicator step={step} />
-            <div
-                style={{
-                    // flex: 1,
-                    display: 'flex',
-                    justifyContent: 'flex-start',
-                    alignItems: 'flex-start',
-                }}
-            >
-                {step === 0 && <WelcomePage />}
-                {step === 1 && <SelectDestinationPage />}
+        <>
+            <div className="mt-4 xl:mt-20 ml-5 xl:ml-64">
+                <ProgressIndicator step={step} />
             </div>
-            <NextButton className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-[150px] xl:w-[300px]" />
-        </section>
+            <section className="h-dvh flex flex-col items-center">
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'flex-start',
+                        alignItems: 'flex-start',
+                    }}
+                >
+                    {step === 0 && <WelcomePage />}
+                    {step === 1 && <SelectDestinationPage />}
+                </div>
+                <NextButton className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-[150px] xl:w-[300px]" />
+            </section>
+        </>
     );
 };
 
