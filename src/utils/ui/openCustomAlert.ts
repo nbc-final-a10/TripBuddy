@@ -5,12 +5,18 @@ import ReactDOM from 'react-dom/client';
 let alertContainer: HTMLDivElement | null = null;
 let root: ReactDOM.Root | null = null;
 
+interface AlertProps {
+    onConfirm?: () => void;
+    isConfirm?: boolean;
+}
+
 export function showAlert(
     title: 'success' | 'caution' | 'error', // 얼러트 타이틀
     description: string, // 얼러트 설명
-    onConfirm?: () => void, // 얼러트 콜백
-    isConfirm?: boolean, // 버튼 확인,취소 두개 보여질 것인지
+    options: AlertProps = {}, // 옵션 객체
 ): void {
+    const { onConfirm = null, isConfirm = false } = options;
+
     if (!alertContainer) {
         alertContainer = document.createElement('div');
         document.body.appendChild(alertContainer);

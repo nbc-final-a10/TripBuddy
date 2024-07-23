@@ -79,7 +79,9 @@ export function AuthProvider({
             }
 
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
-            showAlert('success', '로그인 성공!', () => router.replace('/'));
+            showAlert('success', '로그인 성공!', {
+                onConfirm: () => router.replace('/'),
+            });
         } catch (error) {
             console.error(error);
         }
@@ -120,9 +122,9 @@ export function AuthProvider({
 
             if (data.user) {
                 queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
-                showAlert('success', '회원가입 성공!', () =>
-                    router.replace('/'),
-                );
+                showAlert('success', '회원가입 성공!', {
+                    onConfirm: () => router.replace('/'),
+                });
             }
         } catch (error) {
             console.error(error);
@@ -166,9 +168,9 @@ export function AuthProvider({
             if (!response.ok) {
                 throw new Error('fetch 실패');
             }
-            return showAlert('success', '이메일 전송 성공!', () =>
-                router.replace('/login'),
-            );
+            return showAlert('success', '이메일 전송 성공!', {
+                onConfirm: () => router.replace('/login'),
+            });
         } catch (error) {
             console.error(error);
         }
@@ -190,9 +192,9 @@ export function AuthProvider({
                 return showAlert('caution', '기존 비밀번호와 동일합니다!');
             } else {
                 queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
-                return showAlert('success', '비밀번호 변경 성공!', () =>
-                    router.replace('/'),
-                );
+                return showAlert('success', '비밀번호 변경 성공!', {
+                    onConfirm: () => router.replace('/'),
+                });
             }
         } catch (error) {
             console.error(error);

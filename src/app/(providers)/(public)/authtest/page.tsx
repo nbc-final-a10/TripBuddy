@@ -8,14 +8,12 @@ function TestPage() {
     const { logOut } = useAuth();
 
     useEffect(() => {
-        showAlert(
-            'success',
-            '테스트 알림입니다.',
-            () => {
+        showAlert('success', '테스트 알림입니다.', {
+            onConfirm: () => {
                 console.log('테스트 알림 확인');
             },
-            true,
-        );
+            isConfirm: true,
+        });
     }, []);
 
     return (
