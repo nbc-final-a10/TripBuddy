@@ -18,14 +18,6 @@ const SelectDestinationPage = () => {
         <div className="flex flex-col h-screen">
             <SelectDestinationDescription />
 
-            {/* Title and Subtitle */}
-            <div className="text-center mb-4">
-                <h2 className="text-xl font-bold">여행지를 선택해주세요</h2>
-                <p className="text-gray-500">
-                    지역, 국가, 도시를 1개 선택해주세요.
-                </p>
-            </div>
-
             {/* Search Input */}
             <div className="flex items-center bg-gray-100 p-2 rounded mb-4 mx-4">
                 <span className="material-icons">아이콘</span>
