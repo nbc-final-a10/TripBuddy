@@ -17,6 +17,7 @@ const config: Config = {
                 'main-color': '#ffb806',
                 'secondary-color': '#2f00ff',
             },
+            scrollbar: ['hidden'],
         },
     },
     plugins: [],
