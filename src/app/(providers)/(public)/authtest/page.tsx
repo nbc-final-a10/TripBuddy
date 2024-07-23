@@ -1,5 +1,6 @@
 'use client';
 
+import { mbtis } from '@/data/mbtis';
 import { buddyThemes, tripThemes } from '@/data/themes';
 import { useAuth } from '@/hooks/auth.hooks';
 import { showAlert } from '@/utils/ui/openCustomAlert';
@@ -52,8 +53,11 @@ function TestPage() {
                 <label htmlFor="birth">생년월일</label>
                 <input type="date" id="birth" />
 
-                <label htmlFor="mbti">MBTI</label>
-                <input type="text" id="mbti" />
+                <label htmlFor="introduction">자기소개</label>
+                <input type="text" id="introduction" />
+
+                <label htmlFor="region">지역</label>
+                <input type="text" id="region" />
 
                 <label htmlFor="buddyTheme">선호버디테마</label>
                 <select id="buddyTheme" onChange={handleSelectChange}>
@@ -69,6 +73,15 @@ function TestPage() {
                     {tripThemes.map(theme => (
                         <option key={theme} value={theme}>
                             {theme}
+                        </option>
+                    ))}
+                </select>
+
+                <label htmlFor="mbti">MBTI</label>
+                <select id="mbti" onChange={handleSelectChange}>
+                    {mbtis.map(mbti => (
+                        <option key={mbti.mbti} value={mbti.mbti}>
+                            {mbti.mbti}
                         </option>
                     ))}
                 </select>
