@@ -12,7 +12,7 @@ const MainPageTitle: React.FC<MainPageTitleProps> = ({
     description,
 }) => {
     return (
-        <div>
+        <div className="mb-4">
             <div className="flex justify-between">
                 <p className="text-lg font-bold">{title}</p>
                 <button className="text-xs">{buttonText}</button>
