@@ -19,7 +19,7 @@ export type AuthContextValue = {
     buddy: Buddy | null;
     logIn: (email: string, password: string) => void;
     logOut: () => void;
-    signUp: (name: string, email: string, password: string) => void;
+    signUp: (email: string, password: string) => void;
     loginWithProvider: (provider: Provider) => void;
     resetPassword: (password: string) => void;
     sendingResetEmail: (email: string) => void;
@@ -102,15 +102,11 @@ export function AuthProvider({
         router.replace('/login');
     };
 
-    const signUp: AuthContextValue['signUp'] = async (
-        name,
-        email,
-        password,
-    ) => {
+    const signUp: AuthContextValue['signUp'] = async (email, password) => {
         if (buddy) return showAlert('caution', '이미 로그인 되어 있어요');
 
         try {
-            const payload = { name, email, password };
+            const payload = { email, password };
             const response = await fetch(`${PUBLIC_URL}/api/auth/signup`, {
                 method: 'POST',
                 body: JSON.stringify(payload),

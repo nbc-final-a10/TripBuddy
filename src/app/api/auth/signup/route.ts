@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
     const data = await request.json();
-    const name = data.name as string;
     const email = data.email as string;
     const password = data.password as string;
 
@@ -15,7 +14,8 @@ export async function POST(request: NextRequest) {
     } = await supabase.auth.signUp({
         email,
         password,
-        options: { data: { user_name: name } },
+        // 닉네임은 자동설정이고, 온보딩시에 설정하므로 아래 옵션은 삭제
+        // options: { data: { user_name: name } },
     });
 
     if (error) {

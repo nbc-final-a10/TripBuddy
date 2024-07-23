@@ -1,11 +1,12 @@
 import AuthPageBottom from '@/components/molecules/auth/AuthPageBottom';
 import AuthPageWrapper from '@/components/molecules/auth/AuthPageWrapper';
+import SignUpForm from '@/components/organisms/auth/SignUpForm';
 import Link from 'next/link';
 
 function SignUpPage() {
     return (
         <AuthPageWrapper>
-            {/* <SignUpForm /> */}
+            <SignUpForm />
 
             <AuthPageBottom />
 

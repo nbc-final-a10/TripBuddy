@@ -1,8 +1,6 @@
 'use client';
 
 import { useAuth } from '@/hooks/auth.hooks';
-import { emailRegex } from '@/utils/regexs';
-import { showAlert } from '@/utils/ui/openCustomAlert';
 import clsx from 'clsx';
 import { useSearchParams } from 'next/navigation';
 import { FormEvent, useState } from 'react';
@@ -26,11 +24,13 @@ function LogInForm() {
         const email = formData.get('email') as string;
         const password = formData.get('password') as string;
 
-        authValidation(email, password);
+        const isValid = authValidation(email, password);
 
-        // logIn(email, password);
+        if (!isValid) return;
 
         form.reset();
+
+        // logIn(email, password);
     };
 
     const handleRecoverPassword = (e: FormEvent<HTMLFormElement>) => {
@@ -38,11 +38,13 @@ function LogInForm() {
         const formData = new FormData(form);
         const email = formData.get('email') as string;
 
-        // sendingResetEmail(email);
+        const isValid = authValidation(email);
 
-        authValidation(email);
+        if (!isValid) return;
 
         form.reset();
+
+        // sendingResetEmail(email);
     };
 
     return (
