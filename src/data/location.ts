@@ -160,6 +160,10 @@ const locationData = [
                     { name: '원주시' },
                 ],
             },
+            {
+                name: '제주도',
+                subLocations: [{ name: '서귀포시' }, { name: '제주시' }],
+            },
         ],
     },
     {

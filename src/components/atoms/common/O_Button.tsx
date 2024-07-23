@@ -7,8 +7,8 @@ const buttonVariant = cva(
     {
         variants: {
             intent: {
-                primary: ' border-sky-500',
-                secondary: 'border-slate-500',
+                primary: ' border-main-color',
+                secondary: 'border-secondary-color',
                 danger: 'border-red-500',
             },
             size: {
@@ -25,22 +25,22 @@ const buttonVariant = cva(
             {
                 intent: 'primary',
                 variant: 'contained',
-                className: 'bg-sky-500',
+                className: 'bg-main-color',
             },
             {
                 intent: 'primary',
                 variant: 'outline',
-                className: 'text-sky-500',
+                className: 'text-main-color',
             },
             {
                 intent: 'secondary',
                 variant: 'contained',
-                className: 'bg-slate-500',
+                className: 'bg-secondary-color',
             },
             {
                 intent: 'secondary',
                 variant: 'outline',
-                className: 'text-slate-500',
+                className: 'text-secondary-color',
             },
             { intent: 'danger', variant: 'contained', className: 'bg-red-500' },
             { intent: 'danger', variant: 'outline', className: 'text-red-500' },
