@@ -28,9 +28,7 @@ export async function GET(request: NextRequest) {
         }
 
         if (data && !error) {
-            console.log('컨펌에서 데이터 잘 받아오는가? =>', data);
-            // redirect user to specified redirect URL or root of app
-            // revalidatePath("/recover");
+            // console.log('컨펌에서 데이터 잘 받아오는가? =>', data);
             redirect(next);
         }
     }

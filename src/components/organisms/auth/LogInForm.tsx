@@ -30,7 +30,7 @@ function LogInForm() {
 
         form.reset();
 
-        // logIn(email, password);
+        logIn(email, password);
     };
 
     const handleRecoverPassword = (e: FormEvent<HTMLFormElement>) => {
@@ -44,7 +44,7 @@ function LogInForm() {
 
         form.reset();
 
-        // sendingResetEmail(email);
+        sendingResetEmail(email);
     };
 
     return (

@@ -156,6 +156,9 @@ export function AuthProvider({
                 `${PUBLIC_URL}/api/auth/recover-redirect`,
                 {
                     method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                     body: JSON.stringify({ email }),
                 },
             );
