@@ -111,18 +111,18 @@ export function AuthProvider({
                 method: 'POST',
                 body: JSON.stringify(payload),
             });
-            if (!response.ok) {
-                throw new Error('fetch 실패');
-            }
             const data = await response.json();
+
+            if (!response.ok) {
+                if (data.error === 'User already registered')
+                    return showAlert('caution', '이미 가입된 이메일입니다!');
+            }
 
             if (data.user) {
                 queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
                 showAlert('success', '회원가입 성공!', () =>
                     router.replace('/'),
                 );
-            } else {
-                console.error(data.error);
             }
         } catch (error) {
             console.error(error);
