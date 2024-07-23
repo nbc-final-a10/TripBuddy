@@ -1,6 +1,6 @@
 const MainPageBanner = () => {
     return (
-        <div className="text-left font-semibold text-2xl p-4">
+        <div className="text-left font-semibold text-2xl px-4 py-8 h-[200px] flex flex-col justify-end">
             <p>
                 <span className="font-bold text-3xl">여행자</span>님,
             </p>

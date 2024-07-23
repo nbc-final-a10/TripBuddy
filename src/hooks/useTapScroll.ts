@@ -1,11 +1,11 @@
 'use client';
-import React, { useRef, MouseEvent } from 'react';
+import React, { useRef, MouseEvent as ReactMouseEvent } from 'react';
 
 function useTapScroll() {
     const createMouseDownHandler = (
         scrollContainerRef: React.RefObject<HTMLDivElement>,
     ) => {
-        return (event: MouseEvent) => {
+        return (event: ReactMouseEvent) => {
             const container = scrollContainerRef.current;
             if (container) {
                 const startX = event.pageX - container.offsetLeft;
