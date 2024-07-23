@@ -1,5 +1,4 @@
 'use client';
-
 import useCheckPwa from '@/hooks/useCheckPwa';
 import { useEffect, useState } from 'react';
 
@@ -16,8 +15,35 @@ interface BeforeInstallPromptEvent extends Event {
 const InstallPromptHandler = () => {
     const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null);
     const isPwa = useCheckPwa();
+    const [isIos, setIsIos] = useState(false);
+    const [isAndroid, setIsAndroid] = useState(false);
 
-    console.log(deferredPrompt);
+    useEffect(() => {
+        const handler = (e: Event) => {
+            console.log('beforeinstallprompt event fired');
+            e.preventDefault();
+            setDeferredPrompt(e);
+        };
+
+        window.addEventListener('beforeinstallprompt', handler as any);
+
+        return () => {
+            window.removeEventListener('beforeinstallprompt', handler as any);
+        };
+    }, []);
+
+    useEffect(() => {
+        const ua = window.navigator.userAgent;
+        const isIOS = /iPad|iPhone|iPod/.test(ua) && !(window as any).MSStream;
+        const isAndroid = /Android/.test(ua);
+
+        setIsIos(isIOS);
+        setIsAndroid(isAndroid);
+
+        if (isPwa) {
+            alert('PWA가 이미 설치되었습니다.');
+        }
+    }, [isPwa]);
 
     const handleInstallClick = () => {
         console.log('버튼 클릭되었음');
@@ -31,6 +57,8 @@ const InstallPromptHandler = () => {
                 }
                 setDeferredPrompt(null);
             });
+        } else {
+            alert('설치 가능 여부를 확인할 수 없습니다.');
         }
     };
 

@@ -3,11 +3,7 @@
     "short_name": "NextPWA",
     "description": "My awesome Next.js PWA!",
     "icons": [
-        {
-            "src": "/test_icon.png",
-            "type": "image/png",
-            "sizes": "192x192"
-        },
+
         {
             "src": "/test_icon.png",
             "type": "image/png",
