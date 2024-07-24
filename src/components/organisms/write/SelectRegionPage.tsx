@@ -29,7 +29,7 @@ function Chip({ label, isSelected, onClick }: ChipProps) {
 }
 
 export default function SelectRegion() {
-    const [isDomestic, setIsDomestic] = useState(true);
+    const [isDomestic, setIsDomestic] = useState<boolean>(true);
     const [selectedChip, setSelectedChip] = useState<string | null>(null);
     const [selectedSubLocations, setSelectedSubLocations] = useState<
         Location[]
@@ -44,8 +44,8 @@ export default function SelectRegion() {
     const topLocations = locationData[isDomestic ? 0 : 1].subLocations;
 
     // 국내/해외 선택 처리
-    const handleLocationTypeClick = (isDomestic: boolean) => {
-        setIsDomestic(isDomestic);
+    const handleLocationTypeClick = (isDomesticSelected: boolean) => {
+        setIsDomestic(isDomesticSelected);
         setSelectedChip(null);
         setSelectedSubLocations([]);
     };
