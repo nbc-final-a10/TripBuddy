@@ -55,16 +55,16 @@ export default function SelectRegion() {
         const selectedLocation = topLocations?.find(
             location => location.name === name,
         );
-        setSelectedSubLocation(selectedLocation?.subLocations || []);
+        setSelectedSubLocation(
+            (selectedLocation?.subLocations as unknown as Location[]) || [],
+        );
     };
 
     return (
         <main className="p-4">
             <section className="mb-2">
                 <header className="mt-2 mb-5">
-                    <h2 className="text-2xl font-bold">
-                        여행지를 선택해주세요
-                    </h2>
+                    <p className="text-2xl font-bold">여행지를 선택해주세요</p>
                     <p className="text-sm text-gray-500">
                         지역, 국가, 도시를 1개 선택해주세요.
                     </p>

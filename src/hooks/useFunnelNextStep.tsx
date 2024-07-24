@@ -2,15 +2,17 @@
 
 import { useCallback, useState } from 'react';
 
+type UseNextButtonProps = {
+    initialStep?: number;
+    limit: number;
+    buttonText: string;
+};
+
 const useNextButton = ({
     initialStep = 0,
     limit,
     buttonText,
-}: {
-    initialStep?: number;
-    limit: number;
-    buttonText: string;
-}) => {
+}: UseNextButtonProps) => {
     const [step, setStep] = useState(initialStep);
 
     const handleNext = useCallback(() => {
