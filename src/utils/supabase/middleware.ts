@@ -6,7 +6,9 @@ export async function updateSession(request: NextRequest) {
     requestHeaders.set('x-pathname', request.nextUrl.pathname);
 
     let supabaseResponse = NextResponse.next({
-        request,
+        request: {
+            headers: requestHeaders,
+        },
     });
 
     const supabase = createServerClient(
