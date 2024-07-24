@@ -2,11 +2,15 @@
 
 import { Chip } from '@/components/molecules/H_chips';
 import locationData from '@/data/location';
-import { useState } from 'react';
+import useTapScroll from '@/hooks/useTapScroll';
+import { useRef, useState } from 'react';
 
 const LocationSearchPage = () => {
     const [isDomestic, setIsDomestic] = useState(true);
     const [selectedChips, setSelectedChips] = useState<string | null>(null);
+
+    // const { createMouseDownHandler } = useTapScroll<HTMLUListElement>();
+    const h_chipsRef = useRef<HTMLUListElement>(null);
 
     // 국내
     const handleDomesticClick = () => {
@@ -72,7 +76,11 @@ const LocationSearchPage = () => {
             </section>
 
             <section className="py-3">
-                <ul className="flex flex-nowrap gap-2 py-3 whitespace-nowrap mb-5 overflow-x-auto">
+                <ul
+                    className="flex flex-nowrap gap-[10px] py-3 whitespace-nowrap mb-5 overflow-x-auto"
+                    ref={h_chipsRef}
+                    // onMouseDown={createMouseDownHandler(h_chipsRef)}
+                >
                     {selectedLocation.subLocations?.map(subLocation => (
                         <li key={subLocation.name}>
                             <Chip
