@@ -1,4 +1,4 @@
-const MainPageTrips = () => {
+const HomePageTrips = () => {
     const trips = Array.from({ length: 5 }, (_, index) => `trip ${index + 1}`);
     return (
         <>
@@ -14,4 +14,4 @@ const MainPageTrips = () => {
     );
 };
 
-export default MainPageTrips;
+export default HomePageTrips;

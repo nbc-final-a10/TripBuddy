@@ -1,4 +1,4 @@
-const MainPageBanner = () => {
+const HomePageBanner = () => {
     return (
         <div className="text-left font-semibold text-2xl px-4 py-8 h-[200px] flex flex-col justify-end">
             <p>
@@ -12,4 +12,4 @@ const MainPageBanner = () => {
     );
 };
 
-export default MainPageBanner;
+export default HomePageBanner;

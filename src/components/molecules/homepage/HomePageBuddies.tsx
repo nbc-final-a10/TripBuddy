@@ -1,4 +1,4 @@
-const MainPageBuddies = () => {
+const HomePageBuddies = () => {
     const buddies = Array.from(
         { length: 5 },
         (_, index) => `Buddy ${index + 1}`,
@@ -17,4 +17,4 @@ const MainPageBuddies = () => {
     );
 };
 
-export default MainPageBuddies;
+export default HomePageBuddies;

@@ -1,4 +1,4 @@
-const MainPageStories = () => {
+const HomePageStories = () => {
     const stories = Array.from(
         { length: 5 },
         (_, index) => `스토리 ${index + 1}`,
@@ -17,4 +17,4 @@ const MainPageStories = () => {
     );
 };
 
-export default MainPageStories;
+export default HomePageStories;

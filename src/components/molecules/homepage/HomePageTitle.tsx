@@ -1,12 +1,12 @@
 import React from 'react';
 
-interface MainPageTitleProps {
+interface HomePageTitleProps {
     title: string;
     buttonText: string;
     description: string;
 }
 
-const MainPageTitle: React.FC<MainPageTitleProps> = ({
+const HomePageTitle: React.FC<HomePageTitleProps> = ({
     title,
     buttonText,
     description,
@@ -23,4 +23,4 @@ const MainPageTitle: React.FC<MainPageTitleProps> = ({
     );
 };
 
-export default MainPageTitle;
+export default HomePageTitle;
