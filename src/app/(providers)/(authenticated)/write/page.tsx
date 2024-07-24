@@ -1,7 +1,7 @@
 'use client';
 
 import ProgressIndicator from '@/components/molecules/write/ProgressIndicator';
-import SelectRegion from '@/components/organisms/write/SelectRegion';
+import SelectRegion from '@/components/organisms/write/SelectRegionPage';
 import WelcomePage from '@/components/organisms/write/WelcomePage';
 import useNextButton from '@/hooks/useFunnelNextStep';
 import React from 'react';
