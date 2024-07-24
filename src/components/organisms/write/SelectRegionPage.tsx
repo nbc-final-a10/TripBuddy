@@ -30,7 +30,9 @@ function Chip({ label, isSelected, onClick }: ChipProps) {
 
 export default function SelectRegion() {
     const [isDomestic, setIsDomestic] = useState<boolean>(true);
-    const [selectedChip, setSelectedChip] = useState<string | null>(null);
+    const [selectedLocationName, setSelectedLocationName] = useState<
+        string | null
+    >(null);
     const [selectedSubLocations, setSelectedSubLocations] = useState<
         Location[]
     >([]);
@@ -46,13 +48,13 @@ export default function SelectRegion() {
     // 국내/해외 선택 처리
     const handleLocationTypeClick = (isDomesticSelected: boolean) => {
         setIsDomestic(isDomesticSelected);
-        setSelectedChip(null);
+        setSelectedLocationName(null);
         setSelectedSubLocations([]);
     };
 
     // 칩 클릭 처리 (시도, 대륙 선택 시 도시, 국가명 렌더링)
     const handleChipClick = (name: string) => {
-        setSelectedChip(name);
+        setSelectedLocationName(name);
         const selectedLocation = topLocations?.find(
             location => location.name === name,
         );
@@ -98,7 +100,9 @@ export default function SelectRegion() {
                         <div key={subLocation.name} className="flex-none">
                             <Chip
                                 label={subLocation.name}
-                                isSelected={selectedChip === subLocation.name}
+                                isSelected={
+                                    selectedLocationName === subLocation.name
+                                }
                                 onClick={() =>
                                     handleChipClick(subLocation.name)
                                 }
@@ -116,7 +120,7 @@ export default function SelectRegion() {
                             <div>
                                 <h3 className="text-sm">{loc.name}</h3>
                                 <p className="text-sm text-gray-500">
-                                    {selectedChip}
+                                    {selectedLocationName}
                                 </p>
                             </div>
                         </div>
