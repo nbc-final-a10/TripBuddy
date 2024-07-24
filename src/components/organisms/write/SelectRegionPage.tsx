@@ -41,9 +41,7 @@ export default function SelectRegion() {
     const handleMouseDown = createMouseDownHandler(scrollContainerRef);
 
     // 위치 데이터 필터링
-    const topLocations = isDomestic
-        ? locationData[0].subLocations
-        : locationData[1].subLocations;
+    const topLocations = locationData[isDomestic ? 0 : 1].subLocations;
 
     // 국내/해외 선택 처리
     const handleLocationTypeClick = (isDomestic: boolean) => {
@@ -63,74 +61,68 @@ export default function SelectRegion() {
 
     return (
         <>
-            <header className="mt-2 mb-5">
+            <header className="mt-10 mb-5">
                 <Left2xlBoldText text="여행지를 선택해주세요" />
                 <LeftSmGrayText text="지역, 국가, 도시를 1개 선택해주세요." />
             </header>
-            <main className="p-4">
-                <section className="mb-2">
-                    <div className="flex justify-center items-center w-full">
-                        <label
-                            htmlFor="toggle"
-                            className="flex cursor-pointer items-center bg-gray-200 rounded-full p-1 w-full"
-                        >
-                            <div
-                                onClick={() => handleLocationTypeClick(true)}
-                                className={`rounded-full px-4 py-0.5 w-1/2 text-center transition duration-300 ease-in-out font-semibold ${isDomestic ? 'bg-white text-black' : 'bg-gray-200 text-black'}`}
-                            >
-                                국내
-                            </div>
-                            <div
-                                onClick={() => handleLocationTypeClick(false)}
-                                className={`rounded-full px-4 py-0.5 w-1/2 text-center transition duration-300 ease-in-out font-semibold ${!isDomestic ? 'bg-white text-black' : 'bg-gray-200 text-black'}`}
-                            >
-                                해외
-                            </div>
-                        </label>
-                    </div>
-                </section>
 
-                <section className="py-3">
+            {/* 국내/해외 스위치 버튼 */}
+            <section className="mb-2">
+                <label
+                    htmlFor="toggle"
+                    className="flex cursor-pointer items-center bg-gray-200 rounded-full p-1 w-[200px] xl:w-[400px]"
+                >
                     <div
-                        className="flex flex-nowrap gap-2 py-3 whitespace-nowrap mb-5 overflow-x-auto custom-scroll"
-                        ref={scrollContainerRef}
-                        onMouseDown={handleMouseDown}
+                        onClick={() => handleLocationTypeClick(true)}
+                        className={`rounded-full px-4 py-0.5 w-1/2 text-center transition duration-300 ease-in-out font-semibold ${isDomestic ? 'bg-white text-black' : 'bg-gray-200 text-black'}`}
                     >
-                        {topLocations?.map(subLocation => (
-                            <div key={subLocation.name} className="flex-none">
-                                <Chip
-                                    label={subLocation.name}
-                                    isSelected={
-                                        selectedChip === subLocation.name
-                                    }
-                                    onClick={() =>
-                                        handleChipClick(subLocation.name)
-                                    }
-                                />
-                            </div>
-                        ))}
+                        국내
                     </div>
-                    <div className="my-3">
-                        {selectedSubLocations.map(loc => (
-                            <div
-                                key={loc.name}
-                                className="flex items-center border-b border-gray-300 pb-3 mt-3"
-                            >
-                                <div className="w-9 h-9 bg-gray-300 mr-2 rounded-full"></div>
-                                <div>
-                                    <h3 className="text-sm">{loc.name}</h3>
-                                    <p className="text-sm text-gray-500">
-                                        {selectedChip}
-                                    </p>
-                                </div>
-                            </div>
-                        ))}
+                    <div
+                        onClick={() => handleLocationTypeClick(false)}
+                        className={`rounded-full px-4 py-0.5 w-1/2 text-center transition duration-300 ease-in-out font-semibold ${!isDomestic ? 'bg-white text-black' : 'bg-gray-200 text-black'}`}
+                    >
+                        해외
                     </div>
-                </section>
-                <button className="flex mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:hidden">
-                    검색 결과 보기
-                </button>
-            </main>
+                </label>
+            </section>
+
+            {/* 도시/대륙 선택 */}
+            <section className="py-3">
+                <div
+                    className="flex flex-nowrap gap-2 py-3 whitespace-nowrap mb-5 overflow-x-auto"
+                    ref={scrollContainerRef}
+                    onMouseDown={handleMouseDown}
+                >
+                    {topLocations?.map(subLocation => (
+                        <div key={subLocation.name} className="flex-none">
+                            <Chip
+                                label={subLocation.name}
+                                isSelected={selectedChip === subLocation.name}
+                                onClick={() =>
+                                    handleChipClick(subLocation.name)
+                                }
+                            />
+                        </div>
+                    ))}
+                </div>
+                <div className="my-3">
+                    {selectedSubLocations.map(loc => (
+                        <div
+                            key={loc.name}
+                            className="flex items-center border-b border-gray-300 pb-3 mt-3"
+                        >
+                            <div className="w-9 h-9 bg-gray-300 mr-2 rounded-full"></div>
+                            <div>
+                                <h3 className="text-sm">{loc.name}</h3>
+                                <p className="text-sm text-gray-500">
+                                    {selectedChip}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </section>
         </>
     );
 }
