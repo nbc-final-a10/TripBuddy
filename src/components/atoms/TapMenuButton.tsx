@@ -12,7 +12,7 @@ interface TapMenuButtonProps {
 const TapMenuButton: React.FC<TapMenuButtonProps> = ({ iconName, href }) => {
     return (
         <Link href={href}>
-            <button className="flex items-center justify-center p-4 hover:bg-gray-200 focus:outline-none">
+            <button className="flex items-center justify-center w-full p-4 hover:bg-gray-200 focus:outline-none">
                 <Image
                     src={`/svg/${iconName}.svg`}
                     alt={iconName}

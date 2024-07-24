@@ -3,7 +3,7 @@ import TapMenuButton from '../atoms/TapMenuButton';
 
 const TapMenu: React.FC = () => {
     return (
-        <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-[375px] bg-white border-t-2 border-gray-200 grid grid-cols-4 justify-items-center xl:hidden">
+        <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-[375px] bg-white border-t-2 border-gray-200 grid grid-cols-4">
             <TapMenuButton iconName="Home" href="/" />
             <TapMenuButton iconName="Trip" href="/" />
             <TapMenuButton iconName="Chat" href="/chat" />
