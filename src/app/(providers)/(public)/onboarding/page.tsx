@@ -5,17 +5,17 @@ import locationData from '@/data/location';
 import { mbtis } from '@/data/mbtis';
 import { buddyThemes, tripThemes } from '@/data/themes';
 import { useAuth } from '@/hooks/auth.hooks';
-import { ChangeEvent, FormEvent, MouseEvent, useState } from 'react';
+import { FormEvent, MouseEvent, useCallback, useState } from 'react';
 
 function OnBoardingPage() {
     const { logOut } = useAuth();
 
-    const [selectedLocation, setSelectedLocation] = useState<string[]>([]);
+    const [selectedLocation, setSelectedLocation] = useState<string>('');
     const [selectedBuddyTheme, setSelectedBuddyTheme] = useState<string[]>([]);
     const [selectedTripTheme, setSelectedTripTheme] = useState<string[]>([]);
     const [selectedMbti, setSelectedMbti] = useState<string>('');
 
-    const setStateActionWhenChipClick =
+    const setStateActionWhenChipClick = useCallback(
         (target: EventTarget & HTMLSpanElement) => (prevSelected: string[]) => {
             if (prevSelected.includes(target.innerText)) {
                 // 선택 해제
@@ -55,11 +55,13 @@ function OnBoardingPage() {
                 newSelected[indexToReplace] = target.innerText;
                 return newSelected;
             }
-        };
+        },
+        [],
+    );
 
     const handleLocationChange = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
-        setSelectedLocation(setStateActionWhenChipClick(target));
+        setSelectedLocation(target.innerText);
     };
 
     const handleBuddyThemeChange = (e: MouseEvent<HTMLSpanElement>) => {
@@ -94,19 +96,15 @@ function OnBoardingPage() {
         const gender = formData.get('gender');
         const birth = formData.get('birth');
         const introduction = formData.get('introduction');
-        const region = formData.get('region');
-        const buddyTheme = formData.getAll('buddyTheme');
-        const tripTheme = formData.getAll('tripTheme');
-        const mbti = formData.get('mbti');
 
         console.log('nickname ===>', nickname);
         console.log('gender ===>', gender);
         console.log('birth ===>', birth);
         console.log('introduction ===>', introduction);
-        console.log('region ===>', region);
-        console.log('buddyTheme ===>', buddyTheme);
-        console.log('tripTheme ===>', tripTheme);
-        console.log('mbti ===>', mbti);
+        console.log('region ===>', selectedLocation);
+        console.log('buddyTheme ===>', selectedBuddyTheme);
+        console.log('tripTheme ===>', selectedTripTheme);
+        console.log('mbti ===>', selectedMbti);
     };
 
     return (

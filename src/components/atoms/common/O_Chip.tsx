@@ -39,7 +39,7 @@ const chipVariants = cva(
 
                 계획: 'bg-slate-500 border-slate-500 text-white',
                 즉흥: 'bg-fuchsia-500 border-fuchsia-500 text-white',
-                빨리빨리: 'bg-red-300 border-red-300 text-white',
+                빨리빨리: 'bg-red-500 border-red-500 text-white',
                 느긋느긋: 'bg-lime-500 border-lime-500 text-white',
                 촬영: 'bg-white border-black text-black',
                 감상: 'bg-black border-black text-white',
@@ -50,7 +50,7 @@ const chipVariants = cva(
 
                 도시: 'bg-red-400 border-red-400 text-white',
                 자연: 'bg-green-400 border-green-400 text-white',
-                유명맛집: 'bg-blue-400 border-blue-400 text-white',
+                유명맛집: 'bg-blue-500 border-blue-500 text-white',
                 로컬맛집: 'bg-fuchsia-500 border-fuchsia-500 text-white',
                 힐링: 'bg-lime-400 border-lime-400 text-white',
                 액티비티: 'bg-orange-400 border-orange-400 text-white',
