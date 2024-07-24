@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Header() {
     return (
-        <header className="hidden xl:flex w-[1280px] h-[100px] items-center bg-white justify-between border-b-2 border-gray-400">
+        <header className="hidden xl:flex fixed w-[1280px] h-[100px] items-center bg-white justify-between border-b-2 border-gray-400">
             <div className="flex gap-12">
                 <span>로고</span>
                 <span>HOME</span>

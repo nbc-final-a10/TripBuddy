@@ -8,7 +8,7 @@ function ProviderLayout({ children }: PropsWithChildren) {
         <main className="bg-slate-50 xl:bg-white">
             <section className="w-[375px] mx-auto bg-white xl:w-[1280px] min-h-screen relative">
                 <Header />
-                {children}
+                <div className="pb-[50px] xl:pt-[100px]">{children}</div>
                 <TapMenu />
             </section>
         </main>
