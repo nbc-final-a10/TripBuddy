@@ -1,4 +1,3 @@
-// src/components/organisms/tutorial/TutorialPage1.tsx
 import React from 'react';
 import Image from 'next/image';
 
