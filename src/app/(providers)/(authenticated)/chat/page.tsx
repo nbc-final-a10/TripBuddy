@@ -1,7 +1,10 @@
+import ChatList from '@/components/organisms/chatpage/ChatList';
+
 export default function Chat() {
     return (
-        <div className="bg-gray-300">
-            <div>채팅페이지</div>
+        <div className="bg-white">
+            <div>채팅</div>
+            <ChatList />
         </div>
     );
 }
