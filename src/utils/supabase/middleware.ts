@@ -5,6 +5,14 @@ export async function updateSession(request: NextRequest) {
     const requestHeaders = new Headers(request.headers);
     requestHeaders.set('x-pathname', request.nextUrl.pathname);
 
+    // 쿼리 파라미터를 문자열로 변환
+    // const queryParams = new URLSearchParams(request.nextUrl.searchParams);
+    // requestHeaders.set('x-queryparams', queryParams.toString());
+
+    // 특정 쿼리 파라미터 가져오기
+    const funnelParam = request.nextUrl.searchParams.get('funnel');
+    if (funnelParam) requestHeaders.set('x-funnel', funnelParam);
+
     let supabaseResponse = NextResponse.next({
         request: {
             headers: requestHeaders,

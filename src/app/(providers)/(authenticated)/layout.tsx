@@ -10,20 +10,14 @@ type AuthenticatedLayoutProps = {
 
 const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
     children,
-    searchParams,
 }) => {
-    const pathname = getPathnameServer();
+    const { pathname, queryParams } = getPathnameServer();
 
-    let headerMode = 'default';
-
-    console.log('pathname', pathname);
-    console.log('searchParams', searchParams);
-
-    // if (params.slug === 'write') headerMode = 'write';
+    console.log('queryParams ===>', queryParams);
 
     return (
         <>
-            {headerMode === 'write' && <MobileHeader title="여정 작성" close />}
+            {pathname === '/write' && <MobileHeader title="여정 작성" close />}
             {children}
         </>
     );
