@@ -13,10 +13,10 @@ function OnBoardingPage() {
     const [selectedLocation, setSelectedLocation] = useState<string[]>([]);
     const [selectedBuddyTheme, setSelectedBuddyTheme] = useState<string[]>([]);
     const [selectedTripTheme, setSelectedTripTheme] = useState<string[]>([]);
+    const [selectedMbti, setSelectedMbti] = useState<string>('');
 
-    const handleLocationChange = (e: MouseEvent<HTMLSpanElement>) => {
-        const target = e.currentTarget;
-        setSelectedLocation(prevSelected => {
+    const setStateActionWhenChipClick =
+        (target: EventTarget & HTMLSpanElement) => (prevSelected: string[]) => {
             if (prevSelected.includes(target.innerText)) {
                 // 선택 해제
                 return prevSelected.filter(l => l !== target.innerText);
@@ -55,16 +55,35 @@ function OnBoardingPage() {
                 newSelected[indexToReplace] = target.innerText;
                 return newSelected;
             }
-        });
+        };
+
+    const handleLocationChange = (e: MouseEvent<HTMLSpanElement>) => {
+        const target = e.currentTarget;
+        setSelectedLocation(setStateActionWhenChipClick(target));
     };
 
-    const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-        const selectedOptions = Array.from(event.target.selectedOptions);
-        if (selectedOptions.length > 3) {
-            selectedOptions.forEach(option => (option.selected = false));
-            alert('최대 3개의 테마만 선택할 수 있습니다.');
-        }
+    const handleBuddyThemeChange = (e: MouseEvent<HTMLSpanElement>) => {
+        const target = e.currentTarget;
+        setSelectedBuddyTheme(setStateActionWhenChipClick(target));
     };
+
+    const handleTripThemeChange = (e: MouseEvent<HTMLSpanElement>) => {
+        const target = e.currentTarget;
+        setSelectedTripTheme(setStateActionWhenChipClick(target));
+    };
+
+    const handleMbtiChange = (e: MouseEvent<HTMLSpanElement>) => {
+        const target = e.currentTarget;
+        setSelectedMbti(target.innerText);
+    };
+
+    // const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    //     const selectedOptions = Array.from(event.target.selectedOptions);
+    //     if (selectedOptions.length > 3) {
+    //         selectedOptions.forEach(option => (option.selected = false));
+    //         alert('최대 3개의 테마만 선택할 수 있습니다.');
+    //     }
+    // };
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -143,6 +162,7 @@ function OnBoardingPage() {
                             key={location.name}
                             selected={selectedLocation.includes(location.name)}
                             onClick={handleLocationChange}
+                            intent={location.name}
                         >
                             {location.name}
                         </Chip>
@@ -150,52 +170,46 @@ function OnBoardingPage() {
                 </section>
 
                 <label htmlFor="buddyTheme">선호버디테마</label>
-                <select
-                    id="buddyTheme"
-                    name="buddyTheme"
-                    onChange={handleSelectChange}
-                    multiple
-                    className="w-full border-2 border-gray-300 rounded-md"
-                >
+                <section className="flex flex-wrap gap-2">
                     {buddyThemes.map(theme => (
-                        <option key={theme} value={theme} defaultValue={'계획'}>
+                        <Chip
+                            key={theme}
+                            selected={selectedBuddyTheme.includes(theme)}
+                            onClick={handleBuddyThemeChange}
+                            intent={theme}
+                        >
                             {theme}
-                        </option>
+                        </Chip>
                     ))}
-                </select>
+                </section>
 
                 <label htmlFor="tripTheme">선호여행테마</label>
-                <select
-                    id="tripTheme"
-                    name="tripTheme"
-                    onChange={handleSelectChange}
-                    multiple
-                    className="w-full border-2 border-gray-300 rounded-md"
-                >
+                <section className="flex flex-wrap gap-2">
                     {tripThemes.map(theme => (
-                        <option key={theme} value={theme} defaultValue={'도시'}>
+                        <Chip
+                            key={theme}
+                            selected={selectedTripTheme.includes(theme)}
+                            onClick={handleTripThemeChange}
+                            intent={theme}
+                        >
                             {theme}
-                        </option>
+                        </Chip>
                     ))}
-                </select>
+                </section>
 
                 <label htmlFor="mbti">MBTI</label>
-                <select
-                    id="mbti"
-                    name="mbti"
-                    onChange={handleSelectChange}
-                    className="w-full border-2 border-gray-300 rounded-md"
-                >
+                <section className="flex flex-wrap gap-2">
                     {mbtis.map(mbti => (
-                        <option
+                        <Chip
                             key={mbti.mbti}
-                            value={mbti.mbti}
-                            defaultValue={'INTJ'}
+                            selected={selectedMbti.includes(mbti.mbti)}
+                            onClick={handleMbtiChange}
+                            intent={mbti.mbti}
                         >
                             {mbti.mbti}
-                        </option>
+                        </Chip>
                     ))}
-                </select>
+                </section>
 
                 <button
                     className="w-full bg-blue-500 text-white p-2 rounded-md"
