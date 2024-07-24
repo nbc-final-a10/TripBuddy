@@ -12,10 +12,11 @@ const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
     children,
     searchParams,
 }) => {
-    // const pathname = getPathnameServer(request);
+    const pathname = getPathnameServer();
 
     let headerMode = 'default';
 
+    console.log('pathname', pathname);
     console.log('searchParams', searchParams);
 
     // if (params.slug === 'write') headerMode = 'write';
