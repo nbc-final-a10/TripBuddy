@@ -36,13 +36,13 @@ export default function SelectRegion() {
     const [selectedSubLocations, setSelectedSubLocations] = useState<
         Location[]
     >([]);
-    const [selectedLocationData, setSelctedLocationData] = useState<Location[]>(
-        [],
-    );
+    const [selectedLocationData, setSelectedLocationData] = useState<
+        Location[]
+    >([]);
 
     useEffect(
         () =>
-            setSelctedLocationData(
+            setSelectedLocationData(
                 (locationData[isDomestic ? 0 : 1]?.subLocations || []).map(
                     location => ({
                         name: location.name,
