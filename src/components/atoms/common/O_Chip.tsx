@@ -1,14 +1,21 @@
+import { SecondLevelNames } from '@/types/Location.types';
+import { MBTI } from '@/types/Mbtis.types';
+import { BuddyTheme, TripTheme } from '@/types/Themes.types';
+import { tailwindMerge } from '@/utils/ui/tailwind_merge';
 import { VariantProps, cva } from 'class-variance-authority';
+import React from 'react';
 
 const chipVariants = cva(
     [
         'text-sm',
+        'text-center',
         'border',
         'rounded-full',
         'px-2.5',
         'py-0.5',
-        'hover:opacity-50',
         'transition-opacity',
+        'whitespace-nowrap',
+        'cursor-pointer',
     ],
     {
         variants: {
@@ -66,9 +73,14 @@ const chipVariants = cva(
                 ESTP: 'bg-amber-500 border-amber-500 text-white',
                 ESFP: 'bg-amber-400 border-amber-400 text-white',
             },
+            variant: {
+                selected: 'opacity-100',
+                unselected: 'opacity-60',
+            },
         },
         defaultVariants: {
             intent: '인기',
+            variant: 'unselected',
         },
     },
 );
@@ -76,11 +88,28 @@ const chipVariants = cva(
 type ChipVariantsType = VariantProps<typeof chipVariants>;
 
 type ChipProps = {
-    label: string;
-} & ChipVariantsType;
+    children: SecondLevelNames | MBTI | TripTheme | BuddyTheme;
+    selected: boolean;
+    onClick: (e: React.MouseEvent<HTMLSpanElement>) => void;
+} & ChipVariantsType &
+    React.ComponentProps<'span'>;
 
-function Chip({ label, intent }: ChipProps) {
-    return <div className={chipVariants({ intent })}>{label}</div>;
+function Chip({ children, intent, selected, onClick, ...props }: ChipProps) {
+    return (
+        <span
+            className={tailwindMerge(
+                chipVariants({
+                    intent,
+                    variant: selected ? 'selected' : 'unselected',
+                }),
+                props.className,
+            )}
+            {...props}
+            onClick={onClick}
+        >
+            {children}
+        </span>
+    );
 }
 
 export default Chip;

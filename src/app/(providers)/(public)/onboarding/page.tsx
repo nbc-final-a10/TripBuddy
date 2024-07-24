@@ -1,14 +1,62 @@
 'use client';
 
+import Chip from '@/components/atoms/common/O_Chip';
 import locationData from '@/data/location';
 import { mbtis } from '@/data/mbtis';
 import { buddyThemes, tripThemes } from '@/data/themes';
 import { useAuth } from '@/hooks/auth.hooks';
-import { showAlert } from '@/utils/ui/openCustomAlert';
-import { ChangeEvent, FormEvent, useEffect } from 'react';
+import { ChangeEvent, FormEvent, MouseEvent, useState } from 'react';
 
-function TestPage() {
+function OnBoardingPage() {
     const { logOut } = useAuth();
+
+    const [selectedLocation, setSelectedLocation] = useState<string[]>([]);
+    const [selectedBuddyTheme, setSelectedBuddyTheme] = useState<string[]>([]);
+    const [selectedTripTheme, setSelectedTripTheme] = useState<string[]>([]);
+
+    const handleLocationChange = (e: MouseEvent<HTMLSpanElement>) => {
+        const target = e.currentTarget;
+        setSelectedLocation(prevSelected => {
+            if (prevSelected.includes(target.innerText)) {
+                // 선택 해제
+                return prevSelected.filter(l => l !== target.innerText);
+            } else if (prevSelected.length < 3) {
+                // 새로운 선택 추가
+                return [...prevSelected, target.innerText];
+            } else {
+                // 선택된 Chip이 3개일 때, 가장 가까운 인덱스의 Chip을 해제하고 새로운 선택 추가
+                const newSelected = [...prevSelected];
+                const indexToReplace = prevSelected
+                    .map(selected =>
+                        locationData[0].subLocations.findIndex(
+                            option => option.name === selected,
+                        ),
+                    )
+                    .reduce(
+                        (closest, current, idx, arr) =>
+                            Math.abs(
+                                current -
+                                    locationData[0].subLocations.findIndex(
+                                        option =>
+                                            option.name === target.innerText,
+                                    ),
+                            ) <
+                            Math.abs(
+                                arr[closest] -
+                                    locationData[0].subLocations.findIndex(
+                                        option =>
+                                            option.name === target.innerText,
+                                    ),
+                            )
+                                ? idx
+                                : closest,
+                        0,
+                    );
+                newSelected[indexToReplace] = target.innerText;
+                return newSelected;
+            }
+        });
+    };
 
     const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
         const selectedOptions = Array.from(event.target.selectedOptions);
@@ -41,15 +89,6 @@ function TestPage() {
         console.log('tripTheme ===>', tripTheme);
         console.log('mbti ===>', mbti);
     };
-
-    useEffect(() => {
-        showAlert('success', '테스트 알림입니다.', {
-            onConfirm: () => {
-                console.log('테스트 알림 확인');
-            },
-            isConfirm: true,
-        });
-    }, []);
 
     return (
         <div>
@@ -98,21 +137,17 @@ function TestPage() {
                 />
 
                 <label htmlFor="region">지역</label>
-                <select
-                    id="region"
-                    name="region"
-                    className="w-full border-2 border-gray-300 rounded-md"
-                >
+                <section className="flex flex-wrap gap-2">
                     {locationData[0].subLocations.map(location => (
-                        <option
+                        <Chip
                             key={location.name}
-                            value={location.name}
-                            defaultValue={'서울/경기'}
+                            selected={selectedLocation.includes(location.name)}
+                            onClick={handleLocationChange}
                         >
                             {location.name}
-                        </option>
+                        </Chip>
                     ))}
-                </select>
+                </section>
 
                 <label htmlFor="buddyTheme">선호버디테마</label>
                 <select
@@ -173,4 +208,4 @@ function TestPage() {
     );
 }
 
-export default TestPage;
+export default OnBoardingPage;
