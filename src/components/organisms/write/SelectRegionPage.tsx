@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import locationData from '@/data/location';
 import Left2xlBoldText from '@/components/atoms/MyPage/Left2xlText';
 import LeftSmGrayText from '@/components/atoms/MyPage/LeftSmGrayText';
@@ -36,14 +36,29 @@ export default function SelectRegion() {
     const [selectedSubLocations, setSelectedSubLocations] = useState<
         Location[]
     >([]);
+    const [selectedLocationData, setSelctedLocationData] = useState<Location[]>(
+        [],
+    );
+
+    useEffect(
+        () =>
+            setSelctedLocationData(
+                (locationData[isDomestic ? 0 : 1]?.subLocations || []).map(
+                    location => ({
+                        name: location.name,
+                        subLocations: location.subLocations
+                            ? [...location.subLocations]
+                            : [],
+                    }),
+                ),
+            ),
+        [isDomestic],
+    );
 
     // 가로 스크롤 커스텀 훅 호출, 탭 스크롤 생성, 마우스 다운 이벤트 핸들러
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const { createMouseDownHandler } = useTapScroll();
     const handleMouseDown = createMouseDownHandler(scrollContainerRef);
-
-    // 위치 데이터 필터링
-    const topLocations = locationData[isDomestic ? 0 : 1]?.subLocations || [];
 
     // 국내/해외 선택 처리
     const handleLocationTypeClick = (isDomesticSelected: boolean) => {
@@ -55,7 +70,7 @@ export default function SelectRegion() {
     // 칩 클릭 처리 (시도, 대륙 선택 시 도시, 국가명 렌더링)
     const handleChipClick = (name: string) => {
         setSelectedLocationName(name);
-        const selectedLocation = topLocations.find(
+        const selectedLocation = selectedLocationData.find(
             location => location.name === name,
         );
         setSelectedSubLocations(selectedLocation?.subLocations?.slice() || []);
@@ -96,7 +111,7 @@ export default function SelectRegion() {
                     ref={scrollContainerRef}
                     onMouseDown={handleMouseDown}
                 >
-                    {topLocations?.map(subLocation => (
+                    {selectedLocationData?.map(subLocation => (
                         <div key={subLocation.name} className="flex-none">
                             <Chip
                                 label={subLocation.name}
