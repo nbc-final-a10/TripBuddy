@@ -1,6 +1,6 @@
-import { NextRequest } from 'next/server';
+import { headers } from 'next/headers';
 
-export const getPathnameServer = (request: NextRequest) => {
-    const requestHeaders = new Headers(request.headers);
-    return requestHeaders.get('x-pathname');
+export const getPathnameServer = () => {
+    const headersList = headers();
+    return headersList.get('x-pathname');
 };

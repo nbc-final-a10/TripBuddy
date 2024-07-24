@@ -1,4 +1,5 @@
 import MobileHeader from '@/components/molecules/common/MobileHeader';
+import { getPathnameServer } from '@/utils/common/getPathnameServer';
 import React from 'react';
 
 type AuthenticatedLayoutProps = {
@@ -9,15 +10,15 @@ type AuthenticatedLayoutProps = {
 
 const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
     children,
-    params,
     searchParams,
 }) => {
+    // const pathname = getPathnameServer(request);
+
     let headerMode = 'default';
 
-    console.log('params', params);
     console.log('searchParams', searchParams);
 
-    if (params.slug === 'write') headerMode = 'write';
+    // if (params.slug === 'write') headerMode = 'write';
 
     return (
         <>
