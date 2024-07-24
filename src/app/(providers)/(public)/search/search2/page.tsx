@@ -103,8 +103,8 @@ const LocationSearchPage = () => {
                         ))}
                 </div>
             </section>
-            <button className="flex mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:hidden">
-                검색 결과 보기
+            <button className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:hidden">
+                선택하기
             </button>
         </main>
     );

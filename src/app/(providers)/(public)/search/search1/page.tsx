@@ -8,7 +8,7 @@ import {
 } from '@/components/molecules/chips';
 import { useState } from 'react';
 
-const SearchPage = () => {
+const SearchMainPage = () => {
     // 각 chip의 선택 상태를 저장
     const [selectedChips, setSelectedChips] = useState<Record<string, boolean>>(
         {},
@@ -82,7 +82,7 @@ const SearchPage = () => {
                     ))}
                 </div>
             </section>
-            <section className="mb-3 xl:border-b xl:border-gray-300 xl:mt-3 xl:mb-5">
+            <section className="mb-7 xl:border-b xl:border-gray-300 xl:mt-3 xl:mb-5">
                 <header className="flex flex-row justify-between">
                     <h2 className="text-base font-semibold">추가 속성</h2>
                     <p className="text-sm text-gray-500">최대 2개 선택 가능</p>
@@ -98,12 +98,12 @@ const SearchPage = () => {
                     ))}
                 </div>
             </section>
-            <button className="flex mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:hidden">
-                검색 결과 보기
+            <button className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:hidden">
+                선택하기
             </button>
             <div></div>
         </main>
     );
 };
 
-export default SearchPage;
+export default SearchMainPage;
