@@ -18,7 +18,7 @@ const WritePage: React.FC = () => {
                 <ProgressIndicator step={step} />
             </div>
             <section className="h-dvh flex flex-col items-center">
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col">
                     {step === 0 && <WelcomePage />}
                     {step === 1 && <SelectRegion />}
                 </div>

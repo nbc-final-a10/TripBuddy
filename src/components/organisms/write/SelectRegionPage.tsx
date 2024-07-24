@@ -3,6 +3,7 @@ import locationData from '@/data/location';
 import Left2xlBoldText from '@/components/atoms/MyPage/Left2xlText';
 import LeftSmGrayText from '@/components/atoms/MyPage/LeftSmGrayText';
 import useTapScroll from '@/hooks/useTapScroll';
+import LocationToggleButton from '@/components/atoms/MyPage/LocationToggleButton';
 
 type Location = {
     name: string;
@@ -55,7 +56,7 @@ export default function SelectRegion() {
         [isDomestic],
     );
 
-    // 가로 스크롤 커스텀 훅 호출, 탭 스크롤 생성, 마우스 다운 이벤트 핸들러
+    // 가로 스크롤 커스텀 훅 호출, 탭 스크롤 생성, 마우스 다운 이벤트 핸들
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const { createMouseDownHandler } = useTapScroll();
     const handleMouseDown = createMouseDownHandler(scrollContainerRef);
@@ -85,23 +86,13 @@ export default function SelectRegion() {
 
             {/* 국내/해외 스위치 버튼 */}
             <section className="mb-2">
-                <label
-                    htmlFor="toggle"
-                    className="flex cursor-pointer items-center bg-gray-200 rounded-full p-1 w-[200px] xl:w-[400px]"
-                >
-                    <div
-                        onClick={() => handleLocationTypeClick(true)}
-                        className={`rounded-full px-4 py-0.5 w-1/2 text-center transition duration-300 ease-in-out font-semibold ${isDomestic ? 'bg-white text-black' : 'bg-gray-200 text-black'}`}
-                    >
-                        국내
-                    </div>
-                    <div
-                        onClick={() => handleLocationTypeClick(false)}
-                        className={`rounded-full px-4 py-0.5 w-1/2 text-center transition duration-300 ease-in-out font-semibold ${!isDomestic ? 'bg-white text-black' : 'bg-gray-200 text-black'}`}
-                    >
-                        해외
-                    </div>
-                </label>
+                <LocationToggleButton
+                    firstLabel="국내"
+                    secondLabel="해외"
+                    isDomesticSelected={isDomestic}
+                    onDomesticClick={() => handleLocationTypeClick(true)}
+                    onOverseasClick={() => handleLocationTypeClick(false)}
+                />
             </section>
 
             {/* 도시/대륙 선택 */}
