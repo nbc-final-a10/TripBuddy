@@ -1,15 +1,10 @@
-interface Location {
-    name: string;
-    subLocations?: Location[];
-}
-
 // locationData[0].name === 국내
 // locationData[0].subLocations[0].name === 서울특별시
 // locationData[0].subLocations[0].subLocations[0].name === 종로구
 
 // [locationData[0].name, locationData[0].subLocations[0].name, locationData[0].subLocations[0].subLocations[0].name]
 
-const locationData: Location[] = [
+const locationData = [
     {
         name: '국내',
         subLocations: [
@@ -165,6 +160,10 @@ const locationData: Location[] = [
                     { name: '원주시' },
                 ],
             },
+            {
+                name: '제주도',
+                subLocations: [{ name: '서귀포시' }, { name: '제주시' }],
+            },
         ],
     },
     {
@@ -285,5 +284,5 @@ const locationData: Location[] = [
             },
         ],
     },
-];
+] as const;
 export default locationData;
