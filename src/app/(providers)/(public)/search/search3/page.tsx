@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { RangeCalendar } from '@nextui-org/react';
 import { I18nProvider } from '@react-aria/i18n';
+import { RangeCalendar } from '@nextui-org/calendar';
 
 const DateSearchPage = () => {
     const [selectedRange, setSelectedRange] = useState(
@@ -33,12 +33,7 @@ const DateSearchPage = () => {
             </header>
             <section className="mb-10">
                 <I18nProvider locale="ko-KR-u-ca-dangi">
-                    <RangeCalendar
-                        aria-label="Date (International RangeCalendar)"
-                        // value={selectedRange}
-                        // onChange={handleRangeChange}
-                        // // selectionMode="range"
-                    />
+                    <RangeCalendar aria-label="Date (Controlled Focused Value)" />
                 </I18nProvider>
             </section>
             <button className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:hidden">
