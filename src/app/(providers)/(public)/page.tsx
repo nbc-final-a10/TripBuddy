@@ -1,7 +1,7 @@
 import HomePageBanner from '@/components/molecules/homepage/HomePageBanner';
 import HomePageContainer from '@/components/organisms/homepage/HomePageContainer';
 
-export default function Home() {
+function HomePage() {
     return (
         <div className="bg-gray-300">
             <section>
@@ -13,3 +13,5 @@ export default function Home() {
         </div>
     );
 }
+
+export default HomePage;

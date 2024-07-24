@@ -40,13 +40,26 @@ export async function updateSession(request: NextRequest) {
     // 개발을 위해 잠시 주석처리
     // if (
     //   !user &&
+    //   request.nextUrl.pathname !== "/" &&
     //   !request.nextUrl.pathname.startsWith('/login') &&
-    //   !request.nextUrl.pathname.startsWith('/auth')
+    //   !request.nextUrl.pathname.startsWith("/login") &&
+    //   !request.nextUrl.pathname.startsWith("/recover") &&
+    //   !request.nextUrl.pathname.startsWith("/signup")
     // ) {
     //   // no user, potentially respond by redirecting the user to the login page
     //   const url = request.nextUrl.clone()
     //   url.pathname = '/login'
     //   return NextResponse.redirect(url)
+    // }
+
+    // 유저가 있을 때, login, signup 은 무조건 홈으로 리다이렉트
+    // if (
+    //   (request.nextUrl.pathname.startsWith("/login") && user) ||
+    //   (request.nextUrl.pathname.startsWith("/signup") && user)
+    // ) {
+    //   const url = request.nextUrl.clone();
+    //   url.pathname = "/";
+    //   return NextResponse.redirect(url);
     // }
 
     // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
