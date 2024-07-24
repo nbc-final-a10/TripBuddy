@@ -5,7 +5,7 @@ import {
     buddiesPreferences,
     Chip,
     travelThemes,
-} from '@/components/molecules/chips';
+} from '@/components/molecules/H_chips';
 import { useState } from 'react';
 
 const SearchMainPage = () => {

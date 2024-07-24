@@ -1,6 +1,6 @@
 'use client';
 
-import { Chip } from '@/components/molecules/chips';
+import { Chip } from '@/components/molecules/H_chips';
 import locationData from '@/data/location';
 import { useState } from 'react';
 
