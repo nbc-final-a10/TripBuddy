@@ -43,7 +43,7 @@ export default function SelectRegion() {
     const handleMouseDown = createMouseDownHandler(scrollContainerRef);
 
     // 위치 데이터 필터링
-    const topLocations = locationData[isDomestic ? 0 : 1].subLocations;
+    const topLocations = locationData[isDomestic ? 0 : 1]?.subLocations || [];
 
     // 국내/해외 선택 처리
     const handleLocationTypeClick = (isDomesticSelected: boolean) => {
@@ -55,7 +55,7 @@ export default function SelectRegion() {
     // 칩 클릭 처리 (시도, 대륙 선택 시 도시, 국가명 렌더링)
     const handleChipClick = (name: string) => {
         setSelectedLocationName(name);
-        const selectedLocation = topLocations?.find(
+        const selectedLocation = topLocations.find(
             location => location.name === name,
         );
         setSelectedSubLocations(selectedLocation?.subLocations?.slice() || []);
