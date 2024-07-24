@@ -1,4 +1,4 @@
-import TutorialPage1 from '@/components/organisms/tutorial/TutorialPage1';
+import TutorialPage1 from '@/app/(providers)/(public)/tutorial/TutorialPage1';
 
 const Page1 = () => {
     return <TutorialPage1 />;

@@ -10,10 +10,10 @@ const TutorialPage2 = () => {
                 잡으세요!
             </h2>
             <Image
-                src="/images/office_image.png"
+                src="/images/tuto2.png"
                 alt="사무실 꾸미기"
-                width={200}
-                height={200}
+                width={500}
+                height={500}
             />
         </div>
     );

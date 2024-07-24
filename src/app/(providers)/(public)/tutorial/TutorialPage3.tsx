@@ -6,12 +6,14 @@ const TutorialPage3 = () => {
     return (
         <div className="flex flex-col items-center justify-center p-4 h-screen">
             <Image
-                src="/images/logo.png"
+                src="/images/14F.png"
                 alt="14F 로고"
-                width={128}
-                height={128}
+                width={250}
+                height={250}
                 className="mb-4"
+                margin-bottom="500px"
             />
+
             <div className="login-options flex flex-col gap-2 w-full">
                 <button className="bg-green-500 text-white py-2 rounded">
                     이메일로 시작하기
