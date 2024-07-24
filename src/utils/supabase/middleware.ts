@@ -2,12 +2,10 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 export async function updateSession(request: NextRequest) {
+    // 아래 requestHeaders set 관련 로직이, 서버컴포넌트에서 시작하자마자 주소를 알수있게 하는 로직임
+    // 헤더에 현재 경로 추가
     const requestHeaders = new Headers(request.headers);
     requestHeaders.set('x-pathname', request.nextUrl.pathname);
-
-    // 쿼리 파라미터를 문자열로 변환
-    // const queryParams = new URLSearchParams(request.nextUrl.searchParams);
-    // requestHeaders.set('x-queryparams', queryParams.toString());
 
     // 특정 쿼리 파라미터 가져오기
     const funnelParam = request.nextUrl.searchParams.get('funnel');
