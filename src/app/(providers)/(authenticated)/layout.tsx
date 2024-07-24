@@ -13,11 +13,21 @@ const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
 }) => {
     const { pathname, queryParams } = getPathnameServer();
 
-    console.log('queryParams ===>', queryParams);
+    console.log('pathname =============>', pathname);
+    console.log('queryParams =============>', queryParams);
 
     return (
         <>
-            {pathname === '/write' && <MobileHeader title="여정 작성" close />}
+            {pathname === '/write' && (
+                <MobileHeader
+                    title="여정 작성"
+                    // notification
+                    // search
+                    // settings
+                    // edit
+                    close
+                />
+            )}
             {children}
         </>
     );
