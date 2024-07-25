@@ -48,18 +48,11 @@ const SearchMainPage = () => {
                 <button className="w-full bg-gray-100 p-2 rounded-xl text-left text-gray-400">
                     지역, 국가를 찾아보세요
                 </button>
-                {/* <input
-                    type="text"
-                    placeholder="지역, 국가를 찾아보세요"
-                    className="w-full bg-gray-100 p-2 rounded-xl"
-                /> */}
+
                 <button className="w-full bg-gray-100 p-2 rounded-xl text-left">
                     {formattedToday} ~ {formattedTomorrow}
                 </button>
-                {/* <input
-                    type="date"
-                    className="w-full bg-gray-100 p-2 rounded-xl"
-                /> */}
+
                 <div className="hidden xl:flex xl:gap-2 xl:w-full">
                     <button className="flex-1 px-4 py-2 rounded-lg border border-gray-500 text-gray-700">
                         접기

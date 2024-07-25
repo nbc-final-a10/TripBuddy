@@ -9,6 +9,9 @@ import { useRef, useState } from 'react';
 const LocationSearchPage = () => {
     const [isDomestic, setIsDomestic] = useState(true);
     const [selectedChips, setSelectedChips] = useState<string | null>(null);
+    const [selectedThirdLocationName, setSelectedThirdLocationName] = useState<
+        string | null
+    >(null);
 
     // const { createMouseDownHandler } = useTapScroll<HTMLUListElement>();
     const h_chipsRef = useRef<HTMLUListElement>(null);
@@ -34,6 +37,11 @@ const LocationSearchPage = () => {
     const selectedSubLocation = selectedLocation.subLocations?.find(
         subLocation => subLocation.name === selectedChips,
     )?.subLocations;
+
+    // 세번째 선택 요소 클릭 핸들러
+    const handleSubLocationClick = (name: string) => {
+        setSelectedThirdLocationName(prev => (prev === name ? null : name));
+    };
 
     return (
         <main className="p-5">
@@ -96,11 +104,18 @@ const LocationSearchPage = () => {
                             <div
                                 key={loc.name}
                                 className="flex items-center border-b border-gray-300 pb-3 mt-3"
+                                onClick={() => handleSubLocationClick(loc.name)}
                             >
-                                <div className="w-9 h-9 bg-gray-300 mr-2 rounded-full"></div>
+                                {/* <div className="w-9 h-9 bg-gray-300 mr-2 rounded-full"></div> */}
                                 <div>
-                                    <h3 className="text-sm">{loc.name}</h3>
-                                    <p className="text-sm text-gray-500">
+                                    <h3
+                                        className={`text-sm ${selectedThirdLocationName === loc.name ? 'font-bold' : 'font-medium'}`}
+                                    >
+                                        {loc.name}
+                                    </h3>
+                                    <p
+                                        className={`text-sm text-gray-500 ${selectedThirdLocationName === loc.name ? 'font-bold' : 'font-medium'}`}
+                                    >
                                         {selectedChips}
                                     </p>
                                 </div>

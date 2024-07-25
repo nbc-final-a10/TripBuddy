@@ -13,8 +13,9 @@ const LocationSearchPage = () => {
         string | null
     >(null);
 
-    // const { createMouseDownHandler } = useTapScroll<HTMLUListElement>();
-    const h_chipsRef = useRef<HTMLUListElement>(null);
+    // const h_chipsRef = useRef<HTMLUListElement>(null);
+
+    // const { createMouseDownHandler } = useTapScroll();
 
     // 국내
     const handleDomesticClick = () => {
@@ -82,8 +83,8 @@ const LocationSearchPage = () => {
 
             <section className="py-3">
                 <ul
-                    className="flex flex-nowrap gap-[10px] py-3 whitespace-nowrap mb-5 overflow-x-auto"
-                    ref={h_chipsRef}
+                    className="flex flex-nowrap gap-[10px] py-3 whitespace-nowrap mb-5 overflow-x-auto scrollbar-hidden"
+                    // ref={h_chipsRef}
                     // onMouseDown={createMouseDownHandler(h_chipsRef)}
                 >
                     {selectedLocation.subLocations?.map(subLocation => (
