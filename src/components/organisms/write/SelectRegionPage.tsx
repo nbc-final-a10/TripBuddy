@@ -12,10 +12,13 @@ type Location = {
 };
 
 export default function SelectRegionPage() {
+    // Todo: useState 말고 string으로 해도 될 듯
     const [selectedLocationName, setSelectedLocationName] = useState<
         string | null
     >(null);
-    const [isDomestic, setIsDomestic] = useState<boolean>(true);
+    // Todo: 이름 더 시멘틱하게 변경 레벨 단위로
+    const [firstLevelLocation, setFirstLevelLocation] =
+        useState<string>('korea');
     const [selectedLocationData, setSelectedLocationData] = useState<
         SecondLevelNames[]
     >([]);
@@ -25,15 +28,19 @@ export default function SelectRegionPage() {
 
     useEffect(() => {
         setSelectedLocationData(
-            (locationData[isDomestic ? 0 : 1]?.subLocations || []).map(
-                location => location.name,
-            ),
+            (
+                locationData[firstLevelLocation === 'korea' ? 0 : 1]
+                    ?.subLocations || []
+            ).map(location => location.name),
         );
-    }, [isDomestic]);
+    }, [firstLevelLocation]);
+
+    console.log(`firstLevelLocation: ${firstLevelLocation}`);
+    console.log(`selectedLocationData: ${selectedLocationData}`);
 
     // 국내/해외 선택 처리
-    const handleLocationTypeClick = (isDomesticSelected: boolean) => {
-        setIsDomestic(isDomesticSelected);
+    const handleLocationTypeClick = (isKoreaSelected: boolean) => {
+        setFirstLevelLocation(isKoreaSelected ? 'korea' : 'global');
         setSelectedLocationName(null);
         setSelectedSubLocations([]);
     };
@@ -44,7 +51,10 @@ export default function SelectRegionPage() {
         const selectedLocation = selectedLocationData.find(
             location => location === name,
         );
-        const secondLevel = [...locationData[isDomestic ? 0 : 1].subLocations];
+        const secondLevel = [
+            ...locationData[firstLevelLocation === 'korea' ? 0 : 1]
+                .subLocations,
+        ];
         const thirdLevel =
             secondLevel.find(subLocation => subLocation.name === name)
                 ?.subLocations || [];
@@ -65,9 +75,9 @@ export default function SelectRegionPage() {
                 <LocationToggleButton
                     firstLabel="국내"
                     secondLabel="해외"
-                    isDomesticSelected={isDomestic}
-                    onDomesticClick={() => handleLocationTypeClick(true)}
-                    onOverseasClick={() => handleLocationTypeClick(false)}
+                    isKoreaSelected={firstLevelLocation === 'korea'}
+                    onKoreaClick={() => handleLocationTypeClick(true)}
+                    onGlobalClick={() => handleLocationTypeClick(false)}
                 />
             </section>
 
