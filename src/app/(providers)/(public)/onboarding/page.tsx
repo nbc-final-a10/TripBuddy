@@ -1,10 +1,11 @@
 'use client';
 
 import Chip from '@/components/atoms/common/O_Chip';
-import locationData from '@/data/location';
+import { locationData } from '@/data/location';
 import { mbtis } from '@/data/mbtis';
 import { buddyThemes, tripThemes } from '@/data/themes';
 import { useAuth } from '@/hooks/auth.hooks';
+import { BuddyTheme, TripTheme } from '@/types/Themes.types';
 import { FormEvent, MouseEvent, useCallback, useState } from 'react';
 
 function OnBoardingPage() {
@@ -15,45 +16,40 @@ function OnBoardingPage() {
     const [selectedTripTheme, setSelectedTripTheme] = useState<string[]>([]);
     const [selectedMbti, setSelectedMbti] = useState<string>('');
 
-    const setStateActionWhenChipClick = useCallback(
-        (target: EventTarget & HTMLSpanElement) => (prevSelected: string[]) => {
+    const handleChipClick = useCallback(
+        (
+            target: EventTarget & HTMLSpanElement,
+            data: TripTheme[] | BuddyTheme[],
+            prevSelected: string[],
+            setSelected: (value: string[]) => void,
+        ) => {
             if (prevSelected.includes(target.innerText)) {
                 // 선택 해제
-                return prevSelected.filter(l => l !== target.innerText);
+                const newSelected = prevSelected.filter(
+                    selected => selected !== target.innerText,
+                );
+                setSelected(newSelected);
             } else if (prevSelected.length < 3) {
                 // 새로운 선택 추가
-                return [...prevSelected, target.innerText];
+                setSelected([...prevSelected, target.innerText]);
             } else {
                 // 선택된 Chip이 3개일 때, 가장 가까운 인덱스의 Chip을 해제하고 새로운 선택 추가
                 const newSelected = [...prevSelected];
+                const targetIndex = data.findIndex(
+                    item => item === target.innerText,
+                );
                 const indexToReplace = prevSelected
-                    .map(selected =>
-                        locationData[0].subLocations.findIndex(
-                            option => option.name === selected,
-                        ),
-                    )
+                    .map(selected => data.findIndex(item => item === selected))
                     .reduce(
-                        (closest, current, idx, arr) =>
-                            Math.abs(
-                                current -
-                                    locationData[0].subLocations.findIndex(
-                                        option =>
-                                            option.name === target.innerText,
-                                    ),
-                            ) <
-                            Math.abs(
-                                arr[closest] -
-                                    locationData[0].subLocations.findIndex(
-                                        option =>
-                                            option.name === target.innerText,
-                                    ),
-                            )
+                        (prev, curr, idx) =>
+                            Math.abs(curr - targetIndex) <
+                            Math.abs(prev - targetIndex)
                                 ? idx
-                                : closest,
+                                : prev,
                         0,
                     );
                 newSelected[indexToReplace] = target.innerText;
-                return newSelected;
+                setSelected(newSelected);
             }
         },
         [],
@@ -66,26 +62,31 @@ function OnBoardingPage() {
 
     const handleBuddyThemeChange = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
-        setSelectedBuddyTheme(setStateActionWhenChipClick(target));
+
+        const mutableBuddyThemes = [...buddyThemes];
+        handleChipClick(
+            target,
+            mutableBuddyThemes,
+            selectedBuddyTheme,
+            setSelectedBuddyTheme,
+        );
     };
 
     const handleTripThemeChange = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
-        setSelectedTripTheme(setStateActionWhenChipClick(target));
+        const mutableTripThemes = [...tripThemes];
+        handleChipClick(
+            target,
+            mutableTripThemes,
+            selectedTripTheme,
+            setSelectedTripTheme,
+        );
     };
 
     const handleMbtiChange = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
         setSelectedMbti(target.innerText);
     };
-
-    // const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    //     const selectedOptions = Array.from(event.target.selectedOptions);
-    //     if (selectedOptions.length > 3) {
-    //         selectedOptions.forEach(option => (option.selected = false));
-    //         alert('최대 3개의 테마만 선택할 수 있습니다.');
-    //     }
-    // };
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();

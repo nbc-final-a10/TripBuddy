@@ -1,4 +1,4 @@
-import locationData from '@/data/location';
+import { locationData } from '@/data/location';
 
 export type Location = {
     name: string;

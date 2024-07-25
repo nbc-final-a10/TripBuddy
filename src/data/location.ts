@@ -1,10 +1,9 @@
 // locationData[0].name === 국내
 // locationData[0].subLocations[0].name === 서울특별시
 // locationData[0].subLocations[0].subLocations[0].name === 종로구
-
 // [locationData[0].name, locationData[0].subLocations[0].name, locationData[0].subLocations[0].subLocations[0].name]
 
-const locationData = [
+export const locationData = [
     {
         name: '국내',
         subLocations: [
@@ -228,7 +227,6 @@ const locationData = [
                     { name: '에티오피아' },
                     { name: '케냐' },
                     { name: '탄자니아' },
-                    { name: '카메룬' },
                     { name: '코트디부아르' },
                     { name: '남아프리카공화국' },
                     { name: '우간다' },
@@ -285,4 +283,3 @@ const locationData = [
         ],
     },
 ] as const;
-export default locationData;
