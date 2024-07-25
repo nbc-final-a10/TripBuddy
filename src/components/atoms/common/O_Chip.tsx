@@ -20,7 +20,7 @@ const chipVariants = cva(
     {
         variants: {
             intent: {
-                famous: 'bg-blue-500 border-blue-500 text-white',
+                small: 'bg-white text-black rounded-md px-2 py-0.3',
                 'Seoul/Gyeonggi': 'bg-gray-500 border-gray-500 text-white',
                 Gyeongsangnamdo: 'bg-red-500 border-red-500 text-white',
                 Gyeongsangbukdo: 'bg-yellow-500 border-yellow-500 text-white',
@@ -77,25 +77,46 @@ const chipVariants = cva(
             variant: {
                 selected: 'opacity-100',
                 unselected: 'opacity-40',
+                small: 'text-xs',
             },
         },
         defaultVariants: {
-            intent: 'famous',
+            intent: 'small',
             variant: 'unselected',
         },
+        compoundVariants: [
+            {
+                intent: 'small',
+                variant: 'selected',
+                className: 'bg-gray-7000 text-white opacity-100',
+            },
+            {
+                intent: 'small',
+                variant: 'unselected',
+                className: 'bg-white text-black opacity-100',
+            },
+        ],
     },
 );
 
 type ChipVariantsType = VariantProps<typeof chipVariants>;
 
 type ChipProps = {
-    children: SecondLevelNames | MBTI | TripTheme | BuddyTheme;
-    selected: boolean;
-    onClick: (e: React.MouseEvent<HTMLSpanElement>) => void;
+    label?: SecondLevelNames | MBTI | TripTheme | BuddyTheme;
+    children?: React.ReactNode;
+    selected?: boolean;
+    onClick?: (e: React.MouseEvent<HTMLSpanElement>) => void;
 } & ChipVariantsType &
     React.ComponentProps<'span'>;
 
-function Chip({ children, intent, selected, onClick, ...props }: ChipProps) {
+function Chip({
+    label,
+    children,
+    intent,
+    selected = false,
+    onClick,
+    ...props
+}: ChipProps) {
     return (
         <span
             className={tailwindMerge(
@@ -108,6 +129,7 @@ function Chip({ children, intent, selected, onClick, ...props }: ChipProps) {
             {...props}
             onClick={onClick}
         >
+            {label}
             {children}
         </span>
     );

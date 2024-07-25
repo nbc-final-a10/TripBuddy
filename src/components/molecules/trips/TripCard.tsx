@@ -1,8 +1,11 @@
+'use client';
+
 import TripChip from '@/components/atoms/trips/TripChip';
 import React from 'react';
 import Calendar_month from '../../../../public/svg/Calendar_month.svg';
 import Distance from '../../../../public/svg/Distance.svg';
 import Groups from '../../../../public/svg/Groups.svg';
+import Chip from '@/components/atoms/common/O_Chip';
 
 type TripCardProps = {
     title: string;
@@ -24,9 +27,14 @@ const TripCard: React.FC<TripCardProps> = ({
                 <div className="flex flex-col">
                     <div className="flex flex-col">
                         <h3>{title}</h3>
-
                         <div className="flex gap-2">
-                            <TripChip label="Trip" />
+                            <Chip
+                                onClick={() => {}}
+                                intent="small"
+                                selected={false}
+                            >
+                                {'힐링'}
+                            </Chip>
                         </div>
                     </div>
 
