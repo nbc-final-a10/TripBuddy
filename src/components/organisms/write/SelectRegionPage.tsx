@@ -4,34 +4,29 @@ import Left2xlBoldText from '@/components/atoms/MyPage/Left2xlText';
 import LeftSmGrayText from '@/components/atoms/MyPage/LeftSmGrayText';
 import LocationToggleButton from '@/components/atoms/MyPage/LocationToggleButton';
 import LocationList from '@/components/atoms/MyPage/LocationList';
+import { SecondLevelNames, ThirdLevel } from '@/types/Location.types';
 
-// Location 타입 정의 추가
 type Location = {
     name: string;
     subLocations?: Location[];
 };
 
 export default function SelectRegionPage() {
-    const [isDomestic, setIsDomestic] = useState<boolean>(true);
     const [selectedLocationName, setSelectedLocationName] = useState<
         string | null
     >(null);
-    const [selectedSubLocations, setSelectedSubLocations] = useState<
-        Location[]
-    >([]);
+    const [isDomestic, setIsDomestic] = useState<boolean>(true);
     const [selectedLocationData, setSelectedLocationData] = useState<
-        Location[]
+        SecondLevelNames[]
+    >([]);
+    const [selectedSubLocations, setSelectedSubLocations] = useState<
+        ThirdLevel[]
     >([]);
 
     useEffect(() => {
         setSelectedLocationData(
             (locationData[isDomestic ? 0 : 1]?.subLocations || []).map(
-                location => ({
-                    name: location.name,
-                    subLocations: location.subLocations
-                        ? [...location.subLocations]
-                        : [],
-                }),
+                location => location.name,
             ),
         );
     }, [isDomestic]);
@@ -47,10 +42,16 @@ export default function SelectRegionPage() {
     const handleChipClick = (name: string) => {
         setSelectedLocationName(name);
         const selectedLocation = selectedLocationData.find(
-            location => location.name === name,
+            location => location === name,
         );
-        setSelectedSubLocations(selectedLocation?.subLocations?.slice() || []);
+        const secondLevel = [...locationData[isDomestic ? 0 : 1].subLocations];
+        const thirdLevel =
+            secondLevel.find(subLocation => subLocation.name === name)
+                ?.subLocations || [];
+        setSelectedSubLocations(thirdLevel as ThirdLevel[]);
     };
+
+    console.log(selectedSubLocations);
 
     return (
         <>

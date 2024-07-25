@@ -1,10 +1,13 @@
-import Left2xlBoldText from '@/components/atoms/MyPage/Left2xlText';
+import Center2xlTwoLineText from '@/components/atoms/MyPage/Cneter2xlTwoLineText';
 import React from 'react';
 
 export default function CompletePage() {
     return (
         <div>
-            <Left2xlBoldText text="축하합니다!" />
+            <Center2xlTwoLineText
+                firstText="버디즈 모집 작성 글이"
+                secondText="작성 완료되었어요!"
+            />
         </div>
     );
 }

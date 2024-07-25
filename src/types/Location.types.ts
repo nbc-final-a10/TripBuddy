@@ -16,3 +16,7 @@ type ExtractSecondLevelNames<T extends { subLocations?: readonly any[] }> =
 export type SecondLevelNames = ExtractSecondLevelNames<
     (typeof locationData)[number]
 >;
+
+type LocationDataType = typeof locationData;
+export type ThirdLevel =
+    LocationDataType[number]['subLocations'][number]['subLocations'][number];
