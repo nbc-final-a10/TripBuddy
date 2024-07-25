@@ -1,11 +1,11 @@
 'use client';
 
 import Chip from '@/components/atoms/common/O_Chip';
-import usePreferTheme from '@/components/molecules/common/usePreferTheme';
 import { locationData } from '@/data/location';
 import { mbtis } from '@/data/mbtis';
 import { buddyThemes, tripThemes } from '@/data/themes';
 import { useAuth, useUpdateBuddyInfoMutation } from '@/hooks/auth.hooks';
+import usePreferTheme from '@/hooks/usePreferTheme';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import React, { FormEvent, MouseEvent, useEffect, useState } from 'react';
 
