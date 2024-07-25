@@ -12,10 +12,12 @@
         "genTypes": "npx supabase gen types typescript --project-id \"pedixhwyfardtsanotrp\" --schema public > src/types/supabase.ts"
     },
     "dependencies": {
+        "@internationalized/date": "^3.5.5",
         "@nextui-org/calendar": "^2.0.11",
         "@nextui-org/system": "^2.2.5",
         "@nextui-org/theme": "^2.2.9",
         "@react-aria/i18n": "^3.12.1",
+        "@react-types/calendar": "^3.4.8",
         "@supabase/ssr": "^0.4.0",
         "@supabase/supabase-js": "^2.44.3",
         "@tanstack/react-query": "^5.51.9",

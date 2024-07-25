@@ -36,7 +36,7 @@ const LocationSearchPage = () => {
     )?.subLocations;
 
     return (
-        <main className="p-4">
+        <main className="p-5">
             <section className="mb-2">
                 <SearchPageTitle
                     title="어디로 떠나시나요?"
