@@ -110,13 +110,13 @@ export default function SelectRegionPage() {
                             {selectedSecondLevelLocations.map(loc => (
                                 <div
                                     key={loc.name}
-                                    className="flex ml-2 mr-2 border-b pb-3 mt-2"
+                                    className="flex mt-2 ml-2 mr-2 border-b pb-3"
                                     onClick={() =>
                                         setFinalSelectedLocation(loc.name)
                                     }
                                 >
                                     <div>
-                                        <p className="text-sm text-gray-500">
+                                        <p className="text-sm text-gray-500 xl:text-base">
                                             {firstLevelLocation === 'korea' ? (
                                                 <>
                                                     <p className="font-bold">
