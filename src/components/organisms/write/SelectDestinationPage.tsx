@@ -1,7 +1,7 @@
 'use client';
 
 import SwitchButton from '@/components/atoms/SwitchButton';
-import ProgressIndicator from '@/components/molecules/write/ProgressIndicator';
+import ProgressIndicator from '@/components/atoms/MyPage/ProgressIndicator';
 import SelectDestinationDescription from '@/components/molecules/write/SelectDestinationDescription';
 import React, { useState } from 'react';
 
