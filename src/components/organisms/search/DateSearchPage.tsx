@@ -18,7 +18,7 @@ const DateSearchPage = () => {
                     버디즈와 함께 여행하고 싶은 날짜를 선택해주세요.
                 </p>
             </header>
-            <div className="w-full flex justify-center mb-20">
+            <div className="w-full flex justify-center mb-10">
                 <I18nProvider locale="ko-KR-u-ca-dangi">
                     <RangeCalendar aria-label="Date (Controlled Focused Value)" />
                 </I18nProvider>
