@@ -7,7 +7,7 @@ type Left2xlBoldTextProps = {
 export default function Left2xlBoldText({ text }: Left2xlBoldTextProps) {
     return (
         <div>
-            <p className="text-2xl mt-8 xl:text-4xl xl:mt-8 font-bold">
+            <p className="text-2xl mt-8 ml-2 xl:text-4xl xl:mt-8 xl:ml-2 font-bold">
                 {text}
             </p>
         </div>
