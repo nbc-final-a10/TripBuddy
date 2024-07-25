@@ -1,3 +1,4 @@
+import Left2xlBoldText from '@/components/atoms/MyPage/Left2xlText';
 import React, { useState } from 'react';
 
 export default function WriteTrip() {
@@ -20,9 +21,7 @@ export default function WriteTrip() {
     return (
         <div className="p-4">
             <header className="mb-5">
-                <h1 className="text-lg font-bold mt-4 mb-4 xl:text-4xl xl:mt-8 xl:mb-8">
-                    모집 글을 작성해봐요!
-                </h1>
+                <Left2xlBoldText text="모집 글을 작성해봐요!" />
             </header>
 
             <form onSubmit={handleSubmit} className="space-y-4">
