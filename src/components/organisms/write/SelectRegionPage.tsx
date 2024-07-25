@@ -19,7 +19,7 @@ export default function SelectRegionPage() {
     // Todo: 이름 더 시멘틱하게 변경 레벨 단위로
     const [firstLevelLocation, setFirstLevelLocation] =
         useState<string>('korea');
-    const [selectedLocationData, setSelectedLocationData] = useState<
+    const [secondLevelLocation, setSecondLevelLocation] = useState<
         SecondLevelNames[]
     >([]);
     const [selectedSubLocations, setSelectedSubLocations] = useState<
@@ -27,7 +27,7 @@ export default function SelectRegionPage() {
     >([]);
 
     useEffect(() => {
-        setSelectedLocationData(
+        setSecondLevelLocation(
             (
                 locationData[firstLevelLocation === 'korea' ? 0 : 1]
                     ?.subLocations || []
@@ -36,7 +36,7 @@ export default function SelectRegionPage() {
     }, [firstLevelLocation]);
 
     console.log(`firstLevelLocation: ${firstLevelLocation}`);
-    console.log(`selectedLocationData: ${selectedLocationData}`);
+    console.log(`secondLevelLocation: ${secondLevelLocation}`);
 
     // 국내/해외 선택 처리
     const handleLocationTypeClick = (isKoreaSelected: boolean) => {
@@ -48,7 +48,7 @@ export default function SelectRegionPage() {
     // 칩 클릭 처리 (시도, 대륙 선택 시 도시, 국가명 렌더링)
     const handleChipClick = (name: string) => {
         setSelectedLocationName(name);
-        const selectedLocation = selectedLocationData.find(
+        const selectedLocation = secondLevelLocation.find(
             location => location === name,
         );
         const secondLevel = [
@@ -84,7 +84,7 @@ export default function SelectRegionPage() {
             {/* 도시/대륙 선택 */}
             <section className="py-3">
                 <LocationList
-                    locations={selectedLocationData}
+                    locations={secondLevelLocation}
                     selectedLocationName={selectedLocationName || ''}
                     onChipClick={handleChipClick}
                 />
