@@ -1,35 +1,17 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import locationData from '@/data/location';
 import Left2xlBoldText from '@/components/atoms/MyPage/Left2xlText';
 import LeftSmGrayText from '@/components/atoms/MyPage/LeftSmGrayText';
-import useTapScroll from '@/hooks/useTapScroll';
 import LocationToggleButton from '@/components/atoms/MyPage/LocationToggleButton';
+import LocationList from '@/components/atoms/MyPage/LocationList';
 
+// Location 타입 정의 추가
 type Location = {
     name: string;
     subLocations?: Location[];
 };
 
-type ChipProps = {
-    label: string;
-    isSelected: boolean;
-    onClick: () => void;
-};
-
-function Chip({ label, isSelected, onClick }: ChipProps) {
-    return (
-        <button
-            className={`px-4 py-2 rounded-full ${isSelected ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'}`}
-            onClick={onClick}
-            style={{ minWidth: '100px' }}
-            type="button"
-        >
-            {label}
-        </button>
-    );
-}
-
-export default function SelectRegion() {
+export default function SelectRegionPage() {
     const [isDomestic, setIsDomestic] = useState<boolean>(true);
     const [selectedLocationName, setSelectedLocationName] = useState<
         string | null
@@ -41,25 +23,18 @@ export default function SelectRegion() {
         Location[]
     >([]);
 
-    useEffect(
-        () =>
-            setSelectedLocationData(
-                (locationData[isDomestic ? 0 : 1]?.subLocations || []).map(
-                    location => ({
-                        name: location.name,
-                        subLocations: location.subLocations
-                            ? [...location.subLocations]
-                            : [],
-                    }),
-                ),
+    useEffect(() => {
+        setSelectedLocationData(
+            (locationData[isDomestic ? 0 : 1]?.subLocations || []).map(
+                location => ({
+                    name: location.name,
+                    subLocations: location.subLocations
+                        ? [...location.subLocations]
+                        : [],
+                }),
             ),
-        [isDomestic],
-    );
-
-    // 가로 스크롤 커스텀 훅 호출, 탭 스크롤 생성, 마우스 다운 이벤트 핸들
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
-    const { createMouseDownHandler } = useTapScroll();
-    const handleMouseDown = createMouseDownHandler(scrollContainerRef);
+        );
+    }, [isDomestic]);
 
     // 국내/해외 선택 처리
     const handleLocationTypeClick = (isDomesticSelected: boolean) => {
@@ -97,41 +72,11 @@ export default function SelectRegion() {
 
             {/* 도시/대륙 선택 */}
             <section className="py-3">
-                <div
-                    className="flex flex-nowrap gap-2 py-3 whitespace-nowrap mb-5 overflow-x-auto"
-                    ref={scrollContainerRef}
-                    onMouseDown={handleMouseDown}
-                >
-                    {selectedLocationData?.map(subLocation => (
-                        <div key={subLocation.name} className="flex-none">
-                            <Chip
-                                label={subLocation.name}
-                                isSelected={
-                                    selectedLocationName === subLocation.name
-                                }
-                                onClick={() =>
-                                    handleChipClick(subLocation.name)
-                                }
-                            />
-                        </div>
-                    ))}
-                </div>
-                <div className="my-3">
-                    {selectedSubLocations.map(loc => (
-                        <div
-                            key={loc.name}
-                            className="flex items-center border-b border-gray-300 pb-3 mt-3"
-                        >
-                            <div className="w-9 h-9 bg-gray-300 mr-2 rounded-full"></div>
-                            <div>
-                                <h3 className="text-sm">{loc.name}</h3>
-                                <p className="text-sm text-gray-500">
-                                    {selectedLocationName}
-                                </p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                <LocationList
+                    locations={selectedLocationData}
+                    selectedLocationName={selectedLocationName || ''}
+                    onChipClick={handleChipClick}
+                />
             </section>
         </>
     );
