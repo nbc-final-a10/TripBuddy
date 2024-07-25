@@ -46,7 +46,7 @@ const chipVariants = cva(
                 clean: 'bg-pink-400 border-pink-400 text-white',
                 natural: 'bg-green-600 border-green-600 text-white',
                 'cost-effective': 'bg-blue-600 border-blue-600 text-white',
-                satisfaction: 'bg-amber-4000 border-amber-4000 text-white',
+                satisfaction: 'bg-amber-400 border-amber-400 text-white',
 
                 city: 'bg-red-400 border-red-400 text-white',
                 nature: 'bg-green-400 border-green-400 text-white',

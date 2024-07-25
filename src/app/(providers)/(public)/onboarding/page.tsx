@@ -21,7 +21,7 @@ function OnBoardingPage() {
 
     const [PreferTripTheme, selectedTripTheme] = usePreferTheme({
         themes: [...tripThemes],
-        label: '선호 여행테마',
+        label: '여행 테마',
     });
 
     const [selectedLocation, setSelectedLocation] = useState<string>('');
