@@ -16,7 +16,6 @@ const WritePage: React.FC = () => {
         buttonText: '다음',
         limit: 6,
     });
-
     return (
         <>
             <div className="mt-4 xl:mt-20 ml-5 xl:ml-64">
