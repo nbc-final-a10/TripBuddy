@@ -1,8 +1,6 @@
 'use client';
 
-import Chip from '@/components/atoms/common/O_Chip';
 import PreferTheme from '@/components/atoms/common/PreferTheme';
-import { buddyThemes } from '@/data/themes';
 import { AllBuddyTheme, AllTripTheme } from '@/types/Themes.types';
 import handleChipClick from '@/utils/common/handleChipClick';
 import { MouseEvent, ReactNode, useState } from 'react';

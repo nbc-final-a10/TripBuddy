@@ -1,7 +1,7 @@
 'use client';
 
 import Chip from '@/components/atoms/common/O_Chip';
-import usePreferTheme from '@/components/molecules/common/usePreferBuddyTheme';
+import usePreferTheme from '@/components/molecules/common/usePreferTheme';
 import { locationData } from '@/data/location';
 import { mbtis } from '@/data/mbtis';
 import { buddyThemes, tripThemes } from '@/data/themes';
