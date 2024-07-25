@@ -14,7 +14,7 @@ export default function LocationToggleButton({
     secondLabel,
 }: LocationToggleButtonProps) {
     return (
-        <div className="flex cursor-pointer bg-gray-200 rounded-full p-1 w-[200px] xl:w-[400px]">
+        <div className="flex cursor-pointer ml:4 xl:mt-8 bg-gray-200 rounded-full p-1 w-full">
             <div
                 onClick={() => {
                     onKoreaClick();
