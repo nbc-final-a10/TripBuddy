@@ -4,8 +4,6 @@ import React from 'react';
 
 type AuthenticatedLayoutProps = {
     children: React.ReactNode;
-    params: { slug: string };
-    searchParams: { [key: string]: string | string[] | undefined };
 };
 
 const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
@@ -13,8 +11,9 @@ const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
 }) => {
     const { pathname, queryParams } = getPathnameServer();
 
-    console.log('pathname =============>', pathname);
-    console.log('queryParams =============>', queryParams);
+    // 아래 콘솔로그를 주석해제 하시면 테스트 해볼 수 있습니다.
+    // console.log('pathname =============>', pathname);
+    // console.log('queryParams =============>', queryParams);
 
     return (
         <>
