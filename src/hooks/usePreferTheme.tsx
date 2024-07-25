@@ -35,7 +35,13 @@ const usePreferTheme = ({
                 selectedTheme={selectedTheme}
                 handleThemeChange={handleThemeChange}
                 themes={themeRef.current}
-                label={isLabel && mode === 'trip' ? '여행 테마' : '버디즈 성향'}
+                label={
+                    !isLabel
+                        ? null
+                        : mode === 'trip'
+                          ? '여행 테마'
+                          : '버디즈 성향'
+                }
             />
         );
     };
