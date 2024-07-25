@@ -5,7 +5,7 @@ import CompletePage from '@/components/organisms/write/CompletePage';
 import SelectAdditionalBuddyThemes from '@/components/organisms/write/SelectAdditionalBuddyThemes';
 import SelectRegionPage from '@/components/organisms/write/SelectRegionPage';
 import SelectTripThemesPage from '@/components/organisms/write/SelectTripThemesPage';
-import SelecteDatePage from '@/components/organisms/write/SelecteDatePage';
+import SelectDatePage from '@/components/organisms/write/SelectDatePage';
 import WelcomePage from '@/components/organisms/write/WelcomePage';
 import WriteTrip from '@/components/organisms/write/WriteTrip';
 import useNextButton from '@/hooks/useFunnelNextStep';
@@ -26,7 +26,7 @@ const WritePage: React.FC = () => {
                 <div className="flex flex-col">
                     {step === 0 && <WelcomePage />}
                     {step === 1 && <SelectRegionPage />}
-                    {step === 2 && <SelecteDatePage />}
+                    {step === 2 && <SelectDatePage />}
                     {step === 3 && <SelectTripThemesPage />}
                     {step === 4 && <SelectAdditionalBuddyThemes />}
                     {step === 5 && <WriteTrip />}
