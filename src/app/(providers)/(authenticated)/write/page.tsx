@@ -18,9 +18,9 @@ const WritePage: React.FC = () => {
     });
     return (
         <>
-            <div className="mt-4 xl:mt-20 ml-5 xl:ml-64">
-                <ProgressIndicator step={step} counts={7} />
-            </div>
+            {/* <div className="mt-4 xl:mt-20 ml-5 xl:ml-64"> */}
+            <ProgressIndicator step={step} counts={7} />
+            {/* </div> */}
             <section className="h-dvh flex flex-col">
                 <div className="flex flex-col">
                     {step === 0 && <WelcomePage />}
