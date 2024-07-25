@@ -6,8 +6,9 @@ import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import { Buddy } from '@/types/Auth.types';
 import { QueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
+import React from 'react';
 
-export default async function RecoverPage() {
+const RecoverPage: React.FC = async () => {
     const queryClient = new QueryClient();
 
     await queryClient.prefetchQuery({
@@ -38,4 +39,6 @@ export default async function RecoverPage() {
             </p>
         </AuthPageWrapper>
     );
-}
+};
+
+export default RecoverPage;

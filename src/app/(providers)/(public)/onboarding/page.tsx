@@ -7,9 +7,9 @@ import { mbtis } from '@/data/mbtis';
 import { buddyThemes, tripThemes } from '@/data/themes';
 import { useAuth, useUpdateBuddyInfoMutation } from '@/hooks/auth.hooks';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import { FormEvent, MouseEvent, useEffect, useState } from 'react';
+import React, { FormEvent, MouseEvent, useEffect, useState } from 'react';
 
-function OnBoardingPage() {
+const OnBoardingPage: React.FC = () => {
     const { logOut, buddy } = useAuth();
 
     const { mutate, isPending, error } = useUpdateBuddyInfoMutation();
@@ -193,6 +193,6 @@ function OnBoardingPage() {
             </form>
         </div>
     );
-}
+};
 
 export default OnBoardingPage;
