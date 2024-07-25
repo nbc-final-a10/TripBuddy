@@ -20,13 +20,17 @@ export default function SelectRegionPage() {
     // firstLevelLocation은 'korea', 'global'로 초기화 됨.
     const [firstLevelLocation, setFirstLevelLocation] =
         useState<string>('korea');
-    // secondLevelLocation은 국내의 경우 도, 해외의 경우 대륙 이름들이 배열로 초기화 됨.
+    // secondLevelLocation은 국내의 경우 도, 해외의 경우 대륙 이름들이 열로 초기화 됨.
     const [secondLevelLocation, setSecondLevelLocation] = useState<
         SecondLevelNames[]
     >([]);
     // selectedSecondLevelLocations는 국내는 도, 해외는 대륙을 선택한 경우 해당 대륙에 포함된 나라, 도시들이 배열로 초기화 됨.
     const [selectedSecondLevelLocations, setSelectedSecondLevelLocations] =
         useState<ThirdLevel[]>([]);
+    // finalSelectedLocation은 최종 선택한 지역 이름으로 초기화 됨.
+    const [finalSelectedLocation, setFinalSelectedLocation] = useState<
+        string | null
+    >(null);
 
     useEffect(() => {
         setSecondLevelLocation(
@@ -43,6 +47,7 @@ export default function SelectRegionPage() {
     console.log(
         `selectedSecondLevelLocations: ${selectedSecondLevelLocations}`,
     );
+    console.log(`finalSelectedLocation: ${finalSelectedLocation}`);
 
     // 국내/해외 선택 처리
     const handleLocationTypeClick = (isKoreaSelected: boolean) => {
@@ -105,18 +110,25 @@ export default function SelectRegionPage() {
                             {selectedSecondLevelLocations.map(loc => (
                                 <div
                                     key={loc.name}
-                                    className="flex items-center border-b border-gray-300 pb-3 mt-3"
+                                    className="flex ml-2 mr-2 border-b pb-3 mt-2"
+                                    onClick={() =>
+                                        setFinalSelectedLocation(loc.name)
+                                    }
                                 >
                                     <div>
                                         <p className="text-sm text-gray-500">
                                             {firstLevelLocation === 'korea' ? (
                                                 <>
-                                                    <p>{loc.name}</p>
+                                                    <p className="font-bold">
+                                                        {loc.name}
+                                                    </p>
                                                     <p>한국</p>
                                                 </>
                                             ) : (
                                                 <>
-                                                    <p>{loc.name}</p>
+                                                    <p className="font-bold">
+                                                        {loc.name}
+                                                    </p>
                                                     <p>
                                                         {selectedLocationName}
                                                     </p>
