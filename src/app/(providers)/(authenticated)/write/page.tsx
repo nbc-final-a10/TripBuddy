@@ -32,7 +32,7 @@ const WritePage: React.FC = () => {
                     {step === 6 && <CompletePage />}
                 </div>
                 <div className="flex justify-center">
-                    <NextButton className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-[150px] xl:w-[300px]" />
+                    <NextButton className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-full" />
                 </div>
             </section>
         </>
