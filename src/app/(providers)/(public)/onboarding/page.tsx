@@ -1,9 +1,10 @@
 'use client';
 
 import Chip from '@/components/atoms/common/O_Chip';
+import usePreferBuddyTheme from '@/components/molecules/common/usePreferBuddyTheme';
 import { locationData } from '@/data/location';
 import { mbtis } from '@/data/mbtis';
-import { buddyThemes, tripThemes } from '@/data/themes';
+import { tripThemes } from '@/data/themes';
 import { useAuth, useUpdateBuddyInfoMutation } from '@/hooks/auth.hooks';
 import { type BuddyTheme, type TripTheme } from '@/types/Themes.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
@@ -14,8 +15,11 @@ function OnBoardingPage() {
 
     const { mutate, isPending, error } = useUpdateBuddyInfoMutation();
 
+    const { PreferBuddyTheme, selectedBuddyTheme } = usePreferBuddyTheme();
+
+    console.log(selectedBuddyTheme);
+
     const [selectedLocation, setSelectedLocation] = useState<string>('');
-    const [selectedBuddyTheme, setSelectedBuddyTheme] = useState<string[]>([]);
     const [selectedTripTheme, setSelectedTripTheme] = useState<string[]>([]);
     const [selectedMbti, setSelectedMbti] = useState<string>('');
 
@@ -61,18 +65,6 @@ function OnBoardingPage() {
     const handleLocationChange = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
         setSelectedLocation(target.innerText);
-    };
-
-    const handleBuddyThemeChange = (e: MouseEvent<HTMLSpanElement>) => {
-        const target = e.currentTarget;
-
-        const mutableBuddyThemes = buddyThemes.map(theme => theme.ko);
-        handleChipClick(
-            target,
-            mutableBuddyThemes,
-            selectedBuddyTheme,
-            setSelectedBuddyTheme,
-        );
     };
 
     const handleTripThemeChange = (e: MouseEvent<HTMLSpanElement>) => {
@@ -220,19 +212,7 @@ function OnBoardingPage() {
                     ))}
                 </section>
 
-                <label htmlFor="buddyTheme">선호버디테마</label>
-                <section className="flex flex-wrap gap-2">
-                    {buddyThemes.map(theme => (
-                        <Chip
-                            key={theme.en}
-                            selected={selectedBuddyTheme.includes(theme.ko)}
-                            onClick={handleBuddyThemeChange}
-                            intent={theme.en}
-                        >
-                            {theme.ko}
-                        </Chip>
-                    ))}
-                </section>
+                <PreferBuddyTheme />
 
                 <label htmlFor="tripTheme">선호여행테마</label>
                 <section className="flex flex-wrap gap-2">
