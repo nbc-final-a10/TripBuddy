@@ -22,9 +22,8 @@ export default function SelectRegionPage() {
     const [secondLevelLocation, setSecondLevelLocation] = useState<
         SecondLevelNames[]
     >([]);
-    const [selectedSubLocations, setSelectedSubLocations] = useState<
-        ThirdLevel[]
-    >([]);
+    const [selectedSecondLevelLocations, setSelectedSecondLevelLocations] =
+        useState<ThirdLevel[]>([]);
 
     useEffect(() => {
         setSecondLevelLocation(
@@ -37,12 +36,13 @@ export default function SelectRegionPage() {
 
     console.log(`firstLevelLocation: ${firstLevelLocation}`);
     console.log(`secondLevelLocation: ${secondLevelLocation}`);
+    console.log(`selectedLocationName: ${selectedLocationName}`);
 
     // 국내/해외 선택 처리
     const handleLocationTypeClick = (isKoreaSelected: boolean) => {
         setFirstLevelLocation(isKoreaSelected ? 'korea' : 'global');
         setSelectedLocationName(null);
-        setSelectedSubLocations([]);
+        setSelectedSecondLevelLocations([]);
     };
 
     // 칩 클릭 처리 (시도, 대륙 선택 시 도시, 국가명 렌더링)
@@ -58,10 +58,11 @@ export default function SelectRegionPage() {
         const thirdLevel =
             secondLevel.find(subLocation => subLocation.name === name)
                 ?.subLocations || [];
-        setSelectedSubLocations(thirdLevel as ThirdLevel[]);
+        setSelectedSecondLevelLocations(thirdLevel as ThirdLevel[]);
     };
 
-    console.log(selectedSubLocations);
+    // 최종 지역 데이터
+    console.log(selectedSecondLevelLocations);
 
     return (
         <>
@@ -88,6 +89,40 @@ export default function SelectRegionPage() {
                     selectedLocationName={selectedLocationName || ''}
                     onChipClick={handleChipClick}
                 />
+            </section>
+
+            {/* 선택한 지역 렌더링 */}
+            <section>
+                <div className="my-3">
+                    {selectedLocationName && (
+                        <div>
+                            {selectedSecondLevelLocations.map(loc => (
+                                <div
+                                    key={loc.name}
+                                    className="flex items-center border-b border-gray-300 pb-3 mt-3"
+                                >
+                                    <div>
+                                        <p className="text-sm text-gray-500">
+                                            {firstLevelLocation === 'korea' ? (
+                                                <>
+                                                    <p>{loc.name}</p>
+                                                    <p>한국</p>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <p>{loc.name}</p>
+                                                    <p>
+                                                        {selectedLocationName}
+                                                    </p>
+                                                </>
+                                            )}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </section>
         </>
     );
