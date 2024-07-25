@@ -13,15 +13,18 @@ type Location = {
 
 export default function SelectRegionPage() {
     // Todo: useState 말고 string으로 해도 될 듯
+    // selectedLocationName은 국내의 경우는 선택한 도, 해외의 경우 선택한 대륙 하나만 초기화 됨. (예) 경상남도, 오세아니아
     const [selectedLocationName, setSelectedLocationName] = useState<
         string | null
     >(null);
-    // Todo: 이름 더 시멘틱하게 변경 레벨 단위로
+    // firstLevelLocation은 'korea', 'global'로 초기화 됨.
     const [firstLevelLocation, setFirstLevelLocation] =
         useState<string>('korea');
+    // secondLevelLocation은 국내의 경우 도, 해외의 경우 대륙 이름들이 배열로 초기화 됨.
     const [secondLevelLocation, setSecondLevelLocation] = useState<
         SecondLevelNames[]
     >([]);
+    // selectedSecondLevelLocations는 국내는 도, 해외는 대륙을 선택한 경우 해당 대륙에 포함된 나라, 도시들이 배열로 초기화 됨.
     const [selectedSecondLevelLocations, setSelectedSecondLevelLocations] =
         useState<ThirdLevel[]>([]);
 
@@ -37,6 +40,9 @@ export default function SelectRegionPage() {
     console.log(`firstLevelLocation: ${firstLevelLocation}`);
     console.log(`secondLevelLocation: ${secondLevelLocation}`);
     console.log(`selectedLocationName: ${selectedLocationName}`);
+    console.log(
+        `selectedSecondLevelLocations: ${selectedSecondLevelLocations}`,
+    );
 
     // 국내/해외 선택 처리
     const handleLocationTypeClick = (isKoreaSelected: boolean) => {
