@@ -15,13 +15,13 @@ const OnBoardingPage: React.FC = () => {
     const { mutate, isPending, error } = useUpdateBuddyInfoMutation();
 
     const [PreferBuddyTheme, selectedBuddyTheme] = usePreferTheme({
-        themes: [...buddyThemes],
-        label: '버디즈 성향',
+        mode: 'buddy',
+        isLabel: true,
     });
 
     const [PreferTripTheme, selectedTripTheme] = usePreferTheme({
-        themes: [...tripThemes],
-        label: '여행 테마',
+        mode: 'trip',
+        isLabel: true,
     });
 
     const [selectedLocation, setSelectedLocation] = useState<string>('');
