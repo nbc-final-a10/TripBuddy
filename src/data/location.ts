@@ -5,10 +5,10 @@
 
 export const locationData = [
     {
-        name: '국내',
+        name: { ko: '국내', en: 'domestic' },
         subLocations: [
             {
-                name: '서울/경기',
+                name: { ko: '서울/경기', en: 'Seoul/Gyeonggi' },
                 subLocations: [
                     { name: '서울시' },
                     { name: '수원시' },
@@ -27,7 +27,7 @@ export const locationData = [
                 ],
             },
             {
-                name: '경상남도',
+                name: { ko: '경상남도', en: 'Gyeongsangnamdo' },
                 subLocations: [
                     { name: '부산시' },
                     { name: '창원시' },
@@ -46,7 +46,7 @@ export const locationData = [
                 ],
             },
             {
-                name: '경상북도',
+                name: { ko: '경상북도', en: 'Gyeongsangbukdo' },
                 subLocations: [
                     { name: '상주시' },
                     { name: '안동시' },
@@ -65,7 +65,7 @@ export const locationData = [
                 ],
             },
             {
-                name: '충청남도',
+                name: { ko: '충청남도', en: 'Chungcheongnamdo' },
                 subLocations: [
                     { name: '당진시' },
                     { name: '서산시' },
@@ -82,7 +82,7 @@ export const locationData = [
                 ],
             },
             {
-                name: '충청북도',
+                name: { ko: '충청북도', en: 'Chungcheongbukdo' },
                 subLocations: [
                     { name: '진천군' },
                     { name: '음성군' },
@@ -97,7 +97,7 @@ export const locationData = [
                 ],
             },
             {
-                name: '전라남도',
+                name: { ko: '전라남도', en: 'Jeonlamdo' },
                 subLocations: [
                     { name: '영광군' },
                     { name: '장성군' },
@@ -120,7 +120,7 @@ export const locationData = [
                 ],
             },
             {
-                name: '전라북도',
+                name: { ko: '전라북도', en: 'Jeonrabukdo' },
                 subLocations: [
                     { name: '군산시' },
                     { name: '익산시' },
@@ -139,7 +139,7 @@ export const locationData = [
                 ],
             },
             {
-                name: '강원도',
+                name: { ko: '강원도', en: 'Gangwondo' },
                 subLocations: [
                     { name: '철원군' },
                     { name: '화천군' },
@@ -160,16 +160,16 @@ export const locationData = [
                 ],
             },
             {
-                name: '제주도',
+                name: { ko: '제주도', en: 'Jejudo' },
                 subLocations: [{ name: '서귀포시' }, { name: '제주시' }],
             },
         ],
     },
     {
-        name: '국외',
+        name: { ko: '국외', en: 'foreign' },
         subLocations: [
             {
-                name: '아시아',
+                name: { ko: '아시아', en: 'Asia' },
                 subLocations: [
                     { name: '일본' },
                     { name: '중국' },
@@ -198,7 +198,7 @@ export const locationData = [
                 ],
             },
             {
-                name: '유럽',
+                name: { ko: '유럽', en: 'Europe' },
                 subLocations: [
                     { name: '프랑스' },
                     { name: '독일' },
@@ -221,7 +221,7 @@ export const locationData = [
                 ],
             },
             {
-                name: '아프리카',
+                name: { ko: '아프리카', en: 'Africa' },
                 subLocations: [
                     { name: '나미비아' },
                     { name: '에티오피아' },
@@ -247,7 +247,7 @@ export const locationData = [
                 ],
             },
             {
-                name: '아메리카',
+                name: { ko: '아메리카', en: 'America' },
                 subLocations: [
                     { name: '과테말라' },
                     { name: '미국' },
@@ -272,7 +272,7 @@ export const locationData = [
                 ],
             },
             {
-                name: '오세아니아',
+                name: { ko: '오세아니아', en: 'Oceania' },
                 subLocations: [
                     { name: '뉴질랜드' },
                     { name: '인도네시아' },

@@ -66,7 +66,7 @@ function OnBoardingPage() {
     const handleBuddyThemeChange = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
 
-        const mutableBuddyThemes = [...buddyThemes];
+        const mutableBuddyThemes = buddyThemes.map(theme => theme.ko);
         handleChipClick(
             target,
             mutableBuddyThemes,
@@ -77,7 +77,7 @@ function OnBoardingPage() {
 
     const handleTripThemeChange = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
-        const mutableTripThemes = [...tripThemes];
+        const mutableTripThemes = tripThemes.map(theme => theme.ko);
         handleChipClick(
             target,
             mutableTripThemes,
@@ -208,12 +208,14 @@ function OnBoardingPage() {
                 <section className="flex flex-wrap gap-2">
                     {locationData[0].subLocations.map(location => (
                         <Chip
-                            key={location.name}
-                            selected={selectedLocation.includes(location.name)}
+                            key={location.name.en}
+                            selected={selectedLocation.includes(
+                                location.name.ko,
+                            )}
                             onClick={handleLocationChange}
-                            intent={location.name}
+                            intent={location.name.en}
                         >
-                            {location.name}
+                            {location.name.ko}
                         </Chip>
                     ))}
                 </section>
@@ -222,12 +224,12 @@ function OnBoardingPage() {
                 <section className="flex flex-wrap gap-2">
                     {buddyThemes.map(theme => (
                         <Chip
-                            key={theme}
-                            selected={selectedBuddyTheme.includes(theme)}
+                            key={theme.en}
+                            selected={selectedBuddyTheme.includes(theme.ko)}
                             onClick={handleBuddyThemeChange}
-                            intent={theme}
+                            intent={theme.en}
                         >
-                            {theme}
+                            {theme.ko}
                         </Chip>
                     ))}
                 </section>
@@ -236,12 +238,12 @@ function OnBoardingPage() {
                 <section className="flex flex-wrap gap-2">
                     {tripThemes.map(theme => (
                         <Chip
-                            key={theme}
-                            selected={selectedTripTheme.includes(theme)}
+                            key={theme.en}
+                            selected={selectedTripTheme.includes(theme.ko)}
                             onClick={handleTripThemeChange}
-                            intent={theme}
+                            intent={theme.en}
                         >
-                            {theme}
+                            {theme.ko}
                         </Chip>
                     ))}
                 </section>
