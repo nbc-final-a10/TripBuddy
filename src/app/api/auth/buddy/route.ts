@@ -1,5 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET() {
     const supabase = createClient();
@@ -45,3 +45,22 @@ export async function GET() {
 
     return NextResponse.json({ buddy: buddy }, { status: 200 });
 }
+
+export const POST = async (req: NextRequest) => {
+    const { buddyInfo } = await req.json();
+    const supabase = createClient();
+
+    console.log('authBuddyInfo ===>', buddyInfo);
+
+    const { data, error } = await supabase
+        .from('buddies')
+        .insert([buddyInfo])
+        .select();
+
+    if (error) {
+        console.error(error);
+        return NextResponse.json({ error: error?.message }, { status: 401 });
+    }
+
+    return NextResponse.json({ buddy: data }, { status: 200 });
+};

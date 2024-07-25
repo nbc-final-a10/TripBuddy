@@ -1,8 +1,11 @@
+'use client';
+
 import { getBuddyClient } from '@/api-services/auth/getBuddyClient';
+import { updateBuddyInfo } from '@/api-services/auth/updateBuddyInfo';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import { AuthContext } from '@/contexts/auth.context';
-import { Buddy } from '@/types/Auth.types';
-import { useQuery } from '@tanstack/react-query';
+import { Buddy, PartialBuddy } from '@/types/Auth.types';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useContext } from 'react';
 
 export const useAuth = () => {
@@ -21,5 +24,15 @@ export function useBuddyQuery() {
     return useQuery<Buddy | null, Error>({
         queryKey: [QUERY_KEY_BUDDY],
         queryFn: () => getBuddyClient(),
+    });
+}
+
+export function useUpdateBuddyInfoMutation() {
+    const queryClient = useQueryClient();
+    return useMutation<void, Error, PartialBuddy>({
+        mutationFn: (buddyInfo: PartialBuddy) => updateBuddyInfo(buddyInfo),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY_BUDDY] });
+        },
     });
 }

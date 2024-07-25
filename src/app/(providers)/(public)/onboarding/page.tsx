@@ -4,12 +4,15 @@ import Chip from '@/components/atoms/common/O_Chip';
 import { locationData } from '@/data/location';
 import { mbtis } from '@/data/mbtis';
 import { buddyThemes, tripThemes } from '@/data/themes';
-import { useAuth } from '@/hooks/auth.hooks';
-import { BuddyTheme, TripTheme } from '@/types/Themes.types';
+import { useAuth, useUpdateBuddyInfoMutation } from '@/hooks/auth.hooks';
+import { type BuddyTheme, type TripTheme } from '@/types/Themes.types';
+import { showAlert } from '@/utils/ui/openCustomAlert';
 import { FormEvent, MouseEvent, useCallback, useState } from 'react';
 
 function OnBoardingPage() {
     const { logOut } = useAuth();
+
+    const { mutate, isPending, error } = useUpdateBuddyInfoMutation();
 
     const [selectedLocation, setSelectedLocation] = useState<string>('');
     const [selectedBuddyTheme, setSelectedBuddyTheme] = useState<string[]>([]);
@@ -93,19 +96,51 @@ function OnBoardingPage() {
 
         const formData = new FormData(e.currentTarget);
 
-        const nickname = formData.get('nickname');
-        const gender = formData.get('gender');
-        const birth = formData.get('birth');
-        const introduction = formData.get('introduction');
+        const nickname = formData.get('nickname') as string;
+        const gender = formData.get('gender') as string;
+        const birth = formData.get('birth') as string;
+        const birthDate = new Date(birth);
+        const birthTimestamptz = birthDate.toISOString();
+        const introduction = formData.get('introduction') as string;
 
         console.log('nickname ===>', nickname);
         console.log('gender ===>', gender);
-        console.log('birth ===>', birth);
+        console.log('birth ===>', birthTimestamptz);
         console.log('introduction ===>', introduction);
         console.log('region ===>', selectedLocation);
         console.log('buddyTheme ===>', selectedBuddyTheme);
         console.log('tripTheme ===>', selectedTripTheme);
         console.log('mbti ===>', selectedMbti);
+
+        if (
+            !nickname ||
+            !gender ||
+            !birth ||
+            !introduction ||
+            selectedLocation.length < 3 ||
+            selectedBuddyTheme.length < 3 ||
+            selectedTripTheme.length < 3 ||
+            !selectedMbti
+        ) {
+            return showAlert('error', '입력 정보를 모두 입력해주세요.');
+        }
+
+        const buddyInfo = {
+            buddy_nickname: nickname,
+            buddy_sex: gender,
+            buddy_birth: birthTimestamptz,
+            buddy_introduction: introduction,
+            buddy_region: selectedLocation,
+            buddy_preferred_buddy1: selectedBuddyTheme[0],
+            buddy_preferred_buddy2: selectedBuddyTheme[1],
+            buddy_preferred_buddy3: selectedBuddyTheme[2],
+            buddy_preferred_theme1: selectedTripTheme[0],
+            buddy_preferred_theme2: selectedTripTheme[1],
+            buddy_preferred_theme3: selectedTripTheme[2],
+            buddy_mbti: selectedMbti,
+        };
+
+        mutate(buddyInfo);
     };
 
     return (
