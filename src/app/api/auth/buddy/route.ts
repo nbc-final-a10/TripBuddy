@@ -1,3 +1,4 @@
+import { PartialBuddy } from '@/types/Auth.types';
 import { createClient } from '@/utils/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -46,19 +47,26 @@ export async function GET() {
     return NextResponse.json({ buddy: buddy }, { status: 200 });
 }
 
-export const POST = async (req: NextRequest) => {
-    const { buddyInfo } = await req.json();
+export const PATCH = async (req: NextRequest) => {
+    const { buddyInfo }: { buddyInfo: PartialBuddy } = await req.json();
     const supabase = createClient();
 
-    console.log('authBuddyInfo ===>', buddyInfo);
+    // console.log('authBuddyInfo ===>', buddyInfo);
 
     const { data, error } = await supabase
         .from('buddies')
-        .insert([buddyInfo])
+        .update([{ ...buddyInfo }])
+        .eq('buddy_id', buddyInfo.buddy_id)
         .select();
 
     if (error) {
-        console.error(error);
+        if (error.message.includes('duplicate')) {
+            return NextResponse.json(
+                { error: '이미 존재하는 닉네임입니다.' },
+                { status: 401 },
+            );
+        }
+
         return NextResponse.json({ error: error?.message }, { status: 401 });
     }
 

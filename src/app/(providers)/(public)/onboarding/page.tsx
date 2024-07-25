@@ -7,10 +7,10 @@ import { buddyThemes, tripThemes } from '@/data/themes';
 import { useAuth, useUpdateBuddyInfoMutation } from '@/hooks/auth.hooks';
 import { type BuddyTheme, type TripTheme } from '@/types/Themes.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import { FormEvent, MouseEvent, useCallback, useState } from 'react';
+import { FormEvent, MouseEvent, useCallback, useEffect, useState } from 'react';
 
 function OnBoardingPage() {
-    const { logOut } = useAuth();
+    const { logOut, buddy } = useAuth();
 
     const { mutate, isPending, error } = useUpdateBuddyInfoMutation();
 
@@ -94,11 +94,18 @@ function OnBoardingPage() {
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        if (!buddy) {
+            return showAlert('error', '로그인을 먼저 해주세요.');
+        }
+
         const formData = new FormData(e.currentTarget);
 
         const nickname = formData.get('nickname') as string;
         const gender = formData.get('gender') as string;
         const birth = formData.get('birth') as string;
+        if (!birth) {
+            return showAlert('error', '생년월일을 입력해주세요.');
+        }
         const birthDate = new Date(birth);
         const birthTimestamptz = birthDate.toISOString();
         const introduction = formData.get('introduction') as string;
@@ -126,6 +133,7 @@ function OnBoardingPage() {
         }
 
         const buddyInfo = {
+            buddy_id: buddy.buddy_id,
             buddy_nickname: nickname,
             buddy_sex: gender,
             buddy_birth: birthTimestamptz,
@@ -142,6 +150,13 @@ function OnBoardingPage() {
 
         mutate(buddyInfo);
     };
+
+    useEffect(() => {
+        if (error) {
+            // console.error(error);
+            return showAlert('error', error.message);
+        }
+    }, [error]);
 
     return (
         <div>

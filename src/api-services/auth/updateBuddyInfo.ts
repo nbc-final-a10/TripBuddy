@@ -3,7 +3,7 @@ import { type PartialBuddy } from '@/types/Auth.types';
 
 export async function updateBuddyInfo(buddyInfo: PartialBuddy) {
     const response = await fetch(`${PUBLIC_URL}/api/auth/buddy`, {
-        method: 'POST',
+        method: 'PATCH',
         body: JSON.stringify({ buddyInfo }),
         next: {
             tags: ['buddy'],
@@ -14,7 +14,8 @@ export async function updateBuddyInfo(buddyInfo: PartialBuddy) {
     });
 
     if (!response.ok) {
-        return null;
+        const { error } = await response.json();
+        throw new Error(error);
     }
     const data = await response.json();
 
