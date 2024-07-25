@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { I18nProvider } from '@react-aria/i18n';
 import { RangeCalendar } from '@nextui-org/calendar';
+import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
 
 const DateSearchPage = () => {
     const [selectedRange, setSelectedRange] = useState({
@@ -12,13 +13,12 @@ const DateSearchPage = () => {
 
     return (
         <main className="p-4">
-            <header className="mt-2 mb-10">
-                <h2 className="text-base font-semibold">언제 떠나시나요?</h2>
-                <p className="text-sm text-gray-500">
-                    버디즈와 함께 여행하고 싶은 날짜를 선택해주세요.
-                </p>
-            </header>
-            <div className="w-full flex justify-center mb-10">
+            <SearchPageTitle
+                title="언제 떠나시나요?"
+                description="버디즈와 함께 여행하고 싶은 날짜를 선택해주세요."
+            />
+
+            <div className="w-full flex justify-center mb-20 mt-12">
                 <I18nProvider locale="ko-KR-u-ca-dangi">
                     <RangeCalendar aria-label="Date (Controlled Focused Value)" />
                 </I18nProvider>

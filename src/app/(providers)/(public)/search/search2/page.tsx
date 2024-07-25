@@ -1,6 +1,7 @@
 'use client';
 
 import { Chip } from '@/components/molecules/H_chips';
+import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
 import locationData from '@/data/location';
 import useTapScroll from '@/hooks/useTapScroll';
 import { useRef, useState } from 'react';
@@ -37,14 +38,10 @@ const LocationSearchPage = () => {
     return (
         <main className="p-4">
             <section className="mb-2">
-                <header className="mt-2 mb-5">
-                    <h2 className="text-base font-semibold">
-                        어디로 떠나시나요?
-                    </h2>
-                    <p className="text-sm text-gray-500">
-                        지역, 국가, 도시를 1개 선택해주세요.
-                    </p>
-                </header>
+                <SearchPageTitle
+                    title="어디로 떠나시나요?"
+                    description="지역, 국가, 도시를 1개 선택해주세요."
+                />
 
                 <div className="flex justify-center items-center w-full">
                     <label
