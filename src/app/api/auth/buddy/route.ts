@@ -11,20 +11,20 @@ export async function GET() {
     if (error) {
         if (error.message === 'Auth session missing!')
             return NextResponse.json(
-                { data: { user: 'Auth session missing!' } },
+                { data: { buddy: 'Auth session missing!' } },
                 { status: 401 },
             );
 
         if (error.message === 'Unauthorized')
             return NextResponse.json(
-                { data: { user: 'Unauthorized' } },
+                { data: { buddy: 'Unauthorized' } },
                 { status: 401 },
             );
         return NextResponse.json({ error: error?.message }, { status: 401 });
     }
     if (!user) {
         return NextResponse.json(
-            { data: { user: 'User not found' } },
+            { data: { buddy: 'User not found' } },
             { status: 404 },
         );
     }
@@ -43,5 +43,5 @@ export async function GET() {
         );
     }
 
-    return NextResponse.json({ user: buddy }, { status: 200 });
+    return NextResponse.json({ buddy: buddy }, { status: 200 });
 }

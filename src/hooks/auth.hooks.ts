@@ -1,5 +1,5 @@
-import { getUserClient } from '@/api-services/auth/getUserClient';
-import { QUERY_KEY_USER } from '@/constants/query.constants';
+import { getBuddyClient } from '@/api-services/auth/getBuddyClient';
+import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import { AuthContext } from '@/contexts/auth.context';
 import { Buddy } from '@/types/Auth.types';
 import { useQuery } from '@tanstack/react-query';
@@ -19,7 +19,7 @@ export const useAuth = () => {
 
 export function useBuddyQuery() {
     return useQuery<Buddy | null, Error>({
-        queryKey: [QUERY_KEY_USER],
-        queryFn: () => getUserClient(),
+        queryKey: [QUERY_KEY_BUDDY],
+        queryFn: () => getBuddyClient(),
     });
 }

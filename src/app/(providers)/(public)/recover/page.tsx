@@ -1,8 +1,8 @@
-import { getUserServer } from '@/api-services/auth/getUserServer';
+import { getBuddyServer } from '@/api-services/auth/getBuddyServer';
 import AuthPageBottom from '@/components/molecules/auth/AuthPageBottom';
 import AuthPageWrapper from '@/components/molecules/auth/AuthPageWrapper';
 import ResetForm from '@/components/organisms/auth/PasswordResetForm';
-import { QUERY_KEY_USER } from '@/constants/query.constants';
+import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import { Buddy } from '@/types/Auth.types';
 import { QueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -11,10 +11,12 @@ export default async function RecoverPage() {
     const queryClient = new QueryClient();
 
     await queryClient.prefetchQuery({
-        queryKey: [QUERY_KEY_USER],
-        queryFn: () => getUserServer(),
+        queryKey: [QUERY_KEY_BUDDY],
+        queryFn: () => getBuddyServer(),
     });
-    const buddy = queryClient.getQueryData<Buddy | undefined>([QUERY_KEY_USER]);
+    const buddy = queryClient.getQueryData<Buddy | undefined>([
+        QUERY_KEY_BUDDY,
+    ]);
 
     return (
         <AuthPageWrapper>

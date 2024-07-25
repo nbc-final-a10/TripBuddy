@@ -1,14 +1,15 @@
 import { PUBLIC_URL } from '@/constants/common.constants';
+import { Buddy } from '@/types/Auth.types';
 import { cookies } from 'next/headers';
 
-export async function getUserServer(): Promise<any | null> {
+export async function getBuddyServer(): Promise<any | null> {
     const cookieStore = cookies();
     const cookiesArray = cookieStore.getAll();
 
     const response = await fetch(`${PUBLIC_URL}/api/auth/buddy`, {
         method: 'GET',
         next: {
-            tags: ['user'],
+            tags: ['buddy'],
         },
         // cache: "no-store",
         headers: {
@@ -21,16 +22,16 @@ export async function getUserServer(): Promise<any | null> {
     if (!response.ok) {
         const error = await response.json();
 
-        const message = error.data.user;
+        const message = error.data.buddy;
         if (message === 'Auth session missing!') {
             return null;
         }
         return null;
     }
 
-    const data = await response.json();
+    const data: { buddy: Buddy } = await response.json();
 
-    const buddy = data.user;
+    const buddy = data.buddy;
 
     return buddy;
 }
