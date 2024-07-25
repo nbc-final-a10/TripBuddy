@@ -2,7 +2,7 @@ import { BuddyTheme, TripTheme } from '@/types/Themes.types';
 
 const handleChipClick = (
     target: EventTarget & HTMLSpanElement,
-    data: TripTheme[] | BuddyTheme[],
+    data: (TripTheme | BuddyTheme)[],
     prevSelected: string[],
     setSelected: (value: string[]) => void,
 ) => {
