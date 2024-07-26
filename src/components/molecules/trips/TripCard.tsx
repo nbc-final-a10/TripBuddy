@@ -6,6 +6,9 @@ import Calendar_month from '../../../../public/svg/Calendar_month.svg';
 import Distance from '../../../../public/svg/Distance.svg';
 import Groups from '../../../../public/svg/Groups.svg';
 import Chip from '@/components/atoms/common/O_Chip';
+import { VariantProps } from 'class-variance-authority';
+
+type ChipVariantsType = VariantProps<typeof TripCardVariants>;
 
 type TripCardProps = {
     title: string;
@@ -13,7 +16,8 @@ type TripCardProps = {
     date: string;
     location: string;
     participants: string;
-};
+} & ChipVariantsType &
+    React.ComponentProps<'div'>;
 
 const TripCard: React.FC<TripCardProps> = ({
     title,
