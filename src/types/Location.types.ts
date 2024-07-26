@@ -1,4 +1,4 @@
-import { locationData } from '@/data/location';
+import locationData from '@/data/location';
 
 type LocationName = {
     ko: string;
@@ -38,4 +38,3 @@ export type ThirdLevelNames =
 
 export type ThirdLevel =
     LocationDataType[number]['subLocations'][number]['subLocations'][number];
-
