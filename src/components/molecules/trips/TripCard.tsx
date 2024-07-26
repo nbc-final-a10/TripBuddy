@@ -95,7 +95,7 @@ const TripCard: React.FC<TripCardProps> = ({
                         </div>
 
                         <div className="flex flex-row">
-                            <TripCustomSlider />
+                            <TripCustomSlider counts={3} />
                         </div>
                     </div>
                 </div>
