@@ -3,7 +3,7 @@
 // locationData[0].subLocations[0].subLocations[0].name === 종로구
 // [locationData[0].name, locationData[0].subLocations[0].name, locationData[0].subLocations[0].subLocations[0].name]
 
-export const locationData = [
+const locationData = [
     {
         name: { ko: '국내', en: 'domestic' },
         subLocations: [
@@ -281,3 +281,5 @@ export const locationData = [
         ],
     },
 ] as const;
+
+export default locationData;
