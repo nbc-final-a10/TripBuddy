@@ -1,7 +1,7 @@
 import { PUBLIC_URL } from '@/constants/common.constants';
 import { type PartialBuddy } from '@/types/Auth.types';
 
-export async function updateBuddyInfo(buddyInfo: PartialBuddy) {
+export async function patchBuddyInfo(buddyInfo: PartialBuddy) {
     const response = await fetch(`${PUBLIC_URL}/api/auth/buddy`, {
         method: 'PATCH',
         body: JSON.stringify({ buddyInfo }),

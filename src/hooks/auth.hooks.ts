@@ -1,9 +1,9 @@
 'use client';
 
 import { getBuddyClient } from '@/api-services/auth/getBuddyClient';
+import { patchBuddyInfo } from '@/api-services/auth/patchBuddyInfo';
 import { postLogIn } from '@/api-services/auth/postLogIn';
 import { postSignUp } from '@/api-services/auth/postSignUp';
-import { updateBuddyInfo } from '@/api-services/auth/updateBuddyInfo';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import { AuthContext } from '@/contexts/auth.context';
 import {
@@ -36,7 +36,7 @@ export function useBuddyQuery() {
 export function useUpdateBuddyInfoMutation() {
     const queryClient = useQueryClient();
     return useMutation<void, Error, PartialBuddy>({
-        mutationFn: (buddyInfo: PartialBuddy) => updateBuddyInfo(buddyInfo),
+        mutationFn: (buddyInfo: PartialBuddy) => patchBuddyInfo(buddyInfo),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_BUDDY] });
         },
