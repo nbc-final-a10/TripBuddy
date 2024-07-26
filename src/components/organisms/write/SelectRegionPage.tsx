@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import locationData from '@/data/location';
-import Left2xlBoldText from '@/components/atoms/MyPage/Left2xlText';
-import LeftSmGrayText from '@/components/atoms/MyPage/LeftSmGrayText';
-import LocationToggleButton from '@/components/atoms/MyPage/LocationToggleButton';
-import LocationList from '@/components/atoms/MyPage/LocationList';
 import { SecondLevel, ThirdLevel } from '@/types/Location.types';
+import Left2xlBoldText from '@/components/atoms/\bwrite/Left2xlText';
+import LeftSmGrayText from '@/components/atoms/\bwrite/LeftSmGrayText';
+import LocationToggleButton from '@/components/atoms/\bwrite/LocationToggleButton';
+import LocationList from '@/components/atoms/\bwrite/LocationList';
 
 type Location = {
     name: string;
