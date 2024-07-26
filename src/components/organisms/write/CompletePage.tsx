@@ -1,4 +1,4 @@
-import Center2xlTwoLineText from '@/components/atoms/MyPage/Cneter2xlTwoLineText';
+import Center2xlTwoLineText from '@/components/atoms/write/Cneter2xlTwoLineText';
 import WelcomeImage from '@/components/molecules/write/WelcomeImage';
 import React from 'react';
 

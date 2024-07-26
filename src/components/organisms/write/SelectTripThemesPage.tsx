@@ -1,5 +1,5 @@
-import Left2xlBoldText from '@/components/atoms/MyPage/Left2xlText';
-import LeftSmGrayText from '@/components/atoms/MyPage/LeftSmGrayText';
+import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
+import LeftSmGrayText from '@/components/atoms/write/LeftSmGrayText';
 import React from 'react';
 
 export default function SelectTripThemesPage() {

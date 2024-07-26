@@ -1,4 +1,4 @@
-import Left2xlBoldText from '@/components/atoms/MyPage/Left2xlText';
+import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 import React from 'react';
 
 export default function SelectAdditionalBuddyThemes() {
