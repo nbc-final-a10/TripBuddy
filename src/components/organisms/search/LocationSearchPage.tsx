@@ -1,21 +1,23 @@
 'use client';
 
+import useStore from '@/app/store';
 import { Chip } from '@/components/molecules/H_chips';
 import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
 import locationData from '@/data/location';
 import useTapScroll from '@/hooks/useTapScroll';
 import React, { useRef, useState } from 'react';
 
-type LocationSearchPageProps = {
-    onBack: () => void;
-};
-
-const LocationSearchPage: React.FC<LocationSearchPageProps> = () => {
+const LocationSearchPage: React.FC = () => {
+    const { setCurrentPage } = useStore();
     const [isDomestic, setIsDomestic] = useState(true);
     const [selectedChips, setSelectedChips] = useState<string | null>(null);
     const [selectedThirdLocationName, setSelectedThirdLocationName] = useState<
         string | null
     >(null);
+
+    const handleSelect = () => {
+        setCurrentPage('main');
+    };
 
     // const h_chipsRef = useRef<HTMLUListElement>(null);
 
@@ -138,7 +140,10 @@ const LocationSearchPage: React.FC<LocationSearchPageProps> = () => {
                     {selectedThirdLocationData?.name}
                 </h3>
             </div>
-            <button className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:hidden">
+            <button
+                className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:hidden"
+                onClick={handleSelect}
+            >
                 선택하기
             </button>
         </main>

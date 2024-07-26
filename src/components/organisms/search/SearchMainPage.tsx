@@ -1,5 +1,8 @@
 'use client';
 
+import useStore from '@/app/store';
+import DateSearchButton from '@/components/atoms/DateSearchButton';
+import LocationSearchButton from '@/components/atoms/LocationSearchButton';
 import {
     additionalAttributes,
     buddiesPreferences,
@@ -9,33 +12,13 @@ import {
 import SearchPageChipsTitle from '@/components/molecules/search/SearchMainPageChipsTitle';
 import React, { useState } from 'react';
 
-type SearchMainPageProps = {
-    onLocationSearch: () => void;
-    onDateSearch: () => void;
-};
+const SearchMainPage: React.FC = () => {
+    const { setCurrentPage } = useStore();
 
-const SearchMainPage: React.FC<SearchMainPageProps> = ({
-    onLocationSearch,
-    onDateSearch,
-}) => {
     // 각 chip의 선택 상태를 저장
     const [selectedChips, setSelectedChips] = useState<Record<string, boolean>>(
         {},
     );
-
-    // 현재 날짜, 다음날 가져오기
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-
-    const formatDate = (date: Date) => {
-        const week = ['일', '월', '화', '수', '목', '금', '토'];
-        const dayOfWeek = week[today.getDay()];
-        return `${today.getFullYear().toString().slice(-2)}.${(today.getMonth() + 1).toString().padStart(2, '0')}.${today.getDate().toString().padStart(2, '0')}(${dayOfWeek})`;
-    };
-
-    const formattedToday = formatDate(today);
-    const formattedTomorrow = formatDate(tomorrow);
 
     // 칩 클릭 핸들러(클릭 시 상태 토글)
     const handleChipClick = (label: string) => {
@@ -53,25 +36,20 @@ const SearchMainPage: React.FC<SearchMainPageProps> = ({
                     placeholder="검색어를 입력하세요"
                     className="w-full bg-gray-100 p-2 rounded-xl"
                 />
-                <button
-                    className="w-full bg-gray-100 p-2 rounded-xl text-left text-gray-400"
-                    onClick={onLocationSearch}
-                >
-                    지역, 국가를 찾아보세요
-                </button>
+                <LocationSearchButton
+                    onClick={() => setCurrentPage('location')}
+                />
 
-                <button
-                    className="w-full bg-gray-100 p-2 rounded-xl text-left"
-                    onClick={onDateSearch}
-                >
-                    {formattedToday} ~ {formattedTomorrow}
-                </button>
+                <DateSearchButton onClick={() => setCurrentPage('date')} />
 
                 <div className="hidden xl:flex xl:gap-2 xl:w-full">
                     <button className="flex-1 px-4 py-2 rounded-lg border border-gray-500 text-gray-700">
                         접기
                     </button>
-                    <button className="flex-1 px-4 py-2 rounded-lg bg-gray-500 text-white">
+                    <button
+                        className="flex-1 px-4 py-2 rounded-lg bg-gray-500 text-white"
+                        onClick={() => setCurrentPage('result')}
+                    >
                         검색 결과 보기
                     </button>
                 </div>
@@ -129,7 +107,10 @@ const SearchMainPage: React.FC<SearchMainPageProps> = ({
                     ))}
                 </div>
             </section>
-            <button className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:hidden">
+            <button
+                className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:hidden"
+                onClick={() => setCurrentPage('result')}
+            >
                 선택하기
             </button>
         </main>

@@ -3,22 +3,12 @@
 import DateSearchPage from '@/components/organisms/search/DateSearchPage';
 import LocationSearchPage from '@/components/organisms/search/LocationSearchPage';
 import SearchMainPage from '@/components/organisms/search/SearchMainPage';
-import React, { useState } from 'react';
+import SearchResultPage from '../searchResult/page';
+import React from 'react';
+import useStore from '@/app/store';
 
 const SearchPage: React.FC = () => {
-    const [currentPage, setCurrentPage] = useState('main');
-
-    const handleLocationSearch = () => {
-        setCurrentPage('location');
-    };
-
-    const handleDateSearch = () => {
-        setCurrentPage('date');
-    };
-
-    const handleBackToMain = () => {
-        setCurrentPage('main');
-    };
+    const { currentPage, setCurrentPage } = useStore();
 
     return (
         <>
@@ -26,16 +16,20 @@ const SearchPage: React.FC = () => {
                 <div>
                     {currentPage === 'main' && (
                         <SearchMainPage
-                            onLocationSearch={handleLocationSearch}
-                            onDateSearch={handleDateSearch}
+                            onLocationSearch={() => setCurrentPage('location')}
+                            onDateSearch={() => setCurrentPage('date')}
+                            onShowResult={() => setCurrentPage('result')}
                         />
                     )}
                     {currentPage === 'location' && (
-                        <LocationSearchPage onBack={handleBackToMain} />
+                        <LocationSearchPage
+                            onBack={() => setCurrentPage('main')}
+                        />
                     )}
                     {currentPage === 'date' && (
-                        <DateSearchPage onBack={handleBackToMain} />
+                        <DateSearchPage onBack={() => setCurrentPage('main')} />
                     )}
+                    {currentPage === 'result' && <SearchResultPage />}
                 </div>
             </section>
         </>
