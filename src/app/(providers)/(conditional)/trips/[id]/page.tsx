@@ -22,8 +22,9 @@ const TripsDetailPage: React.FC<TripDetailPageProps> = ({
                     description={`Description 123123`}
                     date="2022-01-01"
                     location="Seoul"
-                    participants="10"
+                    participants="3"
                     mode="detail"
+                    counts={3}
                 />
             </div>
 

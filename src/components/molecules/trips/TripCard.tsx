@@ -14,6 +14,7 @@ type TripCardProps = {
     date: string;
     location: string;
     participants: string;
+    counts: number;
     mode?: 'card' | 'detail' | 'main';
 };
 
@@ -22,23 +23,23 @@ const TripCard: React.FC<TripCardProps> = ({
     date,
     location,
     participants,
+    counts,
     mode = 'card',
 }) => {
     return (
         <div
             className={clsx(
-                'bg-white box-border',
+                'bg-white box-border h-fit',
                 mode === 'detail' && 'py-4',
-                mode === 'card' &&
-                    'cursor-pointer shadow-md max-h-[230px] rounded-lg',
+                mode === 'card' && 'shadow-md rounded-lg',
                 mode === 'main' && '',
             )}
         >
             <div
                 className={clsx(
-                    'bg-gray-200 p-4 rounded-lg box-border h-[80%]',
+                    'bg-gray-200 p-4 rounded-lg box-border h-auto',
                     mode === 'detail' && 'bg-white rounded-none',
-                    mode === 'card' && 'bg-white rounded-b-none',
+                    mode === 'card' && 'bg-gray-200 rounded-b-none',
                     mode === 'main' && 'rounded-b-none',
                 )}
             >
@@ -83,19 +84,25 @@ const TripCard: React.FC<TripCardProps> = ({
 
                         <div className="flex gap-2 items-center">
                             <Groups />
-                            <span>{participants}</span>
+                            <span>{`${participants}/4`}</span>
                         </div>
                     </div>
 
                     {/** slider */}
-                    <div className="flex flex-col gap-1">
+                    <div
+                        className={clsx(
+                            'flex flex-col gap-1',
+                            mode === 'card' && 'hidden',
+                            mode === 'detail' && 'hidden',
+                        )}
+                    >
                         <div className="flex flex-row gap-2">
                             <span className="font-bold">{'D-4'}</span>
                             <span>{'24.07.20'}</span>
                         </div>
 
                         <div className="flex flex-row">
-                            <TripCustomSlider counts={3} />
+                            <TripCustomSlider counts={counts} />
                         </div>
                     </div>
                 </div>
@@ -124,7 +131,7 @@ const TripCard: React.FC<TripCardProps> = ({
                 </button>
                 <button
                     className={clsx(
-                        'w-1/2 p-2',
+                        'p-2',
                         mode === 'detail' &&
                             'bg-gray-100 text-gray-950 rounded-md border border-gray-500 w-[40%]',
                         mode === 'card' &&
