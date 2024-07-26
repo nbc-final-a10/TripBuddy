@@ -1,6 +1,6 @@
 'use client';
 
-import ProgressIndicator from '@/components/atoms/MyPage/ProgressIndicator';
+import ProgressIndicator from '@/components/atoms/write/ProgressIndicator';
 import CompletePage from '@/components/organisms/write/CompletePage';
 import SelectAdditionalBuddyThemes from '@/components/organisms/write/SelectAdditionalBuddyThemes';
 import SelectRegionPage from '@/components/organisms/write/SelectRegionPage';

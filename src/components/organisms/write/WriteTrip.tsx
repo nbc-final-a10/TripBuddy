@@ -1,5 +1,5 @@
-import Left2xlBoldText from '@/components/atoms/MyPage/Left2xlText';
-import SlateEditor from '@/components/atoms/MyPage/SlateEditor';
+import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
+import SlateEditor from '@/components/atoms/write/SlateEditor';
 import React, { useState } from 'react';
 import { Descendant } from 'slate';
 
