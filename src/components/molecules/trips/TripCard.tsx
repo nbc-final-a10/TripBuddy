@@ -6,6 +6,7 @@ import Distance from '../../../../public/svg/Distance.svg';
 import Groups from '../../../../public/svg/Groups.svg';
 import Chip from '@/components/atoms/common/O_Chip';
 import clsx from 'clsx';
+import TripCustomSlider from '@/components/atoms/trips/TripCustomSlider';
 
 type TripCardProps = {
     title: string;
@@ -38,7 +39,7 @@ const TripCard: React.FC<TripCardProps> = ({
                     'bg-gray-200 p-4 rounded-lg box-border h-[80%]',
                     mode === 'detail' && 'bg-white rounded-none',
                     mode === 'card' && 'bg-white rounded-b-none',
-                    mode === 'main' && '',
+                    mode === 'main' && 'rounded-b-none',
                 )}
             >
                 <div className="flex flex-col">
@@ -63,6 +64,7 @@ const TripCard: React.FC<TripCardProps> = ({
                         </div>
                     </div>
 
+                    {/** svg icons + text */}
                     <div
                         className={clsx(
                             'flex flex-col gap-1',
@@ -84,6 +86,18 @@ const TripCard: React.FC<TripCardProps> = ({
                             <span>{participants}</span>
                         </div>
                     </div>
+
+                    {/** slider */}
+                    <div className="flex flex-col gap-1">
+                        <div className="flex flex-row gap-2">
+                            <span className="font-bold">{'D-4'}</span>
+                            <span>{'24.07.20'}</span>
+                        </div>
+
+                        <div className="flex flex-row">
+                            <TripCustomSlider />
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -93,7 +107,7 @@ const TripCard: React.FC<TripCardProps> = ({
                     mode === 'detail' &&
                         'bg-white text-gray-950 rounded-none justify-center gap-4',
                     mode === 'card' && 'justify-between',
-                    mode === 'main' && '',
+                    mode === 'main' && 'rounded-b-lg',
                 )}
             >
                 <button
@@ -102,8 +116,8 @@ const TripCard: React.FC<TripCardProps> = ({
                         mode === 'detail' &&
                             'bg-white text-gray-950 rounded-md border border-gray-500 w-[40%]',
                         mode === 'card' &&
-                            'rounded-t-none rounded-br-none rounded-bl-lg w-1/2 bg-gray-400',
-                        mode === 'main' && '',
+                            'bg-gray-400 text-white rounded-t-none rounded-br-none rounded-bl-lg w-1/2 ',
+                        mode === 'main' && 'hidden',
                     )}
                 >
                     찜하기
@@ -114,8 +128,9 @@ const TripCard: React.FC<TripCardProps> = ({
                         mode === 'detail' &&
                             'bg-gray-100 text-gray-950 rounded-md border border-gray-500 w-[40%]',
                         mode === 'card' &&
-                            'bg-gray-500 rounded-t-none rounded-bl-none rounded-br-lg w-1/2',
-                        mode === 'main' && '',
+                            'bg-gray-500 text-white rounded-t-none rounded-bl-none rounded-br-lg w-1/2',
+                        mode === 'main' &&
+                            'w-full bg-gray-500 text-white rounded-b-lg leading-none py-2.5',
                     )}
                 >
                     참가하기
