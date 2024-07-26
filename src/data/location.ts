@@ -173,7 +173,6 @@ export const locationData = [
                 subLocations: [
                     { name: '일본' },
                     { name: '중국' },
-                    { name: '한국' },
                     { name: '베트남' },
                     { name: '대만' },
                     { name: '마카오' },
