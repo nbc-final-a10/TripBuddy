@@ -4,17 +4,22 @@ import { Chip } from '@/components/molecules/H_chips';
 import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
 import locationData from '@/data/location';
 import useTapScroll from '@/hooks/useTapScroll';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
-const LocationSearchPage = () => {
+type LocationSearchPageProps = {
+    onBack: () => void;
+};
+
+const LocationSearchPage: React.FC<LocationSearchPageProps> = () => {
     const [isDomestic, setIsDomestic] = useState(true);
     const [selectedChips, setSelectedChips] = useState<string | null>(null);
     const [selectedThirdLocationName, setSelectedThirdLocationName] = useState<
         string | null
     >(null);
 
-    // const { createMouseDownHandler } = useTapScroll<HTMLUListElement>();
-    const h_chipsRef = useRef<HTMLUListElement>(null);
+    // const h_chipsRef = useRef<HTMLUListElement>(null);
+
+    // const { createMouseDownHandler } = useTapScroll();
 
     // 국내
     const handleDomesticClick = () => {
@@ -42,6 +47,11 @@ const LocationSearchPage = () => {
     const handleSubLocationClick = (name: string) => {
         setSelectedThirdLocationName(prev => (prev === name ? null : name));
     };
+
+    // 선택된 세번째 요소 데이터 가져오기
+    const selectedThirdLocationData = selectedSubLocation?.find(
+        loc => loc.name === selectedThirdLocationName,
+    );
 
     return (
         <main className="p-5">
@@ -82,8 +92,8 @@ const LocationSearchPage = () => {
 
             <section className="py-3">
                 <ul
-                    className="flex flex-nowrap gap-[10px] py-3 whitespace-nowrap mb-5 overflow-x-auto"
-                    ref={h_chipsRef}
+                    className="flex flex-nowrap gap-[10px] py-3 whitespace-nowrap mb-5 overflow-x-auto scrollbar-hidden"
+                    // ref={h_chipsRef}
                     // onMouseDown={createMouseDownHandler(h_chipsRef)}
                 >
                     {selectedLocation.subLocations?.map(subLocation => (
@@ -123,6 +133,11 @@ const LocationSearchPage = () => {
                         ))}
                 </div>
             </section>
+            <div>
+                <h3 className="text-lg font-bold">
+                    {selectedThirdLocationData?.name}
+                </h3>
+            </div>
             <button className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:hidden">
                 선택하기
             </button>

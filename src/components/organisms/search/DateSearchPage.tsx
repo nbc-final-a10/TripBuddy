@@ -2,10 +2,15 @@
 
 import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
 import Calendar from '@/components/atoms/Calendar';
+import React from 'react';
 
-const DateSearchPage = () => {
+type DateSearchPageProps = {
+    onBack: () => void;
+};
+
+const DateSearchPage: React.FC<DateSearchPageProps> = () => {
     return (
-        <main className="p-4">
+        <main className="p-5">
             <SearchPageTitle
                 title="언제 떠나시나요?"
                 description="버디즈와 함께 여행하고 싶은 날짜를 선택해주세요."

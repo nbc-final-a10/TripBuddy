@@ -7,9 +7,17 @@ import {
     travelThemes,
 } from '@/components/molecules/H_chips';
 import SearchPageChipsTitle from '@/components/molecules/search/SearchMainPageChipsTitle';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-const SearchMainPage = () => {
+type SearchMainPageProps = {
+    onLocationSearch: () => void;
+    onDateSearch: () => void;
+};
+
+const SearchMainPage: React.FC<SearchMainPageProps> = ({
+    onLocationSearch,
+    onDateSearch,
+}) => {
     // 각 chip의 선택 상태를 저장
     const [selectedChips, setSelectedChips] = useState<Record<string, boolean>>(
         {},
@@ -45,21 +53,20 @@ const SearchMainPage = () => {
                     placeholder="검색어를 입력하세요"
                     className="w-full bg-gray-100 p-2 rounded-xl"
                 />
-                <button className="w-full bg-gray-100 p-2 rounded-xl text-left text-gray-400">
+                <button
+                    className="w-full bg-gray-100 p-2 rounded-xl text-left text-gray-400"
+                    onClick={onLocationSearch}
+                >
                     지역, 국가를 찾아보세요
                 </button>
-                {/* <input
-                    type="text"
-                    placeholder="지역, 국가를 찾아보세요"
-                    className="w-full bg-gray-100 p-2 rounded-xl"
-                /> */}
-                <button className="w-full bg-gray-100 p-2 rounded-xl text-left">
+
+                <button
+                    className="w-full bg-gray-100 p-2 rounded-xl text-left"
+                    onClick={onDateSearch}
+                >
                     {formattedToday} ~ {formattedTomorrow}
                 </button>
-                {/* <input
-                    type="date"
-                    className="w-full bg-gray-100 p-2 rounded-xl"
-                /> */}
+
                 <div className="hidden xl:flex xl:gap-2 xl:w-full">
                     <button className="flex-1 px-4 py-2 rounded-lg border border-gray-500 text-gray-700">
                         접기
