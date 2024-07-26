@@ -31,7 +31,6 @@
         "react": "^18",
         "react-dom": "^18",
         "react-icons": "^5.2.1",
-        "react-tailwindcss-datepicker": "^1.6.6",
         "slate": "^0.103.0",
         "slate-react": "^0.107.1",
         "supabase": ">=1.8.1",
