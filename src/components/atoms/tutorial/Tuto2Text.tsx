@@ -1,10 +1,15 @@
-const Tuto2Text = () => {
+import React from 'react';
+import Title from './TutoTitle';
+
+interface Tuto1TextProps {
+    title: string;
+}
+
+const Tuto2Text: React.FC<Tuto1TextProps> = ({ title }) => {
     return (
-        <h2 className="text-lg font-semibold mb-4 text-center">
-            <p>점점 쌓이는 포인트로</p>
-            <p>나만의 사무실을 꾸미고</p>
-            <p>승진의 기회까지잡으세요!</p>
-        </h2>
+        <div>
+            <Title text={title} />
+        </div>
     );
 };
 

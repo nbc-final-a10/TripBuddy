@@ -1,13 +1,16 @@
+import React from 'react';
 import Image from 'next/image';
 
-const Tuto4Image = () => {
+const Tuto4Image: React.FC = () => {
     return (
-        <Image
-            src="/images/tuto1.png"
-            alt="튜토리얼 4페이지 이미지"
-            width={400}
-            height={400}
-        />
+        <div className="flex justify-center items-center h-full">
+            <Image
+                src="/images/이주빈.jpg"
+                alt="튜토리얼 4페이지 이미지"
+                width={500}
+                height={500}
+            />
+        </div>
     );
 };
 

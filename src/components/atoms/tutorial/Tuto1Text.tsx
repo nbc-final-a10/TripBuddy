@@ -1,8 +1,14 @@
-const Tuto1Text = () => {
+import React from 'react';
+
+interface Tuto1TextProps {
+    title: string;
+}
+
+const Tuto1Text: React.FC<Tuto1TextProps> = ({ title }) => {
     return (
-        <h2 className="text-lg font-semibold mb-4 text-center">
-            궁금한 것만 콕콕 집어서 다양한 콘텐츠로 매일 업데이트
-        </h2>
+        <div className="mt-10 text-center absolute top-0 left-1/2 transform -translate-x-1/2">
+            <h1 className="text-2xl font-bold">{title}</h1>
+        </div>
     );
 };
 

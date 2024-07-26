@@ -1,8 +1,15 @@
-const Tuto3Text = () => {
+import React from 'react';
+import Title from './TutoTitle';
+
+interface Tuto1TextProps {
+    title: string;
+}
+
+const Tuto3Text: React.FC<Tuto1TextProps> = ({ title }) => {
     return (
-        <h2 className="text-lg font-semibold mb-4 text-center">
-            튜토리얼 3페이지 텍스트
-        </h2>
+        <div>
+            <Title text={title} />
+        </div>
     );
 };
 
