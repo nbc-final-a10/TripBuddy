@@ -2,11 +2,17 @@
 
 import { useCallback, useState } from 'react';
 
-const useNextButton = (
-    initialStep: number,
-    buttonText: string = '다음',
-    limit: number,
-) => {
+type UseNextButtonProps = {
+    initialStep?: number;
+    limit: number;
+    buttonText: string;
+};
+
+const useNextButton = ({
+    initialStep = 0,
+    limit,
+    buttonText,
+}: UseNextButtonProps) => {
     const [step, setStep] = useState(initialStep);
 
     const handleNext = useCallback(() => {

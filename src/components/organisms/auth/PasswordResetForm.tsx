@@ -4,7 +4,6 @@ import Input from '@/components/atoms/common/O_Input';
 import { SubmitButton } from '@/components/atoms/common/O_Submit-button';
 import { useAuth } from '@/hooks/auth.hooks';
 import { authValidation } from '@/utils/validation';
-import { useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
 
 function ResetForm() {

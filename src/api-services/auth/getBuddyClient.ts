@@ -1,24 +1,22 @@
 import { PUBLIC_URL } from '@/constants/common.constants';
 import { Buddy } from '@/types/Auth.types';
 
-export async function getUserClient(): Promise<Buddy | null> {
+export async function getBuddyClient(): Promise<Buddy | null> {
     const response = await fetch(`${PUBLIC_URL}/api/auth/buddy`, {
         method: 'GET',
         next: {
-            tags: ['user'],
+            tags: ['buddy'],
         },
         // cache: "no-store",
     });
-
-    console.log(response);
 
     if (!response.ok) {
         return null;
     }
 
-    const data = await response.json();
+    const data: { buddy: Buddy } = await response.json();
 
-    const buddy = data.user;
+    const buddy = data.buddy;
 
     return buddy;
 }

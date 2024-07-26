@@ -17,10 +17,10 @@ export async function POST(req: Request) {
     if (error) {
         // console.log(error);
         return NextResponse.json(
-            { user: null, error: error.message },
+            { buddy: null, error: error.message },
             { status: 500 },
         );
     }
 
-    return NextResponse.json({ user });
+    return NextResponse.json({ buddy: user });
 }

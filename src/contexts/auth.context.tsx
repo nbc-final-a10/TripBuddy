@@ -1,7 +1,7 @@
 'use client';
 
 import { PUBLIC_URL } from '@/constants/common.constants';
-import { QUERY_KEY_USER } from '@/constants/query.constants';
+import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import { useBuddyQuery } from '@/hooks/auth.hooks';
 import { Buddy } from '@/types/Auth.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
@@ -80,7 +80,7 @@ export function AuthProvider({
                 }
             }
 
-            queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY_BUDDY] });
             showAlert('success', '로그인 성공!', {
                 onConfirm: () => router.replace('/'),
             });
@@ -102,7 +102,7 @@ export function AuthProvider({
         } catch (error) {
             console.error(error);
         }
-        queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEY_BUDDY] });
         router.replace('/login');
     };
 
@@ -122,8 +122,8 @@ export function AuthProvider({
                     return showAlert('caution', '이미 가입된 이메일입니다!');
             }
 
-            if (data.user) {
-                queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
+            if (data.buddy) {
+                queryClient.invalidateQueries({ queryKey: [QUERY_KEY_BUDDY] });
                 showAlert('success', '회원가입 성공!', {
                     onConfirm: () => router.replace('/'),
                 });
@@ -193,7 +193,7 @@ export function AuthProvider({
             ) {
                 return showAlert('caution', '기존 비밀번호와 동일합니다!');
             } else {
-                queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
+                queryClient.invalidateQueries({ queryKey: [QUERY_KEY_BUDDY] });
                 return showAlert('success', '비밀번호 변경 성공!', {
                     onConfirm: () => router.replace('/'),
                 });
