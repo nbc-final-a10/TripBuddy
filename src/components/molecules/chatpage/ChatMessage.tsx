@@ -3,7 +3,7 @@ import Image from 'next/image';
 const ChatMessage = () => {
     return (
         <>
-            <section className="">
+            <section className="relative">
                 <div className="border-y-[1px] border-gray-200 px-6 py-2">
                     <div className="flex items-center">
                         <div className="w-[40px] h-[40px] bg-gray-200"></div>
@@ -41,7 +41,7 @@ const ChatMessage = () => {
                         </div>
                     </div>
                 </div>
-                <div className="flex w-full justify-around items-center">
+                <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-[375px] bg-white border-gray-200 flex justify-around items-center p-2">
                     <button className="w-[28px] h-[28px] flex items-center justify-center">
                         <Image
                             src="/svg/Plus.svg"
