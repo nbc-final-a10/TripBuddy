@@ -54,7 +54,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
     edit,
 }) => {
     return (
-        <header className="h-[57px] w-full flex flex-row items-center px-5">
+        <header className="h-[57px] w-full flex flex-row items-center px-5 xl:hidden">
             <div className="w-[calc(100%/3)] flex justify-start items-center">
                 <Arrow_Back />
             </div>

@@ -13,8 +13,7 @@ type TripCardProps = {
     description: string;
     date: string;
     location: string;
-    participants: string;
-    counts: number;
+    participants: number;
     mode?: 'card' | 'detail' | 'main';
 };
 
@@ -23,7 +22,6 @@ const TripCard: React.FC<TripCardProps> = ({
     date,
     location,
     participants,
-    counts,
     mode = 'card',
 }) => {
     return (
@@ -102,7 +100,7 @@ const TripCard: React.FC<TripCardProps> = ({
                         </div>
 
                         <div className="flex flex-row">
-                            <TripCustomSlider counts={counts} />
+                            <TripCustomSlider counts={participants} />
                         </div>
                     </div>
                 </div>

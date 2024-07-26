@@ -11,9 +11,8 @@ const TripsPage: React.FC = () => {
                     description={`Description ${index}`}
                     date="2022-01-01"
                     location="Seoul"
-                    participants="10"
+                    participants={3}
                     mode="card"
-                    counts={3}
                 />
             ))}
         </section>
