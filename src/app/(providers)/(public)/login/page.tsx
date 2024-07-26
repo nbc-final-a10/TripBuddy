@@ -2,8 +2,9 @@ import AuthPageBottom from '@/components/molecules/auth/AuthPageBottom';
 import AuthPageWrapper from '@/components/molecules/auth/AuthPageWrapper';
 import LogInForm from '@/components/organisms/auth/LogInForm';
 import Link from 'next/link';
+import React from 'react';
 
-export default function LogInPage() {
+const LogInPage: React.FC = () => {
     return (
         <AuthPageWrapper>
             <LogInForm />
@@ -18,4 +19,6 @@ export default function LogInPage() {
             </p>
         </AuthPageWrapper>
     );
-}
+};
+
+export default LogInPage;

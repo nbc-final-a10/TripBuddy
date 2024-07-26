@@ -2,8 +2,9 @@ import AuthPageBottom from '@/components/molecules/auth/AuthPageBottom';
 import AuthPageWrapper from '@/components/molecules/auth/AuthPageWrapper';
 import SignUpForm from '@/components/organisms/auth/SignUpForm';
 import Link from 'next/link';
+import React from 'react';
 
-function SignUpPage() {
+const SignUpPage: React.FC = () => {
     return (
         <AuthPageWrapper>
             <SignUpForm />
@@ -18,6 +19,6 @@ function SignUpPage() {
             </p>
         </AuthPageWrapper>
     );
-}
+};
 
 export default SignUpPage;

@@ -1,14 +1,28 @@
-import locationData from '@/data/location';
+import { locationData } from '@/data/location';
 
-export type Location = {
+type LocationName = {
+    ko: string;
+    en: string;
+};
+
+type SubLocation = {
     name: string;
-    subLocations?: Location[];
+};
+
+type NestedSubLocation = {
+    name: LocationName;
+    subLocations: SubLocation[];
+};
+
+type LocationData = {
+    name: LocationName;
+    subLocations: (NestedSubLocation | SubLocation)[];
 };
 
 // Todo : 이 부분 추가로 공부할 것
 type ExtractSecondLevelNames<T extends { subLocations?: readonly any[] }> =
     T['subLocations'] extends readonly (infer U)[]
-        ? U extends { name: infer V }
+        ? U extends { name: { ko: infer V } }
             ? V
             : never
         : never;
@@ -18,5 +32,10 @@ export type SecondLevelNames = ExtractSecondLevelNames<
 >;
 
 type LocationDataType = typeof locationData;
+
+export type ThirdLevelNames =
+    LocationDataType[number]['subLocations'][number]['subLocations'][number]['name'];
+
 export type ThirdLevel =
     LocationDataType[number]['subLocations'][number]['subLocations'][number];
+
