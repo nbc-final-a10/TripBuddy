@@ -7,7 +7,7 @@ type AccordionProps = {
     children: React.ReactNode;
 };
 
-function useAccordion(initialOpen = false) {
+function useAccordion(initialOpen: boolean = false) {
     const [isOpen, setIsOpen] = useState(initialOpen);
 
     const toggleAccordion = () => {
