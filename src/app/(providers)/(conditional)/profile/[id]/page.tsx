@@ -1,5 +1,6 @@
 'use client';
 
+import BuddyTemperature from '@/components/atoms/profile/BuddyTemperature';
 import BuddyFollow from '@/components/molecules/profile/BuddyFollow';
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
 import { useParams } from 'next/navigation';
@@ -39,6 +40,10 @@ const ProfilePage = () => {
 
             <section className="w-full h-full">
                 <BuddyFollow />
+            </section>
+
+            <section>
+                <BuddyTemperature />
             </section>
         </>
     );
