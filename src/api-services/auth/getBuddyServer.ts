@@ -2,7 +2,7 @@ import { PUBLIC_URL } from '@/constants/common.constants';
 import { Buddy } from '@/types/Auth.types';
 import { cookies } from 'next/headers';
 
-export async function getBuddyServer(): Promise<any | null> {
+export async function getBuddyServer(): Promise<Buddy | null> {
     const cookieStore = cookies();
     const cookiesArray = cookieStore.getAll();
 
@@ -15,7 +15,7 @@ export async function getBuddyServer(): Promise<any | null> {
         next: {
             tags: ['buddy'],
         },
-        // cache: "no-store",
+        cache: 'no-store',
         headers: {
             Cookie: cookiesArray
                 .map(cookie => `${cookie.name}=${cookie.value}`)

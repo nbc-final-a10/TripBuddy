@@ -2,7 +2,11 @@
 
 import { PUBLIC_URL } from '@/constants/common.constants';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
-import { useBuddyQuery, useLogInMutation } from '@/hooks/auth.hooks';
+import {
+    useBuddyQuery,
+    useLogInMutation,
+    useSignUpMutation,
+} from '@/hooks/auth.hooks';
 import { Buddy } from '@/types/Auth.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { Provider } from '@supabase/supabase-js';
@@ -52,6 +56,9 @@ export function AuthProvider({
     const { mutateAsync: logInMutation, isPending: isLogInPending } =
         useLogInMutation();
 
+    const { mutateAsync: signUpMutation, isPending: isSignUpPending } =
+        useSignUpMutation();
+
     const isLoggedIn = !!buddy;
 
     const router = useRouter();
@@ -63,6 +70,9 @@ export function AuthProvider({
         try {
             const payload = { email, password };
             const buddy = await logInMutation(payload);
+
+            if (!buddy)
+                return showAlert('caution', '알 수 없는 오류가 발생했어요');
 
             showAlert('success', `${buddy.buddy_nickname}님 환영합니다!`, {
                 onConfirm: () => router.replace('/'),
@@ -99,25 +109,26 @@ export function AuthProvider({
 
         try {
             const payload = { email, password };
-            const response = await fetch(`${PUBLIC_URL}/api/auth/signup`, {
-                method: 'POST',
-                body: JSON.stringify(payload),
-            });
-            const data = await response.json();
+            const buddy = await signUpMutation(payload);
 
-            if (!response.ok) {
-                if (data.error === 'User already registered')
-                    return showAlert('caution', '이미 가입된 이메일입니다!');
-            }
+            if (!buddy)
+                return showAlert('caution', '알 수 없는 오류가 발생했어요');
 
-            if (data.buddy) {
-                queryClient.invalidateQueries({ queryKey: [QUERY_KEY_BUDDY] });
-                showAlert('success', '회원가입 성공!', {
+            showAlert(
+                'success',
+                `회원가입 성공 ${buddy.buddy_email}님 환영합니다!`,
+                {
                     onConfirm: () => router.replace('/'),
-                });
-            }
+                },
+            );
         } catch (error) {
             console.error(error);
+            const errorMessage =
+                error instanceof Error ? error.message : 'Unknown error';
+            if (errorMessage === 'User already registered') {
+                return showAlert('caution', '이미 가입된 이메일입니다!');
+            }
+            return showAlert('caution', errorMessage);
         }
     };
 
@@ -198,8 +209,8 @@ export function AuthProvider({
     }, [isPending]);
 
     useEffect(() => {
-        setIsPending(isBuddyPending || isLogInPending);
-    }, [isBuddyPending, isLogInPending]);
+        setIsPending(isBuddyPending || isLogInPending || isSignUpPending);
+    }, [isBuddyPending, isLogInPending, isSignUpPending]);
 
     useEffect(() => {
         console.log('buddy ====>', buddy);

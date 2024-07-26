@@ -2,9 +2,8 @@ import { createClient } from '@/utils/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
-    const data = await request.json();
-    const email = data.email as string;
-    const password = data.password as string;
+    const { email, password }: { email: string; password: string } =
+        await request.json();
 
     const supabase = createClient();
 
@@ -25,7 +24,10 @@ export async function POST(request: NextRequest) {
         );
     }
     if (!user) {
-        return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        return NextResponse.json(
+            { buddy: null, error: 'User not found' },
+            { status: 404 },
+        );
     }
 
     const { data: buddy, error: userError } = await supabase
@@ -37,7 +39,7 @@ export async function POST(request: NextRequest) {
     if (userError) {
         console.error(userError);
         return NextResponse.json(
-            { error: userError?.message },
+            { buddy: null, error: userError?.message },
             { status: 401 },
         );
     }

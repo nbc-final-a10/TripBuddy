@@ -1,8 +1,8 @@
 import { PUBLIC_URL } from '@/constants/common.constants';
 import { type Buddy, type LogInData } from '@/types/Auth.types';
 
-export async function postLogIn(payload: LogInData): Promise<Buddy | null> {
-    const response = await fetch(`${PUBLIC_URL}/api/auth/login`, {
+export async function postSignUp(payload: LogInData): Promise<Buddy | null> {
+    const response = await fetch(`${PUBLIC_URL}/api/auth/signup`, {
         method: 'POST',
         body: JSON.stringify(payload),
     });

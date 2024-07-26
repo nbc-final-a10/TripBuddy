@@ -2,6 +2,7 @@
 
 import { getBuddyClient } from '@/api-services/auth/getBuddyClient';
 import { postLogIn } from '@/api-services/auth/postLogIn';
+import { postSignUp } from '@/api-services/auth/postSignUp';
 import { updateBuddyInfo } from '@/api-services/auth/updateBuddyInfo';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import { AuthContext } from '@/contexts/auth.context';
@@ -44,8 +45,18 @@ export function useUpdateBuddyInfoMutation() {
 
 export function useLogInMutation() {
     const queryClient = useQueryClient();
-    return useMutation<Buddy, Error, LogInData>({
+    return useMutation<Buddy | null, Error, LogInData>({
         mutationFn: (data: LogInData) => postLogIn(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY_BUDDY] });
+        },
+    });
+}
+
+export function useSignUpMutation() {
+    const queryClient = useQueryClient();
+    return useMutation<Buddy | null, Error, LogInData>({
+        mutationFn: (data: LogInData) => postSignUp(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_BUDDY] });
         },
