@@ -20,6 +20,8 @@ const chipVariants = cva(
     {
         variants: {
             intent: {
+                rounded:
+                    'bg-white text-black px-2 py-0.5 flex items-center leading-none',
                 small: 'bg-white text-black rounded-md px-2 py-0.3',
                 'Seoul/Gyeonggi': 'bg-gray-500 border-gray-500 text-white',
                 Gyeongsangnamdo: 'bg-red-500 border-red-500 text-white',
@@ -78,6 +80,7 @@ const chipVariants = cva(
                 selected: 'opacity-100',
                 unselected: 'opacity-40',
                 small: 'text-xs',
+                rounded: 'rounded-full',
             },
         },
         defaultVariants: {
@@ -88,12 +91,17 @@ const chipVariants = cva(
             {
                 intent: 'small',
                 variant: 'selected',
-                className: 'bg-gray-7000 text-white opacity-100',
+                className: 'bg-gray-700 text-white opacity-100 cursor-auto',
             },
             {
                 intent: 'small',
                 variant: 'unselected',
-                className: 'bg-white text-black opacity-100',
+                className: 'bg-white text-black opacity-100 cursor-auto',
+            },
+            {
+                intent: 'rounded',
+                variant: 'unselected',
+                className: 'text-gray-500 opacity-100 cursor-auto',
             },
         ],
     },
@@ -114,7 +122,7 @@ function Chip({
     children,
     intent,
     selected = false,
-    onClick,
+    onClick = () => {},
     ...props
 }: ChipProps) {
     return (
