@@ -1,11 +1,20 @@
 'use client';
 
-import { useRouter } from 'next/router';
+import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
+import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-const MyPage = () => {
-    const router = useRouter();
-    const { id } = router.query;
+const ProfilePage = () => {
+    const params = useParams();
+    const { id } = params;
+
+    useEffect(() => {
+        if (!id) {
+            // id가 없을 경우 처리
+            return;
+        }
+        // ... 사용자 데이터 가져오기 ...
+    }, [id]);
 
     // const [userData, setUserData] = useState(null);
 
@@ -22,13 +31,10 @@ const MyPage = () => {
     // }
 
     return (
-        <div>
-            <h1>유저 아이디 </h1>
-            <p>이름 </p>
-            <p>메일 </p>
-            {/* 사용자 데이터와 관련된 추가 정보 렌더링 */}
-        </div>
+        <section>
+            <BuddyProfile />
+        </section>
     );
 };
 
-export default MyPage;
+export default ProfilePage;
