@@ -7,7 +7,7 @@ import locationData from '@/data/location';
 import useTapScroll from '@/hooks/useTapScroll';
 import React, { useRef, useState } from 'react';
 
-const LocationSearchPage: React.FC = () => {
+const LocationSearchPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     const { setCurrentPage } = useStore();
     const [isDomestic, setIsDomestic] = useState(true);
     const [selectedChips, setSelectedChips] = useState<string | null>(null);
@@ -94,7 +94,7 @@ const LocationSearchPage: React.FC = () => {
 
             <section className="py-3">
                 <ul
-                    className="flex flex-nowrap gap-[10px] py-3 whitespace-nowrap mb-5 overflow-x-auto scrollbar-hidden"
+                    className="flex flex-nowrap gap-3.5 py-3 whitespace-nowrap mb-5 overflow-x-auto scrollbar-hidden"
                     // ref={h_chipsRef}
                     // onMouseDown={createMouseDownHandler(h_chipsRef)}
                 >

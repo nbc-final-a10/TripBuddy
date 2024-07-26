@@ -14,13 +14,7 @@ const SearchPage: React.FC = () => {
         <>
             <section className="items-center">
                 <div>
-                    {currentPage === 'main' && (
-                        <SearchMainPage
-                            onLocationSearch={() => setCurrentPage('location')}
-                            onDateSearch={() => setCurrentPage('date')}
-                            onShowResult={() => setCurrentPage('result')}
-                        />
-                    )}
+                    {currentPage === 'main' && <SearchMainPage />}
                     {currentPage === 'location' && (
                         <LocationSearchPage
                             onBack={() => setCurrentPage('main')}

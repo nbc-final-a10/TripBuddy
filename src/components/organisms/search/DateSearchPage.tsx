@@ -5,7 +5,7 @@ import Calendar from '@/components/atoms/Calendar';
 import React from 'react';
 import useStore from '@/app/store';
 
-const DateSearchPage: React.FC = () => {
+const DateSearchPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     const { setCurrentPage } = useStore();
 
     const handleSelect = () => {
