@@ -1,7 +1,7 @@
 'use client';
 
 import Chip from '@/components/atoms/common/O_Chip';
-import { locationData } from '@/data/location';
+import locationData from '@/data/location';
 import { mbtis } from '@/data/mbtis';
 import { buddyThemes, tripThemes } from '@/data/themes';
 import { useAuth, useUpdateBuddyInfoMutation } from '@/hooks/auth.hooks';
