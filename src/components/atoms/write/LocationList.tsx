@@ -14,7 +14,7 @@ function LocationList({
     const scrollRef = React.useRef<HTMLDivElement>(null);
     const [isScrollable, setIsScrollable] = React.useState(false);
 
-    // 가로 스크롤이 생기는지 확인하는 로직
+    // 가로 스크롤이 생기는지  확인하는 로직
     React.useEffect(() => {
         const checkScrollable = () => {
             if (scrollRef.current) {

@@ -14,7 +14,10 @@ type Location = {
 };
 
 export default function useSelectRegion() {
-    const [selectedRegion, setSelectedRegion] = useState('');
+    // finalSelectedLocation은 최종 선택한 지역 이름으로 초기화 됨.
+    const [finalSelectedLocation, setFinalSelectedLocation] = useState<
+        string | null
+    >(null);
 
     const SelectRegion = () => {
         // Todo: useState 말고 string으로 해도 될 듯
@@ -32,10 +35,6 @@ export default function useSelectRegion() {
         // selectedSecondLevelLocations는 국내는 도, 해외는 대륙을 선택한 경우 해당 대륙에 포함된 나라, 도시들이 배열로 초기화 됨.
         const [selectedSecondLevelLocations, setSelectedSecondLevelLocations] =
             useState<ThirdLevel[]>([]);
-        // finalSelectedLocation은 최종 선택한 지역 이름으로 초기화 됨.
-        const [finalSelectedLocation, setFinalSelectedLocation] = useState<
-            string | null
-        >(null);
 
         useEffect(() => {
             const selectedLocationData =
@@ -118,7 +117,11 @@ export default function useSelectRegion() {
                                 {selectedSecondLevelLocations.map(loc => (
                                     <div
                                         key={loc.name}
-                                        className="flex mt-2 ml-2 mr-2 border-b pb-3"
+                                        className={`flex mt-2 ml-2 mr-2 border-b pb-3 cursor-pointer ${
+                                            finalSelectedLocation === loc.name
+                                                ? 'bg-blue-100'
+                                                : ''
+                                        }`}
                                         onClick={() =>
                                             setFinalSelectedLocation(loc.name)
                                         }
@@ -156,5 +159,6 @@ export default function useSelectRegion() {
             </>
         );
     };
-    return { SelectRegion, selectedRegion, setSelectedRegion };
+
+    return { SelectRegion, finalSelectedLocation };
 }
