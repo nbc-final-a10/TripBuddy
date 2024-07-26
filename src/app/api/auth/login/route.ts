@@ -18,9 +18,26 @@ export async function POST(req: Request) {
         // console.log(error);
         return NextResponse.json(
             { buddy: null, error: error.message },
-            { status: 500 },
+            { status: 400 },
+        );
+    }
+    if (!user) {
+        return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    const { data: buddy, error: userError } = await supabase
+        .from('buddies')
+        .select('*')
+        .eq('buddy_id', user.id)
+        .single();
+
+    if (userError) {
+        console.error(userError);
+        return NextResponse.json(
+            { error: userError?.message },
+            { status: 401 },
         );
     }
 
-    return NextResponse.json({ buddy: user });
+    return NextResponse.json({ buddy: buddy }, { status: 200 });
 }

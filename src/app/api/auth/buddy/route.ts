@@ -12,22 +12,22 @@ export async function GET() {
     if (error) {
         if (error.message === 'Auth session missing!')
             return NextResponse.json(
-                { data: { buddy: 'Auth session missing!' } },
-                { status: 401 },
+                { buddy: null, error: 'Auth session missing!' },
+                { status: 200 },
             );
 
         if (error.message === 'Unauthorized')
             return NextResponse.json(
-                { data: { buddy: 'Unauthorized' } },
+                { buddy: null, error: 'Unauthorized' },
                 { status: 401 },
             );
-        return NextResponse.json({ error: error?.message }, { status: 401 });
+        return NextResponse.json(
+            { buddy: null, error: error?.message },
+            { status: 401 },
+        );
     }
     if (!user) {
-        return NextResponse.json(
-            { data: { buddy: 'User not found' } },
-            { status: 404 },
-        );
+        return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     const { data: buddy, error: userError } = await supabase

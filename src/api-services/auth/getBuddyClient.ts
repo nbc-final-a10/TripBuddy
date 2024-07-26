@@ -11,10 +11,17 @@ export async function getBuddyClient(): Promise<Buddy | null> {
     });
 
     if (!response.ok) {
-        return null;
+        const error = await response.json();
+
+        if (error.error === 'Auth session missing!') {
+            return null;
+        }
+        throw new Error(error.error);
     }
 
     const data: { buddy: Buddy } = await response.json();
+
+    // console.log('client buddy ====>', data);
 
     const buddy = data.buddy;
 

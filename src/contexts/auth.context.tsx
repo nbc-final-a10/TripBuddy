@@ -2,13 +2,13 @@
 
 import { PUBLIC_URL } from '@/constants/common.constants';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
-import { useBuddyQuery } from '@/hooks/auth.hooks';
+import { useBuddyQuery, useLogInMutation } from '@/hooks/auth.hooks';
 import { Buddy } from '@/types/Auth.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { Provider } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { PropsWithChildren, createContext, useEffect } from 'react';
+import { PropsWithChildren, createContext, useEffect, useState } from 'react';
 // interface AuthProviderProps {
 //     initialBuddy: Buddy | null;
 // }
@@ -45,7 +45,12 @@ export function AuthProvider({
     children,
     // initialBuddy,
 }: PropsWithChildren) {
-    const { data: buddy, isPending, error } = useBuddyQuery();
+    const [isPending, setIsPending] = useState<boolean>(false);
+
+    const { data: buddy, isPending: isBuddyPending, error } = useBuddyQuery();
+
+    const { mutateAsync: logInMutation, isPending: isLogInPending } =
+        useLogInMutation();
 
     const isLoggedIn = !!buddy;
 
@@ -56,36 +61,22 @@ export function AuthProvider({
         if (buddy) return showAlert('caution', '이미 로그인 되어 있어요');
 
         try {
-            const data = { email, password };
-            const response = await fetch(`${PUBLIC_URL}/api/auth/login`, {
-                method: 'POST',
-                body: JSON.stringify(data),
-            });
-            if (!response.ok) {
-                const { error } = await response.json();
+            const payload = { email, password };
 
-                if (error) {
-                    if (error === 'Invalid login credentials') {
-                        return showAlert(
-                            'caution',
-                            '이메일, 비밀번호를 확인해주세요.',
-                        );
-                    }
-                    if (error === 'Invalid login credentials')
-                        return showAlert(
-                            'caution',
-                            '이메일, 비밀번호를 확인해주세요.',
-                        );
-                    return showAlert('caution', error);
-                }
-            }
+            const buddy = await logInMutation(payload);
 
-            queryClient.invalidateQueries({ queryKey: [QUERY_KEY_BUDDY] });
-            showAlert('success', '로그인 성공!', {
+            console.log('mutation buddy ====>', buddy, buddy.buddy_nickname);
+
+            showAlert('success', `${buddy.buddy_nickname}님 환영합니다!`, {
                 onConfirm: () => router.replace('/'),
             });
-        } catch (error) {
-            console.error(error);
+        } catch (error: unknown) {
+            const errorMessage =
+                error instanceof Error ? error.message : 'Unknown error';
+            if (errorMessage === 'Invalid login credentials') {
+                return showAlert('caution', '이메일, 비밀번호를 확인해주세요.');
+            }
+            return showAlert('caution', errorMessage);
         }
     };
 
@@ -209,13 +200,21 @@ export function AuthProvider({
     }, [isPending]);
 
     useEffect(() => {
+        setIsPending(isBuddyPending || isLogInPending);
+    }, [isBuddyPending, isLogInPending]);
+
+    useEffect(() => {
         console.log('buddy ====>', buddy);
     }, [buddy]);
+
+    useEffect(() => {
+        if (error) showAlert('error', error.message);
+    }, [error]);
 
     const value: AuthContextValue = {
         isLoggedIn,
         isPending,
-        buddy: error ? null : (buddy as any | null),
+        buddy: buddy ?? null,
         logIn,
         logOut,
         signUp,

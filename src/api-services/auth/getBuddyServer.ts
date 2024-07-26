@@ -6,6 +6,10 @@ export async function getBuddyServer(): Promise<any | null> {
     const cookieStore = cookies();
     const cookiesArray = cookieStore.getAll();
 
+    if (cookiesArray.length === 0) {
+        return null;
+    }
+
     const response = await fetch(`${PUBLIC_URL}/api/auth/buddy`, {
         method: 'GET',
         next: {
@@ -22,14 +26,15 @@ export async function getBuddyServer(): Promise<any | null> {
     if (!response.ok) {
         const error = await response.json();
 
-        const message = error.data.buddy;
-        if (message === 'Auth session missing!') {
+        if (error.error === 'Auth session missing!') {
             return null;
         }
-        return null;
+        throw new Error(error.error);
     }
 
     const data: { buddy: Buddy } = await response.json();
+
+    // console.log('server buddy ====>', data);
 
     const buddy = data.buddy;
 
