@@ -32,15 +32,15 @@ export default function SelectRegionPage() {
         string | null
     >(null);
 
-    const secondLevel =
-        locationData[firstLevelLocation === 'korea' ? 0 : 1]?.subLocations;
-    console.log(`여길보라==>>>>>>> ${secondLevel}`);
-
     useEffect(() => {
-        setSecondLevelLocation(
-            (locationData[firstLevelLocation === 'korea' ? 0 : 1]
-                ?.subLocations as SecondLevel[]) || [],
-        );
+        const selectedLocationData =
+            locationData[firstLevelLocation === 'korea' ? 0 : 1];
+
+        if (selectedLocationData) {
+            setSecondLevelLocation([...selectedLocationData.subLocations]);
+        } else {
+            setSecondLevelLocation([]);
+        }
     }, [firstLevelLocation]);
 
     console.log(`firstLevelLocation: ${firstLevelLocation}`);
