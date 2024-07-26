@@ -5,8 +5,8 @@ const Tuto2Image = () => {
         <Image
             src="/images/tuto2.png"
             alt="튜토리얼 2페이지 이미지"
-            width={500}
-            height={500}
+            width={200}
+            height={200}
         />
     );
 };
