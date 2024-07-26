@@ -405,6 +405,7 @@ export type Database = {
             };
             trips: {
                 Row: {
+                    trip_bookmarks_counts: number;
                     trip_content: string;
                     trip_created_at: string;
                     trip_end_age: number;
@@ -428,6 +429,7 @@ export type Database = {
                     trip_wanted_sex: string;
                 };
                 Insert: {
+                    trip_bookmarks_counts?: number;
                     trip_content: string;
                     trip_created_at: string;
                     trip_end_age: number;
@@ -451,6 +453,7 @@ export type Database = {
                     trip_wanted_sex: string;
                 };
                 Update: {
+                    trip_bookmarks_counts?: number;
                     trip_content?: string;
                     trip_created_at?: string;
                     trip_end_age?: number;
