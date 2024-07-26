@@ -4,7 +4,7 @@ import Left2xlBoldText from '@/components/atoms/MyPage/Left2xlText';
 import LeftSmGrayText from '@/components/atoms/MyPage/LeftSmGrayText';
 import LocationToggleButton from '@/components/atoms/MyPage/LocationToggleButton';
 import LocationList from '@/components/atoms/MyPage/LocationList';
-import { SecondLevelNames, ThirdLevel } from '@/types/Location.types';
+import { SecondLevel, ThirdLevel } from '@/types/Location.types';
 
 type Location = {
     name: string;
@@ -22,7 +22,7 @@ export default function SelectRegionPage() {
         useState<string>('korea');
     // secondLevelLocation은 국내의 경우 도, 해외의 경우 대륙 이름들이 열로 초기화 됨.
     const [secondLevelLocation, setSecondLevelLocation] = useState<
-        SecondLevelNames[]
+        SecondLevel[]
     >([]);
     // selectedSecondLevelLocations는 국내는 도, 해외는 대륙을 선택한 경우 해당 대륙에 포함된 나라, 도시들이 배열로 초기화 됨.
     const [selectedSecondLevelLocations, setSelectedSecondLevelLocations] =
@@ -33,12 +33,14 @@ export default function SelectRegionPage() {
     >(null);
 
     useEffect(() => {
-        setSecondLevelLocation(
-            (
-                locationData[firstLevelLocation === 'korea' ? 0 : 1]
-                    ?.subLocations || []
-            ).map(location => location.name),
-        );
+        const selectedLocationData =
+            locationData[firstLevelLocation === 'korea' ? 0 : 1];
+
+        if (selectedLocationData) {
+            setSecondLevelLocation([...selectedLocationData.subLocations]);
+        } else {
+            setSecondLevelLocation([]);
+        }
     }, [firstLevelLocation]);
 
     console.log(`firstLevelLocation: ${firstLevelLocation}`);
@@ -58,16 +60,17 @@ export default function SelectRegionPage() {
 
     // 칩 클릭 처리 (시도, 대륙 선택 시 도시, 국가명 렌더링)
     const handleChipClick = (name: string) => {
+        console.log(name);
         setSelectedLocationName(name);
-        const selectedLocation = secondLevelLocation.find(
-            location => location === name,
-        );
+        // const selectedLocation = secondLevelLocation.find(
+        //     location => location === name,
+        // );
         const secondLevel = [
             ...locationData[firstLevelLocation === 'korea' ? 0 : 1]
                 .subLocations,
         ];
         const thirdLevel =
-            secondLevel.find(subLocation => subLocation.name === name)
+            secondLevel.find(subLocation => subLocation.name.ko === name)
                 ?.subLocations || [];
         setSelectedSecondLevelLocations(thirdLevel as ThirdLevel[]);
     };
@@ -116,25 +119,25 @@ export default function SelectRegionPage() {
                                     }
                                 >
                                     <div>
-                                        <p className="text-sm text-gray-500 xl:text-base">
+                                        <div className="text-sm text-gray-500 xl:text-base">
                                             {firstLevelLocation === 'korea' ? (
-                                                <>
+                                                <div>
                                                     <p className="font-bold">
                                                         {loc.name}
                                                     </p>
                                                     <p>한국</p>
-                                                </>
+                                                </div>
                                             ) : (
-                                                <>
+                                                <div>
                                                     <p className="font-bold">
                                                         {loc.name}
                                                     </p>
                                                     <p>
                                                         {selectedLocationName}
                                                     </p>
-                                                </>
+                                                </div>
                                             )}
-                                        </p>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
