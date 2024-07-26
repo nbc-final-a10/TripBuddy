@@ -1,3 +1,4 @@
+import EditProfileButton from '@/components/atoms/profile/EditProfileButton';
 import ProfileImage from '@/components/atoms/profile/ProfileImage';
 import React from 'react';
 
@@ -5,7 +6,10 @@ export default function BuddyProfile() {
     return (
         <div className="flex flex-col items-center justify-center p-4 mt-4 xl:mt-8">
             <div className="flex items-center">
-                <ProfileImage />
+                <div className="flex flex-col items-center">
+                    <ProfileImage />
+                    <EditProfileButton />
+                </div>
                 <div className="ml-4">
                     <div className="flex flex-col ">
                         <div className="flex items-center">

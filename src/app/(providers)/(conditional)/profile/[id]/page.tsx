@@ -1,5 +1,6 @@
 'use client';
 
+import BuddyFollow from '@/components/molecules/profile/BuddyFollow';
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -31,9 +32,15 @@ const ProfilePage = () => {
     // }
 
     return (
-        <section>
-            <BuddyProfile />
-        </section>
+        <>
+            <section className="flex flex-col items-center justify-center w-full h-full">
+                <BuddyProfile />
+            </section>
+
+            <section className="w-full h-full">
+                <BuddyFollow />
+            </section>
+        </>
     );
 };
 
