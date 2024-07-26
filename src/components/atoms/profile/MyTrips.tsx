@@ -1,4 +1,4 @@
-import Accordion, { useAccordion } from '@/hooks/useAccordion';
+import { useAccordion, Accordion } from '@/hooks/useAccordion';
 import React from 'react';
 
 export default function MyTrips() {
