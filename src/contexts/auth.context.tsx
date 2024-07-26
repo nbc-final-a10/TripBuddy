@@ -62,10 +62,7 @@ export function AuthProvider({
 
         try {
             const payload = { email, password };
-
             const buddy = await logInMutation(payload);
-
-            console.log('mutation buddy ====>', buddy, buddy.buddy_nickname);
 
             showAlert('success', `${buddy.buddy_nickname}님 환영합니다!`, {
                 onConfirm: () => router.replace('/'),
@@ -136,8 +133,9 @@ export function AuthProvider({
                 const data = await response.json();
 
                 // queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
-                router.replace(data.url);
-                showAlert('success', '로그인 성공');
+                showAlert('success', '소셜 로그인을 진행합니다', {
+                    onConfirm: () => router.replace(data.url),
+                });
             } catch (error) {
                 console.error(error);
             }

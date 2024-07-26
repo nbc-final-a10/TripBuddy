@@ -24,6 +24,23 @@ export async function POST(request: NextRequest) {
             { status: 401 },
         );
     }
+    if (!user) {
+        return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
 
-    return NextResponse.json({ buddy: user }, { status: 200 });
+    const { data: buddy, error: userError } = await supabase
+        .from('buddies')
+        .select('*')
+        .eq('buddy_id', user.id)
+        .single();
+
+    if (userError) {
+        console.error(userError);
+        return NextResponse.json(
+            { error: userError?.message },
+            { status: 401 },
+        );
+    }
+
+    return NextResponse.json({ buddy: buddy }, { status: 200 });
 }
