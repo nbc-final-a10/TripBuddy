@@ -1,6 +1,7 @@
 'use client';
 
 import BuddyTemperature from '@/components/atoms/profile/BuddyTemperature';
+import MyTrips from '@/components/atoms/profile/MyTrips';
 import BuddyFollow from '@/components/molecules/profile/BuddyFollow';
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
 import { useParams } from 'next/navigation';
@@ -44,6 +45,10 @@ const ProfilePage = () => {
 
             <section>
                 <BuddyTemperature />
+            </section>
+
+            <section className="mt-16 mx-8">
+                <MyTrips />
             </section>
         </>
     );
