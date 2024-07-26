@@ -19,7 +19,7 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
-                hostname: '**.namu.wiki',
+                hostname: '**.joongang.co.kr',
             },
         ],
     },
