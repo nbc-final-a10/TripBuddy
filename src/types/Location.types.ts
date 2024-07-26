@@ -38,3 +38,5 @@ export type ThirdLevelNames =
 
 export type ThirdLevel =
     LocationDataType[number]['subLocations'][number]['subLocations'][number];
+
+export type SecondLevel = LocationDataType[number]['subLocations'][number];

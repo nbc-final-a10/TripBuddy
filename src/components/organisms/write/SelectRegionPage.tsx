@@ -4,7 +4,7 @@ import Left2xlBoldText from '@/components/atoms/MyPage/Left2xlText';
 import LeftSmGrayText from '@/components/atoms/MyPage/LeftSmGrayText';
 import LocationToggleButton from '@/components/atoms/MyPage/LocationToggleButton';
 import LocationList from '@/components/atoms/MyPage/LocationList';
-import { SecondLevelNames, ThirdLevel } from '@/types/Location.types';
+import { SecondLevel, ThirdLevel } from '@/types/Location.types';
 
 type Location = {
     name: string;
@@ -22,7 +22,7 @@ export default function SelectRegionPage() {
         useState<string>('korea');
     // secondLevelLocation은 국내의 경우 도, 해외의 경우 대륙 이름들이 열로 초기화 됨.
     const [secondLevelLocation, setSecondLevelLocation] = useState<
-        SecondLevelNames[]
+        SecondLevel[]
     >([]);
     // selectedSecondLevelLocations는 국내는 도, 해외는 대륙을 선택한 경우 해당 대륙에 포함된 나라, 도시들이 배열로 초기화 됨.
     const [selectedSecondLevelLocations, setSelectedSecondLevelLocations] =
@@ -32,12 +32,14 @@ export default function SelectRegionPage() {
         string | null
     >(null);
 
+    const secondLevel =
+        locationData[firstLevelLocation === 'korea' ? 0 : 1]?.subLocations;
+    console.log(`여길보라==>>>>>>> ${secondLevel}`);
+
     useEffect(() => {
         setSecondLevelLocation(
-            (
-                locationData[firstLevelLocation === 'korea' ? 0 : 1]
-                    ?.subLocations || []
-            ).map(location => location.name),
+            (locationData[firstLevelLocation === 'korea' ? 0 : 1]
+                ?.subLocations as SecondLevel[]) || [],
         );
     }, [firstLevelLocation]);
 
@@ -59,15 +61,15 @@ export default function SelectRegionPage() {
     // 칩 클릭 처리 (시도, 대륙 선택 시 도시, 국가명 렌더링)
     const handleChipClick = (name: string) => {
         setSelectedLocationName(name);
-        const selectedLocation = secondLevelLocation.find(
-            location => location === name,
-        );
+        // const selectedLocation = secondLevelLocation.find(
+        //     location => location === name,
+        // );
         const secondLevel = [
             ...locationData[firstLevelLocation === 'korea' ? 0 : 1]
                 .subLocations,
         ];
         const thirdLevel =
-            secondLevel.find(subLocation => subLocation.name === name)
+            secondLevel.find(subLocation => subLocation.name.ko === name)
                 ?.subLocations || [];
         setSelectedSecondLevelLocations(thirdLevel as ThirdLevel[]);
     };
