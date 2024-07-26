@@ -2,8 +2,19 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 export async function updateSession(request: NextRequest) {
+    // 아래 requestHeaders set 관련 로직이, 서버컴포넌트에서 시작하자마자 주소를 알수있게 하는 로직임
+    // 헤더에 현재 경로 추가
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set('x-pathname', request.nextUrl.pathname);
+
+    // 특정 쿼리 파라미터 가져오기
+    const funnelParam = request.nextUrl.searchParams.get('funnel');
+    if (funnelParam) requestHeaders.set('x-funnel', funnelParam);
+
     let supabaseResponse = NextResponse.next({
-        request,
+        request: {
+            headers: requestHeaders,
+        },
     });
 
     const supabase = createServerClient(
@@ -40,13 +51,26 @@ export async function updateSession(request: NextRequest) {
     // 개발을 위해 잠시 주석처리
     // if (
     //   !user &&
+    //   request.nextUrl.pathname !== "/" &&
     //   !request.nextUrl.pathname.startsWith('/login') &&
-    //   !request.nextUrl.pathname.startsWith('/auth')
+    //   !request.nextUrl.pathname.startsWith("/login") &&
+    //   !request.nextUrl.pathname.startsWith("/recover") &&
+    //   !request.nextUrl.pathname.startsWith("/signup")
     // ) {
     //   // no user, potentially respond by redirecting the user to the login page
     //   const url = request.nextUrl.clone()
     //   url.pathname = '/login'
     //   return NextResponse.redirect(url)
+    // }
+
+    // 유저가 있을 때, login, signup 은 무조건 홈으로 리다이렉트
+    // if (
+    //   (request.nextUrl.pathname.startsWith("/login") && user) ||
+    //   (request.nextUrl.pathname.startsWith("/signup") && user)
+    // ) {
+    //   const url = request.nextUrl.clone();
+    //   url.pathname = "/";
+    //   return NextResponse.redirect(url);
     // }
 
     // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're

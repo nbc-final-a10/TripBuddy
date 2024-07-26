@@ -1,38 +1,25 @@
-import { DateValue, RangeCalendar, RangeValue } from '@nextui-org/calendar';
-import { I18nProvider } from '@react-aria/i18n';
+'use client';
+
 import { useState } from 'react';
-
-type DateRange = {
-    start: DateValue | null;
-    end: DateValue | null;
-};
-
-// const defaultDate: DateValue = new Date() as DateValue;
+import { RangeCalendar } from '@nextui-org/calendar';
+import { today, getLocalTimeZone } from '@internationalized/date';
 
 const Calendar = () => {
-    const [selectedRange, setSelectedRange] = useState<RangeValue<DateValue>>({
-        start: null,
-        end: null,
+    let [value, setValue] = useState({
+        start: today(getLocalTimeZone()),
+        end: today(getLocalTimeZone()).add({ weeks: 1 }),
     });
-
-    const handleRangeChange = (newRange: RangeValue<DateValue>) => {
-        setSelectedRange(newRange);
-    };
-
-    console.log({
-        start: selectedRange.start ? selectedRange.start.toString() : 'None',
-        end: selectedRange.end ? selectedRange.end.toString() : 'None',
-    });
+    console.log(value);
 
     return (
         <div className="w-full flex justify-center mb-20 mt-12">
-            <I18nProvider locale="ko-KR-u-ca-dangi">
-                <RangeCalendar
-                    aria-label="Date (Controlled Focused Value)"
-                    value={selectedRange}
-                    onChange={handleRangeChange}
-                />
-            </I18nProvider>
+            {/* <I18nProvider locale="ko-KR-u-ca-dangi"> */}
+            <RangeCalendar
+                aria-label="Date (Controlled Focused Value)"
+                value={value}
+                onChange={setValue}
+            />
+            {/* </I18nProvider> */}
         </div>
     );
 };

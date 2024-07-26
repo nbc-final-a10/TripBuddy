@@ -4,8 +4,11 @@ import useStore from '@/app/store';
 import { Chip } from '@/components/molecules/H_chips';
 import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
 import locationData from '@/data/location';
-import useTapScroll from '@/hooks/useTapScroll';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
+
+const getLocalName = (nameObj: { ko: string; en: string }, locale: string) => {
+    return locale === 'en' ? nameObj.en : nameObj.ko;
+};
 
 const LocationSearchPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     const { setCurrentPage } = useStore();
@@ -15,13 +18,11 @@ const LocationSearchPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         string | null
     >(null);
 
+    const locale = 'ko';
+
     const handleSelect = () => {
         setCurrentPage('main');
     };
-
-    // const h_chipsRef = useRef<HTMLUListElement>(null);
-
-    // const { createMouseDownHandler } = useTapScroll();
 
     // 국내
     const handleDomesticClick = () => {
@@ -42,7 +43,7 @@ const LocationSearchPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
     // 선택된 칩의 하위 위치 찾기
     const selectedSubLocation = selectedLocation.subLocations?.find(
-        subLocation => subLocation.name === selectedChips,
+        subLocation => getLocalName(subLocation.name, 'ko') === selectedChips,
     )?.subLocations;
 
     // 세번째 선택 요소 클릭 핸들러
@@ -93,18 +94,19 @@ const LocationSearchPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             </section>
 
             <section className="py-3">
-                <ul
-                    className="flex flex-nowrap gap-3.5 py-3 whitespace-nowrap mb-5 overflow-x-auto scrollbar-hidden"
-                    // ref={h_chipsRef}
-                    // onMouseDown={createMouseDownHandler(h_chipsRef)}
-                >
+                <ul className="flex flex-nowrap gap-3.5 py-3 whitespace-nowrap mb-5 overflow-x-auto scrollbar-hidden">
                     {selectedLocation.subLocations?.map(subLocation => (
-                        <li key={subLocation.name}>
+                        <li key={getLocalName(subLocation.name, locale)}>
                             <Chip
-                                label={subLocation.name}
-                                isSelected={selectedChips === subLocation.name}
+                                label={getLocalName(subLocation.name, locale)}
+                                isSelected={
+                                    selectedChips ===
+                                    getLocalName(subLocation.name, locale)
+                                }
                                 onClick={() =>
-                                    handleChipClick(subLocation.name)
+                                    handleChipClick(
+                                        getLocalName(subLocation.name, locale),
+                                    )
                                 }
                             />
                         </li>
