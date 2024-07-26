@@ -44,6 +44,11 @@ const LocationSearchPage = () => {
         setSelectedThirdLocationName(prev => (prev === name ? null : name));
     };
 
+    // 선택된 세번째 요소 데이터 가져오기
+    const selectedThirdLocationData = selectedSubLocation?.find(
+        loc => loc.name === selectedThirdLocationName,
+    );
+
     return (
         <main className="p-5">
             <section className="mb-2">
@@ -124,6 +129,11 @@ const LocationSearchPage = () => {
                         ))}
                 </div>
             </section>
+            <div>
+                <h3 className="text-lg font-bold">
+                    {selectedThirdLocationData?.name}
+                </h3>
+            </div>
             <button className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:hidden">
                 선택하기
             </button>
