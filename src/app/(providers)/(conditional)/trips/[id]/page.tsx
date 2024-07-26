@@ -27,7 +27,20 @@ const TripsDetailPage: React.FC<TripDetailPageProps> = ({
                 />
             </div>
 
-            <div></div>
+            {/** 글쓴이 정보 영역 */}
+            <div className="flex items-center bg-white gap-2 h-[217px]"></div>
+
+            {/** 글 내용 */}
+            <div className="flex flex-col bg-white gap-2 h-[217px] p-4">
+                <p className="text-gray-950 text-center">
+                    어쩌구 저쩌구 글입니다 어쩌구 저쩌구 글입니다 어쩌구 저쩌구
+                    글입니다
+                </p>
+
+                <h3 className="text-gray-950 text-xl font-bold">
+                    추천인기 버디즈
+                </h3>
+            </div>
         </div>
     );
 };
