@@ -1,5 +1,6 @@
 'use client';
 
+import { deleteLogOut } from '@/api-services/auth/deleteLogOut';
 import { PUBLIC_URL } from '@/constants/common.constants';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import {
@@ -59,8 +60,6 @@ export function AuthProvider({
     const { mutateAsync: signUpMutation, isPending: isSignUpPending } =
         useSignUpMutation();
 
-    const isLoggedIn = !!buddy;
-
     const router = useRouter();
     const queryClient = useQueryClient();
 
@@ -91,14 +90,11 @@ export function AuthProvider({
         if (!buddy) return showAlert('caution', '로그인하고 눌러주세요');
 
         try {
-            const response = await fetch(`${PUBLIC_URL}/api/auth/logout`, {
-                method: 'DELETE',
-            });
-            if (!response.ok) {
-                throw new Error('fetch 실패');
-            }
+            await deleteLogOut();
         } catch (error) {
-            console.error(error);
+            const errorMessage =
+                error instanceof Error ? error.message : 'Unknown error';
+            return showAlert('error', errorMessage);
         }
         queryClient.invalidateQueries({ queryKey: [QUERY_KEY_BUDDY] });
         router.replace('/login');
@@ -221,7 +217,7 @@ export function AuthProvider({
     }, [error]);
 
     const value: AuthContextValue = {
-        isLoggedIn,
+        isLoggedIn: !!buddy,
         isPending,
         buddy: buddy ?? null,
         logIn,
