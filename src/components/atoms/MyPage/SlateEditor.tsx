@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { createEditor, Descendant } from 'slate';
 import {
     Slate,
@@ -16,20 +16,20 @@ interface SlateEditorProps {
 const SlateEditor: React.FC<SlateEditorProps> = ({ value, onChange }) => {
     const editor = useMemo(() => withReact(createEditor()), []);
 
-    const renderElement = useCallback((props: RenderElementProps) => {
-        return <DefaultElement {...props} />;
-    }, []);
-
-    const renderLeaf = useCallback((props: RenderLeafProps) => {
-        return <DefaultLeaf {...props} />;
-    }, []);
-
     return (
-        <Slate editor={editor} initialValue={value} onChange={onChange}>
+        <Slate
+            editor={editor}
+            initialValue={value}
+            onChange={newValue => onChange(newValue)}
+        >
             <Editable
-                renderElement={renderElement}
-                renderLeaf={renderLeaf}
-                placeholder="내용을 입력하세요"
+                renderElement={(props: RenderElementProps) => (
+                    <DefaultElement {...props} />
+                )}
+                renderLeaf={(props: RenderLeafProps) => (
+                    <DefaultLeaf {...props} />
+                )}
+                placeholder="내용을 입력하세요..."
                 className="w-full px-3 py-2 border border-gray-300 rounded h-32"
             />
         </Slate>

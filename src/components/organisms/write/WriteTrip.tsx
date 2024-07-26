@@ -1,21 +1,32 @@
 import Left2xlBoldText from '@/components/atoms/MyPage/Left2xlText';
+import SlateEditor from '@/components/atoms/MyPage/SlateEditor';
 import React, { useState } from 'react';
+import { Descendant } from 'slate';
+
+const initialContent: Descendant[] = [
+    {
+        type: 'paragraph',
+        children: [{ text: '' }],
+    },
+];
 
 export default function WriteTrip() {
     const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState<Descendant[]>(initialContent);
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value);
     };
 
-    const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setContent(e.target.value);
+    const handleContentChange = (value: Descendant[]) => {
+        setContent(value);
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // 게시글 작성 로직 추가
+        // Todo: 게시글 작성 로직 추가
+        console.log('Title:', title);
+        console.log('Content:', JSON.stringify(content));
     };
 
     return (
@@ -51,12 +62,18 @@ export default function WriteTrip() {
                     <label className="block mb-1 text-sm font-medium text-gray-700">
                         글 내용
                     </label>
-                    <textarea
+                    <SlateEditor
                         value={content}
                         onChange={handleContentChange}
-                        placeholder="내용"
-                        className="w-full px-3 py-2 border border-gray-300 rounded h-32"
-                    ></textarea>
+                    />
+                </div>
+                <div>
+                    <button
+                        type="submit"
+                        className="w-full px-4 py-2 font-semibold text-white bg-blue-500 rounded hover:bg-blue-600"
+                    >
+                        제출 테스트 버튼
+                    </button>
                 </div>
             </form>
         </div>
