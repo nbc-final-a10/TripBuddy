@@ -26,8 +26,10 @@ const TripCard: React.FC<TripCardProps> = ({
     return (
         <div
             className={clsx(
-                'bg-white rounded-lg max-h-[230px] box-border',
-                mode === 'detail' ? '' : 'cursor-pointer shadow-md',
+                'bg-white box-border',
+                mode === 'detail'
+                    ? 'py-4'
+                    : 'cursor-pointer shadow-md max-h-[230px] rounded-lg',
             )}
         >
             <div
@@ -89,13 +91,13 @@ const TripCard: React.FC<TripCardProps> = ({
                 </button>
                 <button
                     className={clsx(
-                        'bg-gray-500 w-1/2 p-2',
+                        'w-1/2 p-2',
                         mode === 'detail'
-                            ? 'bg-white text-gray-950 rounded-md border border-gray-500 w-[40%]'
-                            : 'rounded-t-none rounded-bl-none rounded-br-lg w-1/2',
+                            ? 'bg-gray-100 text-gray-950 rounded-md border border-gray-500 w-[40%]'
+                            : 'bg-gray-500 rounded-t-none rounded-bl-none rounded-br-lg w-1/2',
                     )}
                 >
-                    채팅하기
+                    참가하기
                 </button>
             </div>
         </div>

@@ -11,13 +11,13 @@ const ConditionalLayout: React.FC<ConditionalLayoutProps> = ({ children }) => {
 
     return (
         <>
-            {pathname === '/trips' && (
+            {pathname?.includes('/trips') && (
                 <MobileHeader
-                    title="모집중 여정"
-                    notification
-                    search
+                    title="여정 보기"
+                    // notification
+                    // search
                     // settings
-                    // edit
+                    edit
                     // close
                 />
             )}
