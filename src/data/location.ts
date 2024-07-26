@@ -234,7 +234,6 @@ export const locationData = [
                     { name: '나이지리아' },
                     { name: '세네갈' },
                     { name: '토고' },
-                    { name: '카메룬' },
                     { name: '알제리' },
                     { name: '이집트' },
                     { name: '모로코' },

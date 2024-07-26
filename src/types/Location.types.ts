@@ -35,3 +35,7 @@ type LocationDataType = typeof locationData;
 
 export type ThirdLevelNames =
     LocationDataType[number]['subLocations'][number]['subLocations'][number]['name'];
+
+export type ThirdLevel =
+    LocationDataType[number]['subLocations'][number]['subLocations'][number];
+
