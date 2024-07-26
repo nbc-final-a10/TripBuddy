@@ -7,7 +7,7 @@ type AccordionProps = {
     children: React.ReactNode;
 };
 
-export function useAccordion(initialOpen = false) {
+function useAccordion(initialOpen = false) {
     const [isOpen, setIsOpen] = useState(initialOpen);
 
     const toggleAccordion = () => {
@@ -57,4 +57,4 @@ const Accordion: React.FC<AccordionProps> = ({
     );
 };
 
-export default Accordion;
+export { useAccordion, Accordion };
