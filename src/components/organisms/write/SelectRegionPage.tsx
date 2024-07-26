@@ -60,6 +60,7 @@ export default function SelectRegionPage() {
 
     // 칩 클릭 처리 (시도, 대륙 선택 시 도시, 국가명 렌더링)
     const handleChipClick = (name: string) => {
+        console.log(name);
         setSelectedLocationName(name);
         // const selectedLocation = secondLevelLocation.find(
         //     location => location === name,
@@ -118,25 +119,25 @@ export default function SelectRegionPage() {
                                     }
                                 >
                                     <div>
-                                        <p className="text-sm text-gray-500 xl:text-base">
+                                        <div className="text-sm text-gray-500 xl:text-base">
                                             {firstLevelLocation === 'korea' ? (
-                                                <>
+                                                <div>
                                                     <p className="font-bold">
                                                         {loc.name}
                                                     </p>
                                                     <p>한국</p>
-                                                </>
+                                                </div>
                                             ) : (
-                                                <>
+                                                <div>
                                                     <p className="font-bold">
                                                         {loc.name}
                                                     </p>
                                                     <p>
                                                         {selectedLocationName}
                                                     </p>
-                                                </>
+                                                </div>
                                             )}
-                                        </p>
+                                        </div>
                                     </div>
                                 </div>
                             ))}

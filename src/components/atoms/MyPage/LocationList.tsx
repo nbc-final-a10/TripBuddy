@@ -17,7 +17,7 @@ function LocationList({
                     <Chip
                         intent={subLocation.name.en}
                         selected={selectedLocationName === subLocation.name.en}
-                        onClick={() => onChipClick(subLocation.name.en)}
+                        onClick={() => onChipClick(subLocation.name.ko)}
                     >
                         {subLocation.name.ko}
                     </Chip>
