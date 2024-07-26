@@ -34,10 +34,14 @@ const TripCustomSlider: React.FC<TripCustomSliderProps> = ({ counts }) => {
                     className={clsx(
                         'absolute top-0 h-full w-4 bg-gray-400 rounded-sm',
                         {
-                            'left-[calc(100%-8px)]': counts === 4,
-                            'left-[calc(75%-8px)]': counts === 3,
-                            'left-[calc(50%-8px)]': counts === 2,
-                            'left-[calc(25%-8px)]': counts === 1,
+                            // 'left-[calc(100%-8px)]': counts === 4,
+                            // 'left-[calc(75%-8px)]': counts === 3,
+                            // 'left-[calc(50%-8px)]': counts === 2,
+                            // 'left-[calc(25%-8px)]': counts === 1,
+                            'left-[100%]': counts === 4,
+                            'left-[75%]': counts === 3,
+                            'left-[50%]': counts === 2,
+                            'left-[25%]': counts === 1,
                         },
                     )}
                     id="thumb"
