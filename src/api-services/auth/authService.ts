@@ -116,3 +116,18 @@ export async function getBuddyServer(): Promise<Buddy | null> {
         throw error;
     }
 }
+
+export async function postSendingResetEmail(email: string): Promise<void> {
+    const url = '/api/auth/recover-redirect';
+    try {
+        await fetchWrapper(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email }),
+        });
+    } catch (error: any) {
+        throw error;
+    }
+}
