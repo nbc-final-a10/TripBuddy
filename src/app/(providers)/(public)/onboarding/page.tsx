@@ -3,7 +3,8 @@
 import Chip from '@/components/atoms/common/O_Chip';
 import locationData from '@/data/location';
 import { mbtis } from '@/data/mbtis';
-import { useAuth, useUpdateBuddyInfoMutation } from '@/hooks/auth.hooks';
+import { useAuth } from '@/hooks/auth';
+import { useUpdateBuddyMutation } from '@/hooks/queries';
 import usePreferTheme from '@/hooks/usePreferTheme';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import React, { FormEvent, MouseEvent, useEffect, useState } from 'react';
@@ -11,7 +12,7 @@ import React, { FormEvent, MouseEvent, useEffect, useState } from 'react';
 const OnBoardingPage: React.FC = () => {
     const { logOut, buddy } = useAuth();
 
-    const { mutate, isPending, error } = useUpdateBuddyInfoMutation();
+    const { mutate, isPending, error } = useUpdateBuddyMutation();
 
     const [PreferBuddyTheme, selectedBuddyTheme] = usePreferTheme({
         mode: 'buddy',
