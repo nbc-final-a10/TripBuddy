@@ -8,3 +8,7 @@ export type LogInData = {
     email: string;
     password: string;
 };
+
+export type ErrorResponse = {
+    error: string;
+};

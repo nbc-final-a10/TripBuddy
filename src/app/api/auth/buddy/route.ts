@@ -44,7 +44,7 @@ export async function GET() {
         );
     }
 
-    return NextResponse.json({ buddy: buddy }, { status: 200 });
+    return NextResponse.json({ buddy }, { status: 200 });
 }
 
 export const PATCH = async (req: NextRequest) => {
@@ -53,7 +53,7 @@ export const PATCH = async (req: NextRequest) => {
 
     // console.log('authBuddyInfo ===>', buddyInfo);
 
-    const { data, error } = await supabase
+    const { data: buddy, error } = await supabase
         .from('buddies')
         .update([{ ...buddyInfo }])
         .eq('buddy_id', buddyInfo.buddy_id)
@@ -70,5 +70,5 @@ export const PATCH = async (req: NextRequest) => {
         return NextResponse.json({ error: error?.message }, { status: 401 });
     }
 
-    return NextResponse.json({ buddy: data }, { status: 200 });
+    return NextResponse.json({ buddy }, { status: 200 });
 };
