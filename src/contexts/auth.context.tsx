@@ -1,6 +1,9 @@
 'use client';
 
-import { getLogInWithProvider } from '@/api-services/auth/client';
+import {
+    getLogInWithProvider,
+    postSendingResetEmail,
+} from '@/api-services/auth/client';
 import { deleteLogOut } from '../../backup/auth/deleteLogOut';
 import { PUBLIC_URL } from '@/constants/common.constants';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
@@ -9,7 +12,6 @@ import {
     useLogInMutation,
     useSignUpMutation,
 } from '@/hooks/queries';
-
 import { Buddy } from '@/types/Auth.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { Provider } from '@supabase/supabase-js';
@@ -150,20 +152,7 @@ export function AuthProvider({
         email: string,
     ) => {
         try {
-            const response = await fetch(
-                `${PUBLIC_URL}/api/auth/recover-redirect`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email }),
-                },
-            );
-
-            if (!response.ok) {
-                throw new Error('fetch 실패');
-            }
+            await postSendingResetEmail(email);
             return showAlert('success', '이메일 전송 성공!', {
                 onConfirm: () => router.replace('/login'),
             });
