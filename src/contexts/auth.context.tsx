@@ -7,7 +7,8 @@ import {
     useBuddyQuery,
     useLogInMutation,
     useSignUpMutation,
-} from '@/hooks/auth.hooks';
+} from '@/hooks/queries';
+
 import { Buddy } from '@/types/Auth.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { Provider } from '@supabase/supabase-js';

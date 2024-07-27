@@ -1,7 +1,7 @@
 'use client';
 
 import { getBuddyClient, postLogIn, postSignUp } from '@/api-services/auth';
-import { patchBuddyInfo } from '../../backup/auth/patchBuddyInfo';
+import { patchBuddyInfo } from './patchBuddyInfo';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import { AuthContext } from '@/contexts/auth.context';
 import {
