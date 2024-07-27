@@ -17,6 +17,17 @@ export async function postLogIn(payload: LogInData): Promise<Buddy> {
     }
 }
 
+export async function deleteLogOut(): Promise<void> {
+    const url = `/api/auth/logout`;
+    try {
+        await fetchWrapper(url, {
+            method: 'DELETE',
+        });
+    } catch (error: any) {
+        throw error;
+    }
+}
+
 export async function getLogInWithProvider(
     provider: string,
 ): Promise<OAuthResponse> {
