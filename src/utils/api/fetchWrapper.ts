@@ -4,7 +4,9 @@ async function fetchWrapper<T>(url: string, options: RequestInit): Promise<T> {
     const response = await fetch(`${PUBLIC_URL}${url}`, options);
     if (!response.ok) {
         const { error } = await response.json();
-        throw new Error(error);
+        if (error) {
+            throw new Error(error);
+        }
     }
     return response.json();
 }

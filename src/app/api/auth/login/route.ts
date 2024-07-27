@@ -40,5 +40,5 @@ export async function POST(request: Request) {
         );
     }
 
-    return NextResponse.json({ buddy: buddy }, { status: 200 });
+    return NextResponse.json({ buddy }, { status: 200 });
 }

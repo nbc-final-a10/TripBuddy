@@ -1,9 +1,21 @@
 // authService.ts
-import { PUBLIC_URL } from '@/constants/common.constants';
-import { Buddy, ErrorResponse, PartialBuddy } from '@/types/Auth.types';
+import { Buddy, LogInData, PartialBuddy } from '@/types/Auth.types';
 import fetchWrapper from '@/utils/api/fetchWrapper';
 import { OAuthResponse } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
+
+export async function postLogIn(payload: LogInData): Promise<Buddy> {
+    const url = `/api/auth/login`;
+    try {
+        const data = await fetchWrapper<Buddy>(url, {
+            method: 'POST',
+            body: JSON.stringify(payload),
+        });
+        return data;
+    } catch (error: any) {
+        throw error;
+    }
+}
 
 export async function getLogInWithProvider(
     provider: string,
