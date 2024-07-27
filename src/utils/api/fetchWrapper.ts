@@ -8,7 +8,7 @@ async function fetchWrapper<T>(url: string, options: RequestInit): Promise<T> {
             throw new Error(error);
         }
     }
-    return response.json();
+    return response.json() as Promise<T>;
 }
 
 export default fetchWrapper;

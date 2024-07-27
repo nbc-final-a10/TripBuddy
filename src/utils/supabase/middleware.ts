@@ -48,6 +48,24 @@ export async function updateSession(request: NextRequest) {
         data: { user },
     } = await supabase.auth.getUser();
 
+    // console.log('미들웨어에서 유저 =====>', user);
+
+    // 유저 정보를 x-user 헤더에 추가
+    if (user) {
+        // requestHeaders.set('x-user', JSON.stringify(user));
+        requestHeaders.set('x-user', user.id);
+    }
+
+    // 새로운 응답 객체 생성
+    supabaseResponse = NextResponse.next({
+        request: {
+            headers: requestHeaders,
+        },
+    });
+
+    // 쿠키 복사
+    // supabaseResponse.cookies.setAll(supabaseResponse.cookies.getAll());
+
     // 개발을 위해 잠시 주석처리
     // if (
     //   !user &&

@@ -18,9 +18,6 @@ import { Provider } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { PropsWithChildren, createContext, useEffect, useState } from 'react';
-// interface AuthProviderProps {
-//     initialBuddy: Buddy | null;
-// }
 
 export type AuthContextValue = {
     isLoggedIn: boolean;
@@ -226,7 +223,6 @@ export function AuthProvider({
         loginWithProvider,
         resetPassword,
         sendingResetEmail,
-        // setMeClient,
     };
 
     return (

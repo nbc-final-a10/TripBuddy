@@ -1,25 +1,30 @@
 import { Buddy } from '@/types/Auth.types';
 import fetchWrapper from '@/utils/api/fetchWrapper';
-import { cookies } from 'next/headers';
+// import { cookies } from 'next/headers';
 
-export async function getBuddyServer(): Promise<Buddy | null> {
-    const cookieStore = cookies();
-    const cookiesArray = cookieStore.getAll();
+export async function getBuddyServer(
+    userId: string | null,
+): Promise<Buddy | null> {
+    // const cookieStore = cookies();
+    // const cookiesArray = cookieStore.getAll();
 
-    if (cookiesArray.length === 0) {
-        return null;
-    }
+    // if (cookiesArray.length === 0) {
+    //     return null;
+    // }
 
     const url = `/api/auth/buddy`;
     try {
+        if (!userId) return null;
+
         const data = await fetchWrapper<Buddy>(url, {
-            method: 'GET',
+            method: 'POST',
+            body: JSON.stringify({ userId }),
             cache: 'no-store',
-            headers: {
-                Cookie: cookiesArray
-                    .map(cookie => `${cookie.name}=${cookie.value}`)
-                    .join(';'),
-            },
+            // headers: {
+            //     Cookie: cookiesArray
+            //         .map(cookie => `${cookie.name}=${cookie.value}`)
+            //         .join(';'),
+            // },
             next: { tags: ['buddy'] },
         });
         return data;
