@@ -9,7 +9,7 @@ import React, { PropsWithChildren, Suspense } from 'react';
 import Loading from './loading';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import Header from '@/components/atoms/common/Header';
-import { getBuddyServer } from '../../../backup/auth/getBuddyServer';
+import { getBuddyServer } from '@/api-services/auth/server';
 
 const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
     const queryClient = new QueryClient();

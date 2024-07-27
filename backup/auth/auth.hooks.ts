@@ -1,6 +1,5 @@
 'use client';
 
-import { getBuddyClient, postLogIn, postSignUp } from '@/api-services/auth';
 import { patchBuddyInfo } from './patchBuddyInfo';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import { AuthContext } from '@/contexts/auth.context';
@@ -11,6 +10,9 @@ import {
 } from '@/types/Auth.types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useContext } from 'react';
+import { getBuddyClient } from './getBuddyClient';
+import { postSignUp } from './postSignUp';
+import { postLogIn } from './postLogIn';
 
 export const useAuth = () => {
     const context = useContext(AuthContext);

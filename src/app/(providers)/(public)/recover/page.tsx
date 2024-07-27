@@ -1,4 +1,4 @@
-import { getBuddyServer } from '../../../../../backup/auth/getBuddyServer';
+import { getBuddyServer } from '@/api-services/auth/server';
 import AuthPageBottom from '@/components/molecules/auth/AuthPageBottom';
 import AuthPageWrapper from '@/components/molecules/auth/AuthPageWrapper';
 import ResetForm from '@/components/organisms/auth/PasswordResetForm';

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { patchBuddyInfo } from '@/api-services/auth';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import { Buddy, PartialBuddy } from '@/types/Auth.types';
+import { patchBuddyInfo } from '@/api-services/auth/client';
 
 export function useUpdateBuddyMutation() {
     const queryClient = useQueryClient();
