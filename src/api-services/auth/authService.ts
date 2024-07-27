@@ -131,3 +131,19 @@ export async function postSendingResetEmail(email: string): Promise<void> {
         throw error;
     }
 }
+
+export async function postResetPassword(password: string): Promise<Buddy> {
+    const url = '/api/auth/recover';
+    try {
+        const data = await fetchWrapper<Buddy>(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ password }),
+        });
+        return data;
+    } catch (error: any) {
+        throw error;
+    }
+}
