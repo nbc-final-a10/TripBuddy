@@ -3,9 +3,10 @@
 import { useAuth } from '@/hooks/auth';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { usePathname } from 'next/navigation';
+import React from 'react';
 import { SiKakaotalk } from 'react-icons/si';
 
-function KaKaoLogInButton() {
+const KaKaoLogInButton: React.FC = () => {
     const { loginWithProvider } = useAuth();
     const pathname = usePathname();
 
@@ -24,6 +25,6 @@ function KaKaoLogInButton() {
             onClick={handleClickKaKao}
         />
     );
-}
+};
 
 export default KaKaoLogInButton;
