@@ -22,7 +22,7 @@ export async function postLogIn(payload: LogInData): Promise<Buddy> {
 export async function deleteLogOut(): Promise<void> {
     const url = `/api/auth/logout`;
     try {
-        await fetchWrapper(url, {
+        await fetchWrapper<void>(url, {
             method: 'DELETE',
         });
     } catch (error: any) {
@@ -45,10 +45,10 @@ export async function postSignUp(payload: LogInData): Promise<Buddy> {
 
 export async function getLogInWithProvider(
     provider: string,
-): Promise<OAuthResponse> {
+): Promise<OAuthResponse['data']> {
     const url = `/api/auth/provider?provider=${provider}`;
     try {
-        const data = await fetchWrapper<OAuthResponse>(url, {
+        const data = await fetchWrapper<OAuthResponse['data']>(url, {
             method: 'GET',
         });
         return data;
@@ -93,7 +93,7 @@ export async function getBuddyClient(): Promise<Buddy | null> {
 export async function postSendingResetEmail(email: string): Promise<void> {
     const url = '/api/auth/recover-redirect';
     try {
-        await fetchWrapper(url, {
+        await fetchWrapper<void>(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

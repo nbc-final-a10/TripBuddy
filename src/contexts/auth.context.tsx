@@ -1,5 +1,6 @@
 'use client';
 
+import { getLogInWithProvider } from '@/api-services/auth/client';
 import { deleteLogOut } from '../../backup/auth/deleteLogOut';
 import { PUBLIC_URL } from '@/constants/common.constants';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
@@ -132,14 +133,10 @@ export function AuthProvider({
     const loginWithProvider: AuthContextValue['loginWithProvider'] =
         async provider => {
             try {
-                const response = await fetch(
-                    `${PUBLIC_URL}/api/auth/provider?provider=${provider}`,
-                );
-                if (!response.ok) {
-                    throw new Error('fetch 실패');
+                const data = await getLogInWithProvider(provider);
+                if (!data.url) {
+                    return showAlert('caution', '알 수 없는 오류가 발생했어요');
                 }
-                const data = await response.json();
-
                 // queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
                 showAlert('success', '소셜 로그인을 진행합니다', {
                     onConfirm: () => router.replace(data.url),
