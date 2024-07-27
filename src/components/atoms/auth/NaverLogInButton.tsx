@@ -1,3 +1,5 @@
+'use client';
+
 import useNaverInit from '@/hooks/auth/useNaverInit';
 import React, { useRef } from 'react';
 import { SiNaver } from 'react-icons/si';
