@@ -28,6 +28,19 @@ export async function deleteLogOut(): Promise<void> {
     }
 }
 
+export async function postSignUp(payload: LogInData): Promise<Buddy> {
+    const url = `/api/auth/signup`;
+    try {
+        const data = await fetchWrapper<Buddy>(url, {
+            method: 'POST',
+            body: JSON.stringify(payload),
+        });
+        return data;
+    } catch (error: any) {
+        throw error;
+    }
+}
+
 export async function getLogInWithProvider(
     provider: string,
 ): Promise<OAuthResponse> {
