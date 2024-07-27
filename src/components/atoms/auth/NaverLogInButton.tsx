@@ -1,7 +1,6 @@
 'use client';
 
 import { PUBLIC_URL } from '@/constants/common.constants';
-import useNaverInit from '@/hooks/auth/useNaverInit';
 import fetchWrapper from '@/utils/api/fetchWrapper';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { SiNaver } from 'react-icons/si';
@@ -24,8 +23,6 @@ const NaverLogInButton: React.FC = () => {
             }, // 로그인 버튼 설정
         });
         naverLogin.init();
-
-        return naverLogin;
     }, []);
 
     const handleNaverLoginClick = () => {
@@ -37,7 +34,7 @@ const NaverLogInButton: React.FC = () => {
     };
 
     useEffect(() => {
-        const naverLogin = handleNaverInit();
+        handleNaverInit();
     }, [handleNaverInit]);
 
     useEffect(() => {
