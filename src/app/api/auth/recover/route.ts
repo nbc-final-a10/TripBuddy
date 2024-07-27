@@ -15,7 +15,7 @@ export async function PATCH(req: Request) {
 
     if (error) {
         // console.log("비번변경시 에러 서버에서 =>", error.message);
-        return NextResponse.json({ error: error.message }, { status: 400 });
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
     if (!user) {
@@ -32,7 +32,7 @@ export async function PATCH(req: Request) {
         console.error(userError);
         return NextResponse.json(
             { error: userError?.message },
-            { status: 401 },
+            { status: 500 },
         );
     }
 

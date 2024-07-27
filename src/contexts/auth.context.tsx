@@ -1,11 +1,11 @@
 'use client';
 
 import {
+    deleteLogOut,
     getLogInWithProvider,
+    patchResetPassword,
     postSendingResetEmail,
 } from '@/api-services/auth/client';
-import { deleteLogOut } from '../../backup/auth/deleteLogOut';
-import { PUBLIC_URL } from '@/constants/common.constants';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import {
     useBuddyQuery,
@@ -98,7 +98,9 @@ export function AuthProvider({
         } catch (error) {
             const errorMessage =
                 error instanceof Error ? error.message : 'Unknown error';
-            return showAlert('error', errorMessage);
+            return showAlert('error', errorMessage, {
+                onConfirm: () => router.refresh(),
+            });
         }
         queryClient.invalidateQueries({ queryKey: [QUERY_KEY_BUDDY] });
         router.replace('/login');
@@ -144,7 +146,11 @@ export function AuthProvider({
                     onConfirm: () => router.replace(data.url),
                 });
             } catch (error) {
-                console.error(error);
+                const errorMessage =
+                    error instanceof Error ? error.message : 'Unknown error';
+                return showAlert('error', errorMessage, {
+                    onConfirm: () => router.refresh(),
+                });
             }
         };
 
@@ -157,7 +163,11 @@ export function AuthProvider({
                 onConfirm: () => router.replace('/login'),
             });
         } catch (error) {
-            console.error(error);
+            const errorMessage =
+                error instanceof Error ? error.message : 'Unknown error';
+            return showAlert('error', errorMessage, {
+                onConfirm: () => router.refresh(),
+            });
         }
     };
 
@@ -165,25 +175,28 @@ export function AuthProvider({
         password: string,
     ) => {
         try {
-            const response = await fetch(`${PUBLIC_URL}/api/auth/recover`, {
-                method: 'POST',
-                body: JSON.stringify({ password }),
-            });
-            const data = await response.json();
+            const data = await patchResetPassword(password);
+
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY_BUDDY] });
+            return showAlert(
+                'success',
+                `${data.buddy_nickname}님 비밀번호 변경에 성공했어요!`,
+                {
+                    onConfirm: () => router.replace('/'),
+                },
+            );
+        } catch (error) {
+            const errorMessage =
+                error instanceof Error ? error.message : 'Unknown error';
             if (
-                data.error ===
+                errorMessage ===
                 'New password should be different from the old password.'
             ) {
                 return showAlert('caution', '기존 비밀번호와 동일합니다!');
-            } else {
-                queryClient.invalidateQueries({ queryKey: [QUERY_KEY_BUDDY] });
-                return showAlert('success', '비밀번호 변경 성공!', {
-                    onConfirm: () => router.replace('/'),
-                });
             }
-        } catch (error) {
-            console.error(error);
-            router.refresh();
+            return showAlert('error', errorMessage, {
+                onConfirm: () => router.refresh(),
+            });
         }
     };
 
