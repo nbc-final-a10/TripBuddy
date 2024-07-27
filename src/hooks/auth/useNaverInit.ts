@@ -1,8 +1,10 @@
 import { PUBLIC_URL } from '@/constants/common.constants';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 // 클라이언트 측 코드임
 const useNaverInit = () => {
+    const [naverLogin, setNaverLogin] = useState(null);
+
     const handleNaverInit = useCallback(() => {
         const naver = window.naver;
 
@@ -17,11 +19,20 @@ const useNaverInit = () => {
                 height: '60', // 버튼 높이
             }, // 로그인 버튼 설정
         });
+        naverLogin.init();
+
+        return naverLogin;
     }, []);
 
     useEffect(() => {
-        handleNaverInit();
+        const naverLogin = handleNaverInit();
+
+        setNaverLogin(naverLogin);
     }, [handleNaverInit]);
+
+    if (!naverLogin) return { naverLogin: null };
+
+    return { naverLogin };
 };
 
 export default useNaverInit;
