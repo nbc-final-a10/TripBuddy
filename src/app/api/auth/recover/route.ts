@@ -1,7 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
+export async function PATCH(req: Request) {
     const { password } = await req.json();
 
     const supabase = createClient();
