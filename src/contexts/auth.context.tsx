@@ -1,6 +1,6 @@
 'use client';
 
-import { deleteLogOut } from '@/api-services/auth/deleteLogOut';
+import { deleteLogOut } from '../../backup/auth/deleteLogOut';
 import { PUBLIC_URL } from '@/constants/common.constants';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import {
