@@ -10,17 +10,15 @@ import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import {
     useBuddyQuery,
     useLogInMutation,
+    useNaverLogInMutation,
     useSignUpMutation,
 } from '@/hooks/queries';
-import { useNaverLogInMutation } from '@/hooks/queries/useNaverLogInMutation';
 import { Buddy } from '@/types/Auth.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import { useAuthStore } from '@/zustand/auth.store';
 import { Provider } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { PropsWithChildren, createContext, useEffect, useState } from 'react';
-import { useShallow } from 'zustand/react/shallow';
 
 export type AuthContextValue = {
     isLoggedIn: boolean;
