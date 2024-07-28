@@ -20,7 +20,7 @@ const chipVariants = cva(
     {
         variants: {
             intent: {
-                natural: 'bg-gray-500 border-gray-500 text-white',
+                natural: 'bg-gray-400 border-gray-400 text-white',
                 // 'Seoul/Gyeonggi': 'bg-gray-500 border-gray-500 text-white',
                 // Gyeongsangnamdo: 'bg-red-500 border-red-500 text-white',
                 // Gyeongsangbukdo: 'bg-yellow-500 border-yellow-500 text-white',
@@ -75,8 +75,8 @@ const chipVariants = cva(
                 // ESFP: 'bg-amber-400 border-amber-400 text-white',
             },
             variant: {
-                selected: 'bg-main-color',
-                unselected: 'bg-gray-500',
+                selected: 'bg-main-color border-main-color',
+                unselected: 'bg-gray-400 border-gray-400',
             },
         },
         defaultVariants: {
