@@ -1,8 +1,9 @@
 import EditProfileButton from '@/components/atoms/profile/EditProfileButton';
 import ProfileImage from '@/components/atoms/profile/ProfileImage';
+import { BuddyProfileProps } from '@/types/ProfileParams.types';
 import React from 'react';
 
-export default function BuddyProfile() {
+export default function BuddyProfile({ id }: BuddyProfileProps) {
     return (
         <div className="flex flex-col items-center justify-center p-4 mt-4 xl:mt-8">
             <div className="flex items-center">
