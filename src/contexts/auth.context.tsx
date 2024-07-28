@@ -209,7 +209,7 @@ export function AuthProvider({
             if (!buddy)
                 return showAlert('caution', '알 수 없는 오류가 발생했어요');
 
-            showAlert('success', `${buddy.buddy_nickname}님 환영합니다!`, {
+            showAlert('success', `${buddy.buddy_email}님 환영합니다!`, {
                 onConfirm: () => router.replace('/'),
             });
         } catch (error) {
