@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/auth';
 import React, { useEffect } from 'react';
 
 const LoadingPage: React.FC = () => {
+    // useAuth 의 함수들은 모두 useCallback 처리함
     const { naverLogIn } = useAuth();
 
     useEffect(() => {
