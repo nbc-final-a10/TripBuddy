@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import SearchPageChipsTitle from './SearchMainPageChipsTitle';
 
 const AgeCount: React.FC = () => {
     const [minAge, setMinAge] = useState(20);
     const [maxAge, setMaxAge] = useState(80);
 
     const handleMinAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = Math.min(Number(e.target), maxAge - 1);
+        const value = Math.min(Number(e.target.value), maxAge - 1);
         setMinAge(value);
     };
+
     const handleMaxAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = Math.max(Number(e.target), minAge + 1);
-        setMinAge(value);
+        const value = Math.max(Number(e.target.value), minAge + 1);
+        setMaxAge(value);
     };
 
     return (
@@ -19,19 +19,27 @@ const AgeCount: React.FC = () => {
             <div className="py-3">
                 <div className="flex flex-col justify-center items-center mx-auto">
                     <section className="flex gap-1.5">
-                        <input
-                            className="bg-gray-100 rounded-full w-full p-1 px-3 text-right"
-                            value={minAge}
-                            onChange={e => setMinAge(Number(e.target.value))}
-                            readOnly
-                        />
+                        <div className="relative">
+                            <input
+                                className="bg-gray-100 rounded-full w-full p-1 px-3 text-right pr-8"
+                                value={minAge}
+                                readOnly
+                            />
+                            <span className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                                세
+                            </span>
+                        </div>
                         ~
-                        <input
-                            className="bg-gray-100 rounded-full w-full p-1 px-3 text-right"
-                            value={maxAge}
-                            onChange={e => setMinAge(Number(e.target.value))}
-                            readOnly
-                        />
+                        <div className="relative">
+                            <input
+                                className="bg-gray-100 rounded-full w-full p-1 px-3 text-right pr-8"
+                                value={maxAge}
+                                readOnly
+                            />
+                            <span className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                                세
+                            </span>
+                        </div>
                     </section>
                     <section className="relative w-full my-3 mt-10">
                         <input
@@ -41,7 +49,7 @@ const AgeCount: React.FC = () => {
                             value={minAge}
                             onChange={handleMinAgeChange}
                             className="absolute w-full h-2 bg-transparent pointer-events-auto appearance-none"
-                            style={{ zIndex: minAge > maxAge - 10 ? 1 : 2 }}
+                            style={{ zIndex: minAge > maxAge - 10 ? 2 : 1 }}
                         />
                         <input
                             type="range"
