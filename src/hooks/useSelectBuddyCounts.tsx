@@ -15,7 +15,7 @@ export default function useSelectBuddyCounts() {
 
     const SelectBuddyCounts = () => {
         return (
-            <div className="flex flex-row gap-[2px]">
+            <div className="flex justify-center items-center mx-auto flex-row gap-[2px] mt-3">
                 <button
                     className="text-[#647484] w-[30px] h-[30px] xl:w-[50px] xl:h-[50px] bg-[#edeff1] hover:bg-gray-400 flex items-center justify-center"
                     onClick={handleSubBuddyCounts}

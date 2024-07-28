@@ -76,9 +76,9 @@ const chipVariants = cva(
                 ESTP: 'bg-amber-500 border-amber-500 text-white',
                 ESFP: 'bg-amber-400 border-amber-400 text-white',
 
-                남자만: 'bg-yellow-300 border-yellow-300 text-white',
-                여자만: 'bg-green-500 border-green-500 text-white',
-                상관없음: 'bg-pink-600 border-pink-600 text-white',
+                남자만: 'bg-gray-400 border-gray-400 text-white',
+                여자만: 'bg-gray-400 border-gray-400 text-white',
+                상관없음: 'bg-gray-400 border-gray-400 text-white',
 
                 출발지: 'bg-indigo-500 border-indigo-500 text-white',
                 여행지: 'bg-teal-500 border-teal-500 text-white',

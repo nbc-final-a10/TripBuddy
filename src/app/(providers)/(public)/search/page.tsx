@@ -3,16 +3,14 @@
 import AgeCount from '@/components/molecules/search/AgeCount';
 import GenderChipGroup from '@/components/molecules/search/GenderChipGroup';
 import MeetingPlaceChipGroup from '@/components/molecules/search/MeetingPlaceChipGroup';
-import PeopleCount from '@/components/molecules/search/PeopleCount';
+import SearchPageChipsTitle from '@/components/molecules/search/SearchMainPageChipsTitle';
+import DateSearchPage from '@/components/organisms/search/DateSearchPage';
 import usePreferTheme from '@/hooks/usePreferTheme';
+import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
+import useSelectRegion from '@/hooks/useSelectRegion';
 import React, { useState } from 'react';
 
 const SearchPage: React.FC = () => {
-    // // 각 chip의 선택 상태를 저장
-    // const [selectedChips, setSelectedChips] = useState<Record<string, boolean>>(
-    //     {},
-    // );
-
     // chips 선택 요소들 감추기
     const [isChipsHidden, setIsChipsHidden] = useState(false);
 
@@ -26,13 +24,8 @@ const SearchPage: React.FC = () => {
         isLabel: true,
     });
 
-    // // 칩 클릭 핸들러(클릭 시 상태 토글)
-    // const handleChipClick = (label: string) => {
-    //     setSelectedChips(prevSelectedChips => ({
-    //         ...prevSelectedChips,
-    //         [label]: !prevSelectedChips[label],
-    //     }));
-    // };
+    const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
+    const { SelectRegion, finalSelectedLocation } = useSelectRegion();
 
     const toggleChipsHidden = () => {
         setIsChipsHidden(!isChipsHidden);
@@ -65,8 +58,17 @@ const SearchPage: React.FC = () => {
 
             <GenderChipGroup />
             <AgeCount />
-            <PeopleCount />
+            <div className="py-3">
+                <SearchPageChipsTitle
+                    title="인원수"
+                    limit="인원수 최대 4명까지 가능해요"
+                />
+                <SelectBuddyCounts />
+            </div>
             <MeetingPlaceChipGroup />
+
+            <SelectRegion />
+            <DateSearchPage />
 
             <div className={isChipsHidden ? 'hidden' : ''}>
                 <section>
