@@ -14,9 +14,14 @@ function useAccordion(initialOpen: boolean = false) {
         setIsOpen(!isOpen);
     };
 
+    const closeAccordion = () => {
+        setIsOpen(false);
+    };
+
     return {
         isOpen,
         toggleAccordion,
+        closeAccordion,
     };
 }
 const Accordion: React.FC<AccordionProps> = ({
@@ -30,7 +35,10 @@ const Accordion: React.FC<AccordionProps> = ({
             <details className="group" open={isOpen}>
                 <summary
                     className="flex justify-between items-center font-medium cursor-pointer list-none my-2"
-                    onClick={toggleAccordion}
+                    onClick={e => {
+                        e.preventDefault();
+                        toggleAccordion();
+                    }}
                 >
                     <span className="text-center font-semibold xl:text-xl">
                         {title}

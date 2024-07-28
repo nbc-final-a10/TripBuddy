@@ -3,8 +3,7 @@
 import AgeCount from '@/components/molecules/search/AgeCount';
 import GenderChipGroup from '@/components/molecules/search/GenderChipGroup';
 import MeetingPlaceChipGroup from '@/components/molecules/search/MeetingPlaceChipGroup';
-import SearchPageChipsTitle from '@/components/molecules/search/SearchMainPageChipsTitle';
-import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
+import SearchResult from '@/components/molecules/search/SearchResult';
 import DateSearchPage from '@/components/organisms/search/DateSearchPage';
 import { Accordion, useAccordion } from '@/hooks/useAccordion';
 import usePreferTheme from '@/hooks/usePreferTheme';
@@ -14,9 +13,6 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 const SearchPage: React.FC = () => {
-    // 선택 요소들 감추기
-    const [optionHidden, setOptionHidden] = useState(false);
-
     const [showResult, setShowResult] = useState(false);
 
     const [PreferBuddyTheme, selectedBuddyTheme] = usePreferTheme({
@@ -34,15 +30,28 @@ const SearchPage: React.FC = () => {
 
     const router = useRouter();
 
-    const participatingAccordion = useAccordion(false);
     const createdAccordion = useAccordion(true);
 
-    // const handleMoveSearchResult = () => {
-    //     router.push('/searchResult');
-    // };
+    // 아코디언 상태 관리
+    const genderAccordion = useAccordion(true);
+    const ageAccordion = useAccordion(true);
+    const buddyCountsAccordion = useAccordion(true);
+    const meetingPlaceAccordion = useAccordion(true);
+    const regionAccordion = useAccordion(true);
+    const dateAccordion = useAccordion(true);
+    const tripThemeAccordion = useAccordion(true);
+    const buddyThemeAccordion = useAccordion(true);
 
+    // 아코디언 닫기
     const toggleOptionHidden = () => {
-        setOptionHidden(!optionHidden);
+        genderAccordion.closeAccordion();
+        ageAccordion.closeAccordion();
+        buddyCountsAccordion.closeAccordion();
+        meetingPlaceAccordion.closeAccordion();
+        regionAccordion.closeAccordion();
+        dateAccordion.closeAccordion();
+        tripThemeAccordion.closeAccordion();
+        buddyThemeAccordion.closeAccordion();
     };
 
     const [items, setItems] = useState(
@@ -90,24 +99,24 @@ const SearchPage: React.FC = () => {
 
             <Accordion
                 title="성별"
-                isOpen={createdAccordion.isOpen}
-                toggleAccordion={createdAccordion.toggleAccordion}
+                isOpen={genderAccordion.isOpen}
+                toggleAccordion={genderAccordion.toggleAccordion}
             >
                 <GenderChipGroup />
             </Accordion>
 
             <Accordion
                 title="나이"
-                isOpen={createdAccordion.isOpen}
-                toggleAccordion={createdAccordion.toggleAccordion}
+                isOpen={ageAccordion.isOpen}
+                toggleAccordion={ageAccordion.toggleAccordion}
             >
                 <AgeCount />
             </Accordion>
 
             <Accordion
                 title="인원수"
-                isOpen={createdAccordion.isOpen}
-                toggleAccordion={createdAccordion.toggleAccordion}
+                isOpen={buddyCountsAccordion.isOpen}
+                toggleAccordion={buddyCountsAccordion.toggleAccordion}
             >
                 <p className="text-sm text-gray-500">
                     인원수 최대 4명까지 가능해요
@@ -117,16 +126,16 @@ const SearchPage: React.FC = () => {
 
             <Accordion
                 title="만남 장소"
-                isOpen={createdAccordion.isOpen}
-                toggleAccordion={createdAccordion.toggleAccordion}
+                isOpen={meetingPlaceAccordion.isOpen}
+                toggleAccordion={meetingPlaceAccordion.toggleAccordion}
             >
                 <MeetingPlaceChipGroup />
             </Accordion>
 
             <Accordion
                 title="여행지를 선택해주세요"
-                isOpen={createdAccordion.isOpen}
-                toggleAccordion={createdAccordion.toggleAccordion}
+                isOpen={regionAccordion.isOpen}
+                toggleAccordion={regionAccordion.toggleAccordion}
             >
                 <p className="text-sm text-gray-500">
                     지역, 국가, 도시를 1개 선택해주세요.
@@ -136,8 +145,8 @@ const SearchPage: React.FC = () => {
 
             <Accordion
                 title="언제 떠나시나요?"
-                isOpen={createdAccordion.isOpen}
-                toggleAccordion={createdAccordion.toggleAccordion}
+                isOpen={dateAccordion.isOpen}
+                toggleAccordion={dateAccordion.toggleAccordion}
             >
                 <p className="text-sm text-gray-500">
                     버디즈와 함께 여행하고 싶은 날짜를 선택해주세요.
@@ -147,8 +156,8 @@ const SearchPage: React.FC = () => {
 
             <Accordion
                 title="여정 테마"
-                isOpen={createdAccordion.isOpen}
-                toggleAccordion={createdAccordion.toggleAccordion}
+                isOpen={tripThemeAccordion.isOpen}
+                toggleAccordion={tripThemeAccordion.toggleAccordion}
             >
                 <p className="text-sm text-gray-500">3가지를 선택해주세요</p>
                 <div className="py-4">
@@ -158,8 +167,8 @@ const SearchPage: React.FC = () => {
 
             <Accordion
                 title="버디즈 성향"
-                isOpen={createdAccordion.isOpen}
-                toggleAccordion={createdAccordion.toggleAccordion}
+                isOpen={buddyThemeAccordion.isOpen}
+                toggleAccordion={buddyThemeAccordion.toggleAccordion}
             >
                 <p className="text-sm text-gray-500">3가지를 선택해주세요</p>
                 <div className="py-4">
@@ -169,8 +178,6 @@ const SearchPage: React.FC = () => {
                 </div>
             </Accordion>
 
-            {/* <div className={isChipsHidden ? 'hidden' : ''}> */}
-
             <button
                 className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 mb-10 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:hidden"
                 onClick={handleShowResult}
@@ -179,58 +186,13 @@ const SearchPage: React.FC = () => {
             </button>
 
             {showResult && (
-                <>
-                    <section className="my-5">
-                        <h3 className="text-base font-semibold py-4 my-3">
-                            여정 검색 결과
-                        </h3>
-
-                        <div className="flex flex-nowrap whitespace-nowrap overflow-x-auto scrollbar-hidden gap-4 xl:grid xl:grid-cols-4 xl:auto-cols-[minmax(0,1fr)]">
-                            {items
-                                .slice(0, visibleFirstItems)
-                                .map((item, index) => (
-                                    <div
-                                        key={index}
-                                        className="bg-gray-300 w-[178px] h-[176px] rounded-lg flex-shrink-0 xl:w-[250px] xl:h-[250px]"
-                                    ></div>
-                                ))}
-                        </div>
-                        {visibleFirstItems < items.length && (
-                            <button
-                                className="mt-4 px-4 py-2 bg-gray-500 text-white rounded-lg mx-auto block"
-                                onClick={loadMoreFirstItems}
-                            >
-                                더보기
-                            </button>
-                        )}
-                    </section>
-
-                    <section className="mt-10 xl:mt-24">
-                        <SearchPageTitle
-                            title="이런 여정은 어떠세요?"
-                            description="모집 마감이 얼마 남지 않은 여정들이에요!"
-                        />
-
-                        <ul className="grid grid-cols-1 gap-1 xl:grid-cols-3 xl:gap-2 xl:w-full">
-                            {items
-                                .slice(0, visibleSecondItems)
-                                .map((item, index) => (
-                                    <li
-                                        key={index}
-                                        className="bg-gray-300 w-[335px] h-[93px] rounded-[11px] mx-auto mb-6 xl:mx-0 xl:w-full xl:h-[120px]"
-                                    ></li>
-                                ))}
-                        </ul>
-                        {visibleSecondItems < items.length && (
-                            <button
-                                className="mt-4 px-4 py-2 bg-gray-500 text-white rounded-lg mx-auto block"
-                                onClick={loadMoreSecondItems}
-                            >
-                                더보기
-                            </button>
-                        )}
-                    </section>
-                </>
+                <SearchResult
+                    items={items}
+                    visibleFirstItems={visibleFirstItems}
+                    visibleSecondItems={visibleSecondItems}
+                    loadMoreFirstItems={loadMoreFirstItems}
+                    loadMoreSecondItems={loadMoreSecondItems}
+                />
             )}
         </main>
     );
