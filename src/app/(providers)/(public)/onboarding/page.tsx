@@ -159,7 +159,6 @@ const OnBoardingPage: React.FC = () => {
                                 location.name.ko,
                             )}
                             onClick={handleLocationChange}
-                            intent={location.name.en}
                         >
                             {location.name.ko}
                         </Chip>
@@ -177,7 +176,6 @@ const OnBoardingPage: React.FC = () => {
                             key={mbti.mbti}
                             selected={selectedMbti.includes(mbti.mbti)}
                             onClick={handleMbtiChange}
-                            intent={mbti.mbti}
                         >
                             {mbti.mbti}
                         </Chip>
