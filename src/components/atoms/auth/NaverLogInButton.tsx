@@ -1,12 +1,16 @@
 'use client';
 
 import { PUBLIC_URL } from '@/constants/common.constants';
+import { useAuth } from '@/hooks/auth';
 import fetchWrapper from '@/utils/api/fetchWrapper';
+import { useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { SiNaver } from 'react-icons/si';
 
 const NaverLogInButton: React.FC = () => {
     const naverRef = useRef<HTMLButtonElement>(null);
+    const { buddy } = useAuth();
+    const router = useRouter();
 
     const handleNaverInit = useCallback(() => {
         const naver = window.naver;
@@ -26,10 +30,14 @@ const NaverLogInButton: React.FC = () => {
     }, []);
 
     const handleNaverLoginClick = () => {
-        if (!naverRef || !naverRef.current || !naverRef.current.children)
+        if (
+            !naverRef ||
+            !naverRef.current ||
+            !naverRef.current.children ||
+            !naverRef.current.children[0].children
+        )
             return;
 
-        // 아래 코드는 개발자 도구를 통해 직접 분석해서 사용에 맞게 변경하셔도 좋을 것 같습니다.
         (naverRef.current.children[0].children[0] as HTMLImageElement).click();
     };
 
@@ -38,6 +46,7 @@ const NaverLogInButton: React.FC = () => {
     }, [handleNaverInit]);
 
     useEffect(() => {
+        if (buddy) return;
         if (window.location.hash) {
             const hash = window.location.hash.substring(1);
             const params = new URLSearchParams(hash);
@@ -57,7 +66,7 @@ const NaverLogInButton: React.FC = () => {
                 }
             }
         }
-    }, []);
+    }, [buddy]);
 
     return (
         <>
