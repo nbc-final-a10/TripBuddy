@@ -131,3 +131,24 @@ export async function patchResetPassword(password: string): Promise<Buddy> {
         throw error;
     }
 }
+
+export async function postNaverLogIn(): Promise<Buddy | null> {
+    if (!window.location.hash) return null;
+    const hash = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
+    const accessToken = params.get('access_token');
+
+    const url = '/api/auth/callback/naver';
+    try {
+        const data = await fetchWrapper<Buddy>(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ accessToken }),
+        });
+        return data;
+    } catch (error: any) {
+        throw error;
+    }
+}

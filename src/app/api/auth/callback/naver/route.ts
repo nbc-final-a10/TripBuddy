@@ -1,9 +1,6 @@
-import { Buddy } from '@/types/Auth.types';
 import { createClient } from '@/utils/supabase/server';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { revalidatePath } from 'next/cache';
-import { permanentRedirect } from 'next/navigation';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 const FIXED_PASSWORD = process.env.NAVER_PROVIDER_LOGIN_SECRET;
 
@@ -27,7 +24,7 @@ async function getBuddy(supabase: SupabaseClient, id: string) {
 
 export async function POST(request: Request) {
     const { accessToken } = await request.json();
-    const { origin } = new URL(request.url);
+    // const { origin } = new URL(request.url);
 
     if (!FIXED_PASSWORD) {
         return NextResponse.json(
@@ -43,7 +40,6 @@ export async function POST(request: Request) {
         );
     }
 
-    let buddy: Buddy;
     try {
         // 네이버 API를 사용하여 사용자 정보 가져오기
         const response = await fetch('https://openapi.naver.com/v1/nid/me', {
@@ -96,18 +92,18 @@ export async function POST(request: Request) {
                     );
                 }
 
-                buddy = await getBuddy(supabase, signUpData.user.id);
+                const buddy = await getBuddy(supabase, signUpData.user.id);
 
-                // return NextResponse.json(buddy, { status: 200 });
+                return NextResponse.json(buddy, { status: 200 });
             } else {
                 throw signInError;
             }
         } else {
             // console.log('네이버로그인시도중 로그인 성공시 ====>', signInData);
 
-            buddy = await getBuddy(supabase, signInData.user.id);
+            const buddy = await getBuddy(supabase, signInData.user.id);
             // 로그인 성공
-            // return NextResponse.json(buddy, { status: 200 });
+            return NextResponse.json(buddy, { status: 200 });
         }
     } catch (error) {
         console.error('Error during Naver login callback:', error);
@@ -116,12 +112,4 @@ export async function POST(request: Request) {
             { status: 500 },
         );
     }
-
-    if (!buddy) {
-        return NextResponse.json({ error: 'User not found' }, { status: 401 });
-    }
-
-    // revalidatePath('/login');
-    // permanentRedirect('/');
-    return NextResponse.redirect(`${origin}`);
 }

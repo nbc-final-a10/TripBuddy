@@ -12,6 +12,7 @@ import {
     useLogInMutation,
     useSignUpMutation,
 } from '@/hooks/queries';
+import { useNaverLogInMutation } from '@/hooks/queries/useNaverLogInMutation';
 import { Buddy } from '@/types/Auth.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { Provider } from '@supabase/supabase-js';
@@ -29,6 +30,7 @@ export type AuthContextValue = {
     loginWithProvider: (provider: Provider) => void;
     resetPassword: (password: string) => void;
     sendingResetEmail: (email: string) => void;
+    naverLogIn: () => void;
 };
 
 const initialValue: AuthContextValue = {
@@ -41,6 +43,7 @@ const initialValue: AuthContextValue = {
     loginWithProvider: () => {},
     resetPassword: () => {},
     sendingResetEmail: () => {},
+    naverLogIn: () => {},
 };
 
 //PropsWithChildren<AuthProviderProps>
@@ -60,6 +63,9 @@ export function AuthProvider({
 
     const { mutateAsync: signUpMutation, isPending: isSignUpPending } =
         useSignUpMutation();
+
+    const { mutateAsync: naverLogInMutation, isPending: isNaverLogInPending } =
+        useNaverLogInMutation();
 
     const router = useRouter();
     const queryClient = useQueryClient();
@@ -197,13 +203,35 @@ export function AuthProvider({
         }
     };
 
+    const naverLogIn: AuthContextValue['naverLogIn'] = async () => {
+        try {
+            const buddy = await naverLogInMutation();
+            if (!buddy)
+                return showAlert('caution', '알 수 없는 오류가 발생했어요');
+            showAlert('success', `${buddy.buddy_nickname}님 환영합니다!`, {
+                onConfirm: () => router.replace('/'),
+            });
+        } catch (error) {
+            const errorMessage =
+                error instanceof Error ? error.message : 'Unknown error';
+            return showAlert('error', errorMessage, {
+                onConfirm: () => router.refresh(),
+            });
+        }
+    };
+
     useEffect(() => {
         console.log('isPending ====>', isPending);
     }, [isPending]);
 
     useEffect(() => {
-        setIsPending(isBuddyPending || isLogInPending || isSignUpPending);
-    }, [isBuddyPending, isLogInPending, isSignUpPending]);
+        setIsPending(
+            isBuddyPending ||
+                isLogInPending ||
+                isSignUpPending ||
+                isNaverLogInPending,
+        );
+    }, [isBuddyPending, isLogInPending, isSignUpPending, isNaverLogInPending]);
 
     useEffect(() => {
         console.log('buddy ====>', buddy);
@@ -223,6 +251,7 @@ export function AuthProvider({
         loginWithProvider,
         resetPassword,
         sendingResetEmail,
+        naverLogIn,
     };
 
     return (
