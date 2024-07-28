@@ -4,11 +4,11 @@ import React from 'react';
 export default function WelcomeImage() {
     return (
         <Image
-            src="https://i.namu.wiki/i/_NPDOv8et8JgpbfpRailhTtJa62PoFLU5-MjYvBLT2OkmN8I-VdHWawlsyguTszlnLDQD0iQhz70QuqpIE_erg.webp"
+            src="https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202307/27/267ce76a-0edc-494a-8116-822e4a2c38f6.jpg"
             alt="buddy character"
-            width={300}
-            height={300}
-            className="rounded-full xl:w-[500px] xl:h-[500px]"
+            width={250}
+            height={250}
+            className="rounded-full h-[250px] w-[250px] xl:w-[500px] xl:h-[500px]"
         />
     );
 }

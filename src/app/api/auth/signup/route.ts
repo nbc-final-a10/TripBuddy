@@ -20,10 +20,10 @@ export async function POST(request: NextRequest) {
 
     if (error) {
         return NextResponse.json(
-            { user: null, error: error?.message },
+            { buddy: null, error: error?.message },
             { status: 401 },
         );
     }
 
-    return NextResponse.json({ user }, { status: 200 });
+    return NextResponse.json({ buddy: user }, { status: 200 });
 }

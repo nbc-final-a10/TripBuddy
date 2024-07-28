@@ -1,4 +1,3 @@
-import { getUserServer } from '@/api-services/auth/getUserServer';
 import { AuthProvider } from '@/contexts/auth.context';
 import {
     HydrationBoundary,
@@ -6,16 +5,17 @@ import {
     dehydrate,
 } from '@tanstack/react-query';
 import TapMenu from '@/components/molecules/TapMenu';
-import { PropsWithChildren, Suspense } from 'react';
+import React, { PropsWithChildren, Suspense } from 'react';
 import Loading from './loading';
-import { QUERY_KEY_USER } from '@/constants/query.constants';
+import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import Header from '@/components/atoms/common/Header';
+import { getBuddyServer } from '@/api-services/auth/getBuddyServer';
 
-async function ProvidersLayout({ children }: PropsWithChildren) {
+const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
     const queryClient = new QueryClient();
     await queryClient.prefetchQuery({
-        queryKey: [QUERY_KEY_USER],
-        queryFn: () => getUserServer(),
+        queryKey: [QUERY_KEY_BUDDY],
+        queryFn: () => getBuddyServer(),
     });
     const dehydratedState = dehydrate(queryClient);
 
@@ -36,6 +36,6 @@ async function ProvidersLayout({ children }: PropsWithChildren) {
             </section>
         </main>
     );
-}
+};
 
 export default ProvidersLayout;

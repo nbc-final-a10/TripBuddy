@@ -1,6 +1,6 @@
-import { SecondLevelNames } from '@/types/Location.types';
-import { MBTI } from '@/types/Mbtis.types';
-import { BuddyTheme, TripTheme } from '@/types/Themes.types';
+import { type SecondLevelNames } from '@/types/Location.types';
+import { type MBTI } from '@/types/Mbtis.types';
+import { type BuddyTheme, type TripTheme } from '@/types/Themes.types';
 import { tailwindMerge } from '@/utils/ui/tailwind_merge';
 import { VariantProps, cva } from 'class-variance-authority';
 import React from 'react';
@@ -20,42 +20,42 @@ const chipVariants = cva(
     {
         variants: {
             intent: {
-                인기: 'bg-blue-500 border-blue-500 text-white',
-                '서울/경기': 'bg-gray-500 border-gray-500 text-white',
-                경상남도: 'bg-red-500 border-red-500 text-white',
-                경상북도: 'bg-yellow-500 border-yellow-500 text-white',
-                충청남도: 'bg-violet-500 border-violet-500 text-white',
-                충청북도: 'bg-red-400 border-red-400 text-white',
-                전라남도: 'bg-yellow-400 border-yellow-400 text-white',
-                전라북도: 'bg-blue-400 border-blue-400 text-white',
-                강원도: 'bg-green-400 border-green-400 text-white',
-                제주도: 'bg-purple-400 border-purple-400 text-white',
+                famous: 'bg-blue-500 border-blue-500 text-white',
+                'Seoul/Gyeonggi': 'bg-gray-500 border-gray-500 text-white',
+                Gyeongsangnamdo: 'bg-red-500 border-red-500 text-white',
+                Gyeongsangbukdo: 'bg-yellow-500 border-yellow-500 text-white',
+                Chungcheongnamdo: 'bg-violet-500 border-violet-500 text-white',
+                Chungcheongbukdo: 'bg-red-400 border-red-400 text-white',
+                Jeonlamdo: 'bg-yellow-400 border-yellow-400 text-white',
+                Jeonrabukdo: 'bg-blue-400 border-blue-400 text-white',
+                Gangwondo: 'bg-green-400 border-green-400 text-white',
+                Jejudo: 'bg-purple-400 border-purple-400 text-white',
 
-                아시아: 'bg-slate-500 border-slate-500 text-white',
-                유럽: 'bg-fuchsia-500 border-fuchsia-500 text-white',
-                아프리카: 'bg-amber-500 border-amber-500 text-white',
-                아메리카: 'bg-lime-500 border-lime-500 text-white',
-                오세아니아: 'bg-sky-500 border-sky-500 text-white',
+                Asia: 'bg-slate-500 border-slate-500 text-white',
+                Europe: 'bg-fuchsia-500 border-fuchsia-500 text-white',
+                Africa: 'bg-amber-500 border-amber-500 text-white',
+                America: 'bg-lime-500 border-lime-500 text-white',
+                Oceania: 'bg-sky-500 border-sky-500 text-white',
 
-                계획: 'bg-slate-500 border-slate-500 text-white',
-                즉흥: 'bg-fuchsia-500 border-fuchsia-500 text-white',
-                빨리빨리: 'bg-red-500 border-red-500 text-white',
-                느긋느긋: 'bg-lime-500 border-lime-500 text-white',
-                촬영: 'bg-white border-black text-black',
-                감상: 'bg-black border-black text-white',
-                깔끔쟁이: 'bg-pink-400 border-pink-400 text-white',
-                자연인: 'bg-green-600 border-green-600 text-white',
-                가성비: 'bg-blue-600 border-blue-600 text-white',
-                가심비: 'bg-amber-400 border-amber-400 text-white',
+                plan: 'bg-slate-500 border-slate-500 text-white',
+                improvise: 'bg-fuchsia-500 border-fuchsia-500 text-white',
+                fast: 'bg-red-500 border-red-500 text-white',
+                slow: 'bg-lime-500 border-lime-500 text-white',
+                photo: 'bg-white border-black text-black',
+                review: 'bg-black border-black text-white',
+                clean: 'bg-pink-400 border-pink-400 text-white',
+                natural: 'bg-green-600 border-green-600 text-white',
+                'cost-effective': 'bg-blue-600 border-blue-600 text-white',
+                satisfaction: 'bg-amber-400 border-amber-400 text-white',
 
-                도시: 'bg-red-400 border-red-400 text-white',
-                자연: 'bg-green-400 border-green-400 text-white',
-                유명맛집: 'bg-blue-500 border-blue-500 text-white',
-                로컬맛집: 'bg-fuchsia-500 border-fuchsia-500 text-white',
-                힐링: 'bg-lime-400 border-lime-400 text-white',
-                액티비티: 'bg-orange-400 border-orange-400 text-white',
-                쇼핑: 'bg-purple-400 border-purple-400 text-white',
-                관광: 'bg-white border-black text-black',
+                city: 'bg-red-400 border-red-400 text-white',
+                nature: 'bg-green-400 border-green-400 text-white',
+                'famous-food': 'bg-blue-500 border-blue-500 text-white',
+                'local-food': 'bg-fuchsia-500 border-fuchsia-500 text-white',
+                healing: 'bg-lime-400 border-lime-400 text-white',
+                activity: 'bg-orange-400 border-orange-400 text-white',
+                shopping: 'bg-purple-400 border-purple-400 text-white',
+                tour: 'bg-white border-black text-black',
 
                 INTJ: 'bg-violet-700 border-violet-700 text-white',
                 INTP: 'bg-violet-600 border-violet-600 text-white',
@@ -80,7 +80,7 @@ const chipVariants = cva(
             },
         },
         defaultVariants: {
-            intent: '인기',
+            intent: 'famous',
             variant: 'unselected',
         },
     },

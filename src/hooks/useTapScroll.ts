@@ -3,7 +3,7 @@ import React, { useRef, MouseEvent as ReactMouseEvent } from 'react';
 
 function useTapScroll() {
     const createMouseDownHandler = (
-        scrollContainerRef: React.RefObject<HTMLDivElement>,
+        scrollContainerRef: React.RefObject<HTMLElement>,
     ) => {
         return (event: ReactMouseEvent) => {
             const container = scrollContainerRef.current;
