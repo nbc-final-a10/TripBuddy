@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 
 const TapMenu: React.FC = () => {
     // 챗 페이지에서만 탭메뉴 없앰
-    const router = usePathname();
     const pathname = usePathname();
     const isChatPage = pathname.startsWith('/chat/');
 
