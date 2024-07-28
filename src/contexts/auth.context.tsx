@@ -15,10 +15,12 @@ import {
 import { useNaverLogInMutation } from '@/hooks/queries/useNaverLogInMutation';
 import { Buddy } from '@/types/Auth.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
+import { useAuthStore } from '@/zustand/auth.store';
 import { Provider } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { PropsWithChildren, createContext, useEffect, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 
 export type AuthContextValue = {
     isLoggedIn: boolean;
@@ -208,6 +210,7 @@ export function AuthProvider({
             const buddy = await naverLogInMutation();
             if (!buddy)
                 return showAlert('caution', '알 수 없는 오류가 발생했어요');
+
             showAlert('success', `${buddy.buddy_nickname}님 환영합니다!`, {
                 onConfirm: () => router.replace('/'),
             });
