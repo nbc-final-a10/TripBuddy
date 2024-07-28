@@ -15,21 +15,18 @@ const GenderChipGroup: React.FC = () => {
     };
 
     return (
-        <div className="py-3">
-            <SearchPageChipsTitle title="성별" limit="" />
-            <div className="flex gap-1.5 mt-2">
-                {genderOptions.map(gender => (
-                    <Chip
-                        key={gender}
-                        intent={gender}
-                        selected={selectedGender === gender}
-                        onClick={() => handleGenderClick(gender)}
-                        // className="w-1/3"
-                    >
-                        {gender}
-                    </Chip>
-                ))}
-            </div>
+        <div className="flex gap-1.5 mt-3 mb-5">
+            {genderOptions.map(gender => (
+                <Chip
+                    key={gender}
+                    intent={gender}
+                    selected={selectedGender === gender}
+                    onClick={() => handleGenderClick(gender)}
+                    // className="w-1/3"
+                >
+                    {gender}
+                </Chip>
+            ))}
         </div>
     );
 };

@@ -17,9 +17,8 @@ const AgeCount: React.FC = () => {
     return (
         <>
             <div className="py-3">
-                <SearchPageChipsTitle title="나이" limit="" />
                 <div className="flex flex-col justify-center items-center mx-auto">
-                    <section className="flex gap-1.5 my-3">
+                    <section className="flex gap-1.5">
                         <input
                             className="bg-gray-100 rounded-full w-full p-1 px-3 text-right"
                             value={minAge}
@@ -34,7 +33,7 @@ const AgeCount: React.FC = () => {
                             readOnly
                         />
                     </section>
-                    <section className="relative w-full">
+                    <section className="relative w-full my-3 mt-10">
                         <input
                             type="range"
                             min="0"

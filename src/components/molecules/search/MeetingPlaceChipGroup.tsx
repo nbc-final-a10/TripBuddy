@@ -17,8 +17,7 @@ const MeetingPlaceChipGroup = () => {
     };
 
     return (
-        <div className="py-3">
-            <SearchPageChipsTitle title="만남 장소" limit="" />
+        <div className="mt-3 mb-5">
             <div className="flex gap-1.5">
                 {meetingPlaceOptions.map(place => (
                     <Chip

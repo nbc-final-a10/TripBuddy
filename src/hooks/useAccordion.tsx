@@ -26,13 +26,15 @@ const Accordion: React.FC<AccordionProps> = ({
     children,
 }) => {
     return (
-        <div className="py-5 border-b border-gray-200 mx-4">
+        <div className="py-6 border-b border-gray-200">
             <details className="group" open={isOpen}>
                 <summary
-                    className="flex justify-between items-center font-medium cursor-pointer list-none"
+                    className="flex justify-between items-center font-medium cursor-pointer list-none my-2"
                     onClick={toggleAccordion}
                 >
-                    <span className="text-center xl:text-xl">{title}</span>
+                    <span className="text-center font-semibold xl:text-xl">
+                        {title}
+                    </span>
                     <span className="transition group-open:rotate-180 ml-auto">
                         <svg
                             fill="none"
@@ -49,7 +51,7 @@ const Accordion: React.FC<AccordionProps> = ({
                         </svg>
                     </span>
                 </summary>
-                <div className="text-neutral-600 mt-3 group-open:animate-fadeIn">
+                <div className="text-neutral-600 group-open:animate-fadeIn">
                     {children}
                 </div>
             </details>
