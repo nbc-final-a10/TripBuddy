@@ -21,8 +21,20 @@ const useNextButton = ({
         }
     }, [setStep, step, limit]);
 
-    const NextButton = ({ className }: { className: string }) => (
-        <button onClick={handleNext} className={className}>
+    const NextButton = ({
+        className,
+        onNextButtonClick = () => {},
+    }: {
+        className: string;
+        onNextButtonClick?: () => void;
+    }) => (
+        <button
+            onClick={() => {
+                handleNext();
+                onNextButtonClick();
+            }}
+            className={className}
+        >
             {buttonText}
         </button>
     );

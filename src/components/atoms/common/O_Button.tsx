@@ -1,15 +1,16 @@
 import { VariantProps, cva } from 'class-variance-authority';
 import Link from 'next/link';
-import { ComponentProps, PropsWithChildren } from 'react';
+import React, { ComponentProps, forwardRef, PropsWithChildren } from 'react';
 
 const buttonVariant = cva(
     'border rounded font-semibold transition hover:brightness-90 active:brightness-75',
     {
         variants: {
             intent: {
-                primary: ' border-main-color',
+                primary: 'border-main-color',
                 secondary: 'border-secondary-color',
                 danger: 'border-red-500',
+                onBoarding: 'w-[90%] h-[88px] bg-transparent font-semibold',
             },
             size: {
                 sm: 'px-3 py-1 text-[13px]',
@@ -17,73 +18,105 @@ const buttonVariant = cva(
                 lg: 'px-5 py-2 text-[17px]',
             },
             variant: {
-                outline: 'bg-white',
-                contained: 'text-white',
+                selected: 'border-[#9E6B00] text-[#9E6B00]',
+                unselected: 'text-black',
             },
         },
         compoundVariants: [
             {
-                intent: 'primary',
-                variant: 'contained',
-                className: 'bg-main-color',
+                intent: 'onBoarding',
+                variant: 'selected',
+                className: 'border-[#9E6B00] text-[#9E6B00] bg-main-color/50',
             },
             {
-                intent: 'primary',
-                variant: 'outline',
-                className: 'text-main-color',
+                intent: 'onBoarding',
+                variant: 'unselected',
+                className: 'text-black',
             },
-            {
-                intent: 'secondary',
-                variant: 'contained',
-                className: 'bg-secondary-color',
-            },
-            {
-                intent: 'secondary',
-                variant: 'outline',
-                className: 'text-secondary-color',
-            },
-            { intent: 'danger', variant: 'contained', className: 'bg-red-500' },
-            { intent: 'danger', variant: 'outline', className: 'text-red-500' },
+            // {
+            //     intent: 'primary',
+            //     variant: 'unselected',
+            //     className: 'text-main-color',
+            // },
+            // {
+            //     intent: 'secondary',
+            //     variant: 'selected',
+            //     className: 'bg-secondary-color',
+            // },
+            // {
+            //     intent: 'secondary',
+            //     variant: 'unselected',
+            //     className: 'text-secondary-color',
+            // },
+            // { intent: 'danger', variant: 'selected', className: 'bg-red-500' },
+            // {
+            //     intent: 'danger',
+            //     variant: 'unselected',
+            //     className: 'text-red-500',
+            // },
         ],
         defaultVariants: {
             intent: 'primary',
             size: 'md',
-            variant: 'contained',
+            variant: 'selected',
         },
     },
 );
 
-type ButtonVariant = VariantProps<typeof buttonVariant>;
+type ButtonVariantType = VariantProps<typeof buttonVariant>;
 
-type ButtonProps = ButtonVariant &
+type ButtonProps = {
+    selected: boolean;
+    onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+} & ButtonVariantType &
     (
         | ({} & ComponentProps<'button'>)
         | ({ href: string } & ComponentProps<typeof Link>)
     );
 
-function Button({
-    intent,
-    size,
-    variant,
-    children,
-    ...props
-}: PropsWithChildren<ButtonProps>) {
-    if ('href' in props) {
-        return (
-            <a className={buttonVariant({ intent, size, variant })} {...props}>
-                {children}
-            </a>
-        );
-    } else {
-        return (
-            <button
-                className={buttonVariant({ intent, size, variant })}
-                {...props}
-            >
-                {children}
-            </button>
-        );
-    }
-}
+const Button = forwardRef(
+    (
+        {
+            intent = 'primary',
+            size = 'md',
+            selected,
+            children,
+            onClick,
+            ...props
+        }: PropsWithChildren<ButtonProps>,
+        ref,
+    ) => {
+        if ('href' in props) {
+            return (
+                <a
+                    className={buttonVariant({
+                        intent,
+                        size,
+                        variant: selected ? 'selected' : 'unselected',
+                    })}
+                    {...props}
+                >
+                    {children}
+                </a>
+            );
+        } else {
+            return (
+                <button
+                    className={buttonVariant({
+                        intent,
+                        size,
+                        variant: selected ? 'selected' : 'unselected',
+                    })}
+                    onClick={onClick}
+                    {...props}
+                >
+                    {children}
+                </button>
+            );
+        }
+    },
+);
+
+Button.displayName = 'Button';
 
 export default Button;
