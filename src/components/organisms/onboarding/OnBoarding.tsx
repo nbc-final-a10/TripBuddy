@@ -129,7 +129,7 @@ const OnBoarding: React.FC = () => {
                 <NextButton className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-full" />
             </div>
 
-            <form onSubmit={handleSubmit}>
+            {/* <form onSubmit={handleSubmit}>
                 <label htmlFor="nickname">닉네임</label>
                 <input
                     type="text"
@@ -204,7 +204,7 @@ const OnBoarding: React.FC = () => {
                 >
                     제출
                 </button>
-            </form>
+            </form> */}
         </section>
     );
 };
