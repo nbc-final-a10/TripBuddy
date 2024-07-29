@@ -19,7 +19,7 @@ import React, {
 import OnBoardingDivider from './OnBoardingDivider';
 import OnBoardingSelectGender from './OnBoardingSelectGender';
 import OnBoardingInput from './OnBoardingInput';
-import OnBoardingSelectMbti from './OnBoardingSelectMbti';
+import OnBoardingSelectLocationMbti from './OnBoardingSelectLocationMbti';
 
 const OnBoarding: React.FC = () => {
     const { logOut, buddy } = useAuth();
@@ -143,12 +143,20 @@ const OnBoarding: React.FC = () => {
                 {step === 2 && <OnBoardingInput mode="age" ref={ageRef} />}
                 {step === 3 && <OnBoardingSelectGender />}
                 {step === 4 && (
-                    <OnBoardingSelectMbti
-                        selectedMbti={selectedMbti}
-                        handleMbtiChange={handleMbtiChange}
+                    <OnBoardingSelectLocationMbti
+                        mode="location"
+                        selected={selectedLocation}
+                        handleChange={handleLocationChange}
                     />
                 )}
-                {step === 5 && <OnBoardingDivider mode="middle" />}
+                {step === 5 && (
+                    <OnBoardingSelectLocationMbti
+                        mode="mbti"
+                        selected={selectedMbti}
+                        handleChange={handleMbtiChange}
+                    />
+                )}
+                {step === 6 && <OnBoardingDivider mode="middle" />}
             </div>
             <div className="flex justify-center">
                 <NextButton
@@ -156,6 +164,7 @@ const OnBoarding: React.FC = () => {
                     onNextButtonClick={handleTestClick}
                 />
             </div>
+            <button onClick={logOut}>임시로그아웃</button>
 
             {/* <form onSubmit={handleSubmit}>
                 <label htmlFor="nickname">닉네임</label>
