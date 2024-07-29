@@ -10,6 +10,7 @@ import useNextButton from '@/hooks/useFunnelNextStep';
 import usePreferTheme from '@/hooks/usePreferTheme';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import React, { FormEvent, MouseEvent, useEffect, useState } from 'react';
+import OnBoardingWelcome from './OnBoardingWelcom';
 
 const OnBoarding: React.FC = () => {
     const { logOut, buddy } = useAuth();
@@ -114,6 +115,19 @@ const OnBoarding: React.FC = () => {
     return (
         <section>
             {step > 0 && <ProgressIndicator step={step} counts={7} />}
+
+            <div className="flex flex-col">
+                {step === 0 && <OnBoardingWelcome />}
+                {/* {step === 1 && <SelectRegionPage />}
+                    {step === 2 && <SelectDatePage />}
+                    {step === 3 && <SelectTripThemesPage />}
+                    {step === 4 && <SelectAdditionalBuddyThemes />}
+                    {step === 5 && <WriteTrip />}
+                    {step === 6 && <CompletePage />} */}
+            </div>
+            <div className="flex justify-center">
+                <NextButton className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-full" />
+            </div>
 
             <form onSubmit={handleSubmit}>
                 <label htmlFor="nickname">닉네임</label>
