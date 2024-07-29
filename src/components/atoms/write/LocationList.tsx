@@ -40,7 +40,7 @@ function LocationList({
                     <div key={subLocation.name.en} className="flex-none">
                         <Chip
                             selected={
-                                selectedLocationName === subLocation.name.en
+                                selectedLocationName === subLocation.name.ko
                             }
                             onClick={() => onChipClick(subLocation.name.ko)}
                         >
