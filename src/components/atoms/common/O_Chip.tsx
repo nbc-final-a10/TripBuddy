@@ -1,5 +1,7 @@
+import { type Gender } from '@/types/Gender.types';
 import { type SecondLevelNames } from '@/types/Location.types';
 import { type MBTI } from '@/types/Mbtis.types';
+import { type MeetingPlace } from '@/types/MeetingPlace.types';
 import { type BuddyTheme, type TripTheme } from '@/types/Themes.types';
 import { tailwindMerge } from '@/utils/ui/tailwind_merge';
 import { VariantProps, cva } from 'class-variance-authority';
@@ -73,6 +75,13 @@ const chipVariants = cva(
                 // ISFP: 'bg-orange-400 border-orange-400 text-white',
                 // ESTP: 'bg-amber-500 border-amber-500 text-white',
                 // ESFP: 'bg-amber-400 border-amber-400 text-white',
+
+                // 남자만: 'bg-gray-400 border-gray-400 text-white',
+                // 여자만: 'bg-gray-400 border-gray-400 text-white',
+                // 상관없음: 'bg-gray-400 border-gray-400 text-white',
+
+                // 출발지: 'bg-indigo-500 border-indigo-500 text-white',
+                // 여행지: 'bg-teal-500 border-teal-500 text-white',
             },
             variant: {
                 selected: 'bg-main-color border-main-color',
@@ -106,10 +115,15 @@ const chipVariants = cva(
 type ChipVariantsType = VariantProps<typeof chipVariants>;
 
 type ChipProps = {
-    label?: SecondLevelNames | MBTI | TripTheme | BuddyTheme;
-    children?: React.ReactNode;
-    selected?: boolean;
-    onClick?: (e: React.MouseEvent<HTMLSpanElement>) => void;
+    children:
+        | SecondLevelNames
+        | MBTI
+        | TripTheme
+        | BuddyTheme
+        | Gender
+        | MeetingPlace;
+    selected: boolean;
+    onClick: (e: React.MouseEvent<HTMLSpanElement>) => void;
 } & ChipVariantsType &
     React.ComponentProps<'span'>;
 
