@@ -2,6 +2,7 @@ import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 import LeftSmGrayText from '@/components/atoms/write/LeftSmGrayText';
 import useCalendar from '@/hooks/useCalendar';
 import React from 'react';
+import SelectedResultRealtimeText from './SelectedResultRealtimeText';
 
 export default function SelectDatePage() {
     const { SelectCalendar, startDateTimestamp, endDateTimestamp } =
@@ -15,7 +16,16 @@ export default function SelectDatePage() {
                 <Left2xlBoldText text={title} />
                 <LeftSmGrayText text={subtitle} />
             </div>
-            <SelectCalendar />
+            <div className="flex justify-center">
+                <SelectCalendar />
+            </div>
+            <div>
+                <SelectedResultRealtimeText
+                    selectedData={`${startDateTimestamp} ~ ${endDateTimestamp}`}
+                    firstLabel="선택하신 날짜는"
+                    secondLabel="입니다."
+                />
+            </div>
         </>
     );
 }
