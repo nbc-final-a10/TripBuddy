@@ -3,15 +3,19 @@ import Title from '@/components/atoms/common/O_Title';
 import OnBoardingButtonWrapper from '@/components/atoms/onboarding/OnBoardingButtonWrapper';
 import OnBoardingWrapper from '@/components/atoms/onboarding/OnBoardingWrapper';
 
-const OnBoardingInputAge = () => {
+type OnBoardingInputProps = {
+    mode: 'age' | 'nickname';
+};
+
+const OnBoardingInput = ({ mode }: OnBoardingInputProps) => {
     return (
         <OnBoardingWrapper>
-            <Title>{`나이를 입력해주세요`}</Title>
+            <Title>{`${mode === 'age' ? '나이' : '닉네임'}을 입력해주세요`}</Title>
             <OnBoardingButtonWrapper>
                 <Input
                     type="text"
-                    placeholder="나이 입력"
-                    name="age"
+                    placeholder={mode === 'age' ? '나이' : '닉네임'}
+                    name={mode === 'age' ? 'age' : 'nickname'}
                     className="w-[90%] h-[80px]"
                 />
             </OnBoardingButtonWrapper>
@@ -19,4 +23,4 @@ const OnBoardingInputAge = () => {
     );
 };
 
-export default OnBoardingInputAge;
+export default OnBoardingInput;
