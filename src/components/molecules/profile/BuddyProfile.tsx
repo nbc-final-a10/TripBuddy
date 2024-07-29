@@ -1,15 +1,20 @@
 import EditProfileButton from '@/components/atoms/profile/EditProfileButton';
 import ProfileImage from '@/components/atoms/profile/ProfileImage';
-import { BuddyProfileProps } from '@/types/ProfileParams.types';
+import { useAuth } from '@/hooks/auth';
+import Link from 'next/link';
 import React from 'react';
 
-export default function BuddyProfile({ id }: BuddyProfileProps) {
+export default function BuddyProfile() {
+    const { buddy } = useAuth();
+
     return (
         <div className="flex flex-col items-center justify-center p-4 mt-4 xl:mt-8">
             <div className="flex items-center">
                 <div className="flex flex-col items-center">
                     <ProfileImage />
-                    <EditProfileButton />
+                    <Link href={`/profile/edit/${buddy?.buddy_id}`}>
+                        <EditProfileButton />
+                    </Link>
                 </div>
                 <div className="ml-4">
                     <div className="flex flex-col ">

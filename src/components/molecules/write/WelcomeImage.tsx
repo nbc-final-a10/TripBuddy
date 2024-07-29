@@ -4,7 +4,7 @@ import React from 'react';
 export default function WelcomeImage() {
     return (
         <Image
-            src="https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202307/27/267ce76a-0edc-494a-8116-822e4a2c38f6.jpg"
+            src="/buddy_mascot.webp"
             alt="buddy character"
             width={250}
             height={250}

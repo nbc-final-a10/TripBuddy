@@ -19,10 +19,6 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
-                hostname: '**.joongang.co.kr',
-            },
-            {
-                protocol: 'https',
                 hostname: 'ssl.pstatic.net',
             },
         ],

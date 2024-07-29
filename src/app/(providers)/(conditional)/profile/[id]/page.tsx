@@ -4,15 +4,18 @@ import BuddyTemperature from '@/components/atoms/profile/BuddyTemperature';
 import MyTrips from '@/components/atoms/profile/MyTrips';
 import BuddyFollow from '@/components/molecules/profile/BuddyFollow';
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
+import { useAuth } from '@/hooks/auth';
 import { ProfilePageProps } from '@/types/ProfileParams.types';
+import { Buddy } from '@/types/Auth.types';
 
 function ProfilePage({ params }: ProfilePageProps) {
+    const { buddy } = useAuth();
     return (
         <>
             <section>유저 아이디 {params.id}</section>
 
             <section className="flex flex-col items-center justify-center w-full h-full">
-                <BuddyProfile id={params.id} />
+                <BuddyProfile />
             </section>
 
             <section className="w-full h-full">
