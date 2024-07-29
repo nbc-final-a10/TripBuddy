@@ -1,6 +1,5 @@
 import WelcomeImage from '@/components/molecules/write/WelcomeImage';
 import WelcomeMessage from '@/components/molecules/write/WelcomeMessage';
-import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
 import React from 'react';
 
 type WelcomePageProps = {
