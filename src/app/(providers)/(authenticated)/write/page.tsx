@@ -14,6 +14,7 @@ import { useAuth } from '@/hooks/auth';
 import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
 import useCalendar from '@/hooks/useCalendar';
 import useSelectRegion from '@/hooks/useSelectRegion';
+import usePreferTheme from '@/hooks/usePreferTheme';
 
 const WritePage: React.FC = () => {
     const { NextButton, step } = useNextButton({
@@ -33,6 +34,9 @@ const WritePage: React.FC = () => {
         secondLevelLocation,
         thirdLevelLocation,
     } = useSelectRegion();
+    const [PreferThemeToRender, selectedTheme] = usePreferTheme({
+        mode: 'trip',
+    });
 
     // Todo: 핸들러 함수 정의 (커스텀 훅의 state를 supabase에 한번에 쓰는 함수) -> WritePage에 함수만 내려주기
 
@@ -59,7 +63,11 @@ const WritePage: React.FC = () => {
                             SelectCalendar={SelectCalendar}
                         />
                     )}
-                    {step === 3 && <SelectTripThemesPage />}
+                    {step === 3 && (
+                        <SelectTripThemesPage
+                            PreferThemeToRender={PreferThemeToRender}
+                        />
+                    )}
                     {step === 4 && <SelectAdditionalBuddyThemes />}
                     {step === 5 && (
                         <WriteTrip
