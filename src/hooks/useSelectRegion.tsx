@@ -65,8 +65,6 @@ export default function useSelectRegion() {
             setSelectedSecondLevelLocations(thirdLevel as ThirdLevel[]);
         };
 
-        console.log(`secondLevelLocation: ${secondLevelLocation}`);
-
         return (
             <>
                 {/* 국내/해외 스위치 버튼 */}
