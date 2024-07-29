@@ -15,11 +15,11 @@ const OnBoardingInput = forwardRef(({ mode }: OnBoardingInputProps, ref) => {
             {mode === 'nickname' && (
                 <Title className="text-2xl">안녕하세요!</Title>
             )}
-            <Title>{`${mode === 'age' ? '나이를' : '먼저 닉네임을'} 입력해주세요`}</Title>
+            <Title>{`${mode === 'age' ? '나이를' : '먼저 이름을'} 입력해주세요`}</Title>
             <OnBoardingInnerWrapper>
                 <Input
                     type={mode === 'age' ? 'number' : 'text'}
-                    placeholder={mode === 'age' ? '나이' : '닉네임'}
+                    placeholder={mode === 'age' ? '나이' : '이름'}
                     name={mode === 'age' ? 'age' : 'nickname'}
                     className="w-[90%] h-[80px]"
                     ref={ref as React.LegacyRef<HTMLInputElement>}
