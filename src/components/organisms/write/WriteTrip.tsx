@@ -1,14 +1,14 @@
 import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
-import SlateEditor from '@/components/atoms/write/SlateEditor';
 import React, { useState } from 'react';
 import { Descendant } from 'slate';
 
-const initialContent: Descendant[] = [
-    {
-        type: 'paragraph',
-        children: [{ text: '' }],
-    },
-];
+// slate.js용 type
+// const initialContent: Descendant[] = [
+//     {
+//         type: 'paragraph',
+//         children: [{ text: '' }],
+//     },
+// ];
 
 type WriteTripProps = {
     buddyCounts: number;
@@ -22,7 +22,7 @@ export default function WriteTrip({
     endDateTimestamp,
 }: WriteTripProps) {
     const [title, setTitle] = useState('');
-    const [content, setContent] = useState<Descendant[]>(initialContent);
+    const [content, setContent] = useState('');
 
     console.log(`정말로 되는지: ${buddyCounts}`);
     console.log(`정말로 되는지: ${startDateTimestamp}`);
@@ -32,10 +32,11 @@ export default function WriteTrip({
         setTitle(e.target.value);
     };
 
-    const handleContentChange = (value: Descendant[]) => {
-        setContent(value);
+    const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setContent(e.target.value);
     };
 
+    // Todo : 페이지 컴포넌트로 빠져야 함 -> 이 페이지에서는 Props로 함수만 전달 받기
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         // Todo: 게시글 작성 로직 추가
@@ -76,19 +77,27 @@ export default function WriteTrip({
                     <label className="block mb-1 text-sm font-medium text-gray-700">
                         글 내용
                     </label>
-                    <SlateEditor
+                    <textarea
                         value={content}
                         onChange={handleContentChange}
+                        placeholder="내용을 입력해주세요."
+                        className="w-full px-3 py-2 border border-gray-300 rounded"
                     />
+
+                    {/* Todo: SlateEditor UT 이후 추후 구현 */}
+                    {/* <SlateEditor
+                        value={content}
+                        onChange={handleContentChange}
+                    /> */}
                 </div>
-                <div>
+                {/* <div>
                     <button
                         type="submit"
                         className="w-full px-4 py-2 font-semibold text-white bg-blue-500 rounded hover:bg-blue-600"
                     >
                         제출 테스트 버튼
                     </button>
-                </div>
+                </div> */}
             </form>
         </div>
     );
