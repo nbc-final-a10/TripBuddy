@@ -1,37 +1,39 @@
-import React, { useState } from 'react';
-import MessageInput from '@/components/atoms/chatpage/MessageInput';
+'use client';
 
-type Message = {
-    id: number;
-    text: string;
-    user: string;
-    timestamp: string;
-};
+import supabase from '@/utils/supabase/client';
+import MessageInput from '@/components/atoms/chatpage/MessageInput';
+import { Message } from '@/types/Chat.types';
+import { useAuth } from '@/hooks/auth';
+import ChatMessageList from './ChatMessageList';
+import React from 'react';
 
 const ChatMessage: React.FC = () => {
-    const [messages, setMessages] = useState<Message[]>([
-        {
-            id: 1,
-            text: '안녕하세요! 새로 들어오셨군요~',
-            user: '프사1',
-            timestamp: '20:22',
-        },
-        { id: 2, text: '와아 반가워요!!', user: '프사2', timestamp: '20:23' },
-    ]);
+    const { buddy } = useAuth();
 
-    const currentUser = '프사3';
+    const handleSendMessage = async (messageText: string) => {
+        if (!buddy || !buddy.buddy_id) {
+            console.error('Buddy is not logged in or buddy_id is missing');
+            return;
+        }
 
-    const handleSendMessage = (messageText: string) => {
-        const newMessage: Message = {
-            id: messages.length + 1,
-            text: messageText,
-            user: currentUser,
-            timestamp: new Date().toLocaleTimeString('en-GB', {
-                hour: '2-digit',
-                minute: '2-digit',
-            }),
+        const newMessage: Omit<Message, 'message_id'> = {
+            message_content: messageText,
+            message_sender_id: buddy.buddy_id,
+            message_created_at: new Date().toISOString(),
+            message_type: 'text',
+            message_trip_id: null,
         };
-        setMessages([...messages, newMessage]);
+
+        // Supabase에 메시지 삽입
+        const { data, error } = await supabase
+            .from('messages')
+            .insert([newMessage])
+            .select();
+
+        if (error) {
+            console.error('Error inserting message:', error);
+        } else if (data && data.length > 0) {
+        }
     };
 
     return (
@@ -57,43 +59,7 @@ const ChatMessage: React.FC = () => {
                         2024년 7월 10일
                     </p>
                 </div>
-                <div className="px-6">
-                    {messages.map(message => (
-                        <div
-                            key={message.id}
-                            className={`py-2 flex ${
-                                message.user === currentUser
-                                    ? 'justify-end'
-                                    : 'justify-start'
-                            }`}
-                        >
-                            {message.user !== currentUser && (
-                                <div className="w-[40px] h-[40px] bg-gray-200 text-xs rounded-full flex justify-center items-center">
-                                    {message.user}
-                                </div>
-                            )}
-                            <div className="p-2 pt-4 flex flex-col">
-                                <p
-                                    className={`inline-block text-xs bg-gray-200 p-4 rounded-2xl ${
-                                        message.user === currentUser
-                                            ? 'rounded-tr-none'
-                                            : 'rounded-tl-none'
-                                    }`}
-                                >
-                                    {message.text}
-                                </p>
-                                <span className="text-xs text-gray-500 mt-1">
-                                    {message.timestamp}
-                                </span>
-                            </div>
-                            {message.user === currentUser && (
-                                <div className="w-[40px] h-[40px] bg-gray-200 text-xs rounded-full flex justify-center items-center">
-                                    {message.user}
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
+                <ChatMessageList />
                 <MessageInput onSendMessage={handleSendMessage} />
             </section>
         </>
