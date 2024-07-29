@@ -6,12 +6,14 @@ type UseNextButtonProps = {
     initialStep?: number;
     limit: number;
     buttonText: string;
+    onNextButtonClick?: () => void;
 };
 
 const useNextButton = ({
     initialStep = 0,
     limit,
     buttonText,
+    onNextButtonClick = () => {},
 }: UseNextButtonProps) => {
     const [step, setStep] = useState(initialStep);
 
@@ -19,7 +21,8 @@ const useNextButton = ({
         if (step < limit) {
             setStep(prevStep => prevStep + 1);
         }
-    }, [setStep, step, limit]);
+        onNextButtonClick();
+    }, [setStep, step, limit, onNextButtonClick]);
 
     const NextButton = ({ className }: { className: string }) => (
         <button onClick={handleNext} className={className}>
