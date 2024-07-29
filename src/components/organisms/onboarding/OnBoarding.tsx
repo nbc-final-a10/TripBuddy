@@ -1,39 +1,68 @@
 'use client';
 
-import Chip from '@/components/atoms/common/O_Chip';
-import locationData from '@/data/location';
-import { mbtis } from '@/data/mbtis';
+import ProgressIndicator from '@/components/atoms/write/ProgressIndicator';
 import { useAuth } from '@/hooks/auth';
 import { useUpdateBuddyMutation } from '@/hooks/queries';
+import useNextButton from '@/hooks/useFunnelNextStep';
 import usePreferTheme from '@/hooks/usePreferTheme';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import React, { FormEvent, MouseEvent, useEffect, useState } from 'react';
+import React, {
+    FormEvent,
+    MouseEvent,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
+import OnBoardingDivider from './OnBoardingDivider';
+import OnBoardingSelectGender from './OnBoardingSelectGender';
+import OnBoardingInput from './OnBoardingInput';
+import OnBoardingSelectLocationMbti from './OnBoardingSelectLocationMbti';
+import OnBoardingSelectPrefer from './OnBoardingSelectPrefer';
 
-const OnBoardingPage: React.FC = () => {
+const OnBoarding: React.FC = () => {
     const { logOut, buddy } = useAuth();
 
     const { mutate, isPending, error } = useUpdateBuddyMutation();
 
     const [PreferBuddyTheme, selectedBuddyTheme] = usePreferTheme({
         mode: 'buddy',
-        isLabel: true,
     });
 
     const [PreferTripTheme, selectedTripTheme] = usePreferTheme({
         mode: 'trip',
-        isLabel: true,
     });
+
+    const { NextButton, step } = useNextButton({
+        buttonText: '다음',
+        limit: 9,
+    });
+
+    const nicknameRef = useRef<HTMLInputElement>(null);
+    const ageRef = useRef<HTMLInputElement>(null);
+    const genderRef = useRef<HTMLDivElement>(null);
 
     const [selectedLocation, setSelectedLocation] = useState<string>('');
     const [selectedMbti, setSelectedMbti] = useState<string>('');
 
+    const handleTestClick = () => {
+        if (nicknameRef.current?.value) console.log(nicknameRef.current?.value);
+        if (ageRef.current?.value) console.log(ageRef.current?.value);
+    };
+
+    const handleGenderButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
+        const target = e.currentTarget;
+        console.log('선택된 성별 ===>', target.innerText);
+    };
+
     const handleLocationChange = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
+        console.log('선택된 장소 ===>', target.innerText);
         setSelectedLocation(target.innerText);
     };
 
     const handleMbtiChange = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
+        console.log('선택된 MBTI ===>', target.innerText);
         setSelectedMbti(target.innerText);
     };
 
@@ -104,16 +133,64 @@ const OnBoardingPage: React.FC = () => {
         }
     }, [error]);
 
-    return (
-        <div>
-            <p>TestPage</p>
-            <div>
-                <button className="text-red-500" onClick={() => logOut()}>
-                    로그아웃
-                </button>
-            </div>
+    useEffect(() => {
+        console.log('선택된 버디 테마 ===>', selectedBuddyTheme);
+        console.log('선택된 여정 테마 ===>', selectedTripTheme);
+    }, [selectedBuddyTheme, selectedTripTheme]);
 
-            <form onSubmit={handleSubmit}>
+    return (
+        <section className="w-full h-[calc(100dvh-57px-58px)]">
+            <ProgressIndicator step={step} counts={9} />
+
+            <div className="flex flex-col w-full h-[80%]">
+                {step === 0 && (
+                    <OnBoardingInput mode="nickname" ref={nicknameRef} />
+                )}
+                {step === 1 && <OnBoardingDivider mode="welcome" />}
+                {step === 2 && <OnBoardingInput mode="age" ref={ageRef} />}
+                {step === 3 && (
+                    <OnBoardingSelectGender
+                        handleClick={handleGenderButtonClick}
+                    />
+                )}
+                {step === 4 && (
+                    <OnBoardingSelectLocationMbti
+                        mode="location"
+                        selected={selectedLocation}
+                        handleChange={handleLocationChange}
+                    />
+                )}
+                {step === 5 && (
+                    <OnBoardingSelectLocationMbti
+                        mode="mbti"
+                        selected={selectedMbti}
+                        handleChange={handleMbtiChange}
+                    />
+                )}
+                {step === 6 && <OnBoardingDivider mode="middle" />}
+                {step === 7 && (
+                    <OnBoardingSelectPrefer
+                        mode="buddy"
+                        component={<PreferBuddyTheme />}
+                    />
+                )}
+                {step === 8 && (
+                    <OnBoardingSelectPrefer
+                        mode="trip"
+                        component={<PreferTripTheme />}
+                    />
+                )}
+                {step === 9 && <OnBoardingDivider mode="end" />}
+            </div>
+            <div className="flex justify-center">
+                <NextButton
+                    className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-full"
+                    onNextButtonClick={handleTestClick}
+                />
+            </div>
+            <button onClick={logOut}>임시로그아웃</button>
+
+            {/* <form onSubmit={handleSubmit}>
                 <label htmlFor="nickname">닉네임</label>
                 <input
                     type="text"
@@ -188,9 +265,9 @@ const OnBoardingPage: React.FC = () => {
                 >
                     제출
                 </button>
-            </form>
-        </div>
+            </form> */}
+        </section>
     );
 };
 
-export default OnBoardingPage;
+export default OnBoarding;
