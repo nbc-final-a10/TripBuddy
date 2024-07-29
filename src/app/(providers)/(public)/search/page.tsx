@@ -51,7 +51,7 @@ const SearchPage: React.FC = () => {
 
     return (
         <main className="p-5 xl:p-0 xl:py-5">
-            <section className="flex flex-col mx-auto my-10 xl:flex-row xl: items-center xl:justify-center">
+            <section className="flex flex-col mx-auto mb-10 mt-6 xl:flex-row xl: items-center xl:justify-center">
                 <input
                     type="text"
                     placeholder="검색어를 입력하세요"
