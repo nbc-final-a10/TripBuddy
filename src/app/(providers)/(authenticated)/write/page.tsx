@@ -22,7 +22,6 @@ const WritePage: React.FC = () => {
         limit: 6,
     });
     const { buddy } = useAuth();
-    console.log(`buddy: ${buddy}`);
     const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
     const { SelectCalendar, startDateTimestamp, endDateTimestamp } =
         useCalendar();
@@ -40,6 +39,30 @@ const WritePage: React.FC = () => {
     });
 
     // Todo: 핸들러 함수 정의 (커스텀 훅의 state를 supabase에 한번에 쓰는 함수) -> WritePage에 함수만 내려주기
+    const handleWriteTrip = async () => {
+        const response = await fetch('/api/write', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tripData),
+        });
+
+        const result = await response.json();
+        console.log(`게시글 업데이트 결과: ${result}`);
+    };
+
+    const tripData = {
+        title: '테스트제목',
+        content: '테스트내용',
+        buddy: { buddy_id: buddy?.buddy_id },
+        buddyCounts: buddyCounts,
+        startDateTimestamp: startDateTimestamp,
+        endDateTimestamp: endDateTimestamp,
+        thirdLevelLocation: thirdLevelLocation,
+        selectedTripThemes: selectedTripThemes,
+        selectedBuddyThemes: selectedBuddyThemes,
+    };
 
     return (
         <>
@@ -74,17 +97,14 @@ const WritePage: React.FC = () => {
                             PreferThemeToRender={PreferThemeToRender}
                         />
                     )}
-                    {step === 5 && (
-                        <WriteTrip
-                            firstLevelLocation={firstLevelLocation}
-                            secondLevelLocation={secondLevelLocation || ''}
-                            thirdLevelLocation={thirdLevelLocation || ''}
-                        />
-                    )}
+                    {step === 5 && <WriteTrip />}
                     {step === 6 && <CompletePage />}
                 </div>
                 <div className="flex justify-center">
-                    <NextButton className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-full" />
+                    <NextButton
+                        className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-full"
+                        onClick={step === 5 ? handleWriteTrip : undefined}
+                    />
                 </div>
             </section>
         </>
