@@ -1,6 +1,7 @@
 import React from 'react';
+import { BuddyProfileProps } from '@/types/ProfileParams.types';
 
-export default function BuddyFollow() {
+export default function BuddyFollow({ id }: BuddyProfileProps) {
     return (
         <div className="mt-4 flex items-center justify-center mx-4 space-x-4">
             {/* 등급표 */}

@@ -6,7 +6,7 @@ import React from 'react';
 export default function SelectTripThemesPage() {
     const [PreferThemeToRender, selectedTheme] = usePreferTheme({
         mode: 'trip',
-        isLabel: true,
+        // isLabel: true,
     });
     console.log(`selectedTheme: ${selectedTheme}`);
     return (

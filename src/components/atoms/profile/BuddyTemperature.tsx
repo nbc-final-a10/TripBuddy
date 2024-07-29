@@ -1,8 +1,9 @@
 'use client';
 
+import { BuddyProfileProps } from '@/types/ProfileParams.types';
 import React, { useState } from 'react';
 
-const BuddyTemperature = () => {
+const BuddyTemperature = ({ id }: BuddyProfileProps) => {
     const [temperature, setTemperature] = useState(36.5);
 
     return (
