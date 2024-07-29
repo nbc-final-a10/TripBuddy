@@ -47,8 +47,7 @@ const AgeCount: React.FC = () => {
                         max="100"
                         value={minAge}
                         onChange={handleMinAgeChange}
-                        className="absolute w-full h-2 bg-transparent pointer-events-auto appearance-none"
-                        style={{ zIndex: minAge >= maxAge - 10 ? 2 : 1 }}
+                        className={`absolute w-full h-2 bg-transparent appearance-none pointer-events-auto ${minAge >= maxAge - 10 ? 'z-20' : 'z-10'}`}
                     />
                     <input
                         type="range"
@@ -56,8 +55,7 @@ const AgeCount: React.FC = () => {
                         max="100"
                         value={maxAge}
                         onChange={handleMaxAgeChange}
-                        className="absolute w-full h-2 bg-transparent pointer-events-auto appearance-none"
-                        style={{ zIndex: maxAge <= minAge + 10 ? 2 : 1 }}
+                        className={`absolute w-full h-2 bg-transparent appearance-none pointer-events-auto ${maxAge <= minAge + 10 ? 'z-20' : 'z-10'}`}
                     />
                     <div className="relative z-0 h-2 bg-gray-200 rounded-full">
                         <div
