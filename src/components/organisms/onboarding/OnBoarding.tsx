@@ -19,6 +19,7 @@ import React, {
 import OnBoardingWelcome from './OnBoardingWelcom';
 import OnBoardingSelectGender from './OnBoardingSelectGender';
 import OnBoardingInput from './OnBoardingInput';
+import OnBoardingSelectMbti from './OnBoardingSelectMbti';
 
 const OnBoarding: React.FC = () => {
     const { logOut, buddy } = useAuth();
@@ -60,6 +61,8 @@ const OnBoarding: React.FC = () => {
 
     const handleMbtiChange = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
+
+        console.log(target.innerText);
         setSelectedMbti(target.innerText);
     };
 
@@ -143,6 +146,12 @@ const OnBoarding: React.FC = () => {
                     <OnBoardingInput mode="age" ref={ageRef} />
                 )}
                 {!isStart && step === 2 && <OnBoardingSelectGender />}
+                {!isStart && step === 3 && (
+                    <OnBoardingSelectMbti
+                        selectedMbti={selectedMbti}
+                        handleMbtiChange={handleMbtiChange}
+                    />
+                )}
             </div>
             <div className="flex justify-center">
                 {isStart && (

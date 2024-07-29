@@ -1,6 +1,6 @@
 import Input from '@/components/atoms/common/O_Input';
 import Title from '@/components/atoms/common/O_Title';
-import OnBoardingButtonWrapper from '@/components/atoms/onboarding/OnBoardingButtonWrapper';
+import OnBoardingInnerWrapper from '@/components/atoms/onboarding/OnBoardinginnerWrapper';
 import OnBoardingWrapper from '@/components/atoms/onboarding/OnBoardingWrapper';
 import React, { forwardRef } from 'react';
 
@@ -13,7 +13,7 @@ const OnBoardingInput = forwardRef(({ mode }: OnBoardingInputProps, ref) => {
     return (
         <OnBoardingWrapper>
             <Title>{`${mode === 'age' ? '나이' : '닉네임'}을 입력해주세요`}</Title>
-            <OnBoardingButtonWrapper>
+            <OnBoardingInnerWrapper>
                 <Input
                     type="text"
                     placeholder={mode === 'age' ? '나이' : '닉네임'}
@@ -21,7 +21,7 @@ const OnBoardingInput = forwardRef(({ mode }: OnBoardingInputProps, ref) => {
                     className="w-[90%] h-[80px]"
                     ref={ref as React.LegacyRef<HTMLInputElement>}
                 />
-            </OnBoardingButtonWrapper>
+            </OnBoardingInnerWrapper>
         </OnBoardingWrapper>
     );
 });

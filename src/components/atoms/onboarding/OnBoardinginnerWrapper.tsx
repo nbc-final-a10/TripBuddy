@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 
-const OnBoardingButtonWrapper = ({ children }: PropsWithChildren) => {
+const OnBoardingInnerWrapper = ({ children }: PropsWithChildren) => {
     return (
         <div className="flex flex-col gap-4 w-full h-[80%] items-center justify-center">
             {children}
@@ -8,4 +8,4 @@ const OnBoardingButtonWrapper = ({ children }: PropsWithChildren) => {
     );
 };
 
-export default OnBoardingButtonWrapper;
+export default OnBoardingInnerWrapper;
