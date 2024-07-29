@@ -16,7 +16,7 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import OnBoardingWelcome from './OnBoardingWelcom';
+import OnBoardingDivider from './OnBoardingDivider';
 import OnBoardingSelectGender from './OnBoardingSelectGender';
 import OnBoardingInput from './OnBoardingInput';
 import OnBoardingSelectMbti from './OnBoardingSelectMbti';
@@ -40,8 +40,6 @@ const OnBoarding: React.FC = () => {
         buttonText: '다음',
         limit: 6,
     });
-
-    const [isStart, setIsStart] = useState<boolean>(true);
 
     const nicknameRef = useRef<HTMLInputElement>(null);
     const ageRef = useRef<HTMLInputElement>(null);
@@ -135,39 +133,28 @@ const OnBoarding: React.FC = () => {
 
     return (
         <section className="w-full h-[calc(100dvh-57px-58px)]">
-            {!isStart && <ProgressIndicator step={step} counts={7} />}
+            <ProgressIndicator step={step} counts={7} />
 
-            <div className="flex flex-col w-full h-[90%]">
-                {isStart && <OnBoardingWelcome />}
-                {!isStart && step === 0 && (
+            <div className="flex flex-col w-full h-[80%]">
+                {step === 0 && (
                     <OnBoardingInput mode="nickname" ref={nicknameRef} />
                 )}
-                {!isStart && step === 1 && (
-                    <OnBoardingInput mode="age" ref={ageRef} />
-                )}
-                {!isStart && step === 2 && <OnBoardingSelectGender />}
-                {!isStart && step === 3 && (
+                {step === 1 && <OnBoardingDivider mode="welcome" />}
+                {step === 2 && <OnBoardingInput mode="age" ref={ageRef} />}
+                {step === 3 && <OnBoardingSelectGender />}
+                {step === 4 && (
                     <OnBoardingSelectMbti
                         selectedMbti={selectedMbti}
                         handleMbtiChange={handleMbtiChange}
                     />
                 )}
+                {step === 5 && <OnBoardingDivider mode="middle" />}
             </div>
             <div className="flex justify-center">
-                {isStart && (
-                    <button
-                        onClick={() => setIsStart(false)}
-                        className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-full"
-                    >
-                        시작하기
-                    </button>
-                )}
-                {!isStart && (
-                    <NextButton
-                        className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-full"
-                        onNextButtonClick={handleTestClick}
-                    />
-                )}
+                <NextButton
+                    className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-full"
+                    onNextButtonClick={handleTestClick}
+                />
             </div>
 
             {/* <form onSubmit={handleSubmit}>
