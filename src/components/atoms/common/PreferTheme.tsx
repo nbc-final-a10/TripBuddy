@@ -8,6 +8,7 @@ type PreferThemeProps = {
     handleThemeChange: (e: MouseEvent<HTMLSpanElement>) => void;
     themes: (AllTripTheme | AllBuddyTheme)[];
     label?: string | null;
+    indicate?: boolean;
 };
 
 const PreferTheme = ({
@@ -15,19 +16,22 @@ const PreferTheme = ({
     handleThemeChange,
     themes,
     label = '',
+    indicate = false,
 }: PreferThemeProps) => {
     return (
         <>
             <div className="flex items-center gap-2">
                 {label && <label className="w-full">{label}</label>}
-                <span
-                    className={clsx(
-                        'text-sm w-full text-gray-500',
-                        label ? 'text-right' : 'text-left',
-                    )}
-                >
-                    3가지를 선택해주세요
-                </span>
+                {indicate && (
+                    <span
+                        className={clsx(
+                            'text-sm w-full text-gray-500',
+                            label ? 'text-right' : 'text-left',
+                        )}
+                    >
+                        3가지를 선택해주세요
+                    </span>
+                )}
             </div>
 
             <section className="flex flex-wrap gap-2">

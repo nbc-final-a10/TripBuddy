@@ -143,7 +143,7 @@ const OnBoarding: React.FC = () => {
 
     return (
         <section className="w-full h-[calc(100dvh-57px-58px)]">
-            <ProgressIndicator step={step} counts={7} />
+            <ProgressIndicator step={step} counts={9} />
 
             <div className="flex flex-col w-full h-[80%]">
                 {step === 0 && (
