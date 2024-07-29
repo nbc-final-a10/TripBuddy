@@ -1,6 +1,6 @@
 import { type AllBuddyTheme, type AllTripTheme } from '@/types/Themes.types';
 import Chip from './O_Chip';
-import { MouseEvent, useId } from 'react';
+import { MouseEvent } from 'react';
 import clsx from 'clsx';
 
 type PreferThemeProps = {

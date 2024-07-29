@@ -1,9 +1,6 @@
 'use client';
 
-import Chip from '@/components/atoms/common/O_Chip';
 import ProgressIndicator from '@/components/atoms/write/ProgressIndicator';
-import locationData from '@/data/location';
-import { mbtis } from '@/data/mbtis';
 import { useAuth } from '@/hooks/auth';
 import { useUpdateBuddyMutation } from '@/hooks/queries';
 import useNextButton from '@/hooks/useFunnelNextStep';
