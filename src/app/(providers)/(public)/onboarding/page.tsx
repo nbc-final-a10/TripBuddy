@@ -3,8 +3,8 @@
 import Chip from '@/components/atoms/common/O_Chip';
 import locationData from '@/data/location';
 import { mbtis } from '@/data/mbtis';
-import { buddyThemes, tripThemes } from '@/data/themes';
-import { useAuth, useUpdateBuddyInfoMutation } from '@/hooks/auth.hooks';
+import { useAuth } from '@/hooks/auth';
+import { useUpdateBuddyMutation } from '@/hooks/queries';
 import usePreferTheme from '@/hooks/usePreferTheme';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import React, { FormEvent, MouseEvent, useEffect, useState } from 'react';
@@ -12,7 +12,7 @@ import React, { FormEvent, MouseEvent, useEffect, useState } from 'react';
 const OnBoardingPage: React.FC = () => {
     const { logOut, buddy } = useAuth();
 
-    const { mutate, isPending, error } = useUpdateBuddyInfoMutation();
+    const { mutate, isPending, error } = useUpdateBuddyMutation();
 
     const [PreferBuddyTheme, selectedBuddyTheme] = usePreferTheme({
         mode: 'buddy',
@@ -159,7 +159,6 @@ const OnBoardingPage: React.FC = () => {
                                 location.name.ko,
                             )}
                             onClick={handleLocationChange}
-                            intent={location.name.en}
                         >
                             {location.name.ko}
                         </Chip>
@@ -177,7 +176,6 @@ const OnBoardingPage: React.FC = () => {
                             key={mbti.mbti}
                             selected={selectedMbti.includes(mbti.mbti)}
                             onClick={handleMbtiChange}
-                            intent={mbti.mbti}
                         >
                             {mbti.mbti}
                         </Chip>

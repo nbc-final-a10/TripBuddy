@@ -1,38 +1,32 @@
-const http = require("http");
-const { parse } = require("url");
-const next = require("next");
+const { createServer } = require('https');
+const { parse } = require('url');
+const next = require('next');
+const fs = require('fs');
 
-const https = require("https");
-const fs = require("fs");
+const hostname = 'localhost';
+const port = 3000;
 
-const dev = process.env.NODE_ENV !== "production";
-const app = next({ dev });
+const dev = process.env.NODE_ENV !== 'production';
+const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
 
-const PORT = 3000;
-
 const httpsOptions = {
-    key: fs.readFileSync("./localhost-key.pem"),
-    cert: fs.readFileSync("./localhost.pem"),
+  key: fs.readFileSync('./localhost-key.pem'),
+  cert: fs.readFileSync('./localhost.pem'),
 };
 
 app.prepare().then(() => {
-    http.createServer((req, res) => {
-        const parsedUrl = parse(req.url, true);
-        handle(req, res, parsedUrl);
-    }).listen(PORT, (err) => {
-        if (err) throw err;
-        console.log(`> Ready on http://localhost:${PORT}`);
-    });
-
-    // https 서버 추가
-    https
-        .createServer(httpsOptions, (req, res) => {
-            const parsedUrl = parse(req.url, true);
-            handle(req, res, parsedUrl);
-        })
-        .listen(PORT + 1, (err) => {
-            if (err) throw err;
-            console.log(`> HTTPS: Ready on https://localhost:${PORT + 1}`);
-        });
+  createServer(httpsOptions, async (req, res) => {
+    try {
+      const parsedUrl = parse(req.url, true);
+      await handle(req, res, parsedUrl);
+    } catch (err) {
+      console.error('Error occurred handling', req.url, err);
+      res.statusCode = 500;
+      res.end('internal server error');
+    }
+  }).listen(port, (err) => {
+    if (err) throw err;
+    console.log(`> Ready on https://${hostname}:${port}`);
+  });
 });

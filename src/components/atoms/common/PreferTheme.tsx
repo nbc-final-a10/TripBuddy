@@ -36,7 +36,6 @@ const PreferTheme = ({
                         key={theme.en}
                         selected={selectedTheme.includes(theme.ko)}
                         onClick={handleThemeChange}
-                        intent={theme.en}
                     >
                         {theme.ko}
                     </Chip>

@@ -2,7 +2,7 @@
 
 import Input from '@/components/atoms/common/O_Input';
 import { SubmitButton } from '@/components/atoms/common/O_Submit-button';
-import { useAuth } from '@/hooks/auth.hooks';
+import { useAuth } from '@/hooks/auth';
 import { authValidation } from '@/utils/validation';
 import { FormEvent } from 'react';
 
@@ -58,7 +58,7 @@ function ResetForm() {
                 </div>
 
                 <SubmitButton
-                    className="bg-sky-500 w-[70%] text-white rounded-lg px-4 py-2 text-foreground"
+                    className="bg-sky-500 w-[70%] text-white rounded-lg px-4 py-2"
                     pendingText="변경 중..."
                     pending={isPending}
                 >
