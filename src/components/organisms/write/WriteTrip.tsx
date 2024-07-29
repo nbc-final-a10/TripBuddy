@@ -11,14 +11,22 @@ import { Descendant } from 'slate';
 // ];
 
 type WriteTripProps = {
-    finalSelectedLocation: string;
+    firstLevelLocation: string;
+    secondLevelLocation: string;
+    thirdLevelLocation: string;
 };
 
-export default function WriteTrip({ finalSelectedLocation }: WriteTripProps) {
+export default function WriteTrip({
+    firstLevelLocation,
+    secondLevelLocation,
+    thirdLevelLocation,
+}: WriteTripProps) {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
 
-    console.log(`정말로 잘 되는지: ${finalSelectedLocation}`);
+    console.log(`정말로 잘 되는지 1: ${firstLevelLocation}`);
+    console.log(`정말로 잘 되는지 2: ${secondLevelLocation}`);
+    console.log(`정말로 잘 되는지 3: ${thirdLevelLocation}`);
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value);
