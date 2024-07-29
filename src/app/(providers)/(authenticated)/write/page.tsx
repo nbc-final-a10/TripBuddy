@@ -10,7 +10,7 @@ import WelcomePage from '@/components/organisms/write/WelcomePage';
 import WriteTrip from '@/components/organisms/write/WriteTrip';
 import useNextButton from '@/hooks/useFunnelNextStep';
 import React from 'react';
-import { useAuth } from '@/hooks/auth.hooks';
+import { useAuth } from '@/hooks/auth';
 
 const WritePage: React.FC = () => {
     const { NextButton, step } = useNextButton({

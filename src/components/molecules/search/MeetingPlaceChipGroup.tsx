@@ -22,7 +22,7 @@ const MeetingPlaceChipGroup = () => {
                 {meetingPlaceOptions.map(place => (
                     <Chip
                         key={place}
-                        intent={place}
+                        intent="natural"
                         selected={selectedMeetingPlace === place}
                         onClick={() => handleMeetingPlaceClick(place)}
                         // className="w-1/2"

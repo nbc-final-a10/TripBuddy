@@ -15,64 +15,62 @@ const AgeCount: React.FC = () => {
     };
 
     return (
-        <>
-            <div className="py-3">
-                <div className="flex flex-col justify-center items-center mx-auto">
-                    <section className="flex gap-1.5">
-                        <div className="relative">
-                            <input
-                                className="bg-gray-100 rounded-full w-full p-1 px-3 text-right pr-8"
-                                value={minAge}
-                                readOnly
-                            />
-                            <span className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                                세
-                            </span>
-                        </div>
-                        ~
-                        <div className="relative">
-                            <input
-                                className="bg-gray-100 rounded-full w-full p-1 px-3 text-right pr-8"
-                                value={maxAge}
-                                readOnly
-                            />
-                            <span className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                                세
-                            </span>
-                        </div>
-                    </section>
-                    <section className="relative w-full my-3 mt-10">
+        <div className="py-3">
+            <div className="flex flex-col justify-center items-center mx-auto">
+                <section className="flex gap-1.5">
+                    <div className="relative">
                         <input
-                            type="range"
-                            min="0"
-                            max="100"
+                            className="bg-gray-100 rounded-full w-full p-1 px-3 text-right pr-8"
                             value={minAge}
-                            onChange={handleMinAgeChange}
-                            className="absolute w-full h-2 bg-transparent pointer-events-auto appearance-none"
-                            style={{ zIndex: minAge > maxAge - 10 ? 2 : 1 }}
+                            readOnly
                         />
+                        <span className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                            세
+                        </span>
+                    </div>
+                    ~
+                    <div className="relative">
                         <input
-                            type="range"
-                            min="0"
-                            max="100"
+                            className="bg-gray-100 rounded-full w-full p-1 px-3 text-right pr-8"
                             value={maxAge}
-                            onChange={handleMaxAgeChange}
-                            className="absolute w-full h-2 bg-transparent pointer-events-auto appearance-none"
-                            style={{ zIndex: maxAge > minAge + 10 ? 2 : 1 }}
+                            readOnly
                         />
-                        <div className="relative z-0 h-2 bg-gray-200 rounded-full">
-                            <div
-                                className="absolute h-2 bg-blue-500 rounded-full"
-                                style={{
-                                    left: `${minAge}%`,
-                                    width: `${maxAge - minAge}%`,
-                                }}
-                            ></div>
-                        </div>
-                    </section>
-                </div>
+                        <span className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                            세
+                        </span>
+                    </div>
+                </section>
+                <section className="relative w-full my-3 mt-10">
+                    <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={minAge}
+                        onChange={handleMinAgeChange}
+                        className="absolute w-full h-2 bg-transparent pointer-events-auto appearance-none"
+                        style={{ zIndex: minAge >= maxAge - 10 ? 2 : 1 }}
+                    />
+                    <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={maxAge}
+                        onChange={handleMaxAgeChange}
+                        className="absolute w-full h-2 bg-transparent pointer-events-auto appearance-none"
+                        style={{ zIndex: maxAge <= minAge + 10 ? 2 : 1 }}
+                    />
+                    <div className="relative z-0 h-2 bg-gray-200 rounded-full">
+                        <div
+                            className="absolute h-2 bg-blue-500 rounded-full"
+                            style={{
+                                left: `${minAge}%`,
+                                width: `${maxAge - minAge}%`,
+                            }}
+                        ></div>
+                    </div>
+                </section>
             </div>
-        </>
+        </div>
     );
 };
 
