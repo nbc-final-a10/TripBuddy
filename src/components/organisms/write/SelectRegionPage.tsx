@@ -6,6 +6,7 @@ import React from 'react';
 
 type SelectRegionPageProps = {
     SelectRegion: React.FC;
+    pxHeight: number;
 };
 
 export default function SelectRegionPage({

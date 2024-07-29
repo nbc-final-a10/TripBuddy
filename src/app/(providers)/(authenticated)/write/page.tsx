@@ -21,10 +21,8 @@ const WritePage: React.FC = () => {
         buttonText: '다음',
         limit: 6,
     });
-
     const { buddy } = useAuth();
     console.log(`buddy: ${buddy}`);
-
     const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
     const { SelectCalendar, startDateTimestamp, endDateTimestamp } =
         useCalendar();
@@ -33,7 +31,7 @@ const WritePage: React.FC = () => {
         firstLevelLocation,
         secondLevelLocation,
         thirdLevelLocation,
-    } = useSelectRegion();
+    } = useSelectRegion({ pxHeight: 30 });
     const [PreferTripThemesToRender, selectedTripThemes] = usePreferTheme({
         mode: 'trip',
     });
@@ -51,13 +49,13 @@ const WritePage: React.FC = () => {
             <section className="h-dvh flex flex-col">
                 <div className="flex flex-col">
                     {step === 0 && (
-                        <WelcomePage
-                            buddyCounts={buddyCounts}
-                            SelectBuddyCounts={SelectBuddyCounts}
-                        />
+                        <WelcomePage SelectBuddyCounts={SelectBuddyCounts} />
                     )}
                     {step === 1 && (
-                        <SelectRegionPage SelectRegion={SelectRegion} />
+                        <SelectRegionPage
+                            SelectRegion={SelectRegion}
+                            pxHeight={60}
+                        />
                     )}
                     {step === 2 && (
                         <SelectDatePage

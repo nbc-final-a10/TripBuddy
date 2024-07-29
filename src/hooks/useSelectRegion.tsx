@@ -5,6 +5,7 @@ import LocationToggleButton from '@/components/atoms/write/LocationToggleButton'
 import SelectedResultRealtimeText from '@/components/organisms/write/SelectedResultRealtimeText';
 import locationData from '@/data/location';
 import { SecondLevel, ThirdLevel } from '@/types/Location.types';
+import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
 type Location = {
@@ -12,7 +13,11 @@ type Location = {
     subLocations?: Location[];
 };
 
-export default function useSelectRegion() {
+type SelectRegionProps = {
+    pxHeight?: number;
+};
+
+export default function useSelectRegion({ pxHeight = 30 }: SelectRegionProps) {
     // Todo: 이거 클로저 패턴임 추가 학습요
     // finalSelectedLocation은 최종 선택한 지역 이름으로 초기화 됨.
     const [thirdLevelLocation, setThirdLevelLocation] = useState<string>('');
@@ -88,10 +93,17 @@ export default function useSelectRegion() {
                 </section>
 
                 {/* 선택한 지역 렌더링 */}
-                <section>
+                {/* Todo: vh말고 px이 안 먹힘 */}
+                <section
+                    className={clsx(`overflow-y-auto relative`, {
+                        'h-[30vh]': pxHeight === 30,
+                        'h-[60vh]': pxHeight === 60,
+                        'h-[90vh]': pxHeight === 90,
+                    })}
+                >
                     <div className="my-3">
                         {secondLevelLocation && (
-                            <div id="testId">
+                            <div>
                                 {selectedSecondLevelLocations.map(loc => (
                                     <div
                                         key={loc.name}
