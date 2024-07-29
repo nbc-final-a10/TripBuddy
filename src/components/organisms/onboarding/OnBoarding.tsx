@@ -11,6 +11,7 @@ import usePreferTheme from '@/hooks/usePreferTheme';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import React, { FormEvent, MouseEvent, useEffect, useState } from 'react';
 import OnBoardingWelcome from './OnBoardingWelcom';
+import OnBoardingSelectGender from './OnBoardingSelectGender';
 
 const OnBoarding: React.FC = () => {
     const { logOut, buddy } = useAuth();
@@ -31,6 +32,8 @@ const OnBoarding: React.FC = () => {
         buttonText: '다음',
         limit: 6,
     });
+
+    const [isStart, setIsStart] = useState<boolean>(true);
 
     const [selectedLocation, setSelectedLocation] = useState<string>('');
     const [selectedMbti, setSelectedMbti] = useState<string>('');
@@ -114,19 +117,24 @@ const OnBoarding: React.FC = () => {
 
     return (
         <section className="w-full h-[calc(100dvh-57px-58px)]">
-            {step > 0 && <ProgressIndicator step={step} counts={7} />}
+            {!isStart && <ProgressIndicator step={step} counts={7} />}
 
             <div className="flex flex-col w-full h-[90%]">
-                {step === 0 && <OnBoardingWelcome />}
-                {/* {step === 1 && <SelectRegionPage />}
-                    {step === 2 && <SelectDatePage />}
-                    {step === 3 && <SelectTripThemesPage />}
-                    {step === 4 && <SelectAdditionalBuddyThemes />}
-                    {step === 5 && <WriteTrip />}
-                    {step === 6 && <CompletePage />} */}
+                {isStart && <OnBoardingWelcome />}
+                {!isStart && step === 0 && <OnBoardingSelectGender />}
             </div>
             <div className="flex justify-center">
-                <NextButton className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-full" />
+                {isStart && (
+                    <button
+                        onClick={() => setIsStart(false)}
+                        className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-full"
+                    >
+                        시작하기
+                    </button>
+                )}
+                {!isStart && (
+                    <NextButton className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-full" />
+                )}
             </div>
 
             {/* <form onSubmit={handleSubmit}>
