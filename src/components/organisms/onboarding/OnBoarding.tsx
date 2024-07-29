@@ -9,7 +9,13 @@ import { useUpdateBuddyMutation } from '@/hooks/queries';
 import useNextButton from '@/hooks/useFunnelNextStep';
 import usePreferTheme from '@/hooks/usePreferTheme';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import React, { FormEvent, MouseEvent, useEffect, useState } from 'react';
+import React, {
+    FormEvent,
+    MouseEvent,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 import OnBoardingWelcome from './OnBoardingWelcom';
 import OnBoardingSelectGender from './OnBoardingSelectGender';
 import OnBoardingInput from './OnBoardingInput';
@@ -36,8 +42,16 @@ const OnBoarding: React.FC = () => {
 
     const [isStart, setIsStart] = useState<boolean>(true);
 
+    const nicknameRef = useRef<HTMLInputElement>(null);
+    const ageRef = useRef<HTMLInputElement>(null);
+
     const [selectedLocation, setSelectedLocation] = useState<string>('');
     const [selectedMbti, setSelectedMbti] = useState<string>('');
+
+    const handleTestClick = () => {
+        if (nicknameRef.current?.value) console.log(nicknameRef.current?.value);
+        if (ageRef.current?.value) console.log(ageRef.current?.value);
+    };
 
     const handleLocationChange = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
@@ -122,8 +136,12 @@ const OnBoarding: React.FC = () => {
 
             <div className="flex flex-col w-full h-[90%]">
                 {isStart && <OnBoardingWelcome />}
-                {!isStart && step === 0 && <OnBoardingInput mode="nickname" />}
-                {!isStart && step === 1 && <OnBoardingInput mode="age" />}
+                {!isStart && step === 0 && (
+                    <OnBoardingInput mode="nickname" ref={nicknameRef} />
+                )}
+                {!isStart && step === 1 && (
+                    <OnBoardingInput mode="age" ref={ageRef} />
+                )}
                 {!isStart && step === 2 && <OnBoardingSelectGender />}
             </div>
             <div className="flex justify-center">
@@ -136,7 +154,10 @@ const OnBoarding: React.FC = () => {
                     </button>
                 )}
                 {!isStart && (
-                    <NextButton className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-full" />
+                    <NextButton
+                        className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-full"
+                        onNextButtonClick={handleTestClick}
+                    />
                 )}
             </div>
 
