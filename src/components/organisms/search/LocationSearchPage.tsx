@@ -1,6 +1,5 @@
 'use client';
 
-import useStore from '@/app/store';
 import { Chip } from '@/components/molecules/H_chips';
 import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
 import locationData from '@/data/location';
@@ -10,8 +9,7 @@ const getLocalName = (nameObj: { ko: string; en: string }, locale: string) => {
     return locale === 'en' ? nameObj.en : nameObj.ko;
 };
 
-const LocationSearchPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
-    const { setCurrentPage } = useStore();
+const LocationSearchPage: React.FC = () => {
     const [isDomestic, setIsDomestic] = useState(true);
     const [selectedChips, setSelectedChips] = useState<string | null>(null);
     const [selectedThirdLocationName, setSelectedThirdLocationName] = useState<
@@ -19,10 +17,6 @@ const LocationSearchPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     >(null);
 
     const locale = 'ko';
-
-    const handleSelect = () => {
-        setCurrentPage('main');
-    };
 
     // 국내
     const handleDomesticClick = () => {
@@ -144,7 +138,7 @@ const LocationSearchPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             </div>
             <button
                 className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:hidden"
-                onClick={handleSelect}
+                // onClick={handleSelect}
             >
                 선택하기
             </button>
