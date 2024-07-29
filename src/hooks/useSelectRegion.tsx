@@ -4,6 +4,7 @@ import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 import LeftSmGrayText from '@/components/atoms/write/LeftSmGrayText';
 import LocationList from '@/components/atoms/write/LocationList';
 import LocationToggleButton from '@/components/atoms/write/LocationToggleButton';
+import SelectedResultRealtimeText from '@/components/organisms/write/SelectedResultRealtimeText';
 import locationData from '@/data/location';
 import { SecondLevel, ThirdLevel } from '@/types/Location.types';
 import { useEffect, useState } from 'react';
@@ -84,10 +85,10 @@ export default function useSelectRegion() {
 
         return (
             <>
-                <header className="mt-10 mb-5">
+                {/* <header className="mt-10 mb-5">
                     <Left2xlBoldText text="여행지를 선택해주세요" />
                     <LeftSmGrayText text="지역, 국가, 도시를 1개 선택해주세요." />
-                </header>
+                </header> */}
 
                 {/* 국내/해외 스위치 버튼 */}
                 <section className="mb-2">
@@ -155,6 +156,16 @@ export default function useSelectRegion() {
                             </div>
                         )}
                     </div>
+                </section>
+
+                <section>
+                    {finalSelectedLocation && (
+                        <SelectedResultRealtimeText
+                            selectedData={finalSelectedLocation}
+                            firstLabel="선택한 지역은"
+                            secondLabel="입니다."
+                        />
+                    )}
                 </section>
             </>
         );
