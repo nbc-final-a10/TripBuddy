@@ -1,11 +1,12 @@
 'use client';
 
-import { useAuth } from '@/hooks/auth.hooks';
+import { useAuth } from '@/hooks/auth';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { usePathname } from 'next/navigation';
+import React from 'react';
 import { FcGoogle } from 'react-icons/fc';
 
-function GoogleLogInButton() {
+const GoogleLogInButton: React.FC = () => {
     const { loginWithProvider } = useAuth();
     const pathname = usePathname();
 
@@ -24,6 +25,6 @@ function GoogleLogInButton() {
             onClick={handleClickGoogle}
         />
     );
-}
+};
 
 export default GoogleLogInButton;

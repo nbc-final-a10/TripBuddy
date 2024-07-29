@@ -1,4 +1,5 @@
 'use client';
+import NaverLogInButton from '@/components/atoms/auth/NaverLogInButton';
 import GoogleLogInButton from '../../atoms/auth/GoogleLogInButton';
 import KaKaoLogInButton from '../../atoms/auth/KaKaoLogInButton';
 
@@ -14,6 +15,7 @@ function AuthPageBottom() {
             <div className="flex items-center justify-center gap-8">
                 <GoogleLogInButton />
                 <KaKaoLogInButton />
+                <NaverLogInButton />
             </div>
         </>
     );

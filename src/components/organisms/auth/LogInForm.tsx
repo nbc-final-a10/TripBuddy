@@ -1,12 +1,12 @@
 'use client';
 
-import { useAuth } from '@/hooks/auth.hooks';
 import clsx from 'clsx';
 import { useSearchParams } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 import { SubmitButton } from '../../atoms/common/O_Submit-button';
 import { authValidation } from '@/utils/validation';
 import Input from '@/components/atoms/common/O_Input';
+import { useAuth } from '@/hooks/auth';
 
 function LogInForm() {
     const { isPending, logIn, sendingResetEmail } = useAuth();
@@ -108,7 +108,7 @@ function LogInForm() {
                 </div>
 
                 <SubmitButton
-                    className="bg-sky-200 w-[70%] text-white rounded-lg px-4 py-2 text-foreground"
+                    className="bg-sky-200 w-[70%] text-white rounded-lg px-4 py-2"
                     type="submit"
                     pendingText="로딩..."
                     pending={isPending}
