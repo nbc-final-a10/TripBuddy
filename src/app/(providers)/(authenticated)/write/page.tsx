@@ -12,6 +12,7 @@ import useNextButton from '@/hooks/useFunnelNextStep';
 import React from 'react';
 import { useAuth } from '@/hooks/auth';
 import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
+import useCalendar from '@/hooks/useCalendar';
 
 const WritePage: React.FC = () => {
     const { NextButton, step } = useNextButton({
@@ -23,6 +24,8 @@ const WritePage: React.FC = () => {
     console.log(`buddy: ${buddy}`);
 
     const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
+    const { SelectCalendar, startDateTimestamp, endDateTimestamp } =
+        useCalendar();
 
     // Todo: 핸들러 함수 정의 (커스텀 훅의 state를 supabase에 한번에 쓰는 함수) -> WritePage에 함수만 내려주기
 
@@ -40,10 +43,22 @@ const WritePage: React.FC = () => {
                         />
                     )}
                     {step === 1 && <SelectRegionPage />}
-                    {step === 2 && <SelectDatePage />}
+                    {step === 2 && (
+                        <SelectDatePage
+                            startDateTimestamp={startDateTimestamp}
+                            endDateTimestamp={endDateTimestamp}
+                            SelectCalendar={SelectCalendar}
+                        />
+                    )}
                     {step === 3 && <SelectTripThemesPage />}
                     {step === 4 && <SelectAdditionalBuddyThemes />}
-                    {step === 5 && <WriteTrip buddyCounts={buddyCounts} />}
+                    {step === 5 && (
+                        <WriteTrip
+                            buddyCounts={buddyCounts}
+                            startDateTimestamp={startDateTimestamp}
+                            endDateTimestamp={endDateTimestamp}
+                        />
+                    )}
                     {step === 6 && <CompletePage />}
                 </div>
                 <div className="flex justify-center">
