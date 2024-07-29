@@ -14,13 +14,18 @@ const Title: React.FC<O_TitleProps> = ({
 }) => {
     return (
         <div
-            className={clsx('flex flex-col w-full items-center', {
+            className={clsx('flex flex-col w-full items-center py-4', {
                 'justify-start': align === 'left',
                 'justify-end': align === 'right',
                 'justify-center': align === 'center',
             })}
         >
-            <h2 className={clsx('text-black font-bold', className)}>
+            <h2
+                className={clsx(
+                    'text-black font-bold whitespace-pre-wrap text-center',
+                    className,
+                )}
+            >
                 {children}
             </h2>
         </div>

@@ -8,15 +8,15 @@ type MascotImageProps = {
 const MascotImage: React.FC<MascotImageProps> = ({ intent }) => {
     let src = '';
     if (intent === 'main') {
-        src = '/images/mascot_main.png';
+        src = '/images/mascot_main.webp';
     } else if (intent === 'happy') {
-        src = '/images/mascot_happy.png';
+        src = '/images/mascot_happy.webp';
     } else if (intent === 'blue') {
-        src = '/images/mascot_blue.png';
+        src = '/images/mascot_blue.webp';
     }
     return (
-        <div className="relative w-full flex items-center justify-center">
-            <div className="relative w-1/2 aspect-auto">
+        <div className="relative w-full h-full flex items-center justify-center">
+            <div className="relative w-[80%] h-1/2 aspect-auto">
                 <Image src={src} alt="mascot" fill className="object-contain" />
             </div>
         </div>

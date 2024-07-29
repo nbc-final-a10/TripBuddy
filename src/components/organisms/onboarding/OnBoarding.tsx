@@ -113,10 +113,10 @@ const OnBoarding: React.FC = () => {
     }, [error]);
 
     return (
-        <section>
+        <section className="w-full h-[calc(100dvh-57px-58px)]">
             {step > 0 && <ProgressIndicator step={step} counts={7} />}
 
-            <div className="flex flex-col">
+            <div className="flex flex-col w-full h-[90%]">
                 {step === 0 && <OnBoardingWelcome />}
                 {/* {step === 1 && <SelectRegionPage />}
                     {step === 2 && <SelectDatePage />}

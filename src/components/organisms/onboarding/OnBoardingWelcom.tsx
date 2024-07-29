@@ -10,8 +10,8 @@ const OnBoardingWelcome: React.FC = () => {
     const { buddy } = useAuth();
 
     return (
-        <div className="flex flex-col items-center justify-center h-full">
-            <Title>{`${buddy?.buddy_email}사용자님, 안녕하세요!`}</Title>
+        <div className="flex flex-col items-center justify-center w-full h-full">
+            <Title>{`${buddy?.buddy_email}\n사용자님, 안녕하세요!`}</Title>
             <Paragraph>{`아래의 단계를 따라 여정을 시작해보세요.`}</Paragraph>
             <MascotImage intent="main" />
         </div>
