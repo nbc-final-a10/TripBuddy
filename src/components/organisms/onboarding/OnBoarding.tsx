@@ -18,6 +18,7 @@ import OnBoardingSelectGender from './OnBoardingSelectGender';
 import OnBoardingInput from './OnBoardingInput';
 import OnBoardingSelectLocationMbti from './OnBoardingSelectLocationMbti';
 import OnBoardingSelectPrefer from './OnBoardingSelectPrefer';
+import useSelectRegion from '@/hooks/useSelectRegion';
 
 const OnBoarding: React.FC = () => {
     const { logOut, buddy } = useAuth();
@@ -32,6 +33,9 @@ const OnBoarding: React.FC = () => {
         mode: 'trip',
     });
 
+    const { SelectRegion, secondLevelLocation, thirdLevelLocation } =
+        useSelectRegion();
+
     const { NextButton, step } = useNextButton({
         buttonText: '다음',
         limit: 9,
@@ -39,8 +43,8 @@ const OnBoarding: React.FC = () => {
 
     const nicknameRef = useRef<HTMLInputElement>(null);
     const ageRef = useRef<HTMLInputElement>(null);
-    const genderRef = useRef<HTMLDivElement>(null);
 
+    const [selectedGender, setSelectedGender] = useState<string>('');
     const [selectedLocation, setSelectedLocation] = useState<string>('');
     const [selectedMbti, setSelectedMbti] = useState<string>('');
 
@@ -51,7 +55,9 @@ const OnBoarding: React.FC = () => {
 
     const handleGenderButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
         const target = e.currentTarget;
-        console.log('선택된 성별 ===>', target.innerText);
+        const selectedGender = target.innerText;
+        console.log('선택된 성별 ===>', selectedGender);
+        setSelectedGender(selectedGender);
     };
 
     const handleLocationChange = (e: MouseEvent<HTMLSpanElement>) => {
@@ -136,17 +142,34 @@ const OnBoarding: React.FC = () => {
     useEffect(() => {
         console.log('선택된 버디 테마 ===>', selectedBuddyTheme);
         console.log('선택된 여정 테마 ===>', selectedTripTheme);
-    }, [selectedBuddyTheme, selectedTripTheme]);
+        console.log(
+            '선택된 지역 ===>',
+            secondLevelLocation,
+            thirdLevelLocation,
+        );
+        console.log('선택된 성별 ===>', selectedGender);
+    }, [
+        selectedBuddyTheme,
+        selectedTripTheme,
+        secondLevelLocation,
+        thirdLevelLocation,
+        selectedGender,
+    ]);
 
     return (
         <section className="w-full h-[calc(100dvh-57px-58px)]">
             <ProgressIndicator step={step} counts={9} />
 
-            <div className="flex flex-col w-full h-[80%]">
+            <div className="flex flex-col w-full h-[70%]">
                 {step === 0 && (
                     <OnBoardingInput mode="nickname" ref={nicknameRef} />
                 )}
-                {step === 1 && <OnBoardingDivider mode="welcome" />}
+                {step === 1 && (
+                    <OnBoardingDivider
+                        mode="welcome"
+                        name={nicknameRef.current?.value || ''}
+                    />
+                )}
                 {step === 2 && <OnBoardingInput mode="age" ref={ageRef} />}
                 {step === 3 && (
                     <OnBoardingSelectGender
@@ -158,6 +181,7 @@ const OnBoarding: React.FC = () => {
                         mode="location"
                         selected={selectedLocation}
                         handleChange={handleLocationChange}
+                        SelectRegion={SelectRegion}
                     />
                 )}
                 {step === 5 && (
@@ -167,7 +191,12 @@ const OnBoarding: React.FC = () => {
                         handleChange={handleMbtiChange}
                     />
                 )}
-                {step === 6 && <OnBoardingDivider mode="middle" />}
+                {step === 6 && (
+                    <OnBoardingDivider
+                        mode="middle"
+                        name={nicknameRef.current?.value || ''}
+                    />
+                )}
                 {step === 7 && (
                     <OnBoardingSelectPrefer
                         mode="buddy"
@@ -180,7 +209,12 @@ const OnBoarding: React.FC = () => {
                         component={<PreferTripTheme />}
                     />
                 )}
-                {step === 9 && <OnBoardingDivider mode="end" />}
+                {step === 9 && (
+                    <OnBoardingDivider
+                        mode="end"
+                        name={nicknameRef.current?.value || ''}
+                    />
+                )}
             </div>
             <div className="flex justify-center">
                 <NextButton
