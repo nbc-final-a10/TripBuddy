@@ -1,7 +1,8 @@
-import { useAccordion, Accordion } from '@/hooks/useAccordion';
 import React from 'react';
+import { useAccordion, Accordion } from '@/hooks/useAccordion';
+import { BuddyProfileProps } from '@/types/ProfileParams.types';
 
-export default function MyTrips() {
+export default function MyTrips({ id }: BuddyProfileProps) {
     const participatingAccordion = useAccordion();
     const createdAccordion = useAccordion();
 
