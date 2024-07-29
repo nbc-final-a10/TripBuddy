@@ -4,9 +4,6 @@ import OnBoardingInnerWrapper from '@/components/atoms/onboarding/OnBoardinginne
 import OnBoardingWrapper from '@/components/atoms/onboarding/OnBoardingWrapper';
 import locationData from '@/data/location';
 import { mbtis } from '@/data/mbtis';
-import { SecondLevelNames } from '@/types/Location.types';
-import { MBTI } from '@/types/Mbtis.types';
-import { BuddyTheme, TripTheme } from '@/types/Themes.types';
 import { MouseEvent } from 'react';
 
 type OnBoardingSelectLocationMbtiProps = {

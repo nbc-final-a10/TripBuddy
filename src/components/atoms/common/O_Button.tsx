@@ -1,6 +1,6 @@
 import { VariantProps, cva } from 'class-variance-authority';
 import Link from 'next/link';
-import { ComponentProps, PropsWithChildren } from 'react';
+import React, { ComponentProps, forwardRef, PropsWithChildren } from 'react';
 
 const buttonVariant = cva(
     'border rounded font-semibold transition hover:brightness-90 active:brightness-75',
@@ -67,46 +67,56 @@ type ButtonVariantType = VariantProps<typeof buttonVariant>;
 
 type ButtonProps = {
     selected: boolean;
+    onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 } & ButtonVariantType &
     (
         | ({} & ComponentProps<'button'>)
         | ({ href: string } & ComponentProps<typeof Link>)
     );
 
-function Button({
-    intent = 'primary',
-    size = 'md',
-    selected,
-    children,
-    ...props
-}: PropsWithChildren<ButtonProps>) {
-    if ('href' in props) {
-        return (
-            <a
-                className={buttonVariant({
-                    intent,
-                    size,
-                    variant: selected ? 'selected' : 'unselected',
-                })}
-                {...props}
-            >
-                {children}
-            </a>
-        );
-    } else {
-        return (
-            <button
-                className={buttonVariant({
-                    intent,
-                    size,
-                    variant: selected ? 'selected' : 'unselected',
-                })}
-                {...props}
-            >
-                {children}
-            </button>
-        );
-    }
-}
+const Button = forwardRef(
+    (
+        {
+            intent = 'primary',
+            size = 'md',
+            selected,
+            children,
+            onClick,
+            ...props
+        }: PropsWithChildren<ButtonProps>,
+        ref,
+    ) => {
+        if ('href' in props) {
+            return (
+                <a
+                    className={buttonVariant({
+                        intent,
+                        size,
+                        variant: selected ? 'selected' : 'unselected',
+                    })}
+                    {...props}
+                >
+                    {children}
+                </a>
+            );
+        } else {
+            return (
+                <button
+                    className={buttonVariant({
+                        intent,
+                        size,
+                        variant: selected ? 'selected' : 'unselected',
+                    })}
+                    onClick={onClick}
+                    {...props}
+                >
+                    {children}
+                </button>
+            );
+        }
+    },
+);
+
+Button.displayName = 'Button';
 
 export default Button;

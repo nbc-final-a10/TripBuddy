@@ -20,6 +20,7 @@ import OnBoardingDivider from './OnBoardingDivider';
 import OnBoardingSelectGender from './OnBoardingSelectGender';
 import OnBoardingInput from './OnBoardingInput';
 import OnBoardingSelectLocationMbti from './OnBoardingSelectLocationMbti';
+import OnBoardingSelectPrefer from './OnBoardingSelectPrefer';
 
 const OnBoarding: React.FC = () => {
     const { logOut, buddy } = useAuth();
@@ -28,21 +29,20 @@ const OnBoarding: React.FC = () => {
 
     const [PreferBuddyTheme, selectedBuddyTheme] = usePreferTheme({
         mode: 'buddy',
-        isLabel: true,
     });
 
     const [PreferTripTheme, selectedTripTheme] = usePreferTheme({
         mode: 'trip',
-        isLabel: true,
     });
 
     const { NextButton, step } = useNextButton({
         buttonText: '다음',
-        limit: 6,
+        limit: 9,
     });
 
     const nicknameRef = useRef<HTMLInputElement>(null);
     const ageRef = useRef<HTMLInputElement>(null);
+    const genderRef = useRef<HTMLDivElement>(null);
 
     const [selectedLocation, setSelectedLocation] = useState<string>('');
     const [selectedMbti, setSelectedMbti] = useState<string>('');
@@ -52,15 +52,20 @@ const OnBoarding: React.FC = () => {
         if (ageRef.current?.value) console.log(ageRef.current?.value);
     };
 
+    const handleGenderButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
+        const target = e.currentTarget;
+        console.log('선택된 성별 ===>', target.innerText);
+    };
+
     const handleLocationChange = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
+        console.log('선택된 장소 ===>', target.innerText);
         setSelectedLocation(target.innerText);
     };
 
     const handleMbtiChange = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
-
-        console.log(target.innerText);
+        console.log('선택된 MBTI ===>', target.innerText);
         setSelectedMbti(target.innerText);
     };
 
@@ -131,6 +136,11 @@ const OnBoarding: React.FC = () => {
         }
     }, [error]);
 
+    useEffect(() => {
+        console.log('선택된 버디 테마 ===>', selectedBuddyTheme);
+        console.log('선택된 여정 테마 ===>', selectedTripTheme);
+    }, [selectedBuddyTheme, selectedTripTheme]);
+
     return (
         <section className="w-full h-[calc(100dvh-57px-58px)]">
             <ProgressIndicator step={step} counts={7} />
@@ -141,7 +151,11 @@ const OnBoarding: React.FC = () => {
                 )}
                 {step === 1 && <OnBoardingDivider mode="welcome" />}
                 {step === 2 && <OnBoardingInput mode="age" ref={ageRef} />}
-                {step === 3 && <OnBoardingSelectGender />}
+                {step === 3 && (
+                    <OnBoardingSelectGender
+                        handleClick={handleGenderButtonClick}
+                    />
+                )}
                 {step === 4 && (
                     <OnBoardingSelectLocationMbti
                         mode="location"
@@ -157,6 +171,19 @@ const OnBoarding: React.FC = () => {
                     />
                 )}
                 {step === 6 && <OnBoardingDivider mode="middle" />}
+                {step === 7 && (
+                    <OnBoardingSelectPrefer
+                        mode="buddy"
+                        component={<PreferBuddyTheme />}
+                    />
+                )}
+                {step === 8 && (
+                    <OnBoardingSelectPrefer
+                        mode="trip"
+                        component={<PreferTripTheme />}
+                    />
+                )}
+                {step === 9 && <OnBoardingDivider mode="end" />}
             </div>
             <div className="flex justify-center">
                 <NextButton
