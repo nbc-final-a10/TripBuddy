@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import React, { PropsWithChildren } from 'react';
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -34,6 +35,10 @@ const RootLayout: React.FC<PropsWithChildren> = ({ children }) => {
     return (
         <html lang="en">
             <body className={inter.className}>
+                <Script
+                    src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js"
+                    strategy="beforeInteractive"
+                />
                 <QueryProvider>{children}</QueryProvider>
             </body>
         </html>

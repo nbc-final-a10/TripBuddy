@@ -45,9 +45,7 @@ const TripCard: React.FC<TripCardProps> = ({
                     <div className="flex flex-col gap-2 box-border pb-4">
                         <div className="flex flex-row gap-2">
                             {mode === 'main' && (
-                                <Chip intent="rounded" selected={false}>
-                                    {'국내'}
-                                </Chip>
+                                <Chip selected={false}>{'국내'}</Chip>
                             )}
                             <h2 className="text-lg font-bold text-gray-600">
                                 {'경주'}
@@ -57,9 +55,7 @@ const TripCard: React.FC<TripCardProps> = ({
                         <h3 className="text-lg font-bold">{title}</h3>
 
                         <div className="flex gap-2">
-                            <Chip intent="small" selected={false}>
-                                {'힐링'}
-                            </Chip>
+                            <Chip selected={false}>{'힐링'}</Chip>
                         </div>
                     </div>
 
