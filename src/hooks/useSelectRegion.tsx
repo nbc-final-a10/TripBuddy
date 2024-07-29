@@ -16,9 +16,8 @@ type Location = {
 
 export default function useSelectRegion() {
     // finalSelectedLocation은 최종 선택한 지역 이름으로 초기화 됨.
-    const [finalSelectedLocation, setFinalSelectedLocation] = useState<
-        string | null
-    >(null);
+    const [finalSelectedLocation, setFinalSelectedLocation] =
+        useState<string>('');
 
     const SelectRegion = () => {
         // Todo: useState 말고 string으로 해도 될 듯

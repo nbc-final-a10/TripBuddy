@@ -11,22 +11,14 @@ import { Descendant } from 'slate';
 // ];
 
 type WriteTripProps = {
-    buddyCounts: number;
-    startDateTimestamp: string;
-    endDateTimestamp: string;
+    finalSelectedLocation: string;
 };
 
-export default function WriteTrip({
-    buddyCounts,
-    startDateTimestamp,
-    endDateTimestamp,
-}: WriteTripProps) {
+export default function WriteTrip({ finalSelectedLocation }: WriteTripProps) {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
 
-    console.log(`정말로 되는지: ${buddyCounts}`);
-    console.log(`정말로 되는지: ${startDateTimestamp}`);
-    console.log(`정말로 되는지: ${endDateTimestamp}`);
+    console.log(`정말로 잘 되는지: ${finalSelectedLocation}`);
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value);
