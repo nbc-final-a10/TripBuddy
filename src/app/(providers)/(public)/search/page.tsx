@@ -17,12 +17,12 @@ const SearchPage: React.FC = () => {
 
     const [PreferBuddyTheme, selectedBuddyTheme] = usePreferTheme({
         mode: 'buddy',
-        isLabel: true,
+        // isLabel: true,
     });
 
     const [PreferTripTheme, selectedTripTheme] = usePreferTheme({
         mode: 'trip',
-        isLabel: true,
+        // isLabel: true,
     });
 
     const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
@@ -83,13 +83,13 @@ const SearchPage: React.FC = () => {
 
                 <div className="hidden xl:flex xl:gap-2 xl:w-full xl:ml-5">
                     <button
-                        className="flex-1 px-4 py-2 rounded-[10px] border border-gray-500 text-gray-500 font-semibold text-sm min-w-[130px] py-2.5"
+                        className="flex-1 px-4 py-2 rounded-[10px] border border-gray-500 text-gray-500 font-semibold text-sm min-w-[130px] py-2.5 transition-colors duration-200 ease-in-out active:bg-gray-500 active:text-white"
                         onClick={toggleOptionHidden}
                     >
                         검색 옵션 접기
                     </button>
                     <button
-                        className="flex-1 px-4 py-2 rounded-[10px] bg-gray-500 font-semibold text-white text-sm xl:w-24 min-w-[130px]"
+                        className="flex-1 px-4 py-2 rounded-[10px] bg-gray-500 font-semibold text-white text-sm xl:w-24 min-w-[130px] transition-colors duration-200 ease-in-out active:bg-gray-300"
                         onClick={handleShowResult}
                     >
                         검색 결과 보기
@@ -179,7 +179,7 @@ const SearchPage: React.FC = () => {
             </Accordion>
 
             <button
-                className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 mb-10 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:hidden"
+                className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 mb-10 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:mt-8"
                 onClick={handleShowResult}
             >
                 검색 결과 보기

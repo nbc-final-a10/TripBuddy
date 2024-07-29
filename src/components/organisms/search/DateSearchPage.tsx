@@ -9,12 +9,12 @@ const DateSearchPage: React.FC = () => {
         <section>
             <Calendar />
 
-            <button
+            {/* <button
                 className="flex justify-center items-center mx-auto w-full px-28 py-2 mb-8 rounded-xl bg-gray-500 text-white m-3 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:hidden"
                 // onClick={handleSelect}
             >
                 선택하기
-            </button>
+            </button> */}
         </section>
     );
 };
