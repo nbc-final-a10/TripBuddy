@@ -36,7 +36,7 @@ export default function WriteTrip({
         setContent(e.target.value);
     };
 
-    // Todo : 페이지 컴포넌트로 빠져야 함 -> 이 페이지에서는 Props로 함수만 전달 받기
+    // Todo : 페이지 컴포넌트로 빠져야 함 -> 이 페이���에서는 Props로 함수만 전달 받기
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         // Todo: 게시글 작성 로직 추가
@@ -81,7 +81,7 @@ export default function WriteTrip({
                         value={content}
                         onChange={handleContentChange}
                         placeholder="내용을 입력해주세요."
-                        className="w-full px-3 py-2 border border-gray-300 rounded"
+                        className="w-full h-96 px-3 py-2 border border-gray-300 rounded resize-none"
                     />
 
                     {/* Todo: SlateEditor UT 이후 추후 구현 */}
