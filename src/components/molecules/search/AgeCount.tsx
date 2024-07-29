@@ -15,7 +15,7 @@ const AgeCount: React.FC = () => {
     };
 
     return (
-        <div className="py-3">
+        <>
             <div className="flex flex-col justify-center items-center mx-auto">
                 <section className="flex justify-center items-center gap-1.5 mb-4 w-full mx-auto xl:gap-5">
                     <div className="relative">
@@ -40,7 +40,7 @@ const AgeCount: React.FC = () => {
                         </span>
                     </div>
                 </section>
-                <section className="relative w-full my-3 mt-10">
+                <section className="relative w-full my-3 mt-5">
                     <div className="relative w-full h-2 bg-gray-200 rounded-full">
                         <div
                             className="absolute h-2 bg-main-color rounded-full"
@@ -70,7 +70,7 @@ const AgeCount: React.FC = () => {
                     </div>
                 </section>
             </div>
-        </div>
+        </>
     );
 };
 

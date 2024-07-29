@@ -44,7 +44,7 @@ const GenderChipGroup: React.FC = () => {
     };
 
     return (
-        <div className="flex gap-1.5 mt-3 mb-5">
+        <div className="flex gap-1.5">
             {genderOptions.map(gender => (
                 <Chip
                     key={gender}

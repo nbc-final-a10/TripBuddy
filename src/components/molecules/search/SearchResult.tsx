@@ -29,7 +29,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
                     {items.slice(0, visibleFirstItems).map((item, index) => (
                         <div
                             key={index}
-                            className="relative shadow-lg w-[178px] h-[176px] rounded-lg flex-shrink-0 xl:w-[250px] xl:h-[250px]"
+                            className="relative shadow-lg w-[177px] h-[176px] rounded-lg flex-shrink-0 xl:w-[250px] xl:h-[250px]"
                         >
                             <div>
                                 {finalSelectedLocation && (

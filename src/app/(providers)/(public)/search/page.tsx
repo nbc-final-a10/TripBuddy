@@ -3,6 +3,7 @@
 import AgeCount from '@/components/molecules/search/AgeCount';
 import GenderChipGroup from '@/components/molecules/search/GenderChipGroup';
 import MeetingPlaceChipGroup from '@/components/molecules/search/MeetingPlaceChipGroup';
+import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
 import SearchResult from '@/components/molecules/search/SearchResult';
 import DateSearchPage from '@/components/organisms/search/DateSearchPage';
 import { Accordion, useAccordion } from '@/hooks/useAccordion';
@@ -30,30 +31,6 @@ const SearchPage: React.FC = () => {
 
     const router = useRouter();
 
-    const createdAccordion = useAccordion(true);
-
-    // 아코디언 상태 관리
-    const genderAccordion = useAccordion(true);
-    const ageAccordion = useAccordion(true);
-    const buddyCountsAccordion = useAccordion(true);
-    const meetingPlaceAccordion = useAccordion(true);
-    const regionAccordion = useAccordion(true);
-    const dateAccordion = useAccordion(true);
-    const tripThemeAccordion = useAccordion(true);
-    const buddyThemeAccordion = useAccordion(true);
-
-    // 아코디언 닫기
-    const toggleOptionHidden = () => {
-        genderAccordion.closeAccordion();
-        ageAccordion.closeAccordion();
-        buddyCountsAccordion.closeAccordion();
-        meetingPlaceAccordion.closeAccordion();
-        regionAccordion.closeAccordion();
-        dateAccordion.closeAccordion();
-        tripThemeAccordion.closeAccordion();
-        buddyThemeAccordion.closeAccordion();
-    };
-
     const [items, setItems] = useState(
         Array.from({ length: 10 }, (_, i) => i + 1),
     );
@@ -70,15 +47,6 @@ const SearchPage: React.FC = () => {
 
     const handleShowResult = () => {
         setShowResult(true);
-        // 검색 옵션들 닫기
-        genderAccordion.closeAccordion();
-        ageAccordion.closeAccordion();
-        buddyCountsAccordion.closeAccordion();
-        meetingPlaceAccordion.closeAccordion();
-        regionAccordion.closeAccordion();
-        dateAccordion.closeAccordion();
-        tripThemeAccordion.closeAccordion();
-        buddyThemeAccordion.closeAccordion();
     };
 
     return (
@@ -91,12 +59,12 @@ const SearchPage: React.FC = () => {
                 />
 
                 <div className="hidden xl:flex xl:gap-2 xl:w-full xl:ml-5">
-                    <button
+                    {/* <button
                         className="flex-1 px-4 py-2 rounded-[10px] border border-gray-500 text-gray-500 font-semibold text-sm min-w-[130px] py-2.5 transition-colors duration-200 ease-in-out active:bg-gray-500 active:text-white"
                         onClick={toggleOptionHidden}
                     >
                         검색 옵션 접기
-                    </button>
+                    </button> */}
                     <button
                         className="flex-1 px-4 py-2 rounded-[10px] bg-gray-500 font-semibold text-white text-sm xl:w-24 min-w-[130px] transition-colors duration-200 ease-in-out active:bg-gray-300"
                         onClick={handleShowResult}
@@ -106,86 +74,53 @@ const SearchPage: React.FC = () => {
                 </div>
             </section>
 
-            <Accordion
-                title="성별"
-                isOpen={genderAccordion.isOpen}
-                toggleAccordion={genderAccordion.toggleAccordion}
-            >
+            <div className="my-10">
+                <SearchPageTitle title="성별" description="" />
                 <GenderChipGroup />
-            </Accordion>
-
-            <Accordion
-                title="나이"
-                isOpen={ageAccordion.isOpen}
-                toggleAccordion={ageAccordion.toggleAccordion}
-            >
+            </div>
+            <div className="my-10">
+                <SearchPageTitle title="나이" description="" />
                 <AgeCount />
-            </Accordion>
-
-            <Accordion
-                title="인원수"
-                isOpen={buddyCountsAccordion.isOpen}
-                toggleAccordion={buddyCountsAccordion.toggleAccordion}
-            >
-                <p className="text-sm text-gray-500">
-                    인원수 최대 4명까지 가능해요
-                </p>
+            </div>
+            <div className="my-10">
+                <SearchPageTitle
+                    title="인원수"
+                    description="인원수 최대 4명까지 가능해요."
+                />
                 <SelectBuddyCounts />
-            </Accordion>
-
-            <Accordion
-                title="만남 장소"
-                isOpen={meetingPlaceAccordion.isOpen}
-                toggleAccordion={meetingPlaceAccordion.toggleAccordion}
-            >
+            </div>
+            <div className="my-10">
+                <SearchPageTitle title="만남 장소" description="" />
                 <MeetingPlaceChipGroup />
-            </Accordion>
-
-            <Accordion
-                title="여행지를 선택해주세요"
-                isOpen={regionAccordion.isOpen}
-                toggleAccordion={regionAccordion.toggleAccordion}
-            >
-                <p className="text-sm text-gray-500">
-                    지역, 국가, 도시를 1개 선택해주세요.
-                </p>
+            </div>
+            <div className="my-10">
+                <SearchPageTitle
+                    title="여행지를 선택해주세요."
+                    description="지역, 국가, 도시를 1개 선택해주세요."
+                />
                 <SelectRegion />
-            </Accordion>
-
-            <Accordion
-                title="언제 떠나시나요?"
-                isOpen={dateAccordion.isOpen}
-                toggleAccordion={dateAccordion.toggleAccordion}
-            >
-                <p className="text-sm text-gray-500">
-                    버디즈와 함께 여행하고 싶은 날짜를 선택해주세요.
-                </p>
+            </div>
+            <div className="my-10">
+                <SearchPageTitle
+                    title="언제 떠나시나요?"
+                    description="버디즈와 함께 여행하고 싶은 날짜를 선택해주세요."
+                />
                 <DateSearchPage />
-            </Accordion>
-
-            <Accordion
-                title="여정 테마"
-                isOpen={tripThemeAccordion.isOpen}
-                toggleAccordion={tripThemeAccordion.toggleAccordion}
-            >
-                <p className="text-sm text-gray-500">3가지를 선택해주세요</p>
-                <div className="py-4">
-                    <PreferTripTheme />
-                </div>
-            </Accordion>
-
-            <Accordion
-                title="버디즈 성향"
-                isOpen={buddyThemeAccordion.isOpen}
-                toggleAccordion={buddyThemeAccordion.toggleAccordion}
-            >
-                <p className="text-sm text-gray-500">3가지를 선택해주세요</p>
-                <div className="py-4">
-                    <div className="py-3">
-                        <PreferBuddyTheme />
-                    </div>
-                </div>
-            </Accordion>
+            </div>
+            <div className="my-10">
+                <SearchPageTitle
+                    title="여정 테마"
+                    description="3가지를 선택해주세요."
+                />
+                <PreferTripTheme />
+            </div>
+            <div className="my-10">
+                <SearchPageTitle
+                    title="버디즈 성향"
+                    description="3가지를 선택해주세요."
+                />
+                <PreferBuddyTheme />
+            </div>
 
             <button
                 className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 mb-10 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:mt-8"
