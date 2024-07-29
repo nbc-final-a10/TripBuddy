@@ -19,8 +19,12 @@ import OnBoardingInput from './OnBoardingInput';
 import OnBoardingSelectLocationMbti from './OnBoardingSelectLocationMbti';
 import OnBoardingSelectPrefer from './OnBoardingSelectPrefer';
 import useSelectRegion from '@/hooks/useSelectRegion';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const OnBoarding: React.FC = () => {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
     const { logOut, buddy } = useAuth();
 
     const { mutate, isPending, error } = useUpdateBuddyMutation();
@@ -36,7 +40,7 @@ const OnBoarding: React.FC = () => {
     const { SelectRegion, secondLevelLocation, thirdLevelLocation } =
         useSelectRegion();
 
-    const { NextButton, step } = useNextButton({
+    const { NextButton, step, setStep } = useNextButton({
         buttonText: '다음',
         limit: 9,
     });
@@ -155,6 +159,16 @@ const OnBoarding: React.FC = () => {
         thirdLevelLocation,
         selectedGender,
     ]);
+
+    useEffect(() => {
+        if (step <= 9) router.push(`/onboarding?funnel=${step}`);
+        if (step > 9) router.push('/');
+    }, [step, router]);
+
+    useEffect(() => {
+        const funnel = searchParams.get('funnel');
+        if (funnel) setStep(Number(funnel));
+    }, [searchParams, setStep]);
 
     return (
         <section className="w-full h-[calc(100dvh-57px-58px)]">
