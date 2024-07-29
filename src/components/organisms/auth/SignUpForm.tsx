@@ -2,7 +2,7 @@
 
 import Input from '@/components/atoms/common/O_Input';
 import { SubmitButton } from '@/components/atoms/common/O_Submit-button';
-import { useAuth } from '@/hooks/auth.hooks';
+import { useAuth } from '@/hooks/auth';
 import { authValidation } from '@/utils/validation';
 import { FormEvent } from 'react';
 
@@ -67,7 +67,7 @@ function SignUpForm() {
                 </div>
 
                 <SubmitButton
-                    className="bg-sky-500 w-[70%] text-white rounded-lg px-4 py-2 text-foreground"
+                    className="bg-sky-500 w-[70%] text-white rounded-lg px-4 py-2"
                     pendingText="회원가입중..."
                     pending={isPending}
                 >

@@ -39,7 +39,6 @@ function LocationList({
                 {locations.map(subLocation => (
                     <div key={subLocation.name.en} className="flex-none">
                         <Chip
-                            intent={subLocation.name.en}
                             selected={
                                 selectedLocationName === subLocation.name.en
                             }

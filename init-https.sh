@@ -3,12 +3,12 @@
 MKCERT_INSTALLED=$(which mkcert)
 
 # install mkcert
-if [ -z $MKCERT_INSTALLED ];then 
+if [ -z "$MKCERT_INSTALLED" ]; then 
     brew install mkcert
 fi
 
 # Create server.js file
-cat <<EOT >> server.js
+cat <<EOT > server.js
 const { createServer } = require('https');
 const { parse } = require('url');
 const next = require('next');
@@ -43,6 +43,6 @@ app.prepare().then(() => {
 });
 EOT
 
-
+# Install mkcert and generate certificates
 mkcert -install
 mkcert localhost

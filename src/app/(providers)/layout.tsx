@@ -9,13 +9,18 @@ import React, { PropsWithChildren, Suspense } from 'react';
 import Loading from './loading';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import Header from '@/components/atoms/common/Header';
-import { getBuddyServer } from '@/api-services/auth/getBuddyServer';
+import { getBuddyServer } from '@/api-services/auth/server';
+import { getUserFromHeader } from '@/utils/auth/getUserFromHeader';
 
 const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
+    const userId = getUserFromHeader();
+
+    console.log('헤더에서 user =====>', userId);
+
     const queryClient = new QueryClient();
     await queryClient.prefetchQuery({
         queryKey: [QUERY_KEY_BUDDY],
-        queryFn: () => getBuddyServer(),
+        queryFn: () => getBuddyServer(userId),
     });
     const dehydratedState = dehydrate(queryClient);
 
