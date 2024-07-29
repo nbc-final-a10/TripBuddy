@@ -1,8 +1,8 @@
 import React from 'react';
 
-interface Tuto1TextProps {
+type Tuto1TextProps = {
     title: string;
-}
+};
 
 const Tuto1Text: React.FC<Tuto1TextProps> = ({ title }) => {
     return (

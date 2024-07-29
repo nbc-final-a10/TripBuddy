@@ -5,10 +5,10 @@ const Tuto3Image: React.FC = () => {
     return (
         <div className="flex justify-center items-center h-full">
             <Image
-                src="/images/송강호.jpg"
+                src="/images/tuto3.webp"
                 alt="튜토리얼 3페이지 이미지"
-                width={300}
-                height={300}
+                width={500}
+                height={500}
             />
         </div>
     );

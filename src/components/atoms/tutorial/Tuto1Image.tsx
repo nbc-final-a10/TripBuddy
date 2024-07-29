@@ -5,7 +5,7 @@ const Tuto1Image: React.FC = () => {
     return (
         <div className="flex justify-center items-center h-full">
             <Image
-                src="/images/김태리.jpg"
+                src="/images/tuto1.webp"
                 alt="튜토리얼 1페이지 이미지"
                 width={500}
                 height={500}

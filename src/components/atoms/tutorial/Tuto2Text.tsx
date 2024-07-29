@@ -1,11 +1,11 @@
 import React from 'react';
 import Title from './TutoTitle';
 
-interface Tuto1TextProps {
+type Tuto2TextProps = {
     title: string;
-}
+};
 
-const Tuto2Text: React.FC<Tuto1TextProps> = ({ title }) => {
+const Tuto2Text: React.FC<Tuto2TextProps> = ({ title }) => {
     return (
         <div>
             <Title text={title} />
