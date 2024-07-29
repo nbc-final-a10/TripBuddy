@@ -34,8 +34,11 @@ const WritePage: React.FC = () => {
         secondLevelLocation,
         thirdLevelLocation,
     } = useSelectRegion();
-    const [PreferThemeToRender, selectedTheme] = usePreferTheme({
+    const [PreferTripThemesToRender, selectedTripThemes] = usePreferTheme({
         mode: 'trip',
+    });
+    const [PreferThemeToRender, selectedBuddyThemes] = usePreferTheme({
+        mode: 'buddy',
     });
 
     // Todo: 핸들러 함수 정의 (커스텀 훅의 state를 supabase에 한번에 쓰는 함수) -> WritePage에 함수만 내려주기
@@ -65,10 +68,14 @@ const WritePage: React.FC = () => {
                     )}
                     {step === 3 && (
                         <SelectTripThemesPage
+                            PreferThemeToRender={PreferTripThemesToRender}
+                        />
+                    )}
+                    {step === 4 && (
+                        <SelectAdditionalBuddyThemes
                             PreferThemeToRender={PreferThemeToRender}
                         />
                     )}
-                    {step === 4 && <SelectAdditionalBuddyThemes />}
                     {step === 5 && (
                         <WriteTrip
                             firstLevelLocation={firstLevelLocation}

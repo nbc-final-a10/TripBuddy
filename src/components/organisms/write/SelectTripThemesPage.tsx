@@ -1,6 +1,5 @@
 import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 import LeftSmGrayText from '@/components/atoms/write/LeftSmGrayText';
-import usePreferTheme from '@/hooks/usePreferTheme';
 import React from 'react';
 
 type SelectTripThemesPageProps = {
@@ -12,12 +11,11 @@ export default function SelectTripThemesPage({
 }: SelectTripThemesPageProps) {
     return (
         <div>
-            {/* Todo: 마진 안 먹힘 */}
             <div className="mb-10">
-                <Left2xlBoldText text="어떤 유형의 여정을 원하세요?" />
+                <Left2xlBoldText text="어떤 유형의 버디를 원하세요?" />
                 <LeftSmGrayText text="최대 3개까지 선택할 수 있어요" />
             </div>
-            <div>
+            <div className="mb-10">
                 <PreferThemeToRender />
             </div>
         </div>

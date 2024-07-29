@@ -1,17 +1,21 @@
 import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
-import usePreferTheme from '@/hooks/usePreferTheme';
+import LeftSmGrayText from '@/components/atoms/write/LeftSmGrayText';
 import React from 'react';
 
-export default function SelectAdditionalBuddyThemes() {
-    const [PreferThemeToRender, selectedBuddyThemes] = usePreferTheme({
-        mode: 'buddy',
-        // isLabel: true,
-    });
-    console.log(`selectedBuddyThemes: ${selectedBuddyThemes}`);
+type SelectAdditionalBuddyThemesProps = {
+    PreferThemeToRender: React.FC;
+};
+
+export default function SelectAdditionalBuddyThemes({
+    PreferThemeToRender,
+}: SelectAdditionalBuddyThemesProps) {
     return (
         <div>
-            <Left2xlBoldText text="원하는 버디즈의 특성을 알려주세요" />
-            <div>
+            <div className="mb-10">
+                <Left2xlBoldText text="어떤 유형의 여정을 원하세요?" />
+                <LeftSmGrayText text="최대 3개까지 선택할 수 있어요" />
+            </div>
+            <div className="mb-10">
                 <PreferThemeToRender />
             </div>
         </div>
