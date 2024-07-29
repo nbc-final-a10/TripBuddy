@@ -10,9 +10,15 @@ const initialContent: Descendant[] = [
     },
 ];
 
-export default function WriteTrip() {
+type WriteTripProps = {
+    buddyCounts: number;
+};
+
+export default function WriteTrip({ buddyCounts }: WriteTripProps) {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState<Descendant[]>(initialContent);
+
+    console.log(`정말로 되는지: ${buddyCounts}`);
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value);
