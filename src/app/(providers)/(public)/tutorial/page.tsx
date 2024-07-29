@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import ProgressIndicator from '@/components/atoms/MyPage/ProgressIndicator';
+import ProgressIndicator from '@/components/atoms/write/ProgressIndicator';
 import TutorialPage1 from '@/components/organisms/tutorial/TutorialPage1';
 import TutorialPage2 from '@/components/organisms/tutorial/TutorialPage2';
 import TutorialPage3 from '@/components/organisms/tutorial/TutorialPage3';

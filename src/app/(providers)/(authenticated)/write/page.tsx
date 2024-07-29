@@ -1,6 +1,6 @@
 'use client';
 
-import ProgressIndicator from '@/components/atoms/MyPage/ProgressIndicator';
+import ProgressIndicator from '@/components/atoms/write/ProgressIndicator';
 import CompletePage from '@/components/organisms/write/CompletePage';
 import SelectAdditionalBuddyThemes from '@/components/organisms/write/SelectAdditionalBuddyThemes';
 import SelectRegionPage from '@/components/organisms/write/SelectRegionPage';
@@ -10,12 +10,17 @@ import WelcomePage from '@/components/organisms/write/WelcomePage';
 import WriteTrip from '@/components/organisms/write/WriteTrip';
 import useNextButton from '@/hooks/useFunnelNextStep';
 import React from 'react';
+import { useAuth } from '@/hooks/auth.hooks';
 
 const WritePage: React.FC = () => {
     const { NextButton, step } = useNextButton({
         buttonText: '다음',
         limit: 6,
     });
+
+    const { buddy } = useAuth();
+    console.log(`buddy: ${buddy}`);
+
     return (
         <>
             {/* <div className="mt-4 xl:mt-20 ml-5 xl:ml-64"> */}
