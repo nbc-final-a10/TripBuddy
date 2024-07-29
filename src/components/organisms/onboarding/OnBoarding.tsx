@@ -12,6 +12,7 @@ import { showAlert } from '@/utils/ui/openCustomAlert';
 import React, { FormEvent, MouseEvent, useEffect, useState } from 'react';
 import OnBoardingWelcome from './OnBoardingWelcom';
 import OnBoardingSelectGender from './OnBoardingSelectGender';
+import OnBoardingInputAge from './OnBoardingInputAge';
 
 const OnBoarding: React.FC = () => {
     const { logOut, buddy } = useAuth();
@@ -122,6 +123,7 @@ const OnBoarding: React.FC = () => {
             <div className="flex flex-col w-full h-[90%]">
                 {isStart && <OnBoardingWelcome />}
                 {!isStart && step === 0 && <OnBoardingSelectGender />}
+                {!isStart && step === 1 && <OnBoardingInputAge />}
             </div>
             <div className="flex justify-center">
                 {isStart && (
