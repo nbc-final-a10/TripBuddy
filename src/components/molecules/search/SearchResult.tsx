@@ -7,6 +7,7 @@ type SearchResultProps = {
     visibleSecondItems: number;
     loadMoreFirstItems: () => void;
     loadMoreSecondItems: () => void;
+    finalSelectedLocation: string | null;
 };
 
 const SearchResult: React.FC<SearchResultProps> = ({
@@ -15,6 +16,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
     visibleSecondItems,
     loadMoreFirstItems,
     loadMoreSecondItems,
+    finalSelectedLocation,
 }) => {
     return (
         <>
@@ -27,8 +29,16 @@ const SearchResult: React.FC<SearchResultProps> = ({
                     {items.slice(0, visibleFirstItems).map((item, index) => (
                         <div
                             key={index}
-                            className="bg-gray-300 w-[178px] h-[176px] rounded-lg flex-shrink-0 xl:w-[250px] xl:h-[250px]"
-                        ></div>
+                            className="relative shadow-lg w-[178px] h-[176px] rounded-lg flex-shrink-0 xl:w-[250px] xl:h-[250px]"
+                        >
+                            <div>
+                                {finalSelectedLocation && (
+                                    <p className="text-sm text-gray-700">
+                                        {finalSelectedLocation}
+                                    </p>
+                                )}
+                            </div>
+                        </div>
                     ))}
                 </div>
                 {visibleFirstItems < items.length && (
@@ -51,7 +61,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
                     {items.slice(0, visibleSecondItems).map((item, index) => (
                         <li
                             key={index}
-                            className="bg-gray-300 w-[335px] h-[93px] rounded-[11px] mx-auto mb-6 xl:mx-0 xl:w-full xl:h-[120px]"
+                            className="shadow-md w-[335px] h-[93px] rounded-[11px] mx-auto mb-6 xl:mx-0 xl:w-full xl:h-[120px]"
                         ></li>
                     ))}
                 </ul>

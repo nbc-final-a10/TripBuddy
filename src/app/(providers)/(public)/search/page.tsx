@@ -70,6 +70,15 @@ const SearchPage: React.FC = () => {
 
     const handleShowResult = () => {
         setShowResult(true);
+        // 검색 옵션들 닫기
+        genderAccordion.closeAccordion();
+        ageAccordion.closeAccordion();
+        buddyCountsAccordion.closeAccordion();
+        meetingPlaceAccordion.closeAccordion();
+        regionAccordion.closeAccordion();
+        dateAccordion.closeAccordion();
+        tripThemeAccordion.closeAccordion();
+        buddyThemeAccordion.closeAccordion();
     };
 
     return (
@@ -192,6 +201,7 @@ const SearchPage: React.FC = () => {
                     visibleSecondItems={visibleSecondItems}
                     loadMoreFirstItems={loadMoreFirstItems}
                     loadMoreSecondItems={loadMoreSecondItems}
+                    finalSelectedLocation={finalSelectedLocation}
                 />
             )}
         </main>

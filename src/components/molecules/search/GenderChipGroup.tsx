@@ -7,28 +7,40 @@ const genderOptions: Gender[] = ['여자만', '남자만', '상관없음'];
 
 const GenderChipGroup: React.FC = () => {
     const [selectedGender, setSelectedGender] = useState<string | null>(null);
-    const [clickCount, setClickCount] = useState<number>(0);
 
     const handleGenderClick = async (gender: string) => {
-        const newClickCount = clickCount + 1;
-        setClickCount(newClickCount);
+        const isSelected = selectedGender === gender;
+        const newSelectedGender = isSelected ? null : gender;
 
-        if (newClickCount % 2 !== 0) {
-            const { data, error } = await supabase
-                .from('Buddies')
-                .insert([{ buddy_sex: gender }]);
+        setSelectedGender(newSelectedGender);
 
-            if (error) {
-                console.error('데이터 삽입 오류: ', error);
-            } else {
-                console.log('데이터 삽입됨: ', data);
-            }
+        if (!isSelected) {
+            console.log(gender);
         }
 
-        setSelectedGender(prevSelectedGender =>
-            prevSelectedGender === gender ? null : gender,
-        );
-        // console.log(gender);
+        // if (!isSelected) {
+        //     const { data, error } = await supabase
+        //         .from('trips')
+        //         .insert([{ trip_wanted_sex: gender }]);
+
+        //     if (error) {
+        //         console.error('데이터 삽입 오류: ', error.message);
+        //     } else {
+        //         console.log('데이터 삽입됨: ', data);
+        //     }
+        // } else {
+        //     // 버튼이 선택 해제되면 데이터 삭제
+        //     const { data, error } = await supabase
+        //         .from('trips')
+        //         .delete()
+        //         .eq('trip_wanted_sex', gender);
+
+        //     if (error) {
+        //         console.error('데이터 삭제 오류: ', error.message);
+        //     } else {
+        //         console.log('데이터 삭제됨: ', data);
+        //     }
+        // }
     };
 
     return (
