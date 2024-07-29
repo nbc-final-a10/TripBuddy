@@ -1,5 +1,6 @@
+import ProfileEditColumn from '@/components/atoms/profile/ProfileEditColumn';
+import ProfileImage from '@/components/atoms/profile/ProfileImage';
 import { BuddyProfileProps } from '@/types/ProfileParams.types';
-import Image from 'next/image';
 import React from 'react';
 
 function EditProfilePage({ id }: BuddyProfileProps) {
@@ -8,13 +9,9 @@ function EditProfilePage({ id }: BuddyProfileProps) {
             <div className="w-full max-w-lg rounded-lg p-6">
                 <div className="flex flex-col items-center mt-6">
                     <div className="relative">
-                        <Image
-                            src="/buddy_mascot.webp"
-                            alt="Profile"
-                            width={100}
-                            height={100}
-                            className="w-[100px] h-[100px] xl:w-[200px] xl:h-[200px] rounded-full object-cover"
-                        />
+                        {/* 프로필 이미지 */}
+                        <ProfileImage />
+
                         {/* 프로필 사진 변경 버튼 */}
                         <button className="absolute bottom-0 right-0 p-2 bg-gray-200 rounded-full border-4 border-white">
                             <svg
@@ -41,34 +38,18 @@ function EditProfilePage({ id }: BuddyProfileProps) {
                 <div className="mt-6">
                     <table className="w-full">
                         <tbody>
-                            <tr className="flex justify-between py-2">
-                                <td className="w-1/2 text-gray-600">이름</td>
-                                <td className="w-4/5">김버디</td>
-                            </tr>
-                            <tr className="flex justify-between py-2">
-                                <td className="w-1/2 text-gray-600">성별</td>
-                                <td className="w-4/5">여성</td>
-                            </tr>
-                            <tr className="flex justify-between py-2">
-                                <td className="w-1/2 text-gray-600">
-                                    출생년도
-                                </td>
-                                <td className="w-4/5">1997</td>
-                            </tr>
-                            <tr className="flex justify-between py-2">
-                                <td className="w-1/2 text-gray-600">소개</td>
-                                <td className="w-4/5">
-                                    맛집, 예쁜 카페 탐방 좋아해요~!
-                                </td>
-                            </tr>
-                            <tr className="flex justify-between py-2">
-                                <td className="w-1/2 text-gray-600">MBTI</td>
-                                <td className="w-4/5">ENFP</td>
-                            </tr>
-                            <tr className="flex justify-between py-2">
-                                <td className="w-1/2 text-gray-600">거주지</td>
-                                <td className="w-4/5">경기도 수원</td>
-                            </tr>
+                            <ProfileEditColumn label="닉네임" value="김버디" />
+                            <ProfileEditColumn label="성별" value="여성" />
+                            <ProfileEditColumn label="출생년도" value="1997" />
+                            <ProfileEditColumn
+                                label="소개"
+                                value="맛집, 예쁜 카페 탐방 좋아해요~!"
+                            />
+                            <ProfileEditColumn label="MBTI" value="ENFP" />
+                            <ProfileEditColumn
+                                label="거주지"
+                                value="경기도 수원"
+                            />
                             <tr className="flex justify-between py-2">
                                 <td className="w-1/2 text-gray-600">
                                     선호 여정
