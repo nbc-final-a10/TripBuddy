@@ -4,6 +4,7 @@ import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 import LeftSmGrayText from '@/components/atoms/write/LeftSmGrayText';
 import LocationList from '@/components/atoms/write/LocationList';
 import LocationToggleButton from '@/components/atoms/write/LocationToggleButton';
+import SelectedResultRealtimeText from '@/components/organisms/write/SelectedResultRealtimeText';
 import locationData from '@/data/location';
 import { SecondLevel, ThirdLevel } from '@/types/Location.types';
 import { useEffect, useState } from 'react';
@@ -159,17 +160,11 @@ export default function useSelectRegion() {
 
                 <section>
                     {finalSelectedLocation && (
-                        <div className="text-center">
-                            <span className="text-sm text-gray-500">
-                                선택한 지역은{' '}
-                            </span>
-                            <span className="text-base font-bold text-main-color">
-                                {finalSelectedLocation}
-                            </span>
-                            <span className="text-sm text-gray-500">
-                                입니다.
-                            </span>
-                        </div>
+                        <SelectedResultRealtimeText
+                            selectedData={finalSelectedLocation}
+                            firstLabel="선택한 지역은"
+                            secondLabel="입니다."
+                        />
                     )}
                 </section>
             </>
