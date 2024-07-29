@@ -20,11 +20,15 @@ export default function SelectDatePage() {
                 <SelectCalendar />
             </div>
             <div>
-                <SelectedResultRealtimeText
-                    selectedData={`${startDateTimestamp} ~ ${endDateTimestamp}`}
-                    firstLabel="선택하신 날짜는"
-                    secondLabel="입니다."
-                />
+                {startDateTimestamp && endDateTimestamp ? (
+                    <SelectedResultRealtimeText
+                        selectedData={`${startDateTimestamp} ~ ${endDateTimestamp}`}
+                        firstLabel="선택하신 날짜는"
+                        secondLabel="입니다."
+                    />
+                ) : (
+                    <SelectedResultRealtimeText firstLabel="날짜를 선택해주세요" />
+                )}
             </div>
         </>
     );
