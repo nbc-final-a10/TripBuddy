@@ -5,7 +5,7 @@ import React from 'react';
 export default function SelectAdditionalBuddyThemes() {
     const [PreferThemeToRender, selectedBuddyThemes] = usePreferTheme({
         mode: 'buddy',
-        isLabel: true,
+        // isLabel: true,
     });
     console.log(`selectedBuddyThemes: ${selectedBuddyThemes}`);
     return (
