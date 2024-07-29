@@ -11,7 +11,7 @@ const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
 
     return (
         <>
-            {pathname === '/onboarding' && (
+            {pathname === '/login' && (
                 <MobileHeader
                 // title="여정 작성"
                 // notification
