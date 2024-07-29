@@ -51,7 +51,7 @@ function LocationList({
             </div>
 
             {/* 스크롤 버튼 */}
-            {isScrollable && (
+            {/* {isScrollable && (
                 <div className="flex justify-between">
                     <button
                         className="left-2 z-10"
@@ -76,7 +76,7 @@ function LocationList({
                         {'>'}
                     </button>
                 </div>
-            )}
+            )} */}
         </div>
     );
 }

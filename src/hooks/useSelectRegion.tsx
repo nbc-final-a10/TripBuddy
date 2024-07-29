@@ -84,10 +84,10 @@ export default function useSelectRegion() {
 
         return (
             <>
-                <header className="mt-10 mb-5">
+                {/* <header className="mt-10 mb-5">
                     <Left2xlBoldText text="여행지를 선택해주세요" />
                     <LeftSmGrayText text="지역, 국가, 도시를 1개 선택해주세요." />
-                </header>
+                </header> */}
 
                 {/* 국내/해외 스위치 버튼 */}
                 <section className="mb-2">
@@ -155,6 +155,22 @@ export default function useSelectRegion() {
                             </div>
                         )}
                     </div>
+                </section>
+
+                <section>
+                    {finalSelectedLocation && (
+                        <div className="text-center">
+                            <span className="text-sm text-gray-500">
+                                선택한 지역은{' '}
+                            </span>
+                            <span className="text-base font-bold text-main-color">
+                                {finalSelectedLocation}
+                            </span>
+                            <span className="text-sm text-gray-500">
+                                입니다.
+                            </span>
+                        </div>
+                    )}
                 </section>
             </>
         );
