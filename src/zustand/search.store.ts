@@ -13,10 +13,16 @@ type SearchStore = {
 
     selectedGender: string | null;
     setSelectedGender: (gender: string | null) => void;
-    // GenderFilteredItems: () => Trip[];
+    getGenderFilteredItems: () => Trip[];
+
+    selectedMeetingPlace: string | null;
+    setSelectedMeetingPlace: (place: string | null) => void;
+    getSelectedMeetingPlace: () => Trip[];
+
+    getFilteredItems: () => Trip[];
 };
 
-export const useSearchStore = create<SearchStore>(set => ({
+export const useSearchStore = create<SearchStore>((set, get) => ({
     items: [],
     visibleFirstItems: 8,
     visibleSecondItems: 6,
@@ -34,12 +40,46 @@ export const useSearchStore = create<SearchStore>(set => ({
     setSelectedGender: (gender: string | null) =>
         set({ selectedGender: gender }),
 
-    // GenderFilteredItems: () => {
-    //     const state = get();
-    //     return state.selectedGender
-    //         ? state.items.filter(
-    //               (item: Trip) => item.trip_wanted_sex === state.selectedGender,
-    //           )
-    //         : state.items;
-    // },
+    getGenderFilteredItems: () => {
+        const state = get();
+        return state.selectedGender
+            ? state.items.filter(
+                  (item: Trip) => item.trip_wanted_sex === state.selectedGender,
+              )
+            : state.items;
+    },
+
+    selectedMeetingPlace: null,
+    setSelectedMeetingPlace: (place: string | null) =>
+        set({ selectedMeetingPlace: place }),
+
+    getSelectedMeetingPlace: () => {
+        const state = get();
+        return state.selectedMeetingPlace
+            ? state.items.filter(
+                  (item: Trip) =>
+                      item.trip_meet_location === state.selectedMeetingPlace,
+              )
+            : state.items;
+    },
+
+    getFilteredItems: () => {
+        const state = get();
+        let filteredItems = state.items;
+
+        if (state.selectedGender) {
+            filteredItems = filteredItems.filter(
+                (item: Trip) => item.trip_wanted_sex === state.selectedGender,
+            );
+        }
+
+        if (state.selectedMeetingPlace) {
+            filteredItems = filteredItems.filter(
+                (item: Trip) =>
+                    item.trip_meet_location === state.selectedMeetingPlace,
+            );
+        }
+
+        return filteredItems;
+    },
 }));

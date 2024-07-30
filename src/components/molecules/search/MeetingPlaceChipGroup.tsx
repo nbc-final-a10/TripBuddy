@@ -1,18 +1,23 @@
 import Chip from '@/components/atoms/common/O_Chip';
 import { MeetingPlace } from '@/types/MeetingPlace.types';
+import { useSearchStore } from '@/zustand/search.store';
 import { useState } from 'react';
 
 const meetingPlaceOptions: MeetingPlace[] = ['출발지', '여행지'];
 
 const MeetingPlaceChipGroup = () => {
-    const [selectedMeetingPlace, setSelectedMeetingPlace] = useState<
-        string | null
-    >(null);
+    const { selectedMeetingPlace, setSelectedMeetingPlace } = useSearchStore(
+        state => ({
+            selectedMeetingPlace: state.selectedMeetingPlace,
+            setSelectedMeetingPlace: state.setSelectedMeetingPlace,
+        }),
+    );
 
     const handleMeetingPlaceClick = (place: string) => {
-        setSelectedMeetingPlace(prevSelectedPlace =>
-            prevSelectedPlace === place ? null : place,
-        );
+        const isSelected = selectedMeetingPlace === place;
+        const newSelectedMeetingPlace = isSelected ? null : place;
+
+        setSelectedMeetingPlace(newSelectedMeetingPlace);
     };
 
     return (

@@ -9,32 +9,29 @@ const SearchResult: React.FC = () => {
         visibleSecondItems,
         loadMoreFirstItems,
         loadMoreSecondItems,
-        selectedGender,
+        getFilteredItems,
     } = useSearchStore(state => ({
         items: state.items,
         visibleFirstItems: state.visibleFirstItems,
         visibleSecondItems: state.visibleSecondItems,
         loadMoreFirstItems: state.loadMoreFirstItems,
         loadMoreSecondItems: state.loadMoreSecondItems,
-        selectedGender: state.selectedGender,
+        getFilteredItems: state.getFilteredItems,
     }));
 
-    // // selectedGender에 따라 성별 필터링
-    // const GenderFilteredItems = selectedGender
-    //     ? items.filter(item => item.trip_wanted_sex === selectedGender)
-    //     : items;
+    const FilteredItems = getFilteredItems();
 
-    // if (GenderFilteredItems.length === 0) {
-    //     return <div>검색 결과가 없습니다.</div>;
-    // }
+    if (FilteredItems.length === 0) {
+        return <div>검색 결과가 없습니다.</div>;
+    }
 
     return (
         <>
             <section className="my-5">
                 <h3 className="text-base font-semibold mb-5">여정 검색 결과</h3>
 
-                {/* <div className="flex flex-nowrap whitespace-nowrap overflow-x-auto scrollbar-hidden gap-4 xl:grid xl:grid-cols-4 xl:auto-cols-[minmax(0,1fr)]">
-                    {GenderFilteredItems.slice(0, visibleFirstItems).map(
+                <div className="flex flex-nowrap whitespace-nowrap overflow-x-auto scrollbar-hidden gap-4 xl:grid xl:grid-cols-4 xl:auto-cols-[minmax(0,1fr)]">
+                    {FilteredItems.slice(0, visibleFirstItems).map(
                         (item, index) => (
                             <div
                                 key={index}
@@ -48,18 +45,21 @@ const SearchResult: React.FC = () => {
                                 <p className="text-sm">
                                     {item.trip_wanted_sex}
                                 </p>
+                                <p className="text-sm">
+                                    {item.trip_meet_location}
+                                </p>
                             </div>
                         ),
                     )}
                 </div>
-                {visibleFirstItems < GenderFilteredItems.length && (
+                {visibleFirstItems < FilteredItems.length && (
                     <button
                         className="mt-4 px-4 py-2 bg-main-color text-white rounded-2xl text-sm mx-auto block hidden xl:block"
                         onClick={loadMoreFirstItems}
                     >
                         더보기
                     </button>
-                )} */}
+                )}
             </section>
 
             <section className="mt-10 xl:mt-24">

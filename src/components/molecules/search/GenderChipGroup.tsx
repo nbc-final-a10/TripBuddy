@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Chip from '@/components/atoms/common/O_Chip';
 import { Gender } from '@/types/Gender.types';
 import { useSearchStore } from '@/zustand/search.store';
