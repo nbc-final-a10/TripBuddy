@@ -7,15 +7,15 @@ import MeetingPlaceChipGroup from '@/components/molecules/search/MeetingPlaceChi
 import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
 import SearchResult from '@/components/molecules/search/SearchResult';
 import DateSearchPage from '@/components/organisms/search/DateSearchPage';
-import { Accordion, useAccordion } from '@/hooks/useAccordion';
 import usePreferTheme from '@/hooks/usePreferTheme';
 import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
 import useSelectRegion from '@/hooks/useSelectRegion';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 const SearchPage: React.FC = () => {
     const [showResult, setShowResult] = useState(false);
+    const resultRef = useRef<HTMLDivElement>(null);
 
     const [PreferBuddyTheme, selectedBuddyTheme] = usePreferTheme({
         mode: 'buddy',
@@ -53,6 +53,16 @@ const SearchPage: React.FC = () => {
 
     const handleShowResult = () => {
         setShowResult(true);
+        // 속도 지연
+        setTimeout(() => {
+            resultRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+    };
+
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            handleShowResult();
+        }
     };
 
     return (
@@ -62,6 +72,7 @@ const SearchPage: React.FC = () => {
                     type="text"
                     placeholder="검색어를 입력하세요"
                     className="w-full bg-gray-100 p-2 rounded-xl"
+                    onKeyDown={handleKeyDown}
                 />
 
                 <div className="hidden xl:flex xl:gap-2 xl:w-full xl:ml-5">
@@ -136,14 +147,16 @@ const SearchPage: React.FC = () => {
             </button>
 
             {showResult && (
-                <SearchResult
-                    items={items}
-                    visibleFirstItems={visibleFirstItems}
-                    visibleSecondItems={visibleSecondItems}
-                    loadMoreFirstItems={loadMoreFirstItems}
-                    loadMoreSecondItems={loadMoreSecondItems}
-                    finalSelectedLocation={thirdLevelLocation}
-                />
+                <div ref={resultRef}>
+                    <SearchResult
+                        items={items}
+                        visibleFirstItems={visibleFirstItems}
+                        visibleSecondItems={visibleSecondItems}
+                        loadMoreFirstItems={loadMoreFirstItems}
+                        loadMoreSecondItems={loadMoreSecondItems}
+                        finalSelectedLocation={thirdLevelLocation}
+                    />
+                </div>
             )}
 
             <TopButton />
