@@ -1,15 +1,18 @@
 'use client';
-
 import React, { useState, ChangeEvent, KeyboardEvent } from 'react';
 import supabase from '@/utils/supabase/client';
 import Image from 'next/image';
 import { Message } from '@/types/Chat.types';
 
 type ChatMessageSendProps = {
+    id: string;
     currentBuddy: any;
 };
 
-const ChatMessageSend: React.FC<ChatMessageSendProps> = ({ currentBuddy }) => {
+const ChatMessageSend: React.FC<ChatMessageSendProps> = ({
+    currentBuddy,
+    id,
+}) => {
     const [inputText, setInputText] = useState('');
 
     const handleSendMessage = async (messageText: string) => {
@@ -23,7 +26,7 @@ const ChatMessageSend: React.FC<ChatMessageSendProps> = ({ currentBuddy }) => {
             message_sender_id: currentBuddy.buddy_id,
             message_created_at: new Date().toISOString(),
             message_type: 'text',
-            message_trip_id: '8a9313c8-0c0a-4ba4-804d-b0e101f39d9b',
+            message_trip_id: id,
         };
 
         const { data, error } = await supabase

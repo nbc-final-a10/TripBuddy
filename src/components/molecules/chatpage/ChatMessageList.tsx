@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { Message } from '@/types/Chat.types';
 import supabase from '@/utils/supabase/client';
@@ -7,9 +6,13 @@ import Image from 'next/image';
 
 type ChatMessageListProps = {
     currentBuddy: any;
+    id: string;
 };
 
-const ChatMessageList: React.FC<ChatMessageListProps> = ({ currentBuddy }) => {
+const ChatMessageList: React.FC<ChatMessageListProps> = ({
+    currentBuddy,
+    id,
+}) => {
     const [messages, setMessages] = useState<
         (Message & {
             buddy: { buddy_profile_pic: string; buddy_nickname: string };
@@ -23,14 +26,18 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({ currentBuddy }) => {
                 'postgres_changes',
                 { event: 'INSERT', schema: 'public', table: 'messages' },
                 payload => {
-                    console.log('Change received!', payload);
                     const newMessage = payload.new as Message & {
                         buddy: {
                             buddy_profile_pic: string;
                             buddy_nickname: string;
                         };
                     };
-                    setMessages(prevMessages => [...prevMessages, newMessage]);
+                    if (newMessage.message_trip_id === id) {
+                        setMessages(prevMessages => [
+                            ...prevMessages,
+                            newMessage,
+                        ]);
+                    }
                 },
             )
             .subscribe();
@@ -38,7 +45,7 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({ currentBuddy }) => {
         return () => {
             channel.unsubscribe();
         };
-    }, []);
+    }, [id]);
 
     useEffect(() => {
         const fetchMessages = async () => {
@@ -53,6 +60,7 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({ currentBuddy }) => {
                     )
                 `,
                 )
+                .eq('message_trip_id', id)
                 .order('message_created_at', { ascending: true });
 
             if (error) {
@@ -63,7 +71,7 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({ currentBuddy }) => {
         };
 
         fetchMessages();
-    }, []);
+    }, [id]);
 
     return (
         <div className="px-6">

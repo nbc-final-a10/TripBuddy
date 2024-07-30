@@ -12,10 +12,9 @@ const ChattingPage = () => {
 
     return (
         <div className="bg-white">
-            <div>채팅번호: {id}</div>
             <ChattingTitle />
-            <ChatMessageList currentBuddy={currentBuddy} />
-            <ChatMessageSend currentBuddy={currentBuddy} />
+            <ChatMessageList currentBuddy={currentBuddy} id={id} />
+            <ChatMessageSend currentBuddy={currentBuddy} id={id} />
         </div>
     );
 };

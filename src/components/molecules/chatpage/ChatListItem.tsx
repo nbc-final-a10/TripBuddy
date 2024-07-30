@@ -2,28 +2,30 @@ import Link from 'next/link';
 import React from 'react';
 
 type ChatListItemProps = {
-    chatId: string;
+    contractTripId: string;
     chatName: string;
     lastMessage: string;
+    lastMessageTime: string;
+    profilePics: string[];
 };
 
 const ChatListItem: React.FC<ChatListItemProps> = ({
-    chatId,
+    contractTripId,
     chatName,
     lastMessage,
 }) => {
     return (
-        <Link href={`/chat/${chatId}`}>
-            <div className="flex justify-between">
-                <div className="w-[45px] bg-gray-100 flex items-center justify-center">
-                    사진
+        <Link href={`/chat/${contractTripId}`}>
+            <div className="flex justify-between items-center">
+                <div className="flex space-x-1">
+                    <div className="w-[30px] h-[30px] bg-gray-100 rounded-full overflow-hidden"></div>
                 </div>
-                <div className="flex flex-col gap-1 justify-center">
+                <div className="flex flex-col gap-1 justify-center flex-grow pl-2">
                     <p className="text-sm font-bold">{chatName}</p>
                     <p className="text-xs">{lastMessage}</p>
                 </div>
                 <div className="text-xs flex flex-col gap-1">
-                    <span>14:23</span>
+                    <span>19:02</span>
                     <span className="rounded-[16px] flex items-center justify-center bg-gray-300 p-1">
                         +3
                     </span>
