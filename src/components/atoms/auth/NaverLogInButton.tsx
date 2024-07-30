@@ -2,7 +2,7 @@
 
 import { PUBLIC_URL } from '@/constants/common.constants'; // import Script from 'next/script';
 import Script from 'next/script';
-import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { SiNaver } from 'react-icons/si';
 
 const NaverLogInButton: React.FC = () => {
