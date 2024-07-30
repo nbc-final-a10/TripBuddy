@@ -25,10 +25,7 @@ import useSelectMeetPlace from '@/hooks/useSelectMeetPlace';
 
 const WritePage: React.FC = () => {
     const router = useRouter();
-    const { NextButton, step, setStep } = useNextButton({
-        buttonText: '다음',
-        limit: 6,
-    });
+
     const { buddy } = useAuth();
     const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
     const { SelectCalendar, startDateTimestamp, endDateTimestamp } =
@@ -57,6 +54,23 @@ const WritePage: React.FC = () => {
     const { wantedSex, SelectWantedSexButton } = useSelectSex();
     const { startAge, endAge, handleStartAge, handleEndAge } = useSelectAges();
     const { meetPlace, SelectMeetPlaceButton } = useSelectMeetPlace();
+
+    // 유효성 검사 함수
+    const validateStep = () => {
+        if (step === 2) {
+            if (!startDateTimestamp || !endDateTimestamp) {
+                showAlert('error', '날짜를 선택해 주세요');
+                return false;
+            }
+        }
+        return true;
+    };
+
+    const { NextButton, step, setStep } = useNextButton({
+        buttonText: '다음',
+        limit: 6,
+        validateStep: validateStep,
+    });
 
     type TripData = Tables<'trips'>;
     // 파셜트립데이터는 데이터 컬럼을 선택적으로 쓰겠다
@@ -95,14 +109,7 @@ const WritePage: React.FC = () => {
                 body: JSON.stringify(tripData),
             });
             if (response.ok) {
-                // Todo : 성공 시에만 다음 스텝으로 넘기고, 실패 시 다음 스텝으로 넘기지 말고 showAlert 띄워야 함.
-
-                // showAlert('success', '게시글 업데이트 성공', {
-                //     onConfirm: () => {
-                //         // 확인버튼 추가로직
-                //     },
-                // });
-                setStep(6);
+                console.log('게시글 업데이트 성공');
             } else {
                 const errorResult = await response.json();
                 console.error('게시글 업데이트 중 오류 발생:', errorResult);
@@ -164,7 +171,10 @@ const WritePage: React.FC = () => {
                     {/* Todo: 마지막 스텝에서는 라벨을 '다음'이 아니라 '완료'로 띄워야 함 */}
                     <NextButton
                         className="text-xl text-white bg-main-color font-bold py-2 px-4 mt-4 mx-2 mb-20 rounded-xl w-full hover:bg-main-color/80"
-                        onClick={step === 5 ? handleWriteTrip : undefined}
+                        onClick={() => {
+                            if (step === 5) handleWriteTrip();
+                            validateStep();
+                        }}
                     />
                 </div>
             </section>
