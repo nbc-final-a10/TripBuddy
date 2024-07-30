@@ -39,9 +39,11 @@ const WritePage: React.FC = () => {
     const [PreferTripThemesToRender, selectedTripThemes] = usePreferTheme({
         mode: 'trip',
     });
-    const [PreferThemeToRender, selectedBuddyThemes] = usePreferTheme({
-        mode: 'buddy',
-    });
+    const [PreferWantedBuddiesToRender, selectedWantedBuddies] = usePreferTheme(
+        {
+            mode: 'buddy',
+        },
+    );
     const {
         tripTitle,
         tripContent,
@@ -73,9 +75,9 @@ const WritePage: React.FC = () => {
             trip_theme1: selectedTripThemes[0],
             trip_theme2: selectedTripThemes[1],
             trip_theme3: selectedTripThemes[2],
-            trip_wanted_buddies1: selectedBuddyThemes[0],
-            trip_wanted_buddies2: selectedBuddyThemes[1],
-            trip_wanted_buddies3: selectedBuddyThemes[2],
+            trip_wanted_buddies1: selectedWantedBuddies[0],
+            trip_wanted_buddies2: selectedWantedBuddies[1],
+            trip_wanted_buddies3: selectedWantedBuddies[2],
         };
         try {
             const response = await fetch('/api/write', {
@@ -133,7 +135,7 @@ const WritePage: React.FC = () => {
                     )}
                     {step === 4 && (
                         <SelectAdditionalBuddyThemes
-                            PreferThemeToRender={PreferThemeToRender}
+                            PreferThemeToRender={PreferWantedBuddiesToRender}
                         />
                     )}
                     {step === 5 && (
