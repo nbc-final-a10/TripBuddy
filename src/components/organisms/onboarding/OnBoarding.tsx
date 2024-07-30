@@ -60,11 +60,6 @@ const OnBoarding: React.FC = () => {
         setSelectedMbti(target.innerText);
     };
 
-    // 온보딩은 isOnboarding이 false일 때 한번만 되는 것인데
-    // 마지막 step 에서 한번에 fetch 하게 되면
-    // 모종의 이유로 에러가 발생해서 시퀀스가 중단 되었을 경우에
-    // 아무 정보도 fetch 하지 못한 상태가 되기 때문에
-    // 각 step 마다 fetch 하는 것으로 결정
     const handleNextButtonClick = () => {
         if (!buddy) {
             return showAlert('error', '로그인을 먼저 해주세요.');
