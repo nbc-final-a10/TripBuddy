@@ -43,7 +43,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
                 </div>
                 {visibleFirstItems < items.length && (
                     <button
-                        className="mt-4 px-4 py-2 bg-gray-500 text-white rounded-lg mx-auto block hidden xl:block"
+                        className="mt-4 px-4 py-2 bg-main-color text-white rounded-2xl text-sm mx-auto block hidden xl:block"
                         onClick={loadMoreFirstItems}
                     >
                         더보기
@@ -67,7 +67,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
                 </ul>
                 {visibleSecondItems < items.length && (
                     <button
-                        className="mt-4 px-4 py-2 bg-gray-500 text-white rounded-lg mx-auto block"
+                        className="mt-4 px-4 py-2 bg-main-color text-white rounded-2xl text-sm mx-auto block"
                         onClick={loadMoreSecondItems}
                     >
                         더보기

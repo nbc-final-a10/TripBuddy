@@ -67,30 +67,22 @@ const SearchPage: React.FC = () => {
 
     return (
         <main className="p-5 xl:p-0 xl:py-5">
-            <section className="flex flex-col mx-auto mb-10 mt-6 xl:flex-row xl:items-center xl:justify-center">
-                <div className="flex xl:flex-grow">
+            <section className="flex flex-col mx-auto mb-10 mt-6 xl:flex-row xl:items-center xl:justify-center xl:max-w-screen-xl">
+                <div className="flex xl:flex-grow items-center">
                     <input
                         type="text"
                         placeholder="검색어를 입력하세요"
-                        className="w-full bg-gray-100 p-2 rounded-2xl xl:w-[928px]"
+                        className="w-full bg-gray-100 p-2 rounded-2xl"
                         onKeyDown={handleKeyDown}
                     />
                 </div>
 
-                <div className="hidden xl:flex xl:gap-2 xl:w-full xl:ml-5">
-                    {/* <button
-                        className="flex-1 px-4 py-2 rounded-[10px] border border-gray-500 text-gray-500 font-semibold text-sm min-w-[130px] py-2.5 transition-colors duration-200 ease-in-out active:bg-gray-500 active:text-white"
-                        onClick={toggleOptionHidden}
-                    >
-                        검색 옵션 접기
-                    </button> */}
-                    <button
-                        className="xl:px-4 xl:py-2.5 xl:w-36 rounded-2xl bg-main-color font-semibold text-white text-sm transition-colors duration-200 ease-in-out active:bg-gray-300"
-                        onClick={handleShowResult}
-                    >
-                        검색 결과 보기
-                    </button>
-                </div>
+                <button
+                    className="hidden xl:flex xl:px-4 xl:py-2.5 xl:w-36 xl:ml-6 rounded-2xl bg-main-color justify-center items-center mx-auto font-semibold text-white text-sm transition-colors duration-200 ease-in-out active:bg-gray-300"
+                    onClick={handleShowResult}
+                >
+                    검색 결과 보기
+                </button>
             </section>
 
             <div className="my-10">
