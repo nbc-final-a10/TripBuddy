@@ -1,5 +1,6 @@
 'use client';
 
+import TopButton from '@/components/atoms/search/TopButton';
 import AgeCount from '@/components/molecules/search/AgeCount';
 import GenderChipGroup from '@/components/molecules/search/GenderChipGroup';
 import MeetingPlaceChipGroup from '@/components/molecules/search/MeetingPlaceChipGroup';
@@ -29,8 +30,8 @@ const SearchPage: React.FC = () => {
     const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
     const {
         SelectRegion,
-        firstLevelLocation,
-        secondLevelLocation,
+        // firstLevelLocation,
+        // secondLevelLocation,
         thirdLevelLocation,
     } = useSelectRegion();
 
@@ -105,7 +106,7 @@ const SearchPage: React.FC = () => {
                 />
                 <SelectRegion />
             </div>
-            <div className="my-10">
+            <div className="my-10" id="date-section">
                 <SearchPageTitle
                     title="언제 떠나시나요?"
                     description="버디즈와 함께 여행하고 싶은 날짜를 선택해주세요."
@@ -144,6 +145,8 @@ const SearchPage: React.FC = () => {
                     finalSelectedLocation={thirdLevelLocation}
                 />
             )}
+
+            <TopButton />
         </main>
     );
 };
