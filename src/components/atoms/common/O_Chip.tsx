@@ -121,9 +121,10 @@ type ChipProps = {
         | TripTheme
         | BuddyTheme
         | Gender
-        | MeetingPlace;
+        | MeetingPlace
+        | string;
     selected: boolean;
-    onClick: (e: React.MouseEvent<HTMLSpanElement>) => void;
+    onClick?: (e: React.MouseEvent<HTMLSpanElement>) => void;
 } & ChipVariantsType &
     React.ComponentProps<'span'>;
 
@@ -131,7 +132,7 @@ function Chip({
     children,
     intent = 'natural',
     selected,
-    onClick,
+    onClick = () => {},
     ...props
 }: ChipProps) {
     return (
