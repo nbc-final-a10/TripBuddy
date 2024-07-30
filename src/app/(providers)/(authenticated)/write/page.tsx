@@ -16,8 +16,11 @@ import useCalendar from '@/hooks/useCalendar';
 import useSelectRegion from '@/hooks/useSelectRegion';
 import usePreferTheme from '@/hooks/usePreferTheme';
 import { Tables } from '@/types/supabase';
+import { showAlert } from '@/utils/ui/openCustomAlert';
+import { useRouter } from 'next/navigation';
 
 const WritePage: React.FC = () => {
+    const router = useRouter();
     const { NextButton, step } = useNextButton({
         buttonText: '다음',
         limit: 6,
@@ -44,15 +47,20 @@ const WritePage: React.FC = () => {
     type PartialTripData = Partial<TripData>;
 
     // Todo: 핸들러 함수 정의 (커스텀 훅의 state를 supabase에 한번에 쓰는 함수) -> WritePage에 함수만 내려주기
+    // Todo: 더 큰 함수로 바꾸어서 step 별로 유효성 검사 등 실행 로직 분리하기
     const handleWriteTrip = async () => {
         const tripData: PartialTripData = {
             trip_title: '테스트제목',
             trip_content: '테스트내용',
             trip_master_id: buddy?.buddy_id ?? '',
+            trip_max_buddies_counts: buddyCounts,
             trip_bookmarks_counts: buddyCounts,
             trip_start_date: startDateTimestamp,
             trip_end_date: endDateTimestamp,
-            trip_final_destination: thirdLevelLocation,
+            trip_final_destination: [
+                secondLevelLocation ?? '',
+                thirdLevelLocation ?? '',
+            ].join(', '),
             trip_theme1: selectedTripThemes[0],
             trip_theme2: selectedTripThemes[1],
             trip_theme3: selectedTripThemes[2],
@@ -60,16 +68,30 @@ const WritePage: React.FC = () => {
             trip_wanted_buddies2: selectedBuddyThemes[1],
             trip_wanted_buddies3: selectedBuddyThemes[2],
         };
-        const response = await fetch('/api/write', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(tripData),
-        });
+        try {
+            const response = await fetch('/api/write', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(tripData),
+            });
 
-        const result = await response.json();
-        console.log(`게시글 업데이트 결과: ${result}`);
+            // const result = await response.json();
+            if (response.ok) {
+                showAlert('success', '게시글 업데이트 성공', {
+                    onConfirm: () => {
+                        router.push('/');
+                    },
+                });
+            } else {
+                const errorResult = await response.json();
+                console.error('게시글 업데이트 중 오류 발생:', errorResult);
+                showAlert('error', '게시글 업데이트 실패');
+            }
+        } catch (error) {
+            console.error('게시글 업데이트 중 오류 발생:', error);
+        }
     };
 
     return (
