@@ -8,7 +8,7 @@ import { useParams } from 'next/navigation';
 const ChattingPage = () => {
     const { buddy: currentBuddy } = useAuth();
     const params = useParams();
-    const { id } = params;
+    const { id } = params as { id: string };
 
     return (
         <div className="bg-white">

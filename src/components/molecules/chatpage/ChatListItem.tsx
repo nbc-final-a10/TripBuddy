@@ -5,8 +5,6 @@ type ChatListItemProps = {
     contractTripId: string;
     chatName: string;
     lastMessage: string;
-    lastMessageTime: string;
-    profilePics: string[];
 };
 
 const ChatListItem: React.FC<ChatListItemProps> = ({
