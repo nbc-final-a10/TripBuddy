@@ -66,6 +66,16 @@ const OnBoarding: React.FC = () => {
     };
 
     const handleNextButtonClick = () => {
+        // 닉네임
+        // 성별
+        // 생년월일
+        // 지역
+        // 버디 테마
+        // 여정 테마
+        // MBTI
+
+        // step 번호에 따라 유효성 검사 진행
+        // 유효성 검사 진행 후 fetch 날리고 다음 단계로 이동
         if (step === 0) {
             const result = onBoardingValidation(
                 nicknameRef.current?.value,
@@ -103,17 +113,6 @@ const OnBoarding: React.FC = () => {
             const result = onBoardingValidation(selectedTripTheme, step);
             if (!result) setStep(8);
         }
-
-        // 닉네임
-        // 성별
-        // 생년월일
-        // 지역
-        // 버디 테마
-        // 여정 테마
-        // MBTI
-
-        // step 번호에 따라 유효성 검사 진행
-        // 유효성 검사 진행 후 다음 단계으로 이동
     };
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {

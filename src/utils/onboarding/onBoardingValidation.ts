@@ -4,7 +4,6 @@ import {
 } from './../../types/Location.types';
 import { showAlert } from '../ui/openCustomAlert';
 import { BuddyTheme, TripTheme } from '@/types/Themes.types';
-import { buddyThemes, tripThemes } from '@/data/themes';
 
 type InPutValue =
     | string
@@ -17,14 +16,6 @@ type InPutValue =
     | ThirdLevelNames[];
 
 type onBoardingValidationType = (value: InPutValue, step: number) => boolean;
-
-function isBuddyTheme(objs: BuddyTheme[]): boolean {
-    return objs.every(obj => buddyThemes.find(theme => theme.ko === obj));
-}
-
-function isTripTheme(objs: TripTheme[]): boolean {
-    return objs.every(obj => tripThemes.find(theme => theme.ko === obj));
-}
 
 export const onBoardingValidation: onBoardingValidationType = (value, step) => {
     console.log('value =====>', value);
@@ -53,14 +44,7 @@ export const onBoardingValidation: onBoardingValidationType = (value, step) => {
                 return false;
             }
 
-            if (step === 7 && isBuddyTheme(value as BuddyTheme[])) {
-                if (value.length < 3) {
-                    showAlert('caution', '3가지를 선택하셔야 합니다.');
-                    return false;
-                }
-                return true;
-            }
-            if (step === 8 && isTripTheme(value as TripTheme[])) {
+            if (step === 7 || step === 8) {
                 if (value.length < 3) {
                     showAlert('caution', '3가지를 선택하셔야 합니다.');
                     return false;
