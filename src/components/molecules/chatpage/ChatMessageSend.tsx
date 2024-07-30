@@ -5,25 +5,25 @@ import supabase from '@/utils/supabase/client';
 import Image from 'next/image';
 import { Message } from '@/types/Chat.types';
 
-interface ChatMessageSendProps {
-    buddy: any;
-}
+type ChatMessageSendProps = {
+    currentBuddy: any;
+};
 
-const ChatMessageSend: React.FC<ChatMessageSendProps> = ({ buddy }) => {
+const ChatMessageSend: React.FC<ChatMessageSendProps> = ({ currentBuddy }) => {
     const [inputText, setInputText] = useState('');
 
     const handleSendMessage = async (messageText: string) => {
-        if (!buddy || !buddy.buddy_id) {
+        if (!currentBuddy || !currentBuddy.buddy_id) {
             console.error('Buddy is not logged in or buddy_id is missing');
             return;
         }
 
         const newMessage: Omit<Message, 'message_id'> = {
             message_content: messageText,
-            message_sender_id: buddy.buddy_id,
+            message_sender_id: currentBuddy.buddy_id,
             message_created_at: new Date().toISOString(),
             message_type: 'text',
-            message_trip_id: '4e2b9856-2132-49e2-8d13-ea00ba9695e0',
+            message_trip_id: '8a9313c8-0c0a-4ba4-804d-b0e101f39d9b',
         };
 
         const { data, error } = await supabase

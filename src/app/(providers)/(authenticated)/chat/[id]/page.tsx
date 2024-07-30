@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/auth';
 import { useParams } from 'next/navigation';
 
 const ChattingPage = () => {
-    const { buddy } = useAuth();
+    const { buddy: currentBuddy } = useAuth();
     const params = useParams();
     const { id } = params;
 
@@ -14,8 +14,8 @@ const ChattingPage = () => {
         <div className="bg-white">
             <div>채팅번호: {id}</div>
             <ChattingTitle />
-            <ChatMessageList buddy={buddy} />
-            <ChatMessageSend buddy={buddy} />
+            <ChatMessageList currentBuddy={currentBuddy} />
+            <ChatMessageSend currentBuddy={currentBuddy} />
         </div>
     );
 };

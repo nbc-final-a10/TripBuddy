@@ -3,13 +3,18 @@
 import React, { useState, useEffect } from 'react';
 import { Message } from '@/types/Chat.types';
 import supabase from '@/utils/supabase/client';
+import Image from 'next/image';
 
-interface ChatMessageListProps {
-    buddy: any;
-}
+type ChatMessageListProps = {
+    currentBuddy: any;
+};
 
-const ChatMessageList: React.FC<ChatMessageListProps> = ({ buddy }) => {
-    const [messages, setMessages] = useState<Message[]>([]);
+const ChatMessageList: React.FC<ChatMessageListProps> = ({ currentBuddy }) => {
+    const [messages, setMessages] = useState<
+        (Message & {
+            buddy: { buddy_profile_pic: string; buddy_nickname: string };
+        })[]
+    >([]);
 
     useEffect(() => {
         const channel = supabase
@@ -19,7 +24,12 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({ buddy }) => {
                 { event: 'INSERT', schema: 'public', table: 'messages' },
                 payload => {
                     console.log('Change received!', payload);
-                    const newMessage = payload.new as Message;
+                    const newMessage = payload.new as Message & {
+                        buddy: {
+                            buddy_profile_pic: string;
+                            buddy_nickname: string;
+                        };
+                    };
                     setMessages(prevMessages => [...prevMessages, newMessage]);
                 },
             )
@@ -34,7 +44,15 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({ buddy }) => {
         const fetchMessages = async () => {
             const { data, error } = await supabase
                 .from('messages')
-                .select('*, buddies(*)')
+                .select(
+                    `
+                    *,
+                    buddy:message_sender_id (
+                        buddy_profile_pic,
+                        buddy_nickname
+                    )
+                `,
+                )
                 .order('message_created_at', { ascending: true });
 
             if (error) {
@@ -49,46 +67,53 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({ buddy }) => {
 
     return (
         <div className="px-6">
-            {messages.map(message => (
-                <div
-                    key={message.message_id}
-                    className={`py-2 flex ${
-                        message.message_sender_id === buddy?.buddy_id
-                            ? 'justify-end'
-                            : 'justify-start'
-                    }`}
-                >
-                    {message.message_sender_id !== buddy?.buddy_id && (
-                        <div className="w-[40px] h-[40px] bg-gray-200 text-xs rounded-full flex justify-center items-center">
-                            {message.message_sender_id}
+            {messages.map(message => {
+                const isCurrentUser =
+                    message.message_sender_id === currentBuddy?.buddy_id;
+
+                return (
+                    <div
+                        key={message.message_id}
+                        className={`py-2 flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}
+                    >
+                        {!isCurrentUser && (
+                            <div className="w-[40px] h-[40px] text-xs rounded-full">
+                                <Image
+                                    src={message.buddy?.buddy_profile_pic}
+                                    alt="Profile Image"
+                                    width={40}
+                                    height={40}
+                                    className="rounded-full"
+                                />
+                            </div>
+                        )}
+                        <div className="p-2 pt-4 flex flex-col">
+                            {!isCurrentUser && (
+                                <p className="text-xs font-bold">
+                                    {message.buddy?.buddy_nickname}
+                                </p>
+                            )}
+                            <p
+                                className={`inline-block text-xs p-4 rounded-2xl ${
+                                    isCurrentUser
+                                        ? 'bg-main-color text-black rounded-tr-none'
+                                        : 'bg-gray-200 text-black rounded-tl-none'
+                                }`}
+                            >
+                                {message.message_content}
+                            </p>
+                            <span className="text-xs text-gray-500 mt-1">
+                                {new Date(
+                                    message.message_created_at,
+                                ).toLocaleTimeString('en-GB', {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                })}
+                            </span>
                         </div>
-                    )}
-                    <div className="p-2 pt-4 flex flex-col">
-                        <p
-                            className={`inline-block text-xs bg-gray-200 p-4 rounded-2xl ${
-                                message.message_sender_id === buddy?.buddy_id
-                                    ? 'rounded-tr-none'
-                                    : 'rounded-tl-none'
-                            }`}
-                        >
-                            {message.message_content}
-                        </p>
-                        <span className="text-xs text-gray-500 mt-1">
-                            {new Date(
-                                message.message_created_at,
-                            ).toLocaleTimeString('en-GB', {
-                                hour: '2-digit',
-                                minute: '2-digit',
-                            })}
-                        </span>
                     </div>
-                    {message.message_sender_id === buddy?.buddy_id && (
-                        <div className="w-[40px] h-[40px] bg-gray-200 text-xs rounded-full flex justify-center items-center">
-                            {message.message_sender_id}
-                        </div>
-                    )}
-                </div>
-            ))}
+                );
+            })}
         </div>
     );
 };
