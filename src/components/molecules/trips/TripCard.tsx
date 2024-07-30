@@ -30,32 +30,64 @@ const TripCard: React.FC<TripCardProps> = ({
                 'bg-white box-border h-fit',
                 mode === 'detail' && 'py-4',
                 mode === 'card' && 'shadow-md rounded-lg',
-                mode === 'main' && '',
+                mode === 'main' && 'shadow-md w-[211px] h-[215px]',
             )}
         >
             <div
                 className={clsx(
-                    'bg-gray-200 p-4 rounded-lg box-border h-auto',
+                    'bg-white p-2 rounded-lg box-border h-auto',
                     mode === 'detail' && 'bg-white rounded-none',
                     mode === 'card' && 'bg-gray-200 rounded-b-none',
                     mode === 'main' && 'rounded-b-none',
                 )}
             >
-                <div className="flex flex-col">
-                    <div className="flex flex-col gap-2 box-border pb-4">
-                        <div className="flex flex-row gap-2">
+                <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-2 box-border">
+                        <div className="flex flex-row gap-2 justify-between">
                             {mode === 'main' && (
-                                <Chip selected={false}>{'국내'}</Chip>
+                                <div className="flex flex-row gap-1">
+                                    <Chip selected={false} intent="rounded">
+                                        해외
+                                    </Chip>
+                                    <Chip
+                                        selected={false}
+                                        intent="rounded_blue"
+                                    >
+                                        HOT
+                                    </Chip>
+                                </div>
                             )}
-                            <h2 className="text-lg font-bold text-gray-600">
-                                {'경주'}
-                            </h2>
+
+                            <div className="flex flex-row gap-2">
+                                <span className="font-bold text-lg leading-none">
+                                    {'D-4'}
+                                </span>
+                                <span className="text-sm leading-none">
+                                    {'24.07.20'}
+                                </span>
+                            </div>
                         </div>
 
-                        <h3 className="text-lg font-bold">{title}</h3>
+                        <h2 className="text-xl font-bold leading-none">
+                            {'경주'}
+                        </h2>
+                        <h3 className="text-lg font-bold text-gray-600 leading-none pb-2">
+                            {title}
+                        </h3>
 
-                        <div className="flex gap-2">
-                            <Chip selected={false}>{'힐링'}</Chip>
+                        <div className="flex gap-1">
+                            <Chip selected={false} intent="square">
+                                {'힐링'}
+                            </Chip>
+                            <Chip selected={false} intent="square_white">
+                                {'쇼핑'}
+                            </Chip>
+                            <Chip selected={false} intent="square_white">
+                                {'즉흥'}
+                            </Chip>
+                            <Chip selected={false} intent="square_white">
+                                {'여자만'}
+                            </Chip>
                         </div>
                     </div>
 
@@ -82,7 +114,7 @@ const TripCard: React.FC<TripCardProps> = ({
                         </div>
                     </div>
 
-                    {/** slider */}
+                    {/** 인원수 */}
                     <div
                         className={clsx(
                             'flex flex-col gap-1',
@@ -90,13 +122,11 @@ const TripCard: React.FC<TripCardProps> = ({
                             mode === 'detail' && 'hidden',
                         )}
                     >
-                        <div className="flex flex-row gap-2">
-                            <span className="font-bold">{'D-4'}</span>
-                            <span>{'24.07.20'}</span>
-                        </div>
-
                         <div className="flex flex-row">
-                            <TripCustomSlider counts={participants} />
+                            <p className="text-sm leading-none">
+                                {`신청 ${participants}`}
+                                <span className="text-gray-500">/4</span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -104,7 +134,7 @@ const TripCard: React.FC<TripCardProps> = ({
 
             <div
                 className={clsx(
-                    'flex w-full text-white rounded-lg h-[20%]',
+                    'flex w-full text-white rounded-lg h-[16%]',
                     mode === 'detail' &&
                         'bg-white text-gray-950 rounded-none justify-center gap-4',
                     mode === 'card' && 'justify-between',
@@ -131,10 +161,10 @@ const TripCard: React.FC<TripCardProps> = ({
                         mode === 'card' &&
                             'bg-gray-500 text-white rounded-t-none rounded-bl-none rounded-br-lg w-1/2',
                         mode === 'main' &&
-                            'w-full bg-gray-500 text-white rounded-b-lg leading-none py-2.5',
+                            'w-full bg-main-color text-white rounded-b-lg leading-none py-2.5',
                     )}
                 >
-                    참가하기
+                    참여하기
                 </button>
             </div>
         </div>
