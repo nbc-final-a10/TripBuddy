@@ -19,24 +19,23 @@ const SearchResult: React.FC = () => {
         selectedGender: state.selectedGender,
     }));
 
-    // selectedGender에 따라 성별 필터링
-    const filteredItems = selectedGender
-        ? items.filter(item => item.trip_wanted_sex === selectedGender)
-        : items;
+    // // selectedGender에 따라 성별 필터링
+    // const GenderFilteredItems = selectedGender
+    //     ? items.filter(item => item.trip_wanted_sex === selectedGender)
+    //     : items;
 
-    if (filteredItems.length === 0) {
-        return <div>검색 결과가 없습니다.</div>;
-    }
+    // if (GenderFilteredItems.length === 0) {
+    //     return <div>검색 결과가 없습니다.</div>;
+    // }
 
     return (
         <>
             <section className="my-5">
                 <h3 className="text-base font-semibold mb-5">여정 검색 결과</h3>
 
-                <div className="flex flex-nowrap whitespace-nowrap overflow-x-auto scrollbar-hidden gap-4 xl:grid xl:grid-cols-4 xl:auto-cols-[minmax(0,1fr)]">
-                    {filteredItems
-                        .slice(0, visibleFirstItems)
-                        .map((item, index) => (
+                {/* <div className="flex flex-nowrap whitespace-nowrap overflow-x-auto scrollbar-hidden gap-4 xl:grid xl:grid-cols-4 xl:auto-cols-[minmax(0,1fr)]">
+                    {GenderFilteredItems.slice(0, visibleFirstItems).map(
+                        (item, index) => (
                             <div
                                 key={index}
                                 className="bg-gray-100 relative shadow-lg w-[177px] h-[176px] rounded-lg flex-shrink-0 xl:w-[250px] xl:h-[250px] p-3"
@@ -50,16 +49,17 @@ const SearchResult: React.FC = () => {
                                     {item.trip_wanted_sex}
                                 </p>
                             </div>
-                        ))}
+                        ),
+                    )}
                 </div>
-                {visibleFirstItems < filteredItems.length && (
+                {visibleFirstItems < GenderFilteredItems.length && (
                     <button
                         className="mt-4 px-4 py-2 bg-main-color text-white rounded-2xl text-sm mx-auto block hidden xl:block"
                         onClick={loadMoreFirstItems}
                     >
                         더보기
                     </button>
-                )}
+                )} */}
             </section>
 
             <section className="mt-10 xl:mt-24">

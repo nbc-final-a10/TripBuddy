@@ -13,6 +13,7 @@ type SearchStore = {
 
     selectedGender: string | null;
     setSelectedGender: (gender: string | null) => void;
+    // GenderFilteredItems: () => Trip[];
 };
 
 export const useSearchStore = create<SearchStore>(set => ({
@@ -30,5 +31,15 @@ export const useSearchStore = create<SearchStore>(set => ({
     setItems: (items: Trip[]) => set({ items }),
 
     selectedGender: null,
-    setSelectedGender: gender => set({ selectedGender: gender }),
+    setSelectedGender: (gender: string | null) =>
+        set({ selectedGender: gender }),
+
+    // GenderFilteredItems: () => {
+    //     const state = get();
+    //     return state.selectedGender
+    //         ? state.items.filter(
+    //               (item: Trip) => item.trip_wanted_sex === state.selectedGender,
+    //           )
+    //         : state.items;
+    // },
 }));
