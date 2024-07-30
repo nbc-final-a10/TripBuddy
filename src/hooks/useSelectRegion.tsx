@@ -13,11 +13,7 @@ type Location = {
     subLocations?: Location[];
 };
 
-type SelectRegionProps = {
-    pxHeight?: number;
-};
-
-export default function useSelectRegion({ pxHeight = 30 }: SelectRegionProps) {
+export default function useSelectRegion() {
     // Todo: 이거 클로저 패턴임 추가 학습요
     // finalSelectedLocation은 최종 선택한 지역 이름으로 초기화 됨.
     const [thirdLevelLocation, setThirdLevelLocation] = useState<string>('');
@@ -94,24 +90,14 @@ export default function useSelectRegion({ pxHeight = 30 }: SelectRegionProps) {
 
                 {/* 선택한 지역 렌더링 */}
                 {/* Todo: vh말고 px이 안 먹힘 */}
-                <section
-                    className={clsx(`overflow-y-auto relative`, {
-                        'h-[30vh]': pxHeight === 30,
-                        'h-[60vh]': pxHeight === 60,
-                        'h-[90vh]': pxHeight === 90,
-                    })}
-                >
+                <section>
                     <div className="my-3">
                         {secondLevelLocation && (
                             <div>
                                 {selectedSecondLevelLocations.map(loc => (
                                     <div
                                         key={loc.name}
-                                        className={`flex mt-2 ml-2 mr-2 border-b pb-3 cursor-pointer ${
-                                            thirdLevelLocation === loc.name
-                                                ? 'bg-blue-100'
-                                                : ''
-                                        }`}
+                                        className="flex mt-2 ml-2 mr-2 border-b pb-3 cursor-pointer"
                                         onClick={() =>
                                             setThirdLevelLocation(loc.name)
                                         }

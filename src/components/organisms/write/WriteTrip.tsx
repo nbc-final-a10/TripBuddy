@@ -32,9 +32,9 @@ const WriteTrip: React.FC<{
                         type="text"
                         value={tripTitle}
                         onChange={handleTitleChange}
-                        placeholder="제목"
+                        placeholder="제목을 입력해주세요."
                         maxLength={20}
-                        className="w-full px-3 py-2 border border-gray-300 rounded"
+                        className="w-full px-3 py-2 bg-[#E8E8E8] border border-[#E8E8E8] rounded-xl"
                     />
                     <span className="block text-right text-sm text-gray-500">{`${tripTitle.length}/20`}</span>
                 </div>
@@ -46,7 +46,7 @@ const WriteTrip: React.FC<{
                         value={tripContent}
                         onChange={handleContentChange}
                         placeholder="내용을 입력해주세요."
-                        className="w-full h-96 px-3 py-2 border border-gray-300 rounded resize-none"
+                        className="w-full h-96 px-3 py-2 bg-[#E8E8E8] border border-[#E8E8E8] rounded-xl resize-none"
                     />
                 </div>
             </form>

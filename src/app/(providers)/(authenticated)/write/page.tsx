@@ -35,7 +35,7 @@ const WritePage: React.FC = () => {
         firstLevelLocation,
         secondLevelLocation,
         thirdLevelLocation,
-    } = useSelectRegion({ pxHeight: 30 });
+    } = useSelectRegion();
     const [PreferTripThemesToRender, selectedTripThemes] = usePreferTheme({
         mode: 'trip',
     });
