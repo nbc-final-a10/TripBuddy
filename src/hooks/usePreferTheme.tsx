@@ -2,7 +2,12 @@
 
 import PreferTheme from '@/components/atoms/common/PreferTheme';
 import { buddyThemes, tripThemes } from '@/data/themes';
-import { AllBuddyTheme, AllTripTheme } from '@/types/Themes.types';
+import {
+    AllBuddyTheme,
+    AllTripTheme,
+    BuddyTheme,
+    TripTheme,
+} from '@/types/Themes.types';
 import handleChipClick from '@/utils/common/handleChipClick';
 import { MouseEvent, ReactNode, useRef, useState } from 'react';
 
@@ -16,11 +21,13 @@ type UsePreferThemeProps = {
 const usePreferTheme = ({
     mode,
     isLabel = false,
-}: UsePreferThemeProps): [() => ReactNode, string[]] => {
+}: UsePreferThemeProps): [() => ReactNode, (TripTheme | BuddyTheme)[]] => {
     const themeRef = useRef<AllTripTheme[] | AllBuddyTheme[]>(
         mode === 'trip' ? [...tripThemes] : [...buddyThemes],
     );
-    const [selectedTheme, setSelectedTheme] = useState<string[]>([]);
+    const [selectedTheme, setSelectedTheme] = useState<
+        (TripTheme | BuddyTheme)[]
+    >([]);
 
     const handleThemeChange = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;

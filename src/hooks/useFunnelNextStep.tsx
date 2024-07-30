@@ -23,17 +23,14 @@ const useNextButton = ({
 
     const NextButton = ({
         className,
-        onNextButtonClick = () => {},
-        onClick,
+        onClick = () => {},
     }: {
         className: string;
-        onNextButtonClick?: () => void;
         onClick?: () => void;
     }) => (
         <button
             onClick={() => {
                 handleNext();
-                onNextButtonClick();
                 if (onClick) onClick();
             }}
             className={className}
