@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import supabase from '@/utils/supabase/client';
 import { Message } from '@/types/Chat.types';
+import supabase from '@/utils/supabase/client';
 
 interface ChatMessageListProps {
     buddy: any;
@@ -10,6 +10,25 @@ interface ChatMessageListProps {
 
 const ChatMessageList: React.FC<ChatMessageListProps> = ({ buddy }) => {
     const [messages, setMessages] = useState<Message[]>([]);
+
+    useEffect(() => {
+        const channel = supabase
+            .channel('chat-room')
+            .on(
+                'postgres_changes',
+                { event: 'INSERT', schema: 'public', table: 'messages' },
+                payload => {
+                    console.log('Change received!', payload);
+                    const newMessage = payload.new as Message;
+                    setMessages(prevMessages => [...prevMessages, newMessage]);
+                },
+            )
+            .subscribe();
+
+        return () => {
+            channel.unsubscribe();
+        };
+    }, []);
 
     useEffect(() => {
         const fetchMessages = async () => {
@@ -22,7 +41,6 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({ buddy }) => {
                 console.error('Error fetching messages:', error);
             } else {
                 setMessages(data);
-                console.log(data);
             }
         };
 
