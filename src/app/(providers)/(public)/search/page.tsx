@@ -10,48 +10,41 @@ import DateSearchPage from '@/components/organisms/search/DateSearchPage';
 import usePreferTheme from '@/hooks/usePreferTheme';
 import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
 import useSelectRegion from '@/hooks/useSelectRegion';
-import { useRouter } from 'next/navigation';
+import supabase from '@/utils/supabase/client';
+import { useSearchStore } from '@/zustand/search.store';
+// import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react';
 
 const SearchPage: React.FC = () => {
     const [showResult, setShowResult] = useState(false);
     const resultRef = useRef<HTMLDivElement>(null);
 
-    const [PreferBuddyTheme, selectedBuddyTheme] = usePreferTheme({
+    const [PreferBuddyTheme] = usePreferTheme({
         mode: 'buddy',
-        // isLabel: true,
     });
 
-    const [PreferTripTheme, selectedTripTheme] = usePreferTheme({
+    const [PreferTripTheme] = usePreferTheme({
         mode: 'trip',
-        // isLabel: true,
     });
 
-    const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
-    const {
-        SelectRegion,
-        // firstLevelLocation,
-        // secondLevelLocation,
-        thirdLevelLocation,
-    } = useSelectRegion();
+    const { SelectBuddyCounts } = useSelectBuddyCounts();
+    const { SelectRegion } = useSelectRegion();
 
-    const router = useRouter();
+    // const router = useRouter();
 
-    const [items, setItems] = useState(
-        Array.from({ length: 10 }, (_, i) => i + 1),
-    );
-    const [visibleFirstItems, setVisibleFirstItems] = useState(8);
-    const [visibleSecondItems, setVisibleSecondItems] = useState(6);
+    const { setItems } = useSearchStore(state => ({
+        setItems: state.setItems,
+    }));
 
-    const loadMoreFirstItems = () => {
-        setVisibleFirstItems(prev => prev + 8);
-    };
+    const handleShowResult = async () => {
+        // 데이터 가져와서 상태 업데이트
+        const { data, error } = await supabase.from('trips').select('*');
+        if (error) {
+            console.error('Error fetching trips:', error.message);
+        } else {
+            setItems(data);
+        }
 
-    const loadMoreSecondItems = () => {
-        setVisibleSecondItems(prev => prev + 6);
-    };
-
-    const handleShowResult = () => {
         setShowResult(true);
         // 속도 지연
         setTimeout(() => {
@@ -59,6 +52,7 @@ const SearchPage: React.FC = () => {
         }, 100);
     };
 
+    // enter 누르면 검색 결과 보여주기
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             handleShowResult();
@@ -142,14 +136,7 @@ const SearchPage: React.FC = () => {
 
             {showResult && (
                 <div ref={resultRef}>
-                    <SearchResult
-                        items={items}
-                        visibleFirstItems={visibleFirstItems}
-                        visibleSecondItems={visibleSecondItems}
-                        loadMoreFirstItems={loadMoreFirstItems}
-                        loadMoreSecondItems={loadMoreSecondItems}
-                        finalSelectedLocation={thirdLevelLocation}
-                    />
+                    <SearchResult />
                 </div>
             )}
 
