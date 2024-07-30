@@ -12,7 +12,7 @@ const TripsPage: React.FC = () => {
                     date="2022-01-01"
                     location="Seoul"
                     participants={3}
-                    mode="main"
+                    mode="card"
                 />
             ))}
         </section>

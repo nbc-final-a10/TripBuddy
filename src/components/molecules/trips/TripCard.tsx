@@ -22,29 +22,29 @@ const TripCard: React.FC<TripCardProps> = ({
     date,
     location,
     participants,
-    mode = 'card',
+    mode = 'main',
 }) => {
     return (
         <div
             className={clsx(
-                'bg-white box-border h-fit',
+                'bg-white box-border h-fit shadow-lg',
                 mode === 'detail' && 'py-4',
-                mode === 'card' && 'shadow-md rounded-lg',
-                mode === 'main' && 'shadow-md w-[211px] h-[215px]',
+                mode === 'main' && 'rounded-lg',
+                mode === 'card' && 'w-[211px] h-[215px]',
             )}
         >
             <div
                 className={clsx(
                     'bg-white p-2 rounded-lg box-border h-auto',
                     mode === 'detail' && 'bg-white rounded-none',
-                    mode === 'card' && 'bg-gray-200 rounded-b-none',
-                    mode === 'main' && 'rounded-b-none',
+                    mode === 'main' && 'bg-gray-200 rounded-b-none',
+                    mode === 'card' && 'rounded-b-none',
                 )}
             >
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-col gap-2 box-border">
                         <div className="flex flex-row gap-2 justify-between">
-                            {mode === 'main' && (
+                            {mode === 'card' && (
                                 <div className="flex flex-row gap-1">
                                     <Chip selected={false} intent="rounded">
                                         해외
@@ -95,7 +95,7 @@ const TripCard: React.FC<TripCardProps> = ({
                     <div
                         className={clsx(
                             'flex flex-col gap-1',
-                            mode === 'main' && 'hidden',
+                            mode === 'card' && 'hidden',
                         )}
                     >
                         <div className="flex gap-2 items-center">
@@ -118,7 +118,7 @@ const TripCard: React.FC<TripCardProps> = ({
                     <div
                         className={clsx(
                             'flex flex-col gap-1',
-                            mode === 'card' && 'hidden',
+                            mode === 'main' && 'hidden',
                             mode === 'detail' && 'hidden',
                         )}
                     >
@@ -137,8 +137,8 @@ const TripCard: React.FC<TripCardProps> = ({
                     'flex w-full text-white rounded-lg h-[16%]',
                     mode === 'detail' &&
                         'bg-white text-gray-950 rounded-none justify-center gap-4',
-                    mode === 'card' && 'justify-between',
-                    mode === 'main' && 'rounded-b-lg',
+                    mode === 'main' && 'justify-between',
+                    mode === 'card' && 'rounded-b-lg',
                 )}
             >
                 <button
@@ -146,9 +146,9 @@ const TripCard: React.FC<TripCardProps> = ({
                         'p-2',
                         mode === 'detail' &&
                             'bg-white text-gray-950 rounded-md border border-gray-500 w-[40%]',
-                        mode === 'card' &&
+                        mode === 'main' &&
                             'bg-gray-400 text-white rounded-t-none rounded-br-none rounded-bl-lg w-1/2 ',
-                        mode === 'main' && 'hidden',
+                        mode === 'card' && 'hidden',
                     )}
                 >
                     찜하기
@@ -158,9 +158,9 @@ const TripCard: React.FC<TripCardProps> = ({
                         'p-2',
                         mode === 'detail' &&
                             'bg-gray-100 text-gray-950 rounded-md border border-gray-500 w-[40%]',
-                        mode === 'card' &&
-                            'bg-gray-500 text-white rounded-t-none rounded-bl-none rounded-br-lg w-1/2',
                         mode === 'main' &&
+                            'bg-gray-500 text-white rounded-t-none rounded-bl-none rounded-br-lg w-1/2',
+                        mode === 'card' &&
                             'w-full bg-main-color text-white rounded-b-lg leading-none py-2.5',
                     )}
                 >
