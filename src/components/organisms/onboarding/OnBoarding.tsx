@@ -20,6 +20,7 @@ import OnBoardingSelectLocationMbti from './OnBoardingSelectLocationMbti';
 import OnBoardingSelectPrefer from './OnBoardingSelectPrefer';
 import useSelectRegion from '@/hooks/useSelectRegion';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { onBoardingValidation } from '@/utils/onboarding/onBoardingValidation';
 
 const OnBoarding: React.FC = () => {
     const router = useRouter();
@@ -49,7 +50,6 @@ const OnBoarding: React.FC = () => {
     const ageRef = useRef<HTMLInputElement>(null);
 
     const [selectedGender, setSelectedGender] = useState<string>('');
-    const [selectedLocation, setSelectedLocation] = useState<string>('');
     const [selectedMbti, setSelectedMbti] = useState<string>('');
 
     const handleGenderButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
@@ -57,12 +57,6 @@ const OnBoarding: React.FC = () => {
         const selectedGender = target.innerText;
         console.log('선택된 성별 ===>', selectedGender);
         setSelectedGender(selectedGender);
-    };
-
-    const handleLocationChange = (e: MouseEvent<HTMLSpanElement>) => {
-        const target = e.currentTarget;
-        console.log('선택된 장소 ===>', target.innerText);
-        setSelectedLocation(target.innerText);
     };
 
     const handleMbtiChange = (e: MouseEvent<HTMLSpanElement>) => {
@@ -73,11 +67,41 @@ const OnBoarding: React.FC = () => {
 
     const handleNextButtonClick = () => {
         if (step === 0) {
-            if (nicknameRef.current?.value)
-                console.log(nicknameRef.current?.value);
+            const result = onBoardingValidation(
+                nicknameRef.current?.value,
+                step,
+            );
+            if (!result) setStep(0);
         }
         if (step === 2) {
-            if (ageRef.current?.value) console.log(ageRef.current?.value);
+            const result = onBoardingValidation(
+                Number(ageRef.current?.value),
+                step,
+            );
+            if (!result) setStep(2);
+        }
+        if (step === 3) {
+            const result = onBoardingValidation(selectedGender, step);
+            if (!result) setStep(3);
+        }
+        if (step === 4) {
+            const result = onBoardingValidation(
+                [secondLevelLocation, thirdLevelLocation],
+                step,
+            );
+            if (!result) setStep(4);
+        }
+        if (step === 5) {
+            const result = onBoardingValidation(selectedMbti, step);
+            if (!result) setStep(5);
+        }
+        if (step === 7) {
+            const result = onBoardingValidation(selectedBuddyTheme, step);
+            if (!result) setStep(7);
+        }
+        if (step === 8) {
+            const result = onBoardingValidation(selectedTripTheme, step);
+            if (!result) setStep(8);
         }
 
         // 닉네임
@@ -115,7 +139,6 @@ const OnBoarding: React.FC = () => {
         console.log('gender ===>', gender);
         console.log('birth ===>', birthTimestamptz);
         console.log('introduction ===>', introduction);
-        console.log('region ===>', selectedLocation);
         console.log('buddyTheme ===>', selectedBuddyTheme);
         console.log('tripTheme ===>', selectedTripTheme);
         console.log('mbti ===>', selectedMbti);
@@ -125,7 +148,6 @@ const OnBoarding: React.FC = () => {
             !gender ||
             !birth ||
             !introduction ||
-            selectedLocation.length < 3 ||
             selectedBuddyTheme.length < 3 ||
             selectedTripTheme.length < 3 ||
             !selectedMbti
@@ -139,7 +161,7 @@ const OnBoarding: React.FC = () => {
             buddy_sex: gender,
             buddy_birth: birthTimestamptz,
             buddy_introduction: introduction,
-            buddy_region: selectedLocation,
+            // buddy_region: selectedLocation,
             buddy_preferred_buddy1: selectedBuddyTheme[0],
             buddy_preferred_buddy2: selectedBuddyTheme[1],
             buddy_preferred_buddy3: selectedBuddyTheme[2],
@@ -209,8 +231,7 @@ const OnBoarding: React.FC = () => {
                 {step === 4 && (
                     <OnBoardingSelectLocationMbti
                         mode="location"
-                        selected={selectedLocation}
-                        handleChange={handleLocationChange}
+                        selected={thirdLevelLocation}
                         SelectRegion={SelectRegion}
                     />
                 )}

@@ -9,14 +9,14 @@ type OnBoardingSelectLocationMbtiProps = {
     mode: 'location' | 'mbti';
     selected: string;
     isLabel?: boolean;
-    handleChange: (e: MouseEvent<HTMLSpanElement>) => void;
+    handleChange?: (e: MouseEvent<HTMLSpanElement>) => void;
     SelectRegion?: React.FC | null;
 };
 
 const OnBoardingSelectLocationMbti = ({
     mode,
     selected,
-    handleChange,
+    handleChange = () => {},
     isLabel = false,
     SelectRegion = null,
 }: OnBoardingSelectLocationMbtiProps) => {
