@@ -26,8 +26,8 @@ const chipVariants = cva(
                 natural: 'bg-gray-400 border-gray-400 text-white',
                 square: 'rounded-md px-1',
                 square_white: 'rounded-md px-1',
-                rounded: 'px-1',
-                rounded_blue: 'px-1',
+                rounded: 'px-[6px] py-[3px] rounded-xl',
+                rounded_blue: 'px-[6px] py-[3px] rounded-xl',
             },
             variant: {
                 selected: 'bg-main-color border-main-color',
