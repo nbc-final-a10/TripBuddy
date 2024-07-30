@@ -21,6 +21,7 @@ import useTripWrite from '@/hooks/MyPage/useTripWrite';
 import WriteTrip from '@/components/organisms/write/WriteTrip';
 import useSelectSex from '@/hooks/useSelectSex';
 import useSelectAges from '@/hooks/useSelectAges';
+import useSelectMeetPlace from '@/hooks/useSelectMeetPlace';
 
 const WritePage: React.FC = () => {
     const router = useRouter();
@@ -55,6 +56,7 @@ const WritePage: React.FC = () => {
     } = useTripWrite();
     const { wantedSex, SelectWantedSexButton } = useSelectSex();
     const { startAge, endAge, handleStartAge, handleEndAge } = useSelectAges();
+    const { meetPlace, SelectMeetPlaceButton } = useSelectMeetPlace();
 
     type TripData = Tables<'trips'>;
     // 파셜트립데이터는 데이터 컬럼을 선택적으로 쓰겠다
@@ -73,6 +75,7 @@ const WritePage: React.FC = () => {
             trip_start_date: startDateTimestamp,
             trip_end_date: endDateTimestamp,
             trip_final_destination: `${secondLevelLocation} ${thirdLevelLocation}`,
+            trip_meet_location: meetPlace,
             trip_theme1: selectedTripThemes[0],
             trip_theme2: selectedTripThemes[1],
             trip_theme3: selectedTripThemes[2],
@@ -133,6 +136,7 @@ const WritePage: React.FC = () => {
                     {step === 3 && (
                         <SelectTripThemesPage
                             PreferThemeToRender={PreferTripThemesToRender}
+                            SelectMeetPlaceButton={SelectMeetPlaceButton}
                         />
                     )}
                     {step === 4 && (

@@ -10,7 +10,7 @@ function useSelectMeetPlace() {
 
     const values = [firstValue, secondValue];
 
-    const SelectWantedSexButton = () => {
+    const SelectMeetPlaceButton = () => {
         return (
             <div className="flex justify-center items-center mt-4">
                 {values.map((value, index) => (
@@ -26,7 +26,7 @@ function useSelectMeetPlace() {
         );
     };
 
-    return { SelectWantedSexButton, meetPlace };
+    return { SelectMeetPlaceButton, meetPlace };
 }
 
 export default useSelectMeetPlace;

@@ -1,13 +1,16 @@
 import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 import LeftSmGrayText from '@/components/atoms/write/LeftSmGrayText';
+import LeftXlBoldText from '@/components/atoms/write/LeftXlBoldText';
 import React from 'react';
 
 type SelectTripThemesPageProps = {
     PreferThemeToRender: React.FC;
+    SelectMeetPlaceButton: React.FC;
 };
 
 export default function SelectTripThemesPage({
     PreferThemeToRender,
+    SelectMeetPlaceButton,
 }: SelectTripThemesPageProps) {
     return (
         <div>
@@ -17,6 +20,10 @@ export default function SelectTripThemesPage({
             </div>
             <div className="mb-10 mx-2">
                 <PreferThemeToRender />
+            </div>
+            <div className="mb-10 mx-2">
+                <LeftXlBoldText text="어디에서 만날까요?" />
+                <SelectMeetPlaceButton />
             </div>
         </div>
     );
