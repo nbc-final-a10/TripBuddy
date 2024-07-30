@@ -8,8 +8,6 @@ import { SiNaver } from 'react-icons/si';
 const NaverLogInButton: React.FC = () => {
     const [naverObj, setNaverObj] = useState<any>(null);
 
-    // console.log(naverObj);
-
     const naverRef = useRef<HTMLButtonElement>(null);
 
     const handleNaverInit = useCallback(() => {
@@ -35,11 +33,6 @@ const NaverLogInButton: React.FC = () => {
         if (!naverRef.current?.children[0].children) return;
         (naverRef.current.children[0].children[0] as HTMLImageElement).click();
     };
-
-    // useLayoutEffect(() => {
-    //     setNaverObj(window.naver);
-    //     handleNaverInit();
-    // }, [handleNaverInit]);
 
     return (
         <>
