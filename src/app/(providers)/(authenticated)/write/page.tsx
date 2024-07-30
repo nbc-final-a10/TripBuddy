@@ -11,6 +11,9 @@ import WriteTrip from '@/components/organisms/write/WriteTrip';
 import useNextButton from '@/hooks/useFunnelNextStep';
 import React from 'react';
 import { useAuth } from '@/hooks/auth';
+import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
+import useCalendar from '@/hooks/useCalendar';
+import useSelectRegion from '@/hooks/useSelectRegion';
 
 const WritePage: React.FC = () => {
     const { NextButton, step } = useNextButton({
@@ -21,6 +24,18 @@ const WritePage: React.FC = () => {
     const { buddy } = useAuth();
     console.log(`buddy: ${buddy}`);
 
+    const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
+    const { SelectCalendar, startDateTimestamp, endDateTimestamp } =
+        useCalendar();
+    const {
+        SelectRegion,
+        firstLevelLocation,
+        secondLevelLocation,
+        thirdLevelLocation,
+    } = useSelectRegion();
+
+    // Todo: 핸들러 함수 정의 (커스텀 훅의 state를 supabase에 한번에 쓰는 함수) -> WritePage에 함수만 내려주기
+
     return (
         <>
             {/* <div className="mt-4 xl:mt-20 ml-5 xl:ml-64"> */}
@@ -28,12 +43,31 @@ const WritePage: React.FC = () => {
             {/* </div> */}
             <section className="h-dvh flex flex-col">
                 <div className="flex flex-col">
-                    {step === 0 && <WelcomePage />}
-                    {step === 1 && <SelectRegionPage />}
-                    {step === 2 && <SelectDatePage />}
+                    {step === 0 && (
+                        <WelcomePage
+                            buddyCounts={buddyCounts}
+                            SelectBuddyCounts={SelectBuddyCounts}
+                        />
+                    )}
+                    {step === 1 && (
+                        <SelectRegionPage SelectRegion={SelectRegion} />
+                    )}
+                    {step === 2 && (
+                        <SelectDatePage
+                            startDateTimestamp={startDateTimestamp}
+                            endDateTimestamp={endDateTimestamp}
+                            SelectCalendar={SelectCalendar}
+                        />
+                    )}
                     {step === 3 && <SelectTripThemesPage />}
                     {step === 4 && <SelectAdditionalBuddyThemes />}
-                    {step === 5 && <WriteTrip />}
+                    {step === 5 && (
+                        <WriteTrip
+                            firstLevelLocation={firstLevelLocation}
+                            secondLevelLocation={secondLevelLocation || ''}
+                            thirdLevelLocation={thirdLevelLocation || ''}
+                        />
+                    )}
                     {step === 6 && <CompletePage />}
                 </div>
                 <div className="flex justify-center">

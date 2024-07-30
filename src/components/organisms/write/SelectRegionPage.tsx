@@ -2,12 +2,15 @@
 
 import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 import LeftSmGrayText from '@/components/atoms/write/LeftSmGrayText';
-import useSelectRegion from '@/hooks/useSelectRegion';
 import React from 'react';
 
-export default function SelectRegionPage() {
-    const { SelectRegion, finalSelectedLocation } = useSelectRegion();
+type SelectRegionPageProps = {
+    SelectRegion: React.FC;
+};
 
+export default function SelectRegionPage({
+    SelectRegion,
+}: SelectRegionPageProps) {
     return (
         <div>
             <header className="mt-10 mb-5">
