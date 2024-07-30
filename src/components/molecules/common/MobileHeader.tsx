@@ -59,7 +59,11 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
                 <Arrow_Back />
             </div>
             <div className="w-[calc(100%/3)] flex justify-center items-center">
-                {title && <h1 className="text-center leading-3">{title}</h1>}
+                {title && (
+                    <h1 className="text-center leading-3 text-xl font-semibold">
+                        {title}
+                    </h1>
+                )}
             </div>
 
             <div className="w-[calc(100%/3)] flex justify-end items-center gap-2">

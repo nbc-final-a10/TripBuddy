@@ -5,6 +5,7 @@ import LocationToggleButton from '@/components/atoms/write/LocationToggleButton'
 import SelectedResultRealtimeText from '@/components/organisms/write/SelectedResultRealtimeText';
 import locationData from '@/data/location';
 import { SecondLevel, ThirdLevel } from '@/types/Location.types';
+import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
 type Location = {
@@ -88,18 +89,15 @@ export default function useSelectRegion() {
                 </section>
 
                 {/* 선택한 지역 렌더링 */}
+                {/* Todo: vh말고 px이 안 먹힘 */}
                 <section>
                     <div className="my-3">
                         {secondLevelLocation && (
-                            <div id="testId">
+                            <div>
                                 {selectedSecondLevelLocations.map(loc => (
                                     <div
                                         key={loc.name}
-                                        className={`flex mt-2 ml-2 mr-2 border-b pb-3 cursor-pointer ${
-                                            thirdLevelLocation === loc.name
-                                                ? 'bg-blue-100'
-                                                : ''
-                                        }`}
+                                        className="flex mt-2 ml-2 mr-2 border-b pb-3 cursor-pointer hover:bg-main-color"
                                         onClick={() =>
                                             setThirdLevelLocation(loc.name)
                                         }

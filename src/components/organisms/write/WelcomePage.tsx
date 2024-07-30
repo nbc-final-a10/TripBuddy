@@ -3,14 +3,10 @@ import WelcomeMessage from '@/components/molecules/write/WelcomeMessage';
 import React from 'react';
 
 type WelcomePageProps = {
-    buddyCounts: number;
     SelectBuddyCounts: React.FC;
 };
 
-const WelcomePage: React.FC<WelcomePageProps> = ({
-    buddyCounts,
-    SelectBuddyCounts,
-}) => {
+const WelcomePage: React.FC<WelcomePageProps> = ({ SelectBuddyCounts }) => {
     return (
         <div className="flex flex-col items-center">
             <WelcomeMessage />

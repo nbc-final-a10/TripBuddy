@@ -31,6 +31,16 @@ const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
                 // close
                 />
             )}
+            {pathname === '/search' && (
+                <MobileHeader
+                    title="검색"
+                    // notification
+                    // search
+                    // settings
+                    // edit
+                    close
+                />
+            )}
             {children}
         </>
     );
