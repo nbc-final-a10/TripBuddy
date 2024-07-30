@@ -1,7 +1,5 @@
 'use client';
 
-import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
-import Calendar from '@/components/atoms/Calendar';
 import React from 'react';
 import useCalendar from '@/hooks/useCalendar';
 import SelectedResultRealtimeText from '../write/SelectedResultRealtimeText';
