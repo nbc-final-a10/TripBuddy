@@ -20,6 +20,7 @@ import { useRouter } from 'next/navigation';
 import useTripWrite from '@/hooks/MyPage/useTripWrite';
 import WriteTrip from '@/components/organisms/write/WriteTrip';
 import useSelectSex from '@/hooks/useSelectSex';
+import useSelectAges from '@/hooks/useSelectAges';
 
 const WritePage: React.FC = () => {
     const router = useRouter();
@@ -53,6 +54,7 @@ const WritePage: React.FC = () => {
         handleContentChange,
     } = useTripWrite();
     const { wantedSex, SelectWantedSexButton } = useSelectSex();
+    const { startAge, endAge, handleStartAge, handleEndAge } = useSelectAges();
 
     type TripData = Tables<'trips'>;
     // 파셜트립데이터는 데이터 컬럼을 선택적으로 쓰겠다
@@ -70,6 +72,8 @@ const WritePage: React.FC = () => {
             trip_bookmarks_counts: buddyCounts,
             trip_start_date: startDateTimestamp,
             trip_end_date: endDateTimestamp,
+            trip_start_age: startAge,
+            trip_end_age: endAge,
             trip_final_destination: `${secondLevelLocation} ${thirdLevelLocation}`,
             trip_theme1: selectedTripThemes[0],
             trip_theme2: selectedTripThemes[1],
@@ -137,6 +141,10 @@ const WritePage: React.FC = () => {
                         <SelectAdditionalBuddyThemes
                             PreferThemeToRender={PreferWantedBuddiesToRender}
                             SelectWantedSexButton={SelectWantedSexButton}
+                            startAge={startAge}
+                            endAge={endAge}
+                            handleStartAge={handleStartAge}
+                            handleEndAge={handleEndAge}
                         />
                     )}
                     {step === 5 && (
