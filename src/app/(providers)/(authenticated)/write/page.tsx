@@ -15,6 +15,7 @@ import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
 import useCalendar from '@/hooks/useCalendar';
 import useSelectRegion from '@/hooks/useSelectRegion';
 import usePreferTheme from '@/hooks/usePreferTheme';
+import { Tables } from '@/types/supabase';
 
 const WritePage: React.FC = () => {
     const { NextButton, step } = useNextButton({
@@ -38,8 +39,27 @@ const WritePage: React.FC = () => {
         mode: 'buddy',
     });
 
+    type TripData = Tables<'trips'>;
+    // 파셜트립데이터는 데이터 컬럼을 선택적으로 쓰겠다
+    type PartialTripData = Partial<TripData>;
+
     // Todo: 핸들러 함수 정의 (커스텀 훅의 state를 supabase에 한번에 쓰는 함수) -> WritePage에 함수만 내려주기
     const handleWriteTrip = async () => {
+        const tripData: PartialTripData = {
+            trip_title: '테스트제목',
+            trip_content: '테스트내용',
+            trip_master_id: buddy?.buddy_id ?? '',
+            trip_bookmarks_counts: buddyCounts,
+            trip_start_date: startDateTimestamp,
+            trip_end_date: endDateTimestamp,
+            trip_final_destination: thirdLevelLocation,
+            trip_theme1: selectedTripThemes[0],
+            trip_theme2: selectedTripThemes[1],
+            trip_theme3: selectedTripThemes[2],
+            trip_wanted_buddies1: selectedBuddyThemes[0],
+            trip_wanted_buddies2: selectedBuddyThemes[1],
+            trip_wanted_buddies3: selectedBuddyThemes[2],
+        };
         const response = await fetch('/api/write', {
             method: 'POST',
             headers: {
@@ -50,18 +70,6 @@ const WritePage: React.FC = () => {
 
         const result = await response.json();
         console.log(`게시글 업데이트 결과: ${result}`);
-    };
-
-    const tripData = {
-        title: '테스트제목',
-        content: '테스트내용',
-        buddy: { buddy_id: buddy?.buddy_id },
-        buddyCounts: buddyCounts,
-        startDateTimestamp: startDateTimestamp,
-        endDateTimestamp: endDateTimestamp,
-        thirdLevelLocation: thirdLevelLocation,
-        selectedTripThemes: selectedTripThemes,
-        selectedBuddyThemes: selectedBuddyThemes,
     };
 
     return (

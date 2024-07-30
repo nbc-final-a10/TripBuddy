@@ -10,6 +10,8 @@ import { Descendant } from 'slate';
 //     },
 // ];
 
+// Todo: useRef에서 forwardRef로 부모 페이지 컴포넌트에서부터 내리는 방법 (19 버전부터 '코드가' 없어짐, 기능이 자동 탑재됨) -> 아니면 커스텀 훅
+
 export default function WriteTrip() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
@@ -22,7 +24,7 @@ export default function WriteTrip() {
         setContent(e.target.value);
     };
 
-    // Todo : 페이지 컴포넌트로 빠져야 함 -> 이 페이���에서는 Props로 함수만 전달 받기
+    // Todo : 페이지 컴포넌트로 빠져야 함 -> 이 페이지에서는 Props로 함수만 전달 받기
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         // Todo: 게시글 작성 로직 추가
