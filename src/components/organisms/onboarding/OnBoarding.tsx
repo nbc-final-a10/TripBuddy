@@ -52,11 +52,6 @@ const OnBoarding: React.FC = () => {
     const [selectedLocation, setSelectedLocation] = useState<string>('');
     const [selectedMbti, setSelectedMbti] = useState<string>('');
 
-    const handleTestClick = () => {
-        if (nicknameRef.current?.value) console.log(nicknameRef.current?.value);
-        if (ageRef.current?.value) console.log(ageRef.current?.value);
-    };
-
     const handleGenderButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
         const target = e.currentTarget;
         const selectedGender = target.innerText;
@@ -74,6 +69,28 @@ const OnBoarding: React.FC = () => {
         const target = e.currentTarget;
         console.log('선택된 MBTI ===>', target.innerText);
         setSelectedMbti(target.innerText);
+    };
+
+    const handleNextButtonClick = () => {
+        if (step === 0) {
+            if (nicknameRef.current?.value)
+                console.log(nicknameRef.current?.value);
+        }
+        if (step === 2) {
+            if (ageRef.current?.value) console.log(ageRef.current?.value);
+        }
+
+        // 닉네임
+        // 성별
+        // 생년월일
+        // 자기소개
+        // 지역
+        // 버디 테마
+        // 여정 테마
+        // MBTI
+
+        // step 번호에 따라 유효성 검사 진행
+        // 유효성 검사 진행 후 다음 단계으로 이동
     };
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -233,7 +250,7 @@ const OnBoarding: React.FC = () => {
             <div className="flex justify-center">
                 <NextButton
                     className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-full"
-                    onClick={handleTestClick}
+                    onClick={handleNextButtonClick}
                 />
             </div>
             <button onClick={logOut}>임시로그아웃</button>

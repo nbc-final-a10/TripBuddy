@@ -3,7 +3,7 @@
 import Input from '@/components/atoms/common/O_Input';
 import { SubmitButton } from '@/components/atoms/common/O_Submit-button';
 import { useAuth } from '@/hooks/auth';
-import { authValidation } from '@/utils/common/validation';
+import { authValidation } from '@/utils/auth/validation';
 import { FormEvent } from 'react';
 
 function ResetForm() {

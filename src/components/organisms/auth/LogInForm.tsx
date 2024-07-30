@@ -6,7 +6,7 @@ import { FormEvent, useState } from 'react';
 import { SubmitButton } from '../../atoms/common/O_Submit-button';
 import Input from '@/components/atoms/common/O_Input';
 import { useAuth } from '@/hooks/auth';
-import { authValidation } from '@/utils/common/validation';
+import { authValidation } from '@/utils/auth/validation';
 
 function LogInForm() {
     const { isPending, logIn, sendingResetEmail } = useAuth();
