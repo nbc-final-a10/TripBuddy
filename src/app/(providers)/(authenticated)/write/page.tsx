@@ -7,7 +7,6 @@ import SelectRegionPage from '@/components/organisms/write/SelectRegionPage';
 import SelectTripThemesPage from '@/components/organisms/write/SelectTripThemesPage';
 import SelectDatePage from '@/components/organisms/write/SelectDatePage';
 import WelcomePage from '@/components/organisms/write/WelcomePage';
-import WriteTrip from '@/components/organisms/write/WriteTrip';
 import useNextButton from '@/hooks/useFunnelNextStep';
 import React from 'react';
 import { useAuth } from '@/hooks/auth';
@@ -18,6 +17,8 @@ import usePreferTheme from '@/hooks/usePreferTheme';
 import { Tables } from '@/types/supabase';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useRouter } from 'next/navigation';
+import useTripWrite from '@/hooks/MyPage/useTripWrite';
+import WriteTrip from '@/components/organisms/write/WriteTrip';
 
 const WritePage: React.FC = () => {
     const router = useRouter();
@@ -41,6 +42,13 @@ const WritePage: React.FC = () => {
     const [PreferThemeToRender, selectedBuddyThemes] = usePreferTheme({
         mode: 'buddy',
     });
+    const {
+        tripTitle,
+        tripContent,
+        tripImage,
+        handleTitleChange,
+        handleContentChange,
+    } = useTripWrite();
 
     type TripData = Tables<'trips'>;
     // 파셜트립데이터는 데이터 컬럼을 선택적으로 쓰겠다
@@ -50,8 +58,9 @@ const WritePage: React.FC = () => {
     // Todo: 더 큰 함수로 바꾸어서 step 별로 유효성 검사 등 실행 로직 분리하기
     const handleWriteTrip = async () => {
         const tripData: PartialTripData = {
-            trip_title: '테스트제목',
-            trip_content: '테스트내용',
+            trip_title: tripTitle,
+            trip_content: tripContent,
+            trip_thumbnail: tripImage,
             trip_master_id: buddy?.buddy_id ?? '',
             trip_max_buddies_counts: buddyCounts,
             trip_bookmarks_counts: buddyCounts,
@@ -127,7 +136,14 @@ const WritePage: React.FC = () => {
                             PreferThemeToRender={PreferThemeToRender}
                         />
                     )}
-                    {step === 5 && <WriteTrip />}
+                    {step === 5 && (
+                        <WriteTrip
+                            tripTitle={tripTitle}
+                            tripContent={tripContent}
+                            handleTitleChange={handleTitleChange}
+                            handleContentChange={handleContentChange}
+                        />
+                    )}
                     {step === 6 && <CompletePage />}
                 </div>
                 <div className="flex justify-center">
