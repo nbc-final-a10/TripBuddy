@@ -27,7 +27,12 @@ const SearchPage: React.FC = () => {
     });
 
     const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
-    const { SelectRegion, finalSelectedLocation } = useSelectRegion();
+    const {
+        SelectRegion,
+        firstLevelLocation,
+        secondLevelLocation,
+        thirdLevelLocation,
+    } = useSelectRegion();
 
     const router = useRouter();
 
@@ -136,7 +141,7 @@ const SearchPage: React.FC = () => {
                     visibleSecondItems={visibleSecondItems}
                     loadMoreFirstItems={loadMoreFirstItems}
                     loadMoreSecondItems={loadMoreSecondItems}
-                    finalSelectedLocation={finalSelectedLocation}
+                    finalSelectedLocation={thirdLevelLocation}
                 />
             )}
         </main>
