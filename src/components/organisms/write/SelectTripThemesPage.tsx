@@ -12,8 +12,8 @@ export default function SelectTripThemesPage({
     return (
         <div>
             <div className="mb-10">
-                <Left2xlBoldText text="어떤 유형의 버디를 원하세요?" />
-                <LeftSmGrayText text="최대 3개까지 선택할 수 있어요" />
+                <Left2xlBoldText text="어떤 유형의 여정을 원하세요?" />
+                <LeftSmGrayText text="여정 테마를 3개 선택해주세요" />
             </div>
             <div className="mb-10 mx-2">
                 <PreferThemeToRender />
