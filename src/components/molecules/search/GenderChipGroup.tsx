@@ -1,38 +1,31 @@
 import React, { useState } from 'react';
 import Chip from '@/components/atoms/common/O_Chip';
 import { Gender } from '@/types/Gender.types';
-import supabase from '@/utils/supabase/client';
+import { useSearchStore } from '@/zustand/search.store';
 
 const genderOptions: Gender[] = ['여자만', '남자만', '상관없음'];
 
 const GenderChipGroup: React.FC = () => {
-    const [selectedGender, setSelectedGender] = useState<string | null>(null);
-    const [clickCount, setClickCount] = useState<number>(0);
+    const { selectedGender, setSelectedGender } = useSearchStore(state => ({
+        selectedGender: state.selectedGender,
+        setSelectedGender: state.setSelectedGender,
+    }));
 
     const handleGenderClick = async (gender: string) => {
-        const newClickCount = clickCount + 1;
-        setClickCount(newClickCount);
+        const isSelected = selectedGender === gender;
+        const newSelectedGender = isSelected ? null : gender;
 
-        if (newClickCount % 2 !== 0) {
-            const { data, error } = await supabase
-                .from('Buddies')
-                .insert([{ buddy_sex: gender }]);
+        setSelectedGender(newSelectedGender);
 
-            if (error) {
-                console.error('데이터 삽입 오류: ', error);
-            } else {
-                console.log('데이터 삽입됨: ', data);
-            }
-        }
-
-        setSelectedGender(prevSelectedGender =>
-            prevSelectedGender === gender ? null : gender,
-        );
-        // console.log(gender);
+        // if (newSelectedGender) {
+        //     console.log(`현재 선택된 버튼: ${newSelectedGender}`);
+        // } else {
+        //     console.log('선택이 취소되었습니다.');
+        // }
     };
 
     return (
-        <div className="flex gap-1.5 mt-3 mb-5">
+        <div className="flex gap-1.5">
             {genderOptions.map(gender => (
                 <Chip
                     key={gender}
