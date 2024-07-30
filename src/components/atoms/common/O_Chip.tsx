@@ -1,3 +1,5 @@
+'use client';
+
 import { type Gender } from '@/types/Gender.types';
 import { type SecondLevelNames } from '@/types/Location.types';
 import { type MBTI } from '@/types/Mbtis.types';
@@ -42,7 +44,7 @@ const chipVariants = cva(
             {
                 intent: 'natural',
                 variant: 'selected',
-                className: 'bg-gray-700 text-white opacity-100 cursor-auto',
+                className: 'bg-main-color text-white opacity-100 cursor-auto',
             },
             {
                 intent: 'natural',
@@ -103,6 +105,7 @@ function Chip({
     intent = 'natural',
     selected,
     onClick = () => {},
+    className,
     ...props
 }: ChipProps) {
     return (
@@ -112,7 +115,7 @@ function Chip({
                     intent,
                     variant: selected ? 'selected' : 'unselected',
                 }),
-                props.className,
+                className,
             )}
             {...props}
             onClick={onClick}

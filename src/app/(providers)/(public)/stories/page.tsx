@@ -1,3 +1,4 @@
+import Chip from '@/components/atoms/common/O_Chip';
 import StoryCard from '@/components/molecules/stories/StoryCard';
 import React from 'react';
 
