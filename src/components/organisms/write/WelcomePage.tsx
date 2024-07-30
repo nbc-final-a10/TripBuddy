@@ -1,11 +1,12 @@
 import WelcomeImage from '@/components/molecules/write/WelcomeImage';
 import WelcomeMessage from '@/components/molecules/write/WelcomeMessage';
-import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
 import React from 'react';
 
-const WelcomePage: React.FC = () => {
-    const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
+type WelcomePageProps = {
+    SelectBuddyCounts: React.FC;
+};
 
+const WelcomePage: React.FC<WelcomePageProps> = ({ SelectBuddyCounts }) => {
     return (
         <div className="flex flex-col items-center">
             <WelcomeMessage />

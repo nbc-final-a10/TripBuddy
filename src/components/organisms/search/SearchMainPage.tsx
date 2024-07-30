@@ -1,8 +1,8 @@
 'use client';
 
 import useStore from '@/app/store';
-import DateSearchButton from '@/components/atoms/DateSearchButton';
 import LocationSearchButton from '@/components/atoms/LocationSearchButton';
+import DateSearchButton from '@/components/atoms/search/DateSearchButton';
 import {
     additionalAttributes,
     buddiesPreferences,

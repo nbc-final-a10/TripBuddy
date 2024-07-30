@@ -1,41 +1,21 @@
+'use client';
+
+import React from 'react';
 import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
-import SlateEditor from '@/components/atoms/write/SlateEditor';
-import React, { useState } from 'react';
-import { Descendant } from 'slate';
 
-const initialContent: Descendant[] = [
-    {
-        type: 'paragraph',
-        children: [{ text: '' }],
-    },
-];
-
-export default function WriteTrip() {
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState<Descendant[]>(initialContent);
-
-    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.target.value);
-    };
-
-    const handleContentChange = (value: Descendant[]) => {
-        setContent(value);
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        // Todo: 게시글 작성 로직 추가
-        console.log('Title:', title);
-        console.log('Content:', JSON.stringify(content));
-    };
-
+const WriteTrip: React.FC<{
+    tripTitle: string;
+    tripContent: string;
+    handleTitleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleContentChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}> = ({ tripTitle, tripContent, handleTitleChange, handleContentChange }) => {
     return (
         <div className="p-4">
             <header className="mb-5">
                 <Left2xlBoldText text="모집 글을 작성해봐요!" />
             </header>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form className="space-y-4">
                 <div>
                     <label className="block mb-1 text-sm font-medium text-gray-700">
                         대표 이미지
@@ -50,32 +30,28 @@ export default function WriteTrip() {
                     </label>
                     <input
                         type="text"
-                        value={title}
+                        value={tripTitle}
                         onChange={handleTitleChange}
-                        placeholder="제목"
+                        placeholder="제목을 입력해주세요."
                         maxLength={20}
-                        className="w-full px-3 py-2 border border-gray-300 rounded"
+                        className="w-full px-3 py-2 bg-[#E8E8E8] border border-[#E8E8E8] rounded-xl"
                     />
-                    <span className="block text-right text-sm text-gray-500">{`${title.length}/20`}</span>
+                    <span className="block text-right text-sm text-gray-500">{`${tripTitle.length}/20`}</span>
                 </div>
                 <div>
                     <label className="block mb-1 text-sm font-medium text-gray-700">
                         글 내용
                     </label>
-                    <SlateEditor
-                        value={content}
+                    <textarea
+                        value={tripContent}
                         onChange={handleContentChange}
+                        placeholder="내용을 입력해주세요."
+                        className="w-full h-96 px-3 py-2 bg-[#E8E8E8] border border-[#E8E8E8] rounded-xl resize-none"
                     />
-                </div>
-                <div>
-                    <button
-                        type="submit"
-                        className="w-full px-4 py-2 font-semibold text-white bg-blue-500 rounded hover:bg-blue-600"
-                    >
-                        제출 테스트 버튼
-                    </button>
                 </div>
             </form>
         </div>
     );
-}
+};
+
+export default WriteTrip;
