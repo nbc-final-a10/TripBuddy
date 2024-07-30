@@ -6,10 +6,12 @@ import React from 'react';
 
 type SelectAdditionalBuddyThemesProps = {
     PreferThemeToRender: React.FC;
+    SelectWantedSexButton: React.FC;
 };
 
 export default function SelectAdditionalBuddyThemes({
     PreferThemeToRender,
+    SelectWantedSexButton,
 }: SelectAdditionalBuddyThemesProps) {
     return (
         <div>
@@ -19,6 +21,7 @@ export default function SelectAdditionalBuddyThemes({
             </div>
             <div className="mb-5">
                 <LeftXlBoldText text="성별" />
+                <SelectWantedSexButton />
             </div>
             <div className="mb-5">
                 <LeftXlBoldText text="나이" />

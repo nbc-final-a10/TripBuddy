@@ -19,6 +19,7 @@ import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useRouter } from 'next/navigation';
 import useTripWrite from '@/hooks/MyPage/useTripWrite';
 import WriteTrip from '@/components/organisms/write/WriteTrip';
+import useSelectSex from '@/hooks/useSelectSex';
 
 const WritePage: React.FC = () => {
     const router = useRouter();
@@ -51,6 +52,7 @@ const WritePage: React.FC = () => {
         handleTitleChange,
         handleContentChange,
     } = useTripWrite();
+    const { wantedSex, SelectWantedSexButton } = useSelectSex();
 
     type TripData = Tables<'trips'>;
     // 파셜트립데이터는 데이터 컬럼을 선택적으로 쓰겠다
@@ -68,16 +70,14 @@ const WritePage: React.FC = () => {
             trip_bookmarks_counts: buddyCounts,
             trip_start_date: startDateTimestamp,
             trip_end_date: endDateTimestamp,
-            trip_final_destination: [
-                secondLevelLocation ?? '',
-                thirdLevelLocation ?? '',
-            ].join(', '),
+            trip_final_destination: `${secondLevelLocation} ${thirdLevelLocation}`,
             trip_theme1: selectedTripThemes[0],
             trip_theme2: selectedTripThemes[1],
             trip_theme3: selectedTripThemes[2],
             trip_wanted_buddies1: selectedWantedBuddies[0],
             trip_wanted_buddies2: selectedWantedBuddies[1],
             trip_wanted_buddies3: selectedWantedBuddies[2],
+            trip_wanted_sex: wantedSex,
         };
         try {
             const response = await fetch('/api/write', {
@@ -136,6 +136,7 @@ const WritePage: React.FC = () => {
                     {step === 4 && (
                         <SelectAdditionalBuddyThemes
                             PreferThemeToRender={PreferWantedBuddiesToRender}
+                            SelectWantedSexButton={SelectWantedSexButton}
                         />
                     )}
                     {step === 5 && (
