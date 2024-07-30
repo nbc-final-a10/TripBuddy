@@ -44,10 +44,16 @@ const Tuto: React.FC<TutoProps> = ({ step }) => {
     const { src, alt, text } = content[step];
 
     return (
-        <div className="flex flex-col items-center justify-center h-full">
+        <div className="flex flex-col items-center justify-center h-full max-h-screen p-4">
             <h1 className="text-center font-bold text-xl mb-4">{text}</h1>
-            <div className="flex justify-center items-center">
-                <Image src={src} alt={alt} width={300} height={300} />
+            <div className="flex justify-center items-center max-h-[60vh]">
+                <Image
+                    src={src}
+                    alt={alt}
+                    width={500}
+                    height={500}
+                    className="max-w-full max-h-full h-auto"
+                />
             </div>
         </div>
     );
