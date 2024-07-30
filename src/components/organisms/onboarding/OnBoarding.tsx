@@ -42,7 +42,7 @@ const OnBoarding: React.FC = () => {
 
     const { NextButton, step, setStep } = useNextButton({
         buttonText: '다음',
-        limit: 9,
+        limit: 10,
     });
 
     const nicknameRef = useRef<HTMLInputElement>(null);
@@ -233,7 +233,7 @@ const OnBoarding: React.FC = () => {
             <div className="flex justify-center">
                 <NextButton
                     className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-full"
-                    onNextButtonClick={handleTestClick}
+                    onClick={handleTestClick}
                 />
             </div>
             <button onClick={logOut}>임시로그아웃</button>
