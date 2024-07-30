@@ -13,13 +13,11 @@ const Calendar = () => {
 
     return (
         <div className="w-full flex justify-center mb-16 mt-12">
-            {/* <I18nProvider locale="ko-KR-u-ca-dangi"> */}
             <RangeCalendar
                 aria-label="Date (Controlled Focused Value)"
                 value={value}
                 onChange={setValue}
             />
-            {/* </I18nProvider> */}
         </div>
     );
 };

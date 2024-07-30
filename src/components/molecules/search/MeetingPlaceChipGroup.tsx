@@ -1,5 +1,4 @@
 import Chip from '@/components/atoms/common/O_Chip';
-import SearchPageChipsTitle from './SearchMainPageChipsTitle';
 import { MeetingPlace } from '@/types/MeetingPlace.types';
 import { useState } from 'react';
 
