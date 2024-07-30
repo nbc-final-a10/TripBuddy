@@ -109,8 +109,8 @@ const OnBoarding: React.FC = () => {
             );
             if (!result) return setStep(4);
             buddyInfo.buddy_region = [
-                secondLevelLocation,
                 thirdLevelLocation,
+                secondLevelLocation,
             ].join(' ');
             mutate(buddyInfo);
         }
@@ -138,71 +138,37 @@ const OnBoarding: React.FC = () => {
         }
     };
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        if (!buddy) {
-            return showAlert('error', '로그인을 먼저 해주세요.');
-        }
-
-        const formData = new FormData(e.currentTarget);
-
-        const nickname = formData.get('nickname') as string;
-        const gender = formData.get('gender') as string;
-        const birth = formData.get('birth') as string;
-        if (!birth) {
-            return showAlert('error', '생년월일을 입력해주세요.');
-        }
-        const birthDate = new Date(birth);
-        const birthTimestamptz = birthDate.toISOString();
-        const introduction = formData.get('introduction') as string;
-
-        console.log('nickname ===>', nickname);
-        console.log('gender ===>', gender);
-        console.log('birth ===>', birthTimestamptz);
-        console.log('introduction ===>', introduction);
-        console.log('buddyTheme ===>', selectedBuddyTheme);
-        console.log('tripTheme ===>', selectedTripTheme);
-        console.log('mbti ===>', selectedMbti);
-
-        if (
-            !nickname ||
-            !gender ||
-            !birth ||
-            !introduction ||
-            selectedBuddyTheme.length < 3 ||
-            selectedTripTheme.length < 3 ||
-            !selectedMbti
-        ) {
-            return showAlert('error', '입력 정보를 모두 입력해주세요.');
-        }
-
-        const buddyInfo = {
-            buddy_id: buddy.buddy_id,
-            buddy_nickname: nickname,
-            buddy_sex: gender,
-            buddy_birth: birthTimestamptz,
-            buddy_introduction: introduction,
-            // buddy_region: selectedLocation,
-            buddy_preferred_buddy1: selectedBuddyTheme[0],
-            buddy_preferred_buddy2: selectedBuddyTheme[1],
-            buddy_preferred_buddy3: selectedBuddyTheme[2],
-            buddy_preferred_theme1: selectedTripTheme[0],
-            buddy_preferred_theme2: selectedTripTheme[1],
-            buddy_preferred_theme3: selectedTripTheme[2],
-            buddy_mbti: selectedMbti,
-        };
-
-        mutate(buddyInfo);
-    };
-
     useEffect(() => {
         if (error) {
-            // console.error(error);
+            // NextButton에서 onClick 순서 변경?
+            if (error.message === '이미 존재하는 닉네임입니다.') setStep(0);
             return showAlert('error', error.message);
         }
-    }, [error]);
+    }, [error, setStep]);
 
+    useEffect(() => {
+        if (!buddy) return;
+        if (buddy.buddy_isOnBoarding)
+            return showAlert('caution', '이미 온보딩을 완료하셨습니다.', {
+                onConfirm: () => router.push('/'),
+            });
+        if (step <= 9) router.push(`/onboarding?funnel=${step}`);
+        if (step > 9) {
+            const buddyInfo = {
+                buddy_id: buddy.buddy_id,
+                buddy_isOnBoarding: true,
+            };
+            mutate(buddyInfo);
+            router.push('/');
+        }
+    }, [step, router, buddy, mutate]);
+
+    useEffect(() => {
+        const funnel = searchParams.get('funnel');
+        if (funnel) setStep(Number(funnel));
+    }, [searchParams, setStep]);
+
+    // 이 유즈이펙트는 완성하면 지울것!
     useEffect(() => {
         console.log('선택된 버디 테마 ===>', selectedBuddyTheme);
         console.log('선택된 여정 테마 ===>', selectedTripTheme);
@@ -219,16 +185,6 @@ const OnBoarding: React.FC = () => {
         thirdLevelLocation,
         selectedGender,
     ]);
-
-    useEffect(() => {
-        if (step <= 9) router.push(`/onboarding?funnel=${step}`);
-        if (step > 9) router.push('/');
-    }, [step, router]);
-
-    useEffect(() => {
-        const funnel = searchParams.get('funnel');
-        if (funnel) setStep(Number(funnel));
-    }, [searchParams, setStep]);
 
     return (
         <section className="w-full h-[calc(100dvh-57px-58px)]">
