@@ -1,7 +1,7 @@
 'use client';
 import { tailwindMerge } from '@/utils/ui/tailwind_merge';
 import { VariantProps, cva } from 'class-variance-authority';
-import * as React from 'react';
+import React, { forwardRef, useId, useState } from 'react';
 import { FaEye, FaRegEyeSlash } from 'react-icons/fa';
 
 const InputVariants = cva(
@@ -26,40 +26,60 @@ type InputProps = {
     placeholder?: string;
     name?: string;
     className?: string;
+    label?: string;
 } & InputVariant;
 
-function Input({
-    className,
-    type,
-    intent,
-    name,
-    placeholder,
-    ...props
-}: InputProps) {
-    const [showPassword, setShowPassword] = React.useState(false);
+const Input = forwardRef<HTMLInputElement, InputProps>(
+    (
+        {
+            className,
+            type,
+            intent,
+            label = '',
+            name,
+            placeholder,
+            ...props
+        }: InputProps,
+        ref,
+    ) => {
+        const [showPassword, setShowPassword] = useState(false);
+        const id = useId();
 
-    const togglePasswordVisibility = () => {
-        setShowPassword(prevShowPassword => !prevShowPassword);
-    };
-    return (
-        <div className="relative flex items-center w-full">
-            <input
-                type={type === 'password' && showPassword ? 'text' : type}
-                className={tailwindMerge(InputVariants({ intent }), className)}
-                name={name}
-                placeholder={placeholder}
-                {...props}
-            />
-            {type === 'password' && (
-                <div
-                    className="absolute right-3 cursor-pointer text-muted-foreground"
-                    onClick={togglePasswordVisibility}
-                >
-                    {showPassword ? <FaEye /> : <FaRegEyeSlash />}
-                </div>
-            )}
-        </div>
-    );
-}
+        const togglePasswordVisibility = () => {
+            setShowPassword(prevShowPassword => !prevShowPassword);
+        };
+        return (
+            <div className="relative flex items-center w-full flex-col">
+                {label && (
+                    <label className="w-full text-left" htmlFor={id}>
+                        {label}
+                    </label>
+                )}
+                <input
+                    id={id}
+                    ref={ref}
+                    type={type === 'password' && showPassword ? 'text' : type}
+                    className={tailwindMerge(
+                        InputVariants({ intent }),
+                        className,
+                    )}
+                    name={name}
+                    placeholder={placeholder}
+                    {...props}
+                />
+                {type === 'password' && (
+                    <div
+                        className="absolute right-3 cursor-pointer text-muted-foreground"
+                        onClick={togglePasswordVisibility}
+                    >
+                        {showPassword ? <FaEye /> : <FaRegEyeSlash />}
+                    </div>
+                )}
+            </div>
+        );
+    },
+);
+
+Input.displayName = 'Input';
 
 export default Input;

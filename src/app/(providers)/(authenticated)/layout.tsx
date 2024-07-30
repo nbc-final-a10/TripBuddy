@@ -27,6 +27,16 @@ const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
                     close
                 />
             )}
+            {pathname === '/onboarding' && (
+                <MobileHeader
+                // title="여정 작성"
+                // notification
+                // search
+                // settings
+                // edit
+                // close
+                />
+            )}
             {children}
         </>
     );

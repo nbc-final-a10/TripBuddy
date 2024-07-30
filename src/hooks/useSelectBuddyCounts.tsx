@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 export default function useSelectBuddyCounts() {
-    const [buddyCounts, setBuddyCounts] = useState(1);
+    const [buddyCounts, setBuddyCounts] = useState(2);
 
     const handleAddBuddyCounts = () => {
         setBuddyCounts(buddyCounts + 1);
@@ -15,11 +15,11 @@ export default function useSelectBuddyCounts() {
 
     const SelectBuddyCounts = () => {
         return (
-            <div className="flex flex-row gap-[2px]">
+            <div className="flex justify-center items-center mx-auto flex-row gap-[2px] my-5">
                 <button
                     className="text-[#647484] w-[30px] h-[30px] xl:w-[50px] xl:h-[50px] bg-[#edeff1] hover:bg-gray-400 flex items-center justify-center"
                     onClick={handleSubBuddyCounts}
-                    disabled={buddyCounts === 1}
+                    disabled={buddyCounts === 2}
                 >
                     -
                 </button>

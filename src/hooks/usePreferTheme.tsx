@@ -15,7 +15,7 @@ type UsePreferThemeProps = {
 
 const usePreferTheme = ({
     mode,
-    isLabel,
+    isLabel = false,
 }: UsePreferThemeProps): [() => ReactNode, string[]] => {
     const themeRef = useRef<AllTripTheme[] | AllBuddyTheme[]>(
         mode === 'trip' ? [...tripThemes] : [...buddyThemes],

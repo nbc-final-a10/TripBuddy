@@ -31,7 +31,7 @@ function LocationList({
 
     return (
         <div className="relative">
-            {/* 도/대륙 목록 (가로스크롤) */}
+            {/* 도/대륙 목록 */}
             <div
                 className="flex flex-nowrap gap-2 py-3 whitespace-nowrap mb-5 overflow-x-hidden scrollbar-hide"
                 ref={scrollRef}
@@ -40,7 +40,7 @@ function LocationList({
                     <div key={subLocation.name.en} className="flex-none">
                         <Chip
                             selected={
-                                selectedLocationName === subLocation.name.en
+                                selectedLocationName === subLocation.name.ko
                             }
                             onClick={() => onChipClick(subLocation.name.ko)}
                         >
@@ -51,7 +51,7 @@ function LocationList({
             </div>
 
             {/* 스크롤 버튼 */}
-            {isScrollable && (
+            {/* {isScrollable && (
                 <div className="flex justify-between">
                     <button
                         className="left-2 z-10"
@@ -76,7 +76,7 @@ function LocationList({
                         {'>'}
                     </button>
                 </div>
-            )}
+            )} */}
         </div>
     );
 }
