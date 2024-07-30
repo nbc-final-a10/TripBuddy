@@ -161,7 +161,7 @@ const WritePage: React.FC = () => {
                 </div>
                 <div className="flex justify-center">
                     <NextButton
-                        className="text-xl text-white bg-main-color font-bold py-2 px-4 mt-4 mx-2 rounded-xl w-full hover:bg-main-color/80"
+                        className="text-xl text-white bg-main-color font-bold py-2 px-4 mt-4 mx-2 mb-20 rounded-xl w-full hover:bg-main-color/80"
                         onClick={step === 5 ? handleWriteTrip : undefined}
                     />
                 </div>
