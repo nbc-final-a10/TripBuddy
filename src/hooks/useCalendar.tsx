@@ -23,7 +23,7 @@ export default function useCalendar() {
 
     function SelectCalendar() {
         return (
-            <div className="w-full flex justify-center mb-16 mt-12">
+            <div className="w-full flex justify-center mb-10 mt-10">
                 <RangeCalendar
                     aria-label="Date (Controlled Focused Value)"
                     value={value}

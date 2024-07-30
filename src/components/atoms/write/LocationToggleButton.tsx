@@ -19,7 +19,7 @@ export default function LocationToggleButton({
                 onClick={() => {
                     onKoreaClick();
                 }}
-                className={`rounded-full px-4 py-0.5 w-1/2 text-center transition duration-300 ease-in-out font-semibold ${isKoreaSelected ? 'bg-white text-black' : 'bg-gray-200 text-black'}`}
+                className={`rounded-full px-4 py-0.5 w-1/2 text-center transition duration-300 ease-in-out font-semibold ${isKoreaSelected ? 'bg-white text-black' : 'bg-gray-200 text-white'}`}
             >
                 {firstLabel}
             </div>
@@ -27,7 +27,7 @@ export default function LocationToggleButton({
                 onClick={() => {
                     onGlobalClick();
                 }}
-                className={`rounded-full px-4 py-0.5 w-1/2 text-center transition duration-300 ease-in-out font-semibold ${!isKoreaSelected ? 'bg-white text-black' : 'bg-gray-200 text-black'}`}
+                className={`rounded-full px-4 py-0.5 w-1/2 text-center transition duration-300 ease-in-out font-semibold ${!isKoreaSelected ? 'bg-white text-black' : 'bg-gray-200 text-white'}`}
             >
                 {secondLabel}
             </div>

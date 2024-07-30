@@ -1,20 +1,29 @@
 'use client';
 
 import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
-import Calendar from '@/components/atoms/Calendar';
 import React from 'react';
+import useCalendar from '@/hooks/useCalendar';
+import SelectedResultRealtimeText from '../write/SelectedResultRealtimeText';
 
 const DateSearchPage: React.FC = () => {
+    const { SelectCalendar, startDateTimestamp, endDateTimestamp } =
+        useCalendar();
     return (
         <section>
-            <Calendar />
-
-            <button
-                className="flex justify-center items-center mx-auto w-full px-28 py-2 mb-8 rounded-xl bg-gray-500 text-white m-3 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:hidden"
-                // onClick={handleSelect}
-            >
-                선택하기
-            </button>
+            <div className="flex justify-center">
+                <SelectCalendar />
+            </div>
+            <div>
+                {startDateTimestamp && endDateTimestamp ? (
+                    <SelectedResultRealtimeText
+                        selectedData={`${startDateTimestamp} ~ ${endDateTimestamp}`}
+                        firstLabel="선택하신 날짜는"
+                        secondLabel="입니다."
+                    />
+                ) : (
+                    <SelectedResultRealtimeText firstLabel="날짜를 선택해주세요" />
+                )}
+            </div>
         </section>
     );
 };
