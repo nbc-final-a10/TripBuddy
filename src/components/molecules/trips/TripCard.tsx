@@ -7,6 +7,7 @@ import Groups from '../../../../public/svg/Groups.svg';
 import Chip from '@/components/atoms/common/O_Chip';
 import clsx from 'clsx';
 import TripCustomSlider from '@/components/atoms/trips/TripCustomSlider';
+import { getTimeSinceUpload } from '@/utils/common/getTimeSinceUpload';
 
 type TripCardProps = {
     title: string;
@@ -58,20 +59,30 @@ const TripCard: React.FC<TripCardProps> = ({
                                 </div>
                             )}
 
-                            <div className="flex flex-row gap-2">
-                                <span className="font-bold text-lg leading-none">
-                                    {'D-4'}
-                                </span>
-                                <span className="text-sm leading-none">
-                                    {'24.07.20'}
-                                </span>
-                            </div>
+                            {mode === 'card' && (
+                                <div className="flex flex-row gap-2">
+                                    <span className="font-bold text-lg leading-none">
+                                        {'D-4'}
+                                    </span>
+                                    <span className="text-sm leading-none">
+                                        {'24.07.20'}
+                                    </span>
+                                </div>
+                            )}
                         </div>
 
-                        <h2 className="text-xl font-bold leading-none">
-                            {'경주'}
-                        </h2>
-                        <h3 className="text-lg font-bold text-gray-600 leading-none pb-2">
+                        {mode === 'card' && (
+                            <h2 className="text-xl font-bold leading-none">
+                                {'경주'}
+                            </h2>
+                        )}
+                        <h3
+                            className={clsx(
+                                'text-lg font-bold leading-none pb-2',
+                                mode === 'main' && 'text-black text-xl',
+                                mode === 'card' && 'text-gray-600',
+                            )}
+                        >
                             {title}
                         </h3>
 
@@ -129,6 +140,13 @@ const TripCard: React.FC<TripCardProps> = ({
                             </p>
                         </div>
                     </div>
+
+                    {/** 업로드 시간 표시 */}
+                    <div className="flex flex-row items-center justify-end">
+                        <span className="text-sm leading-none text-gray-500">
+                            {getTimeSinceUpload('2024-07-30 15:00:00')}
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -147,7 +165,7 @@ const TripCard: React.FC<TripCardProps> = ({
                         mode === 'detail' &&
                             'bg-white text-gray-950 rounded-md border border-gray-500 w-[40%]',
                         mode === 'main' &&
-                            'bg-gray-400 text-white rounded-t-none rounded-br-none rounded-bl-lg w-1/2 ',
+                            'bg-white text-main-color border-main-color font-bold border rounded-t-none rounded-br-none rounded-bl-lg w-1/2 ',
                         mode === 'card' && 'hidden',
                     )}
                 >
@@ -159,7 +177,7 @@ const TripCard: React.FC<TripCardProps> = ({
                         mode === 'detail' &&
                             'bg-gray-100 text-gray-950 rounded-md border border-gray-500 w-[40%]',
                         mode === 'main' &&
-                            'bg-gray-500 text-white rounded-t-none rounded-bl-none rounded-br-lg w-1/2',
+                            'bg-main-color text-white font-bold rounded-t-none rounded-bl-none rounded-br-lg w-1/2',
                         mode === 'card' &&
                             'w-full bg-main-color text-white rounded-b-lg leading-none py-2.5',
                     )}
