@@ -8,6 +8,7 @@ import Chip from '@/components/atoms/common/O_Chip';
 import clsx from 'clsx';
 import TripCustomSlider from '@/components/atoms/trips/TripCustomSlider';
 import { getTimeSinceUpload } from '@/utils/common/getTimeSinceUpload';
+import TripTimeSinceUpload from '@/components/atoms/trips/TripTimeSinceUpload';
 
 type TripCardProps = {
     title: string;
@@ -29,7 +30,7 @@ const TripCard: React.FC<TripCardProps> = ({
         <div
             className={clsx(
                 'bg-white box-border h-fit shadow-lg',
-                mode === 'detail' && 'py-4',
+                mode === 'detail' && 'p-4',
                 mode === 'main' && 'rounded-lg',
                 mode === 'card' && 'w-[211px] h-[215px]',
             )}
@@ -86,19 +87,27 @@ const TripCard: React.FC<TripCardProps> = ({
                             {title}
                         </h3>
 
-                        <div className="flex gap-1">
-                            <Chip selected={false} intent="square">
-                                {'힐링'}
-                            </Chip>
-                            <Chip selected={false} intent="square_white">
-                                {'쇼핑'}
-                            </Chip>
-                            <Chip selected={false} intent="square_white">
-                                {'즉흥'}
-                            </Chip>
-                            <Chip selected={false} intent="square_white">
-                                {'여자만'}
-                            </Chip>
+                        <div className="flex flex-row justify-between">
+                            <div className="flex gap-1">
+                                <Chip selected={false} intent="square">
+                                    {'힐링'}
+                                </Chip>
+                                <Chip selected={false} intent="square_white">
+                                    {'쇼핑'}
+                                </Chip>
+                                <Chip selected={false} intent="square_white">
+                                    {'즉흥'}
+                                </Chip>
+                                <Chip selected={false} intent="square_white">
+                                    {'여자만'}
+                                </Chip>
+                            </div>
+
+                            {mode === 'detail' && (
+                                <TripTimeSinceUpload
+                                    time={'2024-07-30 15:00:00'}
+                                />
+                            )}
                         </div>
                     </div>
 
@@ -125,28 +134,33 @@ const TripCard: React.FC<TripCardProps> = ({
                         </div>
                     </div>
 
-                    {/** 인원수 */}
-                    <div
-                        className={clsx(
-                            'flex flex-col gap-1',
-                            mode === 'main' && 'hidden',
-                            mode === 'detail' && 'hidden',
-                        )}
-                    >
-                        <div className="flex flex-row">
-                            <p className="text-sm leading-none">
-                                {`신청 ${participants}`}
-                                <span className="text-gray-500">/4</span>
-                            </p>
-                        </div>
-                    </div>
+                    {/** 인원수 카드에서만 보임 */}
+                    {mode === 'card' && (
+                        <>
+                            <div className="flex flex-col gap-1">
+                                <div className="flex flex-row">
+                                    <p className="text-sm leading-none">
+                                        {`신청 ${participants}`}
+                                        <span className="text-gray-500">
+                                            /4
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
 
-                    {/** 업로드 시간 표시 */}
-                    <div className="flex flex-row items-center justify-end">
-                        <span className="text-sm leading-none text-gray-500">
-                            {getTimeSinceUpload('2024-07-30 15:00:00')}
-                        </span>
-                    </div>
+                            <TripTimeSinceUpload time={'2024-07-30 15:00:00'} />
+                        </>
+                    )}
+
+                    {/** 프로필 이미지 원형 */}
+                    {mode === 'detail' && (
+                        <div className="relative flex flex-row h-10">
+                            <div className="absolute w-10 h-10 bg-gray-100 border-2 border-white rounded-full" />
+                            <div className="absolute w-10 h-10 left-[24px] bg-gray-100 border-2 border-white rounded-full" />
+                            <div className="absolute w-10 h-10 left-[48px] bg-gray-100 border-2 border-white rounded-full" />
+                            <div className="absolute w-10 h-10 left-[72px] bg-gray-100 border-2 border-white rounded-full" />
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -154,7 +168,7 @@ const TripCard: React.FC<TripCardProps> = ({
                 className={clsx(
                     'flex w-full text-white rounded-lg h-[16%]',
                     mode === 'detail' &&
-                        'bg-white text-gray-950 rounded-none justify-center gap-4',
+                        'bg-white text-gray-950 rounded-none justify-center gap-2',
                     mode === 'main' && 'justify-between',
                     mode === 'card' && 'rounded-b-lg',
                 )}
@@ -163,7 +177,7 @@ const TripCard: React.FC<TripCardProps> = ({
                     className={clsx(
                         'p-2',
                         mode === 'detail' &&
-                            'bg-white text-gray-950 rounded-md border border-gray-500 w-[40%]',
+                            'bg-white text-main-color border-main-color rounded-xl border w-[48%]',
                         mode === 'main' &&
                             'bg-white text-main-color border-main-color font-bold border rounded-t-none rounded-br-none rounded-bl-lg w-1/2 ',
                         mode === 'card' && 'hidden',
@@ -175,7 +189,7 @@ const TripCard: React.FC<TripCardProps> = ({
                     className={clsx(
                         'p-2',
                         mode === 'detail' &&
-                            'bg-gray-100 text-gray-950 rounded-md border border-gray-500 w-[40%]',
+                            'bg-main-color text-white rounded-xl border border-main-color w-[48%]',
                         mode === 'main' &&
                             'bg-main-color text-white font-bold rounded-t-none rounded-bl-none rounded-br-lg w-1/2',
                         mode === 'card' &&
