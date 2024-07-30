@@ -72,8 +72,6 @@ const WritePage: React.FC = () => {
             trip_bookmarks_counts: buddyCounts,
             trip_start_date: startDateTimestamp,
             trip_end_date: endDateTimestamp,
-            trip_start_age: startAge,
-            trip_end_age: endAge,
             trip_final_destination: `${secondLevelLocation} ${thirdLevelLocation}`,
             trip_theme1: selectedTripThemes[0],
             trip_theme2: selectedTripThemes[1],
@@ -82,6 +80,8 @@ const WritePage: React.FC = () => {
             trip_wanted_buddies2: selectedWantedBuddies[1],
             trip_wanted_buddies3: selectedWantedBuddies[2],
             trip_wanted_sex: wantedSex,
+            trip_start_age: startAge,
+            trip_end_age: endAge,
         };
         try {
             const response = await fetch('/api/write', {
@@ -111,9 +111,7 @@ const WritePage: React.FC = () => {
 
     return (
         <>
-            {/* <div className="mt-4 xl:mt-20 ml-5 xl:ml-64"> */}
             <ProgressIndicator step={step} counts={7} />
-            {/* </div> */}
             <section className="h-dvh flex flex-col">
                 <div className="flex flex-col">
                     {step === 0 && (
