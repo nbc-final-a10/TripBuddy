@@ -1,12 +1,40 @@
-import React, { useState, ChangeEvent, KeyboardEvent } from 'react';
-import Image from 'next/image';
+'use client';
 
-interface MessageInputProps {
-    onSendMessage: (messageText: string) => void;
+import React, { useState, ChangeEvent, KeyboardEvent } from 'react';
+import supabase from '@/utils/supabase/client';
+import Image from 'next/image';
+import { Message } from '@/types/Chat.types';
+
+interface ChatMessageSendProps {
+    buddy: any;
 }
 
-const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
+const ChatMessageSend: React.FC<ChatMessageSendProps> = ({ buddy }) => {
     const [inputText, setInputText] = useState('');
+
+    const handleSendMessage = async (messageText: string) => {
+        if (!buddy || !buddy.buddy_id) {
+            console.error('Buddy is not logged in or buddy_id is missing');
+            return;
+        }
+
+        const newMessage: Omit<Message, 'message_id'> = {
+            message_content: messageText,
+            message_sender_id: buddy.buddy_id,
+            message_created_at: new Date().toISOString(),
+            message_type: 'text',
+            message_trip_id: '4e2b9856-2132-49e2-8d13-ea00ba9695e0',
+        };
+
+        const { data, error } = await supabase
+            .from('messages')
+            .insert([newMessage])
+            .select();
+
+        if (error) {
+            console.error('Error inserting message:', error);
+        }
+    };
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         setInputText(event.target.value);
@@ -14,7 +42,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
 
     const handleSend = () => {
         if (inputText.trim()) {
-            onSendMessage(inputText);
+            handleSendMessage(inputText);
             setInputText('');
         }
     };
@@ -48,4 +76,4 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
     );
 };
 
-export default MessageInput;
+export default ChatMessageSend;

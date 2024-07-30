@@ -3,11 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import supabase from '@/utils/supabase/client';
 import { Message } from '@/types/Chat.types';
-import { useAuth } from '@/hooks/auth';
 
-const ChatMessageList: React.FC = () => {
+interface ChatMessageListProps {
+    buddy: any;
+}
+
+const ChatMessageList: React.FC<ChatMessageListProps> = ({ buddy }) => {
     const [messages, setMessages] = useState<Message[]>([]);
-    const { buddy } = useAuth();
 
     useEffect(() => {
         const fetchMessages = async () => {
