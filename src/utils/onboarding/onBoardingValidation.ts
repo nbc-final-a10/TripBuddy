@@ -25,6 +25,10 @@ export const onBoardingValidation: onBoardingValidationType = (value, step) => {
             return false;
         }
         if (typeof value === 'number' && step === 2) {
+            if (isNaN(value)) {
+                showAlert('caution', '숫자만 입력해주세요.');
+                return false;
+            }
             if (value < 18) {
                 showAlert(
                     'caution',

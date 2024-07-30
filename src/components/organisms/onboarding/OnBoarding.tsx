@@ -21,26 +21,22 @@ import OnBoardingSelectPrefer from './OnBoardingSelectPrefer';
 import useSelectRegion from '@/hooks/useSelectRegion';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { onBoardingValidation } from '@/utils/onboarding/onBoardingValidation';
+import { PartialBuddy } from '@/types/Auth.types';
+import { getBirthDate } from '@/utils/common/getBirthDate';
 
 const OnBoarding: React.FC = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
-
     const { logOut, buddy } = useAuth();
-
     const { mutate, isPending, error } = useUpdateBuddyMutation();
-
     const [PreferBuddyTheme, selectedBuddyTheme] = usePreferTheme({
         mode: 'buddy',
     });
-
     const [PreferTripTheme, selectedTripTheme] = usePreferTheme({
         mode: 'trip',
     });
-
     const { SelectRegion, secondLevelLocation, thirdLevelLocation } =
         useSelectRegion();
-
     const { NextButton, step, setStep } = useNextButton({
         buttonText: '다음',
         limit: 10,
@@ -48,7 +44,6 @@ const OnBoarding: React.FC = () => {
 
     const nicknameRef = useRef<HTMLInputElement>(null);
     const ageRef = useRef<HTMLInputElement>(null);
-
     const [selectedGender, setSelectedGender] = useState<string>('');
     const [selectedMbti, setSelectedMbti] = useState<string>('');
 
@@ -65,14 +60,19 @@ const OnBoarding: React.FC = () => {
         setSelectedMbti(target.innerText);
     };
 
+    // 온보딩은 isOnboarding이 false일 때 한번만 되는 것인데
+    // 마지막 step 에서 한번에 fetch 하게 되면
+    // 모종의 이유로 에러가 발생해서 시퀀스가 중단 되었을 경우에
+    // 아무 정보도 fetch 하지 못한 상태가 되기 때문에
+    // 각 step 마다 fetch 하는 것으로 결정
     const handleNextButtonClick = () => {
-        // 닉네임
-        // 성별
-        // 생년월일
-        // 지역
-        // 버디 테마
-        // 여정 테마
-        // MBTI
+        if (!buddy) {
+            return showAlert('error', '로그인을 먼저 해주세요.');
+        }
+
+        const buddyInfo: PartialBuddy = {
+            buddy_id: buddy.buddy_id,
+        };
 
         // step 번호에 따라 유효성 검사 진행
         // 유효성 검사 진행 후 fetch 날리고 다음 단계로 이동
@@ -81,37 +81,60 @@ const OnBoarding: React.FC = () => {
                 nicknameRef.current?.value,
                 step,
             );
-            if (!result) setStep(0);
+            if (!result) return setStep(0);
+            buddyInfo.buddy_nickname = nicknameRef.current?.value;
+            mutate(buddyInfo);
         }
         if (step === 2) {
-            const result = onBoardingValidation(
-                Number(ageRef.current?.value),
-                step,
-            );
-            if (!result) setStep(2);
+            const age = Number(ageRef.current?.value);
+
+            const result = onBoardingValidation(age, step);
+            if (!result) return setStep(2);
+
+            const birthTimestamptz = getBirthDate(age);
+
+            buddyInfo.buddy_birth = birthTimestamptz;
+            mutate(buddyInfo);
         }
         if (step === 3) {
             const result = onBoardingValidation(selectedGender, step);
-            if (!result) setStep(3);
+            if (!result) return setStep(3);
+            buddyInfo.buddy_sex = selectedGender;
+            mutate(buddyInfo);
         }
         if (step === 4) {
             const result = onBoardingValidation(
                 [secondLevelLocation, thirdLevelLocation],
                 step,
             );
-            if (!result) setStep(4);
+            if (!result) return setStep(4);
+            buddyInfo.buddy_region = [
+                secondLevelLocation,
+                thirdLevelLocation,
+            ].join(' ');
+            mutate(buddyInfo);
         }
         if (step === 5) {
             const result = onBoardingValidation(selectedMbti, step);
-            if (!result) setStep(5);
+            if (!result) return setStep(5);
+            buddyInfo.buddy_mbti = selectedMbti;
+            mutate(buddyInfo);
         }
         if (step === 7) {
             const result = onBoardingValidation(selectedBuddyTheme, step);
-            if (!result) setStep(7);
+            if (!result) return setStep(7);
+            buddyInfo.buddy_preferred_buddy1 = selectedBuddyTheme[0];
+            buddyInfo.buddy_preferred_buddy2 = selectedBuddyTheme[1];
+            buddyInfo.buddy_preferred_buddy3 = selectedBuddyTheme[2];
+            mutate(buddyInfo);
         }
         if (step === 8) {
             const result = onBoardingValidation(selectedTripTheme, step);
-            if (!result) setStep(8);
+            if (!result) return setStep(8);
+            buddyInfo.buddy_preferred_theme1 = selectedTripTheme[0];
+            buddyInfo.buddy_preferred_theme2 = selectedTripTheme[1];
+            buddyInfo.buddy_preferred_theme3 = selectedTripTheme[2];
+            mutate(buddyInfo);
         }
     };
 
@@ -212,6 +235,15 @@ const OnBoarding: React.FC = () => {
             <ProgressIndicator step={step} counts={9} />
 
             <div className="flex flex-col w-full h-[70%]">
+                {/** mutate 중에 로딩 띄우기 */}
+                {isPending && (
+                    <div className="fixed z-50 top-0 left-0 w-full h-full bg-black/50 flex justify-center items-center">
+                        <div className="text-center text-white font-bold">
+                            업데이트 중...
+                        </div>
+                    </div>
+                )}
+
                 {step === 0 && (
                     <OnBoardingInput mode="nickname" ref={nicknameRef} />
                 )}
