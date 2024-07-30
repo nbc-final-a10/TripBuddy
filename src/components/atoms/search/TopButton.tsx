@@ -29,9 +29,9 @@ export default function TopButton() {
         isVisible && (
             <button
                 onClick={scrollToTop}
-                className="fixed bottom-20 right-5 p-2 bg-main-color text-white rounded-full shadow-lg transition-transform transform xl:right-10 xl:bottom-10"
+                className="fixed bottom-20 right-5 p-2 px-3 bg-main-color text-white rounded-full shadow-lg transition-transform transform xl:right-10 xl:bottom-10"
             >
-                Top
+                ↑
             </button>
         )
     );

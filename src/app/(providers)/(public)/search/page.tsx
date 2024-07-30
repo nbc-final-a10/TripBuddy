@@ -67,13 +67,15 @@ const SearchPage: React.FC = () => {
 
     return (
         <main className="p-5 xl:p-0 xl:py-5">
-            <section className="flex flex-col mx-auto mb-10 mt-6 xl:flex-row xl: items-center xl:justify-center">
-                <input
-                    type="text"
-                    placeholder="검색어를 입력하세요"
-                    className="w-full bg-gray-100 p-2 rounded-xl"
-                    onKeyDown={handleKeyDown}
-                />
+            <section className="flex flex-col mx-auto mb-10 mt-6 xl:flex-row xl:items-center xl:justify-center">
+                <div className="flex xl:flex-grow">
+                    <input
+                        type="text"
+                        placeholder="검색어를 입력하세요"
+                        className="w-full bg-gray-100 p-2 rounded-2xl xl:w-[928px]"
+                        onKeyDown={handleKeyDown}
+                    />
+                </div>
 
                 <div className="hidden xl:flex xl:gap-2 xl:w-full xl:ml-5">
                     {/* <button
@@ -83,7 +85,7 @@ const SearchPage: React.FC = () => {
                         검색 옵션 접기
                     </button> */}
                     <button
-                        className="flex-1 px-4 py-2 rounded-[10px] bg-gray-500 font-semibold text-white text-sm xl:w-24 min-w-[130px] transition-colors duration-200 ease-in-out active:bg-gray-300"
+                        className="xl:px-4 xl:py-2.5 xl:w-36 rounded-2xl bg-main-color font-semibold text-white text-sm transition-colors duration-200 ease-in-out active:bg-gray-300"
                         onClick={handleShowResult}
                     >
                         검색 결과 보기
@@ -140,7 +142,7 @@ const SearchPage: React.FC = () => {
             </div>
 
             <button
-                className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 mb-10 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:mt-8"
+                className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-2xl bg-main-color font-semibold text-white text-sm m-3 mb-10 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:w-1/2 xl:mt-8"
                 onClick={handleShowResult}
             >
                 검색 결과 보기
