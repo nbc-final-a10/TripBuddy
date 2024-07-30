@@ -97,7 +97,7 @@ export default function useSelectRegion() {
                                 {selectedSecondLevelLocations.map(loc => (
                                     <div
                                         key={loc.name}
-                                        className="flex mt-2 ml-2 mr-2 border-b pb-3 cursor-pointer"
+                                        className="flex mt-2 ml-2 mr-2 border-b pb-3 cursor-pointer hover:bg-main-color"
                                         onClick={() =>
                                             setThirdLevelLocation(loc.name)
                                         }
