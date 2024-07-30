@@ -66,7 +66,7 @@ const buttonVariant = cva(
 type ButtonVariantType = VariantProps<typeof buttonVariant>;
 
 type ButtonProps = {
-    selected: boolean;
+    selected: boolean | null;
     onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 } & ButtonVariantType &
     (
