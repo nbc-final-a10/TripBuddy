@@ -7,6 +7,7 @@ import HomePageTrips from '@/components/molecules/homepage/HomePageTrips';
 import React, { useRef } from 'react';
 import useTapScroll from '@/hooks/useTapScroll';
 import HomePageTitle from '@/components/molecules/homepage/HomePageTitle';
+import Link from 'next/link';
 
 const HomePageContainer = () => {
     const buddiesRef = useRef<HTMLDivElement>(null);
@@ -17,7 +18,9 @@ const HomePageContainer = () => {
 
     return (
         <div className="rounded-t-[32px] bg-white p-4">
-            <HomePageSearchBar />
+            <Link href="/search">
+                <HomePageSearchBar />
+            </Link>
 
             <div className="mt-4 mb-2">
                 <HomePageTitle

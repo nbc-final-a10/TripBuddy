@@ -37,7 +37,7 @@ import Settings from '../../../../public/svg/Settings.svg';
 // 내 정보 수정 /editprofile?? (뒤로가기)
 
 type MobileHeaderProps = {
-    title: string;
+    title?: string;
     close?: boolean;
     notification?: boolean;
     search?: boolean;
@@ -58,8 +58,9 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
             <div className="w-[calc(100%/3)] flex justify-start items-center">
                 <Arrow_Back />
             </div>
-
-            <h1 className="w-[calc(100%/3)] text-center leading-3">{title}</h1>
+            <div className="w-[calc(100%/3)] flex justify-center items-center">
+                {title && <h1 className="text-center leading-3">{title}</h1>}
+            </div>
 
             <div className="w-[calc(100%/3)] flex justify-end items-center gap-2">
                 {search && <Search />}
