@@ -2,6 +2,9 @@ import { createClient } from '@/utils/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
+    // 로딩 상태 초기화
+    let isPending = true;
+
     try {
         const supabase = createClient();
 
@@ -15,6 +18,7 @@ export async function GET(req: NextRequest) {
         // 데이터베이스 에러 처리
         if (error) {
             console.error('버디 추천 리스트 통신 오류 발생:', error);
+            isPending = false;
             return NextResponse.json(
                 { buddies: null, error: error?.message },
                 { status: 500 },
@@ -22,10 +26,12 @@ export async function GET(req: NextRequest) {
         }
 
         // 성공 시 응답
+        isPending = false;
         return NextResponse.json({ buddies }, { status: 200 });
     } catch (error) {
         // 일반 에러 처리
         console.error('버디 추천 리스트 통신 오류 발생:', error);
+        isPending = false;
         return NextResponse.json(
             { buddies: null, error: '서버 오류' },
             { status: 500 },
