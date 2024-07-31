@@ -2,26 +2,37 @@
 
 import TopButton from '@/components/atoms/search/TopButton';
 import SelectAgesRange from '@/components/atoms/write/SelectAgesRange';
-import AgeCount from '@/components/molecules/search/AgeCount';
 import GenderChipGroup from '@/components/molecules/search/GenderChipGroup';
 import MeetingPlaceChipGroup from '@/components/molecules/search/MeetingPlaceChipGroup';
 import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
 import SearchResult from '@/components/molecules/search/SearchResult';
 import DateSearchPage from '@/components/organisms/search/DateSearchPage';
 import usePreferTheme from '@/hooks/usePreferTheme';
-import useSelectAges from '@/hooks/useSelectAges';
 import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
 import useSelectRegion from '@/hooks/useSelectRegion';
 import supabase from '@/utils/supabase/client';
 import { useSearchStore } from '@/zustand/search.store';
 // import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 
 const SearchPage: React.FC = () => {
     const [showResult, setShowResult] = useState(false);
     const resultRef = useRef<HTMLDivElement>(null);
 
-    const { startAge, endAge, handleStartAge, handleEndAge } = useSelectAges();
+    const { startAge, endAge, setStartAge, setEndAge } = useSearchStore(
+        useShallow(state => ({
+            startAge: state.startAge,
+            endAge: state.endAge,
+            setStartAge: state.setStartAge,
+            setEndAge: state.setEndAge,
+        })),
+    );
+
+    // const { startAge, endAge } = useSearchStore(state => ({
+    //     startAge: state.startAge,
+    //     endAge: state.endAge,
+    // }));
 
     const [PreferBuddyTheme] = usePreferTheme({
         mode: 'buddy',
@@ -92,8 +103,8 @@ const SearchPage: React.FC = () => {
                 <SelectAgesRange
                     startAge={startAge}
                     endAge={endAge}
-                    handleStartAge={handleStartAge}
-                    handleEndAge={handleEndAge}
+                    handleStartAge={setStartAge}
+                    handleEndAge={setEndAge}
                 />
             </div>
             <div className="my-10">

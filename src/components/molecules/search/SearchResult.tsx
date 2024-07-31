@@ -21,6 +21,8 @@ const SearchResult: React.FC = () => {
 
     const FilteredItems = getFilteredItems();
 
+    console.log(FilteredItems);
+
     if (FilteredItems.length === 0) {
         return <div>검색 결과가 없습니다.</div>;
     }
@@ -48,6 +50,8 @@ const SearchResult: React.FC = () => {
                                 <p className="text-sm">
                                     {item.trip_meet_location}
                                 </p>
+                                <p className="text-sm">{item.trip_start_age}</p>
+                                <p className="text-sm">{item.trip_end_age}</p>
                             </div>
                         ),
                     )}

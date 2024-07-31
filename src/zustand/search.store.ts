@@ -19,6 +19,11 @@ type SearchStore = {
     setSelectedMeetingPlace: (place: string | null) => void;
     getSelectedMeetingPlace: () => Trip[];
 
+    startAge: number;
+    endAge: number;
+    setStartAge: (age: number) => void;
+    setEndAge: (age: number) => void;
+
     getFilteredItems: () => Trip[];
 };
 
@@ -63,6 +68,11 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
             : state.items;
     },
 
+    startAge: 18,
+    endAge: 150,
+    setStartAge: (age: number) => set({ startAge: age }),
+    setEndAge: (age: number) => set({ endAge: age }),
+
     getFilteredItems: () => {
         const state = get();
         let filteredItems = state.items;
@@ -77,6 +87,14 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
             filteredItems = filteredItems.filter(
                 (item: Trip) =>
                     item.trip_meet_location === state.selectedMeetingPlace,
+            );
+        }
+
+        if (state.startAge !== undefined && state.endAge !== undefined) {
+            filteredItems = filteredItems.filter(
+                (item: Trip) =>
+                    item.trip_start_age >= state.startAge &&
+                    item.trip_end_age <= state.endAge,
             );
         }
 
