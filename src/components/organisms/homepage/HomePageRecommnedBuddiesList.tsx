@@ -9,8 +9,19 @@ function HomePageRecommnedBuddiesList() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const timer = setTimeout(() => setLoading(false), 3000);
-        return () => clearTimeout(timer);
+        const fetchBuddies = async () => {
+            try {
+                const response = await fetch(
+                    '/api/home/BuddiesRecommendationList',
+                );
+                const data = await response.json();
+                console.log(data);
+                setLoading(false);
+            } catch (error) {
+                console.error('버디 추천 리스트 통신 오류 발생:', error);
+            }
+        };
+        fetchBuddies();
     }, []);
 
     return (
