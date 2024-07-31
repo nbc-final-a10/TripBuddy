@@ -1,133 +1,45 @@
 'use client';
-import React, { useState, useRef, DragEvent, TouchEvent } from 'react';
 
-interface Position {
-    top: number;
-    left: number;
-}
+import React, { useState } from 'react';
+import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 
-const DraggableComponent: React.FC = () => {
-    const [position, setPosition] = useState<Position>({ top: 100, left: 100 });
-    const [offset, setOffset] = useState<{ offsetX: number; offsetY: number }>({
-        offsetX: 0,
-        offsetY: 0,
-    });
-    const draggableRef = useRef<HTMLDivElement | null>(null);
-    const containerRef = useRef<HTMLDivElement | null>(null);
+const DraggableText = () => {
+    const [text, setText] = useState('');
+    const [position, setPosition] = useState({ x: 0, y: 0 });
 
-    const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
-        if (draggableRef.current) {
-            const rect = draggableRef.current.getBoundingClientRect();
-            e.dataTransfer.setData(
-                'text/plain',
-                JSON.stringify({
-                    offsetX: e.clientX - rect.left,
-                    offsetY: e.clientY - rect.top,
-                }),
-            );
-            setTimeout(() => {
-                if (draggableRef.current) {
-                    // draggableRef.current.style.display = 'none';
-                    draggableRef.current.style.opacity = '0';
-                }
-            }, 0);
-        }
+    const handleDrag = (e: DraggableEvent, data: DraggableData) => {
+        setPosition({ x: data.x, y: data.y });
     };
 
-    const handleDragEnd = () => {
-        if (draggableRef.current) {
-            // draggableRef.current.style.display = 'block';
-            draggableRef.current.style.opacity = '1';
-        }
+    const handleStop = (e: DraggableEvent, data: DraggableData) => {
+        setPosition({ x: data.x, y: data.y });
     };
 
-    const handleDrop = (e: DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        const data = e.dataTransfer.getData('text/plain');
-        if (data) {
-            const { offsetX, offsetY } = JSON.parse(data);
-            const rect = containerRef.current?.getBoundingClientRect();
-            if (rect) {
-                const x = e.clientX - rect.left - offsetX;
-                const y = e.clientY - rect.top - offsetY;
-                setPosition({ top: y, left: x });
-            }
-        }
-    };
-
-    const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-    };
-
-    const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
-        if (draggableRef.current) {
-            const touch = e.touches[0];
-            const rect = draggableRef.current.getBoundingClientRect();
-            setOffset({
-                offsetX: touch.clientX - rect.left,
-                offsetY: touch.clientY - rect.top,
-            });
-            setTimeout(() => {
-                if (draggableRef.current) {
-                    // draggableRef.current.style.display = 'none';
-                    draggableRef.current.style.opacity = '0';
-                }
-            }, 0);
-        }
-    };
-
-    const handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        const touch = e.touches[0];
-        const rect = containerRef.current?.getBoundingClientRect();
-        if (rect) {
-            const x = touch.clientX - rect.left - offset.offsetX;
-            const y = touch.clientY - rect.top - offset.offsetY;
-            setPosition({ top: y, left: x });
-        }
-    };
-
-    const handleTouchEnd = () => {
-        if (draggableRef.current) {
-            // draggableRef.current.style.display = 'block';
-            draggableRef.current.style.opacity = '1';
-        }
-    };
+    const handleSave = async () => {};
 
     return (
-        <div
-            id="container"
-            ref={containerRef}
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-            style={{
-                width: '100%',
-                height: '100dvh',
-                position: 'relative',
-                border: '1px solid #ccc',
-            }}
-        >
-            <div
-                id="draggable"
-                ref={draggableRef}
-                draggable="true"
-                onDragStart={handleDragStart}
-                onDragEnd={handleDragEnd}
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-                style={{
-                    width: '100px',
-                    height: '100px',
-                    backgroundColor: 'red',
-                    position: 'absolute',
-                    top: `${position.top}px`,
-                    left: `${position.left}px`,
-                    cursor: 'grab',
-                }}
-            ></div>
+        <div className="relative w-full h-dvh">
+            <Draggable
+                scale={2}
+                position={position}
+                onDrag={handleDrag}
+                onStop={handleStop}
+            >
+                <input
+                    type="text"
+                    value={text}
+                    onChange={e => setText(e.target.value)}
+                    style={{
+                        top: position.y,
+                        left: position.x,
+                        transform: 'translate(-50%, -50%)',
+                    }}
+                    className="absolute border-2 border-gray-300 rounded-md p-2"
+                />
+            </Draggable>
+            <button onClick={handleSave}>Save</button>
         </div>
     );
 };
 
-export default DraggableComponent;
+export default DraggableText;
