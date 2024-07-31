@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 
-const DraggableText = () => {
+const DraggableInput = () => {
     const [text, setText] = useState('');
     const [position, setPosition] = useState({ x: 0, y: 0 });
 
@@ -47,4 +47,4 @@ const DraggableText = () => {
     );
 };
 
-export default DraggableText;
+export default DraggableInput;
