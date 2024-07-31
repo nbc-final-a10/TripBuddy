@@ -18,7 +18,7 @@ const DraggableInput = () => {
     const handleSave = async () => {};
 
     return (
-        <div className="relative w-full h-full">
+        <div className="absolute w-full h-full">
             <Draggable
                 scale={2}
                 position={position}

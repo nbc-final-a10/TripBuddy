@@ -1,7 +1,8 @@
+import StoryWrite from '@/components/organisms/stories/StoryWrite';
 import React from 'react';
 
 const WriteStory: React.FC = () => {
-    return <div>WriteStory</div>;
+    return <StoryWrite />;
 };
 
 export default WriteStory;
