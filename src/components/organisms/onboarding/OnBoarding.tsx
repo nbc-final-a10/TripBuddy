@@ -155,6 +155,7 @@ const OnBoarding: React.FC = () => {
         if (step <= 9) router.push(`/onboarding?funnel=${step}`);
         if (step > 9) {
             buddyInfoRef.current.buddy_isOnBoarding = true;
+            console.log('최종 버디즈 정보 =====>', buddyInfoRef.current);
             mutate(buddyInfoRef.current);
             router.push('/');
         }
@@ -225,13 +226,13 @@ const OnBoarding: React.FC = () => {
                 {step === 7 && (
                     <OnBoardingSelectPrefer
                         mode="buddy"
-                        component={<PreferBuddyTheme />}
+                        component={<PreferBuddyTheme className="px-4 py-2.5" />}
                     />
                 )}
                 {step === 8 && (
                     <OnBoardingSelectPrefer
                         mode="trip"
-                        component={<PreferTripTheme />}
+                        component={<PreferTripTheme className="px-4 py-2.5" />}
                     />
                 )}
                 {step === 9 && (

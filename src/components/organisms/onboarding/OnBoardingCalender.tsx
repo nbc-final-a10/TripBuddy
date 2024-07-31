@@ -4,7 +4,7 @@ import Title from '@/components/atoms/common/O_Title';
 import OnBoardingInnerWrapper from '@/components/atoms/onboarding/OnBoardinginnerWrapper';
 import OnBoardingWrapper from '@/components/atoms/onboarding/OnBoardingWrapper';
 import { Calendar, CalendarDate } from '@nextui-org/calendar';
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 type OnBoardingCalenderProps = {
     calenderValue: CalendarDate;
@@ -16,8 +16,13 @@ const OnBoardingCalender = ({
     setCalenderValue,
 }: OnBoardingCalenderProps) => {
     const calenderRef = useRef<HTMLDivElement | null>(null);
+    const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
-    useLayoutEffect(() => {
+    const handleCalenderChange = (isExpanded: boolean) => {
+        setIsExpanded(isExpanded);
+    };
+
+    useEffect(() => {
         if (calenderRef.current) {
             const rows = calenderRef.current.querySelectorAll(
                 'tr[data-slot="grid-body-row"]',
@@ -34,7 +39,7 @@ const OnBoardingCalender = ({
                 }
             });
         }
-    }, []);
+    }, [isExpanded]);
 
     return (
         <OnBoardingWrapper>
@@ -54,9 +59,11 @@ const OnBoardingCalender = ({
                         content: 'w-[337px]',
                         headerWrapper: 'after:-z-50',
                         header: 'z-0',
+                        pickerWrapper: 'z-0',
                     }}
                     ref={calenderRef}
                     value={calenderValue}
+                    onHeaderExpandedChange={handleCalenderChange}
                     onChange={setCalenderValue}
                 />
             </OnBoardingInnerWrapper>

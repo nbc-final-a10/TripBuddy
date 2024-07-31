@@ -13,7 +13,7 @@ const OnBoardingInput = forwardRef(({ mode }: OnBoardingInputProps, ref) => {
     return (
         <OnBoardingWrapper>
             {mode === 'nickname' && (
-                <Title className="text-2xl">안녕하세요!</Title>
+                <Title className="text-2xl py-4">안녕하세요!</Title>
             )}{' '}
             <OnBoardingInnerWrapper align="start">
                 <Title align="left">{`${mode === 'age' ? '나이를' : '이름을'} 입력해주세요`}</Title>
