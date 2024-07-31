@@ -65,7 +65,7 @@ const OnBoarding: React.FC = () => {
         limit: 10,
     });
 
-    const handleGenderButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
+    const handleGenderButtonClick = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
         const selectedGender = target.innerText;
         setSelectedGender(selectedGender);
