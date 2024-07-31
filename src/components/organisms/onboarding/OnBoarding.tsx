@@ -23,6 +23,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { onBoardingValidation } from '@/utils/onboarding/onBoardingValidation';
 import { PartialBuddy } from '@/types/Auth.types';
 import { getBirthDate } from '@/utils/common/getBirthDate';
+import OnBoardingCalender from './OnBoardingCalender';
 
 const buttonText = [
     '다음',
@@ -185,7 +186,9 @@ const OnBoarding: React.FC = () => {
                         name={nicknameRef.current?.value as string}
                     />
                 )}
-                {step === 2 && <OnBoardingInput mode="age" ref={ageRef} />}
+                {/* {step === 2 && <OnBoardingInput mode="age" ref={ageRef} />} */}
+                {step === 2 && <OnBoardingCalender />}
+
                 {step === 3 && (
                     <OnBoardingSelectGender
                         handleClick={handleGenderButtonClick}

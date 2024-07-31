@@ -40,7 +40,9 @@ const OnBoardingDivider: React.FC<OnBoardingDividerProps> = ({
     return (
         <OnBoardingWrapper>
             <Title className="text-xl">{titleRef.current}</Title>
-            <Paragraph>{paragraphRef.current}</Paragraph>
+            <Paragraph className="text-center">
+                {paragraphRef.current}
+            </Paragraph>
             <MascotImage intent={imgIntentRef.current} />
         </OnBoardingWrapper>
     );
