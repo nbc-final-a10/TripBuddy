@@ -19,13 +19,13 @@ import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useRouter } from 'next/navigation';
 import useTripWrite from '@/hooks/MyPage/useTripWrite';
 import WriteTrip from '@/components/organisms/write/WriteTrip';
+import useSelectSex from '@/hooks/useSelectSex';
+import useSelectAges from '@/hooks/useSelectAges';
+import useSelectMeetPlace from '@/hooks/useSelectMeetPlace';
 
 const WritePage: React.FC = () => {
     const router = useRouter();
-    const { NextButton, step } = useNextButton({
-        buttonText: '다음',
-        limit: 6,
-    });
+
     const { buddy } = useAuth();
     const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
     const { SelectCalendar, startDateTimestamp, endDateTimestamp } =
@@ -51,6 +51,26 @@ const WritePage: React.FC = () => {
         handleTitleChange,
         handleContentChange,
     } = useTripWrite();
+    const { wantedSex, SelectWantedSexButton } = useSelectSex();
+    const { startAge, endAge, handleStartAge, handleEndAge } = useSelectAges();
+    const { meetPlace, SelectMeetPlaceButton } = useSelectMeetPlace();
+
+    // 유효성 검사 함수
+    const validateStep = () => {
+        if (step === 2) {
+            if (!startDateTimestamp || !endDateTimestamp) {
+                showAlert('error', '날짜를 선택해 주세요');
+                return false;
+            }
+        }
+        return true;
+    };
+
+    const { NextButton, step, setStep } = useNextButton({
+        buttonText: '다음',
+        limit: 6,
+        validateStep: validateStep,
+    });
 
     type TripData = Tables<'trips'>;
     // 파셜트립데이터는 데이터 컬럼을 선택적으로 쓰겠다
@@ -68,16 +88,17 @@ const WritePage: React.FC = () => {
             trip_bookmarks_counts: buddyCounts,
             trip_start_date: startDateTimestamp,
             trip_end_date: endDateTimestamp,
-            trip_final_destination: [
-                secondLevelLocation ?? '',
-                thirdLevelLocation ?? '',
-            ].join(', '),
+            trip_final_destination: `${secondLevelLocation} ${thirdLevelLocation}`,
+            trip_meet_location: meetPlace,
             trip_theme1: selectedTripThemes[0],
             trip_theme2: selectedTripThemes[1],
             trip_theme3: selectedTripThemes[2],
             trip_wanted_buddies1: selectedWantedBuddies[0],
             trip_wanted_buddies2: selectedWantedBuddies[1],
             trip_wanted_buddies3: selectedWantedBuddies[2],
+            trip_wanted_sex: wantedSex,
+            trip_start_age: startAge,
+            trip_end_age: endAge,
         };
         try {
             const response = await fetch('/api/write', {
@@ -87,14 +108,8 @@ const WritePage: React.FC = () => {
                 },
                 body: JSON.stringify(tripData),
             });
-
-            // const result = await response.json();
             if (response.ok) {
-                showAlert('success', '게시글 업데이트 성공', {
-                    onConfirm: () => {
-                        router.push('/');
-                    },
-                });
+                console.log('게시글 업데이트 성공');
             } else {
                 const errorResult = await response.json();
                 console.error('게시글 업데이트 중 오류 발생:', errorResult);
@@ -107,9 +122,7 @@ const WritePage: React.FC = () => {
 
     return (
         <>
-            {/* <div className="mt-4 xl:mt-20 ml-5 xl:ml-64"> */}
             <ProgressIndicator step={step} counts={7} />
-            {/* </div> */}
             <section className="h-dvh flex flex-col">
                 <div className="flex flex-col">
                     {step === 0 && (
@@ -131,11 +144,17 @@ const WritePage: React.FC = () => {
                     {step === 3 && (
                         <SelectTripThemesPage
                             PreferThemeToRender={PreferTripThemesToRender}
+                            SelectMeetPlaceButton={SelectMeetPlaceButton}
                         />
                     )}
                     {step === 4 && (
                         <SelectAdditionalBuddyThemes
                             PreferThemeToRender={PreferWantedBuddiesToRender}
+                            SelectWantedSexButton={SelectWantedSexButton}
+                            startAge={startAge}
+                            endAge={endAge}
+                            handleStartAge={handleStartAge}
+                            handleEndAge={handleEndAge}
                         />
                     )}
                     {step === 5 && (
@@ -149,9 +168,13 @@ const WritePage: React.FC = () => {
                     {step === 6 && <CompletePage />}
                 </div>
                 <div className="flex justify-center">
+                    {/* Todo: 마지막 스텝에서는 라벨을 '다음'이 아니라 '완료'로 띄워야 함 */}
                     <NextButton
-                        className="text-xl text-white bg-main-color font-bold py-2 px-4 mt-4 mx-2 rounded-xl w-full hover:bg-main-color/80"
-                        onClick={step === 5 ? handleWriteTrip : undefined}
+                        className="text-xl text-white bg-main-color font-bold py-2 px-4 mt-4 mx-2 mb-20 rounded-xl w-full hover:bg-main-color/80"
+                        onClick={() => {
+                            if (step === 5) handleWriteTrip();
+                            validateStep();
+                        }}
                     />
                 </div>
             </section>
