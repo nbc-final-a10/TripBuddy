@@ -1,7 +1,6 @@
 // import Chip from '@/components/atoms/common/O_Chip';
 // import StoryCard from '@/components/molecules/stories/StoryCard';
-import DraggableText from '@/components/organisms/stories/DraggableComponent';
-import DraggableComponent from '@/components/organisms/stories/DraggableComponentDefault';
+import DraggableText from '@/components/organisms/stories/DraggableInput';
 import React from 'react';
 
 const StoriesPage: React.FC = () => {
@@ -17,7 +16,7 @@ const StoriesPage: React.FC = () => {
                     mode="my"
                 />
             ))} */}
-            {/* <DraggableComponent /> */}
+
             <DraggableText />
         </section>
     );
