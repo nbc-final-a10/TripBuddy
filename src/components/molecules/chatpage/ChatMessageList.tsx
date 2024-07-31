@@ -25,17 +25,33 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
             .on(
                 'postgres_changes',
                 { event: 'INSERT', schema: 'public', table: 'messages' },
-                payload => {
-                    const newMessage = payload.new as Message & {
-                        buddy: {
-                            buddy_profile_pic: string;
-                            buddy_nickname: string;
-                        };
+                async payload => {
+                    const newMessage = payload.new as Message;
+
+                    const { data: buddyData, error: senderError } =
+                        await supabase
+                            .from('buddies')
+                            .select('buddy_profile_pic, buddy_nickname')
+                            .eq('buddy_id', newMessage.message_sender_id)
+                            .single();
+
+                    if (senderError) {
+                        console.error(
+                            'Error fetching sender info:',
+                            senderError,
+                        );
+                        return;
+                    }
+
+                    const newMessageWithBuddy = {
+                        ...newMessage,
+                        buddy: buddyData,
                     };
+
                     if (newMessage.message_trip_id === id) {
                         setMessages(prevMessages => [
                             ...prevMessages,
-                            newMessage,
+                            newMessageWithBuddy,
                         ]);
                     }
                 },
@@ -71,7 +87,7 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
         };
 
         fetchMessages();
-    });
+    }, [id]);
 
     return (
         <div className="px-6">
