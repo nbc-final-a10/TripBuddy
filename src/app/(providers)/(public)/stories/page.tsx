@@ -5,7 +5,7 @@ import React from 'react';
 
 const StoriesPage: React.FC = () => {
     return (
-        <section className="flex flex-col gap-4">
+        <section className="flex flex-col gap-4 h-[calc(100vh-50px)] overflow-hidden">
             {/* {Array.from({ length: 10 }, (_, index) => (
                 <StoryCard
                     key={index}

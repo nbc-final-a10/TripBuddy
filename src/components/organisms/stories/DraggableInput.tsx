@@ -18,7 +18,7 @@ const DraggableText = () => {
     const handleSave = async () => {};
 
     return (
-        <div className="relative w-full h-dvh">
+        <div className="relative w-full h-full">
             <Draggable
                 scale={2}
                 position={position}
@@ -34,10 +34,15 @@ const DraggableText = () => {
                         left: position.x,
                         transform: 'translate(-50%, -50%)',
                     }}
-                    className="absolute border-b-2 border-gray-300 rounded-md p-2"
+                    className="absolute border-b-2 border-gray-300 p-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-white focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 />
             </Draggable>
-            <button onClick={handleSave}>Save</button>
+            <button
+                className="absolute bg-blue-500 text-white p-2"
+                onClick={handleSave}
+            >
+                Save
+            </button>
         </div>
     );
 };

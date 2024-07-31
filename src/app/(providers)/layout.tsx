@@ -25,13 +25,13 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
     const dehydratedState = dehydrate(queryClient);
 
     return (
-        <main className="bg-slate-50 xl:bg-white">
-            <section className="w-[375px] mx-auto bg-white xl:w-[1080px] min-h-screen relative">
+        <main className="bg-slate-50 xl:bg-white min-h-dvh overflow-hidden">
+            <section className="w-[375px] mx-auto bg-white xl:w-[1080px] relative">
                 <Suspense fallback={<Loading />}>
                     <HydrationBoundary state={dehydratedState}>
                         <AuthProvider>
                             <Header />
-                            <div className="pb-[50px] xl:pt-[100px]">
+                            <div className="relative box-border pb-[50px] xl:pt-[100px]">
                                 {children}
                             </div>
                             <TapMenu />
