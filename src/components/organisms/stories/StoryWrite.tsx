@@ -13,16 +13,17 @@ const StoryWrite: React.FC = () => {
     return (
         <section
             className={clsx(
-                'flex flex-col gap-4 w-full h-dvh max-h-dvh overflow-hidden aspect-auto bg-gray-600',
+                'relative flex flex-col gap-4 w-full h-dvh max-h-dvh overflow-hidden aspect-auto bg-gray-600',
                 !isLocked && 'hidden',
             )}
         >
-            <div className="absolute top-0 left-0 w-full bg-gradient-to-b from-transparent to-black/80 rounded-lg z-10"></div>
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black/80 rounded-lg z-10"></div>
             <Image
                 src="/images/test2.webp"
                 alt="my-profile-background"
                 fill
-                sizes="100vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                priority
                 onLoad={() => setIsLoaded(true)}
                 className={clsx(
                     'object-contain',
