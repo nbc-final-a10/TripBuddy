@@ -35,10 +35,6 @@ const RootLayout: React.FC<PropsWithChildren> = ({ children }) => {
     return (
         <html lang="en">
             <body className={inter.className}>
-                <Script
-                    src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js"
-                    strategy="beforeInteractive"
-                />
                 <QueryProvider>{children}</QueryProvider>
             </body>
         </html>

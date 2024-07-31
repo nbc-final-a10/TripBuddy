@@ -9,7 +9,7 @@ import {
     TripTheme,
 } from '@/types/Themes.types';
 import handleChipClick from '@/utils/common/handleChipClick';
-import { MouseEvent, ReactNode, useRef, useState } from 'react';
+import React, { MouseEvent, ReactNode, useRef, useState } from 'react';
 
 // (AllTripTheme | AllBuddyTheme)[];
 
@@ -21,7 +21,10 @@ type UsePreferThemeProps = {
 const usePreferTheme = ({
     mode,
     isLabel = false,
-}: UsePreferThemeProps): [() => ReactNode, (TripTheme | BuddyTheme)[]] => {
+}: UsePreferThemeProps): [
+    ({ className }: { className?: string }) => React.JSX.Element,
+    (TripTheme | BuddyTheme)[],
+] => {
     const themeRef = useRef<AllTripTheme[] | AllBuddyTheme[]>(
         mode === 'trip' ? [...tripThemes] : [...buddyThemes],
     );
@@ -36,7 +39,7 @@ const usePreferTheme = ({
         handleChipClick(target, mutableThemes, selectedTheme, setSelectedTheme);
     };
 
-    const PreferThemeToRender = () => {
+    const PreferThemeToRender = ({ className }: { className?: string }) => {
         return (
             <PreferTheme
                 selectedTheme={selectedTheme}
@@ -49,6 +52,7 @@ const usePreferTheme = ({
                           ? '여행 테마'
                           : '버디즈 성향'
                 }
+                className={className}
             />
         );
     };
