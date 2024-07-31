@@ -1,8 +1,28 @@
+import clsx from 'clsx';
 import { PropsWithChildren } from 'react';
+import { twMerge } from 'tailwind-merge';
 
-const OnBoardingInnerWrapper = ({ children }: PropsWithChildren) => {
+type OnBoardingInnerWrapperProps = PropsWithChildren<{
+    align?: 'start' | 'end' | 'center';
+    className?: string;
+}>;
+
+const OnBoardingInnerWrapper = ({
+    children,
+    className,
+    align = 'center',
+}: OnBoardingInnerWrapperProps) => {
     return (
-        <div className="flex flex-col gap-4 w-full h-[80%] items-center justify-center">
+        <div
+            className={twMerge(
+                clsx('flex flex-col gap-4 w-full h-[80%] items-center', {
+                    'justify-start': align === 'start',
+                    'justify-end': align === 'end',
+                    'justify-center': align === 'center',
+                }),
+                className,
+            )}
+        >
             {children}
         </div>
     );

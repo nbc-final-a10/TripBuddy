@@ -49,7 +49,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             setShowPassword(prevShowPassword => !prevShowPassword);
         };
         return (
-            <div className="relative flex items-center w-full flex-col">
+            <div className="relative flex items-center w-full flex-col px-3">
                 {label && (
                     <label className="w-full text-left" htmlFor={id}>
                         {label}

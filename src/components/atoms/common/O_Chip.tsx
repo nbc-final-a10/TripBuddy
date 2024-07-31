@@ -30,6 +30,7 @@ const chipVariants = cva(
                 square_white: 'rounded-md px-1',
                 rounded: 'px-[6px] py-[3px] rounded-xl',
                 rounded_blue: 'px-[6px] py-[3px] rounded-xl',
+                onBoarding: 'bg-gray-200 text-gray-500 border-gray-200',
             },
             variant: {
                 selected: 'bg-main-color border-main-color',
@@ -44,17 +45,13 @@ const chipVariants = cva(
             {
                 intent: 'natural',
                 variant: 'selected',
-                className: 'bg-main-color text-white opacity-100 cursor-auto',
+                className:
+                    'bg-main-color text-white opacity-100 cursor-pointer',
             },
             {
                 intent: 'natural',
                 variant: 'unselected',
-                className: 'bg-white text-black opacity-100 cursor-auto',
-            },
-            {
-                intent: 'natural',
-                variant: 'unselected',
-                className: 'text-gray-500 opacity-100 cursor-auto',
+                className: 'bg-gray-400 text-white opacity-100 cursor-pointer',
             },
             {
                 intent: 'square',
@@ -80,6 +77,18 @@ const chipVariants = cva(
                 className:
                     'text-white opacity-100 bg-[#516FE6] border-[#516FE6] cursor-auto',
             },
+            {
+                intent: 'onBoarding',
+                variant: 'unselected',
+                className:
+                    'text-gray-500 bg-gray-200 border-gray-200 cursor-pointer',
+            },
+            {
+                intent: 'onBoarding',
+                variant: 'selected',
+                className:
+                    'text-white bg-main-color border-main-color cursor-pointer',
+            },
         ],
     },
 );
@@ -95,7 +104,7 @@ type ChipProps = {
         | Gender
         | MeetingPlace
         | string;
-    selected: boolean;
+    selected?: boolean;
     onClick?: (e: React.MouseEvent<HTMLSpanElement>) => void;
 } & ChipVariantsType &
     React.ComponentProps<'span'>;
@@ -103,7 +112,7 @@ type ChipProps = {
 function Chip({
     children,
     intent = 'natural',
-    selected,
+    selected = false,
     onClick = () => {},
     className,
     ...props
