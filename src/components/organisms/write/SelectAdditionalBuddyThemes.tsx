@@ -1,15 +1,28 @@
-import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
+'use client';
+
 import LeftSmGrayText from '@/components/atoms/write/LeftSmGrayText';
 import LeftXlBoldText from '@/components/atoms/write/LeftXlBoldText';
 import LeftXsmGrayText from '@/components/atoms/write/LeftXsmGrayText';
 import React from 'react';
+import SelectAgesRange from '@/components/atoms/write/SelectAgesRange';
+import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 
 type SelectAdditionalBuddyThemesProps = {
     PreferThemeToRender: React.FC;
+    SelectWantedSexButton: React.FC;
+    startAge: number;
+    endAge: number;
+    handleStartAge: (value: number) => void;
+    handleEndAge: (value: number) => void;
 };
 
 export default function SelectAdditionalBuddyThemes({
     PreferThemeToRender,
+    SelectWantedSexButton,
+    startAge,
+    endAge,
+    handleStartAge,
+    handleEndAge,
 }: SelectAdditionalBuddyThemesProps) {
     return (
         <div>
@@ -19,9 +32,16 @@ export default function SelectAdditionalBuddyThemes({
             </div>
             <div className="mb-5">
                 <LeftXlBoldText text="성별" />
+                <SelectWantedSexButton />
             </div>
             <div className="mb-5">
                 <LeftXlBoldText text="나이" />
+                <SelectAgesRange
+                    startAge={startAge}
+                    endAge={endAge}
+                    handleStartAge={handleStartAge}
+                    handleEndAge={handleEndAge}
+                />
             </div>
             <div className="mb-5">
                 <LeftXlBoldText text="버디즈 성향" />
