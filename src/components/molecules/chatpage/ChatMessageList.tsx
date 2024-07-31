@@ -71,7 +71,7 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
         };
 
         fetchMessages();
-    }, [id]);
+    });
 
     return (
         <div className="px-6">
