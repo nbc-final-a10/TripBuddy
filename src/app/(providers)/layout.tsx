@@ -13,6 +13,7 @@ import { getBuddyServer } from '@/api-services/auth/server';
 import { getUserFromHeader } from '@/utils/auth/getUserFromHeader';
 import { getPathnameServer } from '@/utils/common/getPathnameServer';
 import MainSectionWrapper from '@/components/molecules/common/MainSectionWrapper';
+import MobileHeader from '@/components/molecules/common/MobileHeader';
 
 const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
     const userId = getUserFromHeader();
@@ -33,6 +34,7 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
                 <Suspense fallback={<Loading />}>
                     <HydrationBoundary state={dehydratedState}>
                         <AuthProvider>
+                            <MobileHeader pathname={pathname as string} />
                             <Header />
                             {children}
                             <TapMenu pathname={pathname as string} />

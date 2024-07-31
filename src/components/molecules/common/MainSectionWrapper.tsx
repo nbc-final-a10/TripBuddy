@@ -21,7 +21,7 @@ const MainSectionWrapper = ({
     return (
         <section
             className={twMerge(
-                'relative max-w-[430px] min-w-[360px] mx-auto min-h-dvh bg-white pb-[50px] xl:pt-[100px] xl:w-[1080px]',
+                'relative max-w-[430px] min-w-[360px] mx-auto min-h-dvh bg-white pb-[50px] xl:w-[1080px] xl:max-w-[1280px]',
                 isHidePaddingBottom && 'pb-0',
             )}
         >
@@ -31,3 +31,4 @@ const MainSectionWrapper = ({
 };
 
 export default MainSectionWrapper;
+//xl:pt-[100px]

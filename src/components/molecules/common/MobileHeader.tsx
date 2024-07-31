@@ -3,7 +3,69 @@ import Arrow_Back from '../../../../public/svg/Arrow_back.svg';
 import Close from '../../../../public/svg/Close.svg';
 import Notification from '../../../../public/svg/Notifications_unread.svg';
 import Search from '../../../../public/svg/Search.svg';
-import Settings from '../../../../public/svg/Settings.svg';
+import MobileHeaderSettingsButton from '@/components/atoms/common/MobileHeaderSettingsButton';
+
+type MobileHeaderProps = {
+    pathname: string;
+};
+
+const MobileHeader: React.FC<MobileHeaderProps> = ({ pathname }) => {
+    const isTrips = pathname === '/trips';
+    const isTripDetail = pathname.startsWith('/trips/');
+    const isLogin = pathname === '/login';
+    const isSignup = pathname === '/signup';
+    const isSearch = pathname === '/search';
+    const isWrite = pathname === '/write';
+    const isOnboarding = pathname === '/onboarding';
+    const isProfile = pathname.startsWith('/profile/');
+
+    const headerTitle =
+        (isTrips && '모집중 여정') ||
+        (isTripDetail && '여정 보기') ||
+        (isWrite && '여정 작성') ||
+        (isLogin && '') ||
+        (isSignup && '') ||
+        (isSearch && '검색') ||
+        (isOnboarding && '온보딩') ||
+        (isProfile && '프로필');
+
+    const isShow =
+        isTrips ||
+        isTripDetail ||
+        isLogin ||
+        isSignup ||
+        isSearch ||
+        isWrite ||
+        isOnboarding ||
+        isProfile;
+
+    if (!isShow) return null;
+
+    return (
+        <header className="relative h-[57px] w-full flex flex-row items-center px-5 xl:hidden">
+            <div className="w-[calc(100%/3)] flex justify-start items-center">
+                <Arrow_Back />
+            </div>
+            <div className="w-[calc(100%/3)] flex justify-center items-center">
+                <h1 className="text-center leading-3 text-xl font-semibold">
+                    {headerTitle}
+                </h1>
+            </div>
+
+            <div className="w-[calc(100%/3)] flex justify-end items-center gap-2">
+                {isTrips && <Search />}
+                {isTrips && <Notification />}
+                {isProfile && (
+                    <MobileHeaderSettingsButton pathname={pathname} />
+                )}
+                {isTripDetail && <span>수정</span>}
+                {(isSearch || isWrite) && <Close />}
+            </div>
+        </header>
+    );
+};
+
+export default MobileHeader;
 
 // 필요한 것
 // 바뀌는 라벨(필수) v
@@ -35,46 +97,3 @@ import Settings from '../../../../public/svg/Settings.svg';
 // 마이페이지 /[id] 인데 buddy.buddy_id 가 자신이면 (설정버튼톱니바퀴)
 // 프로필 /[id] 인데 buddy.buddy_id 가 자신이 아니면
 // 내 정보 수정 /editprofile?? (뒤로가기)
-
-type MobileHeaderProps = {
-    title?: string;
-    close?: boolean;
-    notification?: boolean;
-    search?: boolean;
-    settings?: boolean;
-    edit?: boolean;
-};
-
-const MobileHeader: React.FC<MobileHeaderProps> = ({
-    title,
-    close,
-    notification,
-    search,
-    settings,
-    edit,
-}) => {
-    return (
-        <header className="relative h-[57px] w-full flex flex-row items-center px-5 xl:hidden">
-            <div className="w-[calc(100%/3)] flex justify-start items-center">
-                <Arrow_Back />
-            </div>
-            <div className="w-[calc(100%/3)] flex justify-center items-center">
-                {title && (
-                    <h1 className="text-center leading-3 text-xl font-semibold">
-                        {title}
-                    </h1>
-                )}
-            </div>
-
-            <div className="w-[calc(100%/3)] flex justify-end items-center gap-2">
-                {search && <Search />}
-                {notification && <Notification />}
-                {settings && <Settings />}
-                {edit && <span>수정</span>}
-                {close && <Close />}
-            </div>
-        </header>
-    );
-};
-
-export default MobileHeader;
