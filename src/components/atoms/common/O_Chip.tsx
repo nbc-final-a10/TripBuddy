@@ -44,17 +44,13 @@ const chipVariants = cva(
             {
                 intent: 'natural',
                 variant: 'selected',
-                className: 'bg-main-color text-white opacity-100 cursor-auto',
+                className:
+                    'bg-main-color text-white opacity-100 cursor-pointer',
             },
             {
                 intent: 'natural',
                 variant: 'unselected',
-                className: 'bg-white text-black opacity-100 cursor-auto',
-            },
-            {
-                intent: 'natural',
-                variant: 'unselected',
-                className: 'text-gray-500 opacity-100 cursor-auto',
+                className: 'bg-white text-black opacity-100 cursor-pointer',
             },
             {
                 intent: 'square',

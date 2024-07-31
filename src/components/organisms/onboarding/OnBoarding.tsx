@@ -44,6 +44,7 @@ const OnBoarding: React.FC = () => {
 
     const nicknameRef = useRef<HTMLInputElement>(null);
     const ageRef = useRef<HTMLInputElement>(null);
+    const buddyInfoRef = useRef<PartialBuddy>({ buddy_id: buddy?.buddy_id });
     const [selectedGender, setSelectedGender] = useState<string>('');
     const [selectedMbti, setSelectedMbti] = useState<string>('');
 
@@ -61,9 +62,7 @@ const OnBoarding: React.FC = () => {
     };
 
     const handleNextButtonClick = () => {
-        if (!buddy) {
-            return showAlert('error', '로그인을 먼저 해주세요.');
-        }
+        if (!buddy) return showAlert('error', '로그인을 먼저 해주세요.');
 
         const buddyInfo: PartialBuddy = {
             buddy_id: buddy.buddy_id,
@@ -77,8 +76,7 @@ const OnBoarding: React.FC = () => {
                 step,
             );
             if (!result) return setStep(0);
-            buddyInfo.buddy_nickname = nicknameRef.current?.value;
-            mutate(buddyInfo);
+            buddyInfoRef.current.buddy_nickname = nicknameRef.current?.value;
         }
         if (step === 2) {
             const age = Number(ageRef.current?.value);
@@ -88,14 +86,12 @@ const OnBoarding: React.FC = () => {
 
             const birthTimestamptz = getBirthDate(age);
 
-            buddyInfo.buddy_birth = birthTimestamptz;
-            mutate(buddyInfo);
+            buddyInfoRef.current.buddy_birth = birthTimestamptz;
         }
         if (step === 3) {
             const result = onBoardingValidation(selectedGender, step);
             if (!result) return setStep(3);
-            buddyInfo.buddy_sex = selectedGender;
-            mutate(buddyInfo);
+            buddyInfoRef.current.buddy_sex = selectedGender;
         }
         if (step === 4) {
             const result = onBoardingValidation(
@@ -103,33 +99,29 @@ const OnBoarding: React.FC = () => {
                 step,
             );
             if (!result) return setStep(4);
-            buddyInfo.buddy_region = [
-                thirdLevelLocation,
+            buddyInfoRef.current.buddy_region = [
                 secondLevelLocation,
+                thirdLevelLocation,
             ].join(' ');
-            mutate(buddyInfo);
         }
         if (step === 5) {
             const result = onBoardingValidation(selectedMbti, step);
             if (!result) return setStep(5);
-            buddyInfo.buddy_mbti = selectedMbti;
-            mutate(buddyInfo);
+            buddyInfoRef.current.buddy_mbti = selectedMbti;
         }
         if (step === 7) {
             const result = onBoardingValidation(selectedBuddyTheme, step);
             if (!result) return setStep(7);
-            buddyInfo.buddy_preferred_buddy1 = selectedBuddyTheme[0];
-            buddyInfo.buddy_preferred_buddy2 = selectedBuddyTheme[1];
-            buddyInfo.buddy_preferred_buddy3 = selectedBuddyTheme[2];
-            mutate(buddyInfo);
+            buddyInfoRef.current.buddy_preferred_buddy1 = selectedBuddyTheme[0];
+            buddyInfoRef.current.buddy_preferred_buddy2 = selectedBuddyTheme[1];
+            buddyInfoRef.current.buddy_preferred_buddy3 = selectedBuddyTheme[2];
         }
         if (step === 8) {
             const result = onBoardingValidation(selectedTripTheme, step);
             if (!result) return setStep(8);
-            buddyInfo.buddy_preferred_theme1 = selectedTripTheme[0];
-            buddyInfo.buddy_preferred_theme2 = selectedTripTheme[1];
-            buddyInfo.buddy_preferred_theme3 = selectedTripTheme[2];
-            mutate(buddyInfo);
+            buddyInfoRef.current.buddy_preferred_theme1 = selectedTripTheme[0];
+            buddyInfoRef.current.buddy_preferred_theme2 = selectedTripTheme[1];
+            buddyInfoRef.current.buddy_preferred_theme3 = selectedTripTheme[2];
         }
     };
 
@@ -149,11 +141,9 @@ const OnBoarding: React.FC = () => {
             });
         if (step <= 9) router.push(`/onboarding?funnel=${step}`);
         if (step > 9) {
-            const buddyInfo = {
-                buddy_id: buddy.buddy_id,
-                buddy_isOnBoarding: true,
-            };
-            mutate(buddyInfo);
+            buddyInfoRef.current.buddy_isOnBoarding = true;
+
+            mutate(buddyInfoRef.current);
             router.push('/');
         }
     }, [step, router, buddy, mutate]);
@@ -162,24 +152,6 @@ const OnBoarding: React.FC = () => {
         const funnel = searchParams.get('funnel');
         if (funnel) setStep(Number(funnel));
     }, [searchParams, setStep]);
-
-    // 이 유즈이펙트는 완성하면 지울것!
-    useEffect(() => {
-        console.log('선택된 버디 테마 ===>', selectedBuddyTheme);
-        console.log('선택된 여정 테마 ===>', selectedTripTheme);
-        console.log(
-            '선택된 지역 ===>',
-            secondLevelLocation,
-            thirdLevelLocation,
-        );
-        console.log('선택된 성별 ===>', selectedGender);
-    }, [
-        selectedBuddyTheme,
-        selectedTripTheme,
-        secondLevelLocation,
-        thirdLevelLocation,
-        selectedGender,
-    ]);
 
     return (
         <section className="w-full h-[calc(100dvh-57px-58px)]">
@@ -201,7 +173,7 @@ const OnBoarding: React.FC = () => {
                 {step === 1 && (
                     <OnBoardingDivider
                         mode="welcome"
-                        name={nicknameRef.current?.value || ''}
+                        name={nicknameRef.current?.value as string}
                     />
                 )}
                 {step === 2 && <OnBoardingInput mode="age" ref={ageRef} />}
