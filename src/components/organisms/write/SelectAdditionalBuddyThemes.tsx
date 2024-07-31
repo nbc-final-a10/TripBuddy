@@ -36,7 +36,12 @@ export default function SelectAdditionalBuddyThemes({
             </div>
             <div className="mb-5">
                 <LeftXlBoldText text="나이" />
-                <SelectAgesRange />
+                <SelectAgesRange
+                    startAge={startAge}
+                    endAge={endAge}
+                    handleStartAge={handleStartAge}
+                    handleEndAge={handleEndAge}
+                />
             </div>
             <div className="mb-5">
                 <LeftXlBoldText text="버디즈 성향" />

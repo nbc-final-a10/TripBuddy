@@ -110,7 +110,11 @@ export default function useSelectRegion() {
                                                         <p className="font-bold">
                                                             {loc.name}
                                                         </p>
-                                                        <p>한국</p>
+                                                        <p>
+                                                            {
+                                                                secondLevelLocation
+                                                            }
+                                                        </p>
                                                     </div>
                                                 ) : (
                                                     <div>

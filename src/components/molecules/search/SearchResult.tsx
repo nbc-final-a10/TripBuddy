@@ -48,10 +48,22 @@ const SearchResult: React.FC = () => {
                                     {item.trip_wanted_sex}
                                 </p>
                                 <p className="text-sm">
-                                    {item.trip_meet_location}
+                                    만남 장소: {item.trip_meet_location}
                                 </p>
+                                최소:{' '}
                                 <p className="text-sm">{item.trip_start_age}</p>
+                                최대:{' '}
                                 <p className="text-sm">{item.trip_end_age}</p>
+                                {/* 인원수:{' '}
+                                <p className="text-sm">
+                                    {item.trip_max_buddies_counts}
+                                </p> */}
+                                {/* <p className="text-sm">
+                                    {item.trip_final_destination}
+                                </p> */}
+                                <p className="text-sm">{item.trip_theme1}</p>
+                                <p className="text-sm">{item.trip_theme2}</p>
+                                <p className="text-sm">{item.trip_theme3}</p>
                             </div>
                         ),
                     )}

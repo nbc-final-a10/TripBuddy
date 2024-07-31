@@ -16,12 +16,6 @@ const GenderChipGroup: React.FC = () => {
         const newSelectedGender = isSelected ? null : gender;
 
         setSelectedGender(newSelectedGender);
-
-        // if (newSelectedGender) {
-        //     console.log(`현재 선택된 버튼: ${newSelectedGender}`);
-        // } else {
-        //     console.log('선택이 취소되었습니다.');
-        // }
     };
 
     return (

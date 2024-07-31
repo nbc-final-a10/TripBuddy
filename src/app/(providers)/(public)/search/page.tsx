@@ -20,12 +20,27 @@ const SearchPage: React.FC = () => {
     const [showResult, setShowResult] = useState(false);
     const resultRef = useRef<HTMLDivElement>(null);
 
-    const { startAge, endAge, setStartAge, setEndAge } = useSearchStore(
+    const {
+        startAge,
+        endAge,
+        setStartAge,
+        setEndAge,
+
+        // buddyCount,
+        // setBuddyCount,
+
+        // setThirdLevelLocation,
+    } = useSearchStore(
         useShallow(state => ({
             startAge: state.startAge,
             endAge: state.endAge,
             setStartAge: state.setStartAge,
             setEndAge: state.setEndAge,
+
+            // buddyCount: state.buddyCount,
+            // setBuddyCount: state.setBuddyCount,
+
+            // setThirdLevelLocation: state.setThirdLevelLocation,
         })),
     );
 
@@ -38,17 +53,19 @@ const SearchPage: React.FC = () => {
         mode: 'buddy',
     });
 
-    const [PreferTripTheme] = usePreferTheme({
+    const [PreferTripTheme, selectedTripThemes] = usePreferTheme({
         mode: 'trip',
     });
 
     const { SelectBuddyCounts } = useSelectBuddyCounts();
-    const { SelectRegion } = useSelectRegion();
+    const { SelectRegion, thirdLevelLocation } = useSelectRegion();
+    // console.log('Third Level Location:', thirdLevelLocation);
 
     // const router = useRouter();
 
-    const { setItems } = useSearchStore(state => ({
+    const { setItems, setSelectedThemes } = useSearchStore(state => ({
         setItems: state.setItems,
+        setSelectedThemes: state.setSelectedThemes,
     }));
 
     const handleShowResult = async () => {
@@ -59,6 +76,8 @@ const SearchPage: React.FC = () => {
         } else {
             setItems(data);
         }
+
+        setSelectedThemes(selectedTripThemes);
 
         setShowResult(true);
         // 속도 지연

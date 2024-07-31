@@ -13,16 +13,25 @@ type SearchStore = {
 
     selectedGender: string | null;
     setSelectedGender: (gender: string | null) => void;
-    getGenderFilteredItems: () => Trip[];
+    // getGenderFilteredItems: () => Trip[];
 
     selectedMeetingPlace: string | null;
     setSelectedMeetingPlace: (place: string | null) => void;
-    getSelectedMeetingPlace: () => Trip[];
+    // getSelectedMeetingPlace: () => Trip[];
 
     startAge: number;
     endAge: number;
     setStartAge: (age: number) => void;
     setEndAge: (age: number) => void;
+
+    buddyCount: number | null;
+    setBuddyCount: (count: number | null) => void;
+
+    thirdLevelLocation: string | null;
+    setThirdLevelLocation: (location: string | null) => void;
+
+    selectedThemes: string[];
+    setSelectedThemes: (themes: string[]) => void;
 
     getFilteredItems: () => Trip[];
 };
@@ -45,33 +54,43 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
     setSelectedGender: (gender: string | null) =>
         set({ selectedGender: gender }),
 
-    getGenderFilteredItems: () => {
-        const state = get();
-        return state.selectedGender
-            ? state.items.filter(
-                  (item: Trip) => item.trip_wanted_sex === state.selectedGender,
-              )
-            : state.items;
-    },
+    // getGenderFilteredItems: () => {
+    //     const state = get();
+    //     return state.selectedGender
+    //         ? state.items.filter(
+    //               (item: Trip) => item.trip_wanted_sex === state.selectedGender,
+    //           )
+    //         : state.items;
+    // },
 
     selectedMeetingPlace: null,
     setSelectedMeetingPlace: (place: string | null) =>
         set({ selectedMeetingPlace: place }),
 
-    getSelectedMeetingPlace: () => {
-        const state = get();
-        return state.selectedMeetingPlace
-            ? state.items.filter(
-                  (item: Trip) =>
-                      item.trip_meet_location === state.selectedMeetingPlace,
-              )
-            : state.items;
-    },
+    // getSelectedMeetingPlace: () => {
+    //     const state = get();
+    //     return state.selectedMeetingPlace
+    //         ? state.items.filter(
+    //               (item: Trip) =>
+    //                   item.trip_meet_location === state.selectedMeetingPlace,
+    //           )
+    //         : state.items;
+    // },
 
     startAge: 18,
     endAge: 150,
     setStartAge: (age: number) => set({ startAge: age }),
     setEndAge: (age: number) => set({ endAge: age }),
+
+    buddyCount: null,
+    setBuddyCount: (count: number | null) => set({ buddyCount: count }),
+
+    thirdLevelLocation: null,
+    setThirdLevelLocation: (location: string | null) =>
+        set({ thirdLevelLocation: location }),
+
+    selectedThemes: [],
+    setSelectedThemes: (themes: string[]) => set({ selectedThemes: themes }),
 
     getFilteredItems: () => {
         const state = get();
@@ -95,6 +114,33 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
                 (item: Trip) =>
                     item.trip_start_age >= state.startAge &&
                     item.trip_end_age <= state.endAge,
+            );
+        }
+
+        // if (state.buddyCount !== null) {
+        //     filteredItems = filteredItems.filter(
+        //         (item: Trip) =>
+        //             item.trip_max_buddies_counts === state.buddyCount,
+        //     );
+        // }
+
+        if (state.thirdLevelLocation !== null) {
+            filteredItems = filteredItems.filter((item: Trip) =>
+                item.trip_final_destination.includes(
+                    state.thirdLevelLocation as string,
+                ),
+            );
+        }
+
+        if (state.selectedThemes.length > 0) {
+            filteredItems = filteredItems.filter((item: Trip) =>
+                state.selectedThemes.every(theme =>
+                    [
+                        item.trip_theme1,
+                        item.trip_theme2,
+                        item.trip_theme3,
+                    ].includes(theme),
+                ),
             );
         }
 
