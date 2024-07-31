@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
+import { twMerge } from 'tailwind-merge';
 
 type MainSectionWrapperProps = {
     children: React.ReactNode;
@@ -19,8 +20,8 @@ const MainSectionWrapper = ({
 
     return (
         <section
-            className={clsx(
-                'relative max-w-[430px] min-w-[360px] mx-auto min-h-dvh bg-white pb-[50px] xl:pt-[100px] xl:w-[1080px] ',
+            className={twMerge(
+                'relative max-w-[430px] min-w-[360px] mx-auto min-h-dvh bg-white pb-[50px] xl:pt-[100px] xl:w-[1080px]',
                 isHidePaddingBottom && 'pb-0',
             )}
         >

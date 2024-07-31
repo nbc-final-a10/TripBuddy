@@ -7,6 +7,7 @@ import { SubmitButton } from '../../atoms/common/O_Submit-button';
 import Input from '@/components/atoms/common/O_Input';
 import { useAuth } from '@/hooks/auth';
 import { authValidation } from '@/utils/auth/validation';
+import AuthSubText from '@/components/atoms/auth/AuthSubText';
 
 function LogInForm() {
     const { isPending, logIn, sendingResetEmail } = useAuth();
@@ -50,53 +51,60 @@ function LogInForm() {
     return (
         <>
             <div className="flex flex-col items-center justify-center gap-2 pb-6">
-                <h1 className="text-2xl font-Pretendard-Regular font-bold">
+                <h1 className="text-2xl font-bold">
                     {isRecoverPassword ? '비밀번호 복구' : '로그인'}
                 </h1>
-                <p className="text-sm font-Pretendard-Regular text-gray-500">
-                    {isRecoverPassword
-                        ? 'Recover your password'
-                        : 'Sign up to continue using our App'}
-                </p>
             </div>
 
             <form
                 onSubmit={
                     isRecoverPassword ? handleRecoverPassword : handleSubmit
                 }
-                className="w-full h-fit min-h-[35%] flex flex-col items-center justify-center gap-10"
+                className="w-full h-fit min-h-[35%] flex flex-col items-center justify-center gap-44"
             >
-                <div className="w-[90%] flex flex-col items-center justify-center font-Pretendard-Regular gap-10">
-                    <Input type="text" placeholder="email" name="email" />
+                <div className="w-[90%] flex flex-col items-center justify-center gap-10">
+                    <div className="w-full flex flex-col gap-2 justify-center">
+                        <Input
+                            type="text"
+                            placeholder="이메일 입력"
+                            name="email"
+                        />
+                        <AuthSubText text="ex) abcd1234@gmail.com" />
+                    </div>
 
                     {isRecoverPassword ? null : (
                         <div
                             className={clsx(
-                                'w-full flex flex-col gap-1',
+                                'w-full flex flex-col gap-4',
                                 isRecoverPassword && 'gap-4',
                             )}
                         >
-                            <Input
-                                type="password"
-                                placeholder="password"
-                                name="password"
-                            />
-
-                            {isRecoverPassword && (
+                            <div className="w-full flex flex-col gap-2 justify-center">
                                 <Input
                                     type="password"
-                                    placeholder="confirm password"
-                                    name="passwordConfirm"
+                                    placeholder="비밀번호 입력"
+                                    name="password"
                                 />
-                            )}
+                                <AuthSubText text="영문자 및 숫자 조합으로 8자 ~ 16자 이내 입력" />
+                            </div>
 
-                            <button
-                                type="button"
-                                onClick={() => setIsRecoverPassword(true)}
-                                className="w-full text-sm text-right text-gray-500"
-                            >
-                                Forget Password?
-                            </button>
+                            <div className="w-full flex flex-col gap-2 justify-center">
+                                {isRecoverPassword && (
+                                    <Input
+                                        type="password"
+                                        placeholder="confirm password"
+                                        name="passwordConfirm"
+                                    />
+                                )}
+
+                                <button
+                                    type="button"
+                                    onClick={() => setIsRecoverPassword(true)}
+                                    className="w-full text-xs text-right text-gray-500"
+                                >
+                                    비밀번호를 잊으셨나요?
+                                </button>
+                            </div>
                         </div>
                     )}
 
@@ -108,12 +116,12 @@ function LogInForm() {
                 </div>
 
                 <SubmitButton
-                    className="bg-sky-200 w-[70%] text-white rounded-lg px-4 py-2"
+                    className="bg-main-color w-[90%] text-white rounded-2xl px-4 py-3 font-bold text-xl"
                     type="submit"
-                    pendingText="로딩..."
+                    pendingText="진행중..."
                     pending={isPending}
                 >
-                    {isRecoverPassword ? '복구메일보내기' : '로그인하기'}
+                    {isRecoverPassword ? '복구메일보내기' : '로그인'}
                 </SubmitButton>
             </form>
         </>
