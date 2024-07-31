@@ -3,7 +3,14 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 
-const DraggableInput = () => {
+type DraggableInputProps = {
+    texts: { text: string; position: { x: number; y: number } }[];
+    setTexts: (
+        texts: { text: string; position: { x: number; y: number } }[],
+    ) => void;
+};
+
+const DraggableInput = ({ texts, setTexts }: DraggableInputProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const divRef = useRef<HTMLDivElement>(null);
     const [text, setText] = useState<string>('');
@@ -11,9 +18,6 @@ const DraggableInput = () => {
         x: 0,
         y: 0,
     });
-    const [texts, setTexts] = useState<
-        { text: string; position: { x: number; y: number } }[]
-    >([]);
 
     const handleDrag = (e: DraggableEvent, data: DraggableData) => {
         setPosition({ x: data.x, y: data.y });
@@ -79,9 +83,6 @@ const DraggableInput = () => {
                     {text.text}
                 </p>
             ))}
-            <button className="absolute bg-main-color text-white px-2 pt-0.5 pb-1.5 rounded-md top-0 right-0 z-10 leading-none">
-                save
-            </button>
         </div>
     );
 };

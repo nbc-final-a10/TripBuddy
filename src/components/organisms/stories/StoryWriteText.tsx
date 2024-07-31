@@ -16,7 +16,26 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
     selectedMedia,
 }) => {
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
+    const [texts, setTexts] = useState<
+        { text: string; position: { x: number; y: number } }[]
+    >([]);
     const isLocked = useLockBodyScroll();
+
+    const handleSaveButtonClick = () => {
+        console.log('save');
+
+        if (!imageFile) return;
+        if (!texts.length) return;
+
+        const payload = {
+            imageFile,
+            texts,
+        };
+    };
+
+    // 이미지 스토리지에 쓰기
+    // 데이터 테이블에 쓰기
+    // 스토리 생성 완료 후 리다이렉트
 
     return (
         <section
@@ -28,7 +47,7 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black/80 rounded-lg z-10"></div>
             <Image
                 src={selectedMedia}
-                alt="my-profile-background"
+                alt="my-story-background"
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 priority
@@ -38,7 +57,13 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
                     isLoaded ? 'opacity-100' : 'opacity-0',
                 )}
             />
-            <DraggableInput />
+            <DraggableInput texts={texts} setTexts={setTexts} />
+            <button
+                className="absolute bg-main-color text-white px-2 pt-0.5 pb-1.5 rounded-md top-0 right-0 z-10 leading-none"
+                onClick={handleSaveButtonClick}
+            >
+                save
+            </button>
         </section>
     );
 };
