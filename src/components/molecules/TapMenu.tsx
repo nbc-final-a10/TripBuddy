@@ -26,7 +26,7 @@ const TapMenu: React.FC<TapMenuProps> = ({ pathname }) => {
     return (
         <div
             className={clsx(
-                'fixed bottom-0 left-1/2 transform -translate-x-1/2 w-[375px] bg-white border-t-2 border-gray-200 grid grid-cols-4 xl:hidden',
+                'fixed bottom-0 left-1/2 transform -translate-x-1/2 max-w-[430px] min-w-[375px] bg-white border-t-2 border-gray-200 grid grid-cols-4 xl:hidden',
                 hidden && 'hidden',
             )} // 변경 필요
         >

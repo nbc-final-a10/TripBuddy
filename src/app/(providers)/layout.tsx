@@ -28,7 +28,7 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
 
     return (
         <main className="bg-slate-50 xl:bg-white min-h-dvh overflow-hidden">
-            <section className="w-[375px] mx-auto bg-white xl:w-[1080px] relative">
+            <section className="max-w-[430px] min-w-[360px] mx-auto bg-white xl:w-[1080px] relative">
                 <Suspense fallback={<Loading />}>
                     <HydrationBoundary state={dehydratedState}>
                         <AuthProvider>

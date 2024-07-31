@@ -1,7 +1,7 @@
 'use client';
 import { tailwindMerge } from '@/utils/ui/tailwind_merge';
 import { VariantProps, cva } from 'class-variance-authority';
-import React, { forwardRef, useId, useState } from 'react';
+import React, { ComponentProps, forwardRef, useId, useState } from 'react';
 import { FaEye, FaRegEyeSlash } from 'react-icons/fa';
 
 const InputVariants = cva(
@@ -16,6 +16,16 @@ const InputVariants = cva(
         defaultVariants: {
             intent: false,
         },
+        compoundVariants: [
+            {
+                intent: true,
+                class: 'file:border-2 file:border-dashed file:border-gray-300 file:bg-gray-100 file:text-gray-500',
+            },
+            {
+                intent: false,
+                class: 'file:border-0 file:bg-transparent file:text-sm file:font-medium',
+            },
+        ],
     },
 );
 
@@ -27,7 +37,8 @@ type InputProps = {
     name?: string;
     className?: string;
     label?: string;
-} & InputVariant;
+} & InputVariant &
+    ComponentProps<'input'>;
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
     (
@@ -55,6 +66,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                         {label}
                     </label>
                 )}
+
                 <input
                     id={id}
                     ref={ref}
@@ -62,11 +74,18 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                     className={tailwindMerge(
                         InputVariants({ intent }),
                         className,
+                        type === 'file' && 'hidden',
                     )}
                     name={name}
                     placeholder={placeholder}
                     {...props}
                 />
+
+                {type === 'file' && (
+                    <button className="text-sm text-muted-foreground">
+                        업로드
+                    </button>
+                )}
                 {type === 'password' && (
                     <div
                         className="absolute right-3 cursor-pointer text-muted-foreground"

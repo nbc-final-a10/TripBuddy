@@ -6,7 +6,7 @@ import Image from 'next/image';
 import useLockBodyScroll from '@/hooks/common/useLockBodyScroll';
 import clsx from 'clsx';
 
-const StoryWrite: React.FC = () => {
+const StoryWriteText: React.FC = () => {
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
     const isLocked = useLockBodyScroll();
 
@@ -35,4 +35,4 @@ const StoryWrite: React.FC = () => {
     );
 };
 
-export default StoryWrite;
+export default StoryWriteText;
