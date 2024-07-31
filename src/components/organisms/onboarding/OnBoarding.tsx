@@ -6,13 +6,7 @@ import { useUpdateBuddyMutation } from '@/hooks/queries';
 import useNextButton from '@/hooks/useFunnelNextStep';
 import usePreferTheme from '@/hooks/usePreferTheme';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import React, {
-    FormEvent,
-    MouseEvent,
-    useEffect,
-    useRef,
-    useState,
-} from 'react';
+import React, { MouseEvent, useEffect, useRef, useState } from 'react';
 import OnBoardingDivider from './OnBoardingDivider';
 import OnBoardingSelectGender from './OnBoardingSelectGender';
 import OnBoardingInput from './OnBoardingInput';
@@ -23,11 +17,39 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { onBoardingValidation } from '@/utils/onboarding/onBoardingValidation';
 import { PartialBuddy } from '@/types/Auth.types';
 import { getBirthDate } from '@/utils/common/getBirthDate';
+import OnBoardingCalender from './OnBoardingCalender';
+import { CalendarDate, parseDate } from '@internationalized/date';
+import { getAgeFromBirthDate } from '@/utils/common/getAgeFromBirthDate';
+
+const buttonText = [
+    '다음',
+    '테스트시작하기',
+    '다음',
+    '다음',
+    '다음',
+    '다음',
+    '다음',
+    '다음',
+    '다음',
+    '트립버디즈 시작하기',
+];
 
 const OnBoarding: React.FC = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { logOut, buddy } = useAuth();
+
+    const nicknameRef = useRef<HTMLInputElement>(null);
+    const ageRef = useRef<HTMLInputElement>(null);
+    const buddyInfoRef = useRef<PartialBuddy>({ buddy_id: buddy?.buddy_id });
+
+    const [selectedGender, setSelectedGender] = useState<string>('');
+    const [selectedMbti, setSelectedMbti] = useState<string>('');
+    const [stepToDisplay, setStepToDisplay] = useState<number>(0);
+    const [calenderValue, setCalenderValue] = useState<CalendarDate>(
+        parseDate(new Date().toISOString().split('T')[0]),
+    );
+
     const { mutate, isPending, error } = useUpdateBuddyMutation();
     const [PreferBuddyTheme, selectedBuddyTheme] = usePreferTheme({
         mode: 'buddy',
@@ -37,37 +59,25 @@ const OnBoarding: React.FC = () => {
     });
     const { SelectRegion, secondLevelLocation, thirdLevelLocation } =
         useSelectRegion();
+
     const { NextButton, step, setStep } = useNextButton({
-        buttonText: '다음',
+        buttonText: buttonText[stepToDisplay],
         limit: 10,
     });
 
-    const nicknameRef = useRef<HTMLInputElement>(null);
-    const ageRef = useRef<HTMLInputElement>(null);
-    const [selectedGender, setSelectedGender] = useState<string>('');
-    const [selectedMbti, setSelectedMbti] = useState<string>('');
-
-    const handleGenderButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
+    const handleGenderButtonClick = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
         const selectedGender = target.innerText;
-        console.log('선택된 성별 ===>', selectedGender);
         setSelectedGender(selectedGender);
     };
 
     const handleMbtiChange = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
-        console.log('선택된 MBTI ===>', target.innerText);
         setSelectedMbti(target.innerText);
     };
 
     const handleNextButtonClick = () => {
-        if (!buddy) {
-            return showAlert('error', '로그인을 먼저 해주세요.');
-        }
-
-        const buddyInfo: PartialBuddy = {
-            buddy_id: buddy.buddy_id,
-        };
+        if (!buddy) return showAlert('error', '로그인을 먼저 해주세요.');
 
         // step 번호에 따라 유효성 검사 진행
         // 유효성 검사 진행 후 fetch 날리고 다음 단계로 이동
@@ -77,25 +87,25 @@ const OnBoarding: React.FC = () => {
                 step,
             );
             if (!result) return setStep(0);
-            buddyInfo.buddy_nickname = nicknameRef.current?.value;
-            mutate(buddyInfo);
+            buddyInfoRef.current.buddy_nickname = nicknameRef.current?.value;
         }
         if (step === 2) {
-            const age = Number(ageRef.current?.value);
+            // const age = Number(ageRef.current?.value);
+
+            const jsDate = calenderValue.toDate('UTC'); // 'UTC' 타임존으로 변환
+            const isoString = jsDate.toISOString();
+            const age = getAgeFromBirthDate(isoString);
 
             const result = onBoardingValidation(age, step);
             if (!result) return setStep(2);
 
-            const birthTimestamptz = getBirthDate(age);
-
-            buddyInfo.buddy_birth = birthTimestamptz;
-            mutate(buddyInfo);
+            // const birthTimestamptz = getBirthDate(age);
+            buddyInfoRef.current.buddy_birth = isoString;
         }
         if (step === 3) {
             const result = onBoardingValidation(selectedGender, step);
             if (!result) return setStep(3);
-            buddyInfo.buddy_sex = selectedGender;
-            mutate(buddyInfo);
+            buddyInfoRef.current.buddy_sex = selectedGender;
         }
         if (step === 4) {
             const result = onBoardingValidation(
@@ -103,39 +113,34 @@ const OnBoarding: React.FC = () => {
                 step,
             );
             if (!result) return setStep(4);
-            buddyInfo.buddy_region = [
-                thirdLevelLocation,
+            buddyInfoRef.current.buddy_region = [
                 secondLevelLocation,
+                thirdLevelLocation,
             ].join(' ');
-            mutate(buddyInfo);
         }
         if (step === 5) {
             const result = onBoardingValidation(selectedMbti, step);
             if (!result) return setStep(5);
-            buddyInfo.buddy_mbti = selectedMbti;
-            mutate(buddyInfo);
+            buddyInfoRef.current.buddy_mbti = selectedMbti;
         }
         if (step === 7) {
             const result = onBoardingValidation(selectedBuddyTheme, step);
             if (!result) return setStep(7);
-            buddyInfo.buddy_preferred_buddy1 = selectedBuddyTheme[0];
-            buddyInfo.buddy_preferred_buddy2 = selectedBuddyTheme[1];
-            buddyInfo.buddy_preferred_buddy3 = selectedBuddyTheme[2];
-            mutate(buddyInfo);
+            buddyInfoRef.current.buddy_preferred_buddy1 = selectedBuddyTheme[0];
+            buddyInfoRef.current.buddy_preferred_buddy2 = selectedBuddyTheme[1];
+            buddyInfoRef.current.buddy_preferred_buddy3 = selectedBuddyTheme[2];
         }
         if (step === 8) {
             const result = onBoardingValidation(selectedTripTheme, step);
             if (!result) return setStep(8);
-            buddyInfo.buddy_preferred_theme1 = selectedTripTheme[0];
-            buddyInfo.buddy_preferred_theme2 = selectedTripTheme[1];
-            buddyInfo.buddy_preferred_theme3 = selectedTripTheme[2];
-            mutate(buddyInfo);
+            buddyInfoRef.current.buddy_preferred_theme1 = selectedTripTheme[0];
+            buddyInfoRef.current.buddy_preferred_theme2 = selectedTripTheme[1];
+            buddyInfoRef.current.buddy_preferred_theme3 = selectedTripTheme[2];
         }
     };
 
     useEffect(() => {
         if (error) {
-            // NextButton에서 onClick 순서 변경?
             if (error.message === '이미 존재하는 닉네임입니다.') setStep(0);
             return showAlert('error', error.message);
         }
@@ -149,37 +154,18 @@ const OnBoarding: React.FC = () => {
             });
         if (step <= 9) router.push(`/onboarding?funnel=${step}`);
         if (step > 9) {
-            const buddyInfo = {
-                buddy_id: buddy.buddy_id,
-                buddy_isOnBoarding: true,
-            };
-            mutate(buddyInfo);
+            buddyInfoRef.current.buddy_isOnBoarding = true;
+            console.log('최종 버디즈 정보 =====>', buddyInfoRef.current);
+            mutate(buddyInfoRef.current);
             router.push('/');
         }
+        setStepToDisplay(step);
     }, [step, router, buddy, mutate]);
 
     useEffect(() => {
         const funnel = searchParams.get('funnel');
         if (funnel) setStep(Number(funnel));
     }, [searchParams, setStep]);
-
-    // 이 유즈이펙트는 완성하면 지울것!
-    useEffect(() => {
-        console.log('선택된 버디 테마 ===>', selectedBuddyTheme);
-        console.log('선택된 여정 테마 ===>', selectedTripTheme);
-        console.log(
-            '선택된 지역 ===>',
-            secondLevelLocation,
-            thirdLevelLocation,
-        );
-        console.log('선택된 성별 ===>', selectedGender);
-    }, [
-        selectedBuddyTheme,
-        selectedTripTheme,
-        secondLevelLocation,
-        thirdLevelLocation,
-        selectedGender,
-    ]);
 
     return (
         <section className="w-full h-[calc(100dvh-57px-58px)]">
@@ -201,10 +187,17 @@ const OnBoarding: React.FC = () => {
                 {step === 1 && (
                     <OnBoardingDivider
                         mode="welcome"
-                        name={nicknameRef.current?.value || ''}
+                        name={nicknameRef.current?.value as string}
                     />
                 )}
-                {step === 2 && <OnBoardingInput mode="age" ref={ageRef} />}
+                {/* {step === 2 && <OnBoardingInput mode="age" ref={ageRef} />} */}
+                {step === 2 && (
+                    <OnBoardingCalender
+                        calenderValue={calenderValue}
+                        setCalenderValue={setCalenderValue}
+                    />
+                )}
+
                 {step === 3 && (
                     <OnBoardingSelectGender
                         handleClick={handleGenderButtonClick}
@@ -233,13 +226,13 @@ const OnBoarding: React.FC = () => {
                 {step === 7 && (
                     <OnBoardingSelectPrefer
                         mode="buddy"
-                        component={<PreferBuddyTheme />}
+                        component={<PreferBuddyTheme className="px-4 py-2.5" />}
                     />
                 )}
                 {step === 8 && (
                     <OnBoardingSelectPrefer
                         mode="trip"
-                        component={<PreferTripTheme />}
+                        component={<PreferTripTheme className="px-4 py-2.5" />}
                     />
                 )}
                 {step === 9 && (
@@ -251,7 +244,7 @@ const OnBoarding: React.FC = () => {
             </div>
             <div className="flex justify-center">
                 <NextButton
-                    className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-full"
+                    className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded-2xl w-full text-white"
                     onClick={handleNextButtonClick}
                 />
             </div>

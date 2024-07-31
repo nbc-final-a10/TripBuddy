@@ -9,6 +9,7 @@ type PreferThemeProps = {
     themes: (AllTripTheme | AllBuddyTheme)[];
     label?: string | null;
     indicate?: boolean;
+    className?: string;
 };
 
 const PreferTheme = ({
@@ -17,6 +18,7 @@ const PreferTheme = ({
     themes,
     label = '',
     indicate = false,
+    className,
 }: PreferThemeProps) => {
     return (
         <>
@@ -34,12 +36,14 @@ const PreferTheme = ({
                 )}
             </div>
 
-            <section className="flex flex-wrap gap-2">
+            <section className="gap-2 grid grid-cols-4">
                 {themes.map(theme => (
                     <Chip
                         key={theme.en}
                         selected={selectedTheme.includes(theme.ko)}
                         onClick={handleThemeChange}
+                        intent="onBoarding"
+                        className={className}
                     >
                         {theme.ko}
                     </Chip>
@@ -50,3 +54,5 @@ const PreferTheme = ({
 };
 
 export default PreferTheme;
+
+// <section className="flex-wrap gap-2 grid grid-cols-3">

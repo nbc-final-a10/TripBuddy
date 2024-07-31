@@ -20,22 +20,25 @@ type onBoardingValidationType = (value: InPutValue, step: number) => boolean;
 export const onBoardingValidation: onBoardingValidationType = (value, step) => {
     console.log('value =====>', value);
     if (value !== undefined) {
-        if (!value) {
+        if (value === 0 || value) {
+            // value가 숫자이고, step이 2인 경우 추가 검사를 합니다.
+            if (typeof value === 'number' && step === 2) {
+                if (isNaN(value)) {
+                    showAlert('caution', '숫자만 입력해주세요.');
+                    return false;
+                }
+                if (value < 18) {
+                    showAlert(
+                        'caution',
+                        '18세 이상부터 서비스를 이용할 수 있습니다.',
+                    );
+                    return false;
+                }
+                // 추가적인 밸리데이션이 있다면 여기에 작성합니다.
+            }
+        } else {
             showAlert('caution', '필수 입력 사항입니다.');
             return false;
-        }
-        if (typeof value === 'number' && step === 2) {
-            if (isNaN(value)) {
-                showAlert('caution', '숫자만 입력해주세요.');
-                return false;
-            }
-            if (value < 18) {
-                showAlert(
-                    'caution',
-                    '18세 이상부터 서비스를 이용할 수 있습니다.',
-                );
-                return false;
-            }
         }
         if (Array.isArray(value)) {
             console.log('value ===>', value);
