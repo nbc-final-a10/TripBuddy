@@ -6,13 +6,7 @@ import { useUpdateBuddyMutation } from '@/hooks/queries';
 import useNextButton from '@/hooks/useFunnelNextStep';
 import usePreferTheme from '@/hooks/usePreferTheme';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import React, {
-    FormEvent,
-    MouseEvent,
-    useEffect,
-    useRef,
-    useState,
-} from 'react';
+import React, { MouseEvent, useEffect, useRef, useState } from 'react';
 import OnBoardingDivider from './OnBoardingDivider';
 import OnBoardingSelectGender from './OnBoardingSelectGender';
 import OnBoardingInput from './OnBoardingInput';
@@ -24,6 +18,8 @@ import { onBoardingValidation } from '@/utils/onboarding/onBoardingValidation';
 import { PartialBuddy } from '@/types/Auth.types';
 import { getBirthDate } from '@/utils/common/getBirthDate';
 import OnBoardingCalender from './OnBoardingCalender';
+import { CalendarDate, parseDate } from '@internationalized/date';
+import { getAgeFromBirthDate } from '@/utils/common/getAgeFromBirthDate';
 
 const buttonText = [
     '다음',
@@ -50,6 +46,9 @@ const OnBoarding: React.FC = () => {
     const [selectedGender, setSelectedGender] = useState<string>('');
     const [selectedMbti, setSelectedMbti] = useState<string>('');
     const [stepToDisplay, setStepToDisplay] = useState<number>(0);
+    const [calenderValue, setCalenderValue] = useState<CalendarDate>(
+        parseDate(new Date().toISOString().split('T')[0]),
+    );
 
     const { mutate, isPending, error } = useUpdateBuddyMutation();
     const [PreferBuddyTheme, selectedBuddyTheme] = usePreferTheme({
@@ -91,13 +90,17 @@ const OnBoarding: React.FC = () => {
             buddyInfoRef.current.buddy_nickname = nicknameRef.current?.value;
         }
         if (step === 2) {
-            const age = Number(ageRef.current?.value);
+            // const age = Number(ageRef.current?.value);
+
+            const jsDate = calenderValue.toDate('UTC'); // 'UTC' 타임존으로 변환
+            const isoString = jsDate.toISOString();
+            const age = getAgeFromBirthDate(isoString);
 
             const result = onBoardingValidation(age, step);
             if (!result) return setStep(2);
 
-            const birthTimestamptz = getBirthDate(age);
-            buddyInfoRef.current.buddy_birth = birthTimestamptz;
+            // const birthTimestamptz = getBirthDate(age);
+            buddyInfoRef.current.buddy_birth = isoString;
         }
         if (step === 3) {
             const result = onBoardingValidation(selectedGender, step);
@@ -187,7 +190,12 @@ const OnBoarding: React.FC = () => {
                     />
                 )}
                 {/* {step === 2 && <OnBoardingInput mode="age" ref={ageRef} />} */}
-                {step === 2 && <OnBoardingCalender />}
+                {step === 2 && (
+                    <OnBoardingCalender
+                        calenderValue={calenderValue}
+                        setCalenderValue={setCalenderValue}
+                    />
+                )}
 
                 {step === 3 && (
                     <OnBoardingSelectGender

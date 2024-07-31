@@ -18,7 +18,7 @@ type InPutValue =
 type onBoardingValidationType = (value: InPutValue, step: number) => boolean;
 
 export const onBoardingValidation: onBoardingValidationType = (value, step) => {
-    console.log('value =====>', value);
+    // console.log('value =====>', value);
     if (value !== undefined) {
         if (!value) {
             showAlert('caution', '필수 입력 사항입니다.');
