@@ -2,22 +2,23 @@ import Chip from '@/components/atoms/common/O_Chip';
 import Title from '@/components/atoms/common/O_Title';
 import OnBoardingInnerWrapper from '@/components/atoms/onboarding/OnBoardinginnerWrapper';
 import OnBoardingWrapper from '@/components/atoms/onboarding/OnBoardingWrapper';
-import locationData from '@/data/location';
 import { mbtis } from '@/data/mbtis';
-import { MouseEvent } from 'react';
+import React, { MouseEvent } from 'react';
 
 type OnBoardingSelectLocationMbtiProps = {
     mode: 'location' | 'mbti';
     selected: string;
     isLabel?: boolean;
-    handleChange: (e: MouseEvent<HTMLSpanElement>) => void;
+    handleChange?: (e: MouseEvent<HTMLSpanElement>) => void;
+    SelectRegion?: React.FC | null;
 };
 
 const OnBoardingSelectLocationMbti = ({
     mode,
     selected,
-    handleChange,
+    handleChange = () => {},
     isLabel = false,
+    SelectRegion = null,
 }: OnBoardingSelectLocationMbtiProps) => {
     return (
         <OnBoardingWrapper>
@@ -26,9 +27,9 @@ const OnBoardingSelectLocationMbti = ({
                 {isLabel && (
                     <label>{mode === 'location' ? '지역' : 'MBTI'}</label>
                 )}
-                <section className="grid gap-2 w-[90%] grid-cols-4">
-                    {mode === 'mbti' &&
-                        mbtis.map(mbti => (
+                {mode === 'mbti' && (
+                    <section className="grid gap-2 w-[90%] grid-cols-4">
+                        {mbtis.map(mbti => (
                             <Chip
                                 key={mbti.mbti}
                                 selected={selected.includes(mbti.mbti)}
@@ -37,17 +38,13 @@ const OnBoardingSelectLocationMbti = ({
                                 {mbti.mbti}
                             </Chip>
                         ))}
-                    {mode === 'location' &&
-                        locationData[0].subLocations.map(location => (
-                            <Chip
-                                key={location.name.en}
-                                selected={selected.includes(location.name.ko)}
-                                onClick={handleChange}
-                            >
-                                {location.name.ko}
-                            </Chip>
-                        ))}
-                </section>
+                    </section>
+                )}
+                {mode === 'location' && SelectRegion && (
+                    <section className="w-[90%] h-[80%] overflow-y-auto">
+                        <SelectRegion />
+                    </section>
+                )}
             </OnBoardingInnerWrapper>
         </OnBoardingWrapper>
     );

@@ -1,15 +1,45 @@
+import { Tables } from '@/types/supabase';
 import { create } from 'zustand';
 
-type PageState = 'main' | 'location' | 'date' | 'result';
+type Trip = Tables<'trips'>;
 
-type StoreState = {
-    currentPage: PageState;
-    setCurrentPage: (page: PageState) => void;
+type SearchStore = {
+    items: Trip[];
+    visibleFirstItems: number;
+    visibleSecondItems: number;
+    loadMoreFirstItems: () => void;
+    loadMoreSecondItems: () => void;
+    setItems: (items: Trip[]) => void;
+
+    selectedGender: string | null;
+    setSelectedGender: (gender: string | null) => void;
+    // GenderFilteredItems: () => Trip[];
 };
 
-const useStore = create<StoreState>(set => ({
-    currentPage: 'main',
-    setCurrentPage: page => set({ currentPage: page }),
-}));
+export const useSearchStore = create<SearchStore>(set => ({
+    items: [],
+    visibleFirstItems: 8,
+    visibleSecondItems: 6,
+    loadMoreFirstItems: () =>
+        set(state => ({
+            visibleFirstItems: state.visibleFirstItems + 8,
+        })),
+    loadMoreSecondItems: () =>
+        set(state => ({
+            visibleSecondItems: state.visibleSecondItems + 6,
+        })),
+    setItems: (items: Trip[]) => set({ items }),
 
-export default useStore;
+    selectedGender: null,
+    setSelectedGender: (gender: string | null) =>
+        set({ selectedGender: gender }),
+
+    // GenderFilteredItems: () => {
+    //     const state = get();
+    //     return state.selectedGender
+    //         ? state.items.filter(
+    //               (item: Trip) => item.trip_wanted_sex === state.selectedGender,
+    //           )
+    //         : state.items;
+    // },
+}));

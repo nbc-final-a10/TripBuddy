@@ -11,7 +11,7 @@ type OnBoardingSelectGenderProps = {
 const OnBoardingSelectGender: React.FC<OnBoardingSelectGenderProps> = ({
     handleClick,
 }) => {
-    const [selected, setSelected] = useState(false);
+    const [selected, setSelected] = useState<boolean | null>(null);
 
     const handleGenderSelect = (e: React.MouseEvent<HTMLButtonElement>) => {
         setSelected(!selected);
@@ -23,14 +23,14 @@ const OnBoardingSelectGender: React.FC<OnBoardingSelectGenderProps> = ({
             <Title>{`성별을 선택해주세요`}</Title>
             <OnBoardingInnerWrapper>
                 <Button
-                    selected={selected}
+                    selected={selected === true}
                     intent="onBoarding"
                     onClick={handleGenderSelect}
                 >
                     남자
                 </Button>
                 <Button
-                    selected={!selected}
+                    selected={selected === false}
                     intent="onBoarding"
                     onClick={handleGenderSelect}
                 >

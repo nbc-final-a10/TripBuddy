@@ -188,7 +188,7 @@ export type Database = {
                     message_created_at?: string;
                     message_id?: string;
                     message_sender_id: string;
-                    message_trip_id: string;
+                    message_trip_id?: string;
                     message_type?: string;
                 };
                 Update: {

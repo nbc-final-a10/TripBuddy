@@ -232,9 +232,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
             if (!buddy)
                 return showAlert('caution', '알 수 없는 오류가 발생했어요');
 
-            showAlert('success', `${buddy.buddy_email}님 환영합니다!`, {
-                onConfirm: () => router.replace('/'),
-            });
+            showAlert(
+                'success',
+                `${buddy.buddy_isOnBoarding ? buddy.buddy_nickname : buddy.buddy_email}님 환영합니다!`,
+                {
+                    onConfirm: () => router.replace('/'),
+                },
+            );
         } catch (error) {
             const errorMessage =
                 error instanceof Error ? error.message : 'Unknown error';

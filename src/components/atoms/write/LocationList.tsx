@@ -31,9 +31,9 @@ function LocationList({
 
     return (
         <div className="relative">
-            {/* 도/대륙 목록 (가로스크롤) */}
+            {/* 도/대륙 목록 */}
             <div
-                className="flex flex-nowrap gap-2 py-3 whitespace-nowrap mb-5 overflow-x-hidden scrollbar-hide"
+                className="flex flex-nowrap gap-2 py-3 whitespace-nowrap overflow-x-hidden scrollbar-hide"
                 ref={scrollRef}
             >
                 {locations.map(subLocation => (

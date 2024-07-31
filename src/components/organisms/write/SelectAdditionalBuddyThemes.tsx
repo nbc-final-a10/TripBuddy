@@ -1,17 +1,53 @@
-import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
-import usePreferTheme from '@/hooks/usePreferTheme';
-import React from 'react';
+'use client';
 
-export default function SelectAdditionalBuddyThemes() {
-    const [PreferThemeToRender, selectedBuddyThemes] = usePreferTheme({
-        mode: 'buddy',
-        // isLabel: true,
-    });
-    console.log(`selectedBuddyThemes: ${selectedBuddyThemes}`);
+import LeftSmGrayText from '@/components/atoms/write/LeftSmGrayText';
+import LeftXlBoldText from '@/components/atoms/write/LeftXlBoldText';
+import LeftXsmGrayText from '@/components/atoms/write/LeftXsmGrayText';
+import React from 'react';
+import SelectAgesRange from '@/components/atoms/write/SelectAgesRange';
+import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
+
+type SelectAdditionalBuddyThemesProps = {
+    PreferThemeToRender: React.FC;
+    SelectWantedSexButton: React.FC;
+    startAge: number;
+    endAge: number;
+    handleStartAge: (value: number) => void;
+    handleEndAge: (value: number) => void;
+};
+
+export default function SelectAdditionalBuddyThemes({
+    PreferThemeToRender,
+    SelectWantedSexButton,
+    startAge,
+    endAge,
+    handleStartAge,
+    handleEndAge,
+}: SelectAdditionalBuddyThemesProps) {
     return (
         <div>
-            <Left2xlBoldText text="원하는 버디즈의 특성을 알려주세요" />
-            <div>
+            <div className="mb-10">
+                <Left2xlBoldText text="원하는 버디즈의 특성을 알려주세요" />
+                <LeftSmGrayText text="모두 필수 선택 항목입니다" />
+            </div>
+            <div className="mb-5">
+                <LeftXlBoldText text="성별" />
+                <SelectWantedSexButton />
+            </div>
+            <div className="mb-5">
+                <LeftXlBoldText text="나이" />
+                <SelectAgesRange
+                    startAge={startAge}
+                    endAge={endAge}
+                    handleStartAge={handleStartAge}
+                    handleEndAge={handleEndAge}
+                />
+            </div>
+            <div className="mb-5">
+                <LeftXlBoldText text="버디즈 성향" />
+                <LeftXsmGrayText text="3개를 선택해주세요" />
+            </div>
+            <div className="mx-2">
                 <PreferThemeToRender />
             </div>
         </div>

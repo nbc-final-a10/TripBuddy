@@ -3,18 +3,17 @@ import { BuddyTheme, TripTheme } from '@/types/Themes.types';
 const handleChipClick = (
     target: EventTarget & HTMLSpanElement,
     data: (TripTheme | BuddyTheme)[],
-    prevSelected: string[],
-    setSelected: (value: string[]) => void,
+    prevSelected: (TripTheme | BuddyTheme)[],
+    setSelected: (value: (TripTheme | BuddyTheme)[]) => void,
 ) => {
-    if (prevSelected.includes(target.innerText)) {
+    const text = target.innerText as TripTheme | BuddyTheme;
+    if (prevSelected.includes(text)) {
         // 선택 해제
-        const newSelected = prevSelected.filter(
-            selected => selected !== target.innerText,
-        );
+        const newSelected = prevSelected.filter(selected => selected !== text);
         setSelected(newSelected);
     } else if (prevSelected.length < 3) {
         // 새로운 선택 추가
-        setSelected([...prevSelected, target.innerText]);
+        setSelected([...prevSelected, text]);
     } else {
         // 선택된 Chip이 3개일 때, 가장 가까운 인덱스의 Chip을 해제하고 새로운 선택 추가
         const newSelected = [...prevSelected];
@@ -28,7 +27,7 @@ const handleChipClick = (
                         : prev,
                 0,
             );
-        newSelected[indexToReplace] = target.innerText;
+        newSelected[indexToReplace] = text;
         setSelected(newSelected);
     }
 };
