@@ -5,7 +5,7 @@ import StorySelectMedia from './StorySelectMedia';
 import StoryWriteText from './StoryWriteText';
 
 const StoryWriteMain: React.FC = () => {
-    const [step, setStep] = useState<number>(1);
+    const [step, setStep] = useState<number>(0);
 
     return (
         <div>

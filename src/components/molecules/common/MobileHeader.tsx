@@ -18,6 +18,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ pathname }) => {
     const isWrite = pathname === '/write';
     const isOnboarding = pathname === '/onboarding';
     const isProfile = pathname.startsWith('/profile/');
+    const isStoryWrite = pathname === '/write/story';
 
     const headerTitle =
         (isTrips && '모집중 여정') ||
@@ -27,7 +28,8 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ pathname }) => {
         (isSignup && '') ||
         (isSearch && '검색') ||
         (isOnboarding && '온보딩') ||
-        (isProfile && '프로필');
+        (isProfile && '프로필') ||
+        (isStoryWrite && '스토리에 추가');
 
     const isShow =
         isTrips ||
@@ -37,7 +39,8 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ pathname }) => {
         isSearch ||
         isWrite ||
         isOnboarding ||
-        isProfile;
+        isProfile ||
+        isStoryWrite;
 
     if (!isShow) return null;
 
