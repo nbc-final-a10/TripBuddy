@@ -31,6 +31,16 @@ const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
                 // close
                 />
             )}
+            {pathname === '/signup' && (
+                <MobileHeader
+                // title="여정 작성"
+                // notification
+                // search
+                // settings
+                // edit
+                // close
+                />
+            )}
             {pathname === '/search' && (
                 <MobileHeader
                     title="검색"

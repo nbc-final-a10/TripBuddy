@@ -8,6 +8,7 @@ import Input from '@/components/atoms/common/O_Input';
 import { useAuth } from '@/hooks/auth';
 import { authValidation } from '@/utils/auth/validation';
 import AuthSubText from '@/components/atoms/auth/AuthSubText';
+import { twMerge } from 'tailwind-merge';
 
 function LogInForm() {
     const { isPending, logIn, sendingResetEmail } = useAuth();
@@ -52,7 +53,7 @@ function LogInForm() {
         <>
             <div className="flex flex-col items-center justify-center gap-2 pb-6">
                 <h1 className="text-2xl font-bold">
-                    {isRecoverPassword ? '비밀번호 복구' : '로그인'}
+                    {isRecoverPassword ? '비밀번호 찾기' : '로그인'}
                 </h1>
             </div>
 
@@ -60,7 +61,10 @@ function LogInForm() {
                 onSubmit={
                     isRecoverPassword ? handleRecoverPassword : handleSubmit
                 }
-                className="w-full h-fit min-h-[35%] flex flex-col items-center justify-center gap-44"
+                className={twMerge(
+                    'w-full h-fit min-h-[35%] flex flex-col items-center justify-center gap-44',
+                    isRecoverPassword && 'gap-72',
+                )}
             >
                 <div className="w-[90%] flex flex-col items-center justify-center gap-10">
                     <div className="w-full flex flex-col gap-2 justify-center">
@@ -69,7 +73,11 @@ function LogInForm() {
                             placeholder="이메일 입력"
                             name="email"
                         />
-                        <AuthSubText text="ex) abcd1234@gmail.com" />
+                        {isRecoverPassword ? (
+                            <AuthSubText text="이메일로 인증번호를 보내드려요" />
+                        ) : (
+                            <AuthSubText text="ex) abcd1234@gmail.com" />
+                        )}
                     </div>
 
                     {isRecoverPassword ? null : (
@@ -107,12 +115,6 @@ function LogInForm() {
                             </div>
                         </div>
                     )}
-
-                    {isRecoverPassword && (
-                        <p className="w-full text-sm text-right text-gray-500">
-                            이메일로 복구 코드를 보내드립니다
-                        </p>
-                    )}
                 </div>
 
                 <SubmitButton
@@ -121,7 +123,7 @@ function LogInForm() {
                     pendingText="진행중..."
                     pending={isPending}
                 >
-                    {isRecoverPassword ? '복구메일보내기' : '로그인'}
+                    {isRecoverPassword ? '비밀번호 찾기' : '로그인'}
                 </SubmitButton>
             </form>
         </>
