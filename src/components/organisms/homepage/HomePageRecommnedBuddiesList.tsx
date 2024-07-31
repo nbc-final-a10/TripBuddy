@@ -93,6 +93,9 @@ function HomePageRecommnedBuddiesList() {
                                                   <BuddyTemperature
                                                       isLabel={false}
                                                       isTempText={false}
+                                                      temperature={
+                                                          buddy.buddy_temperature
+                                                      }
                                                   />
                                               </div>
                                           </div>
