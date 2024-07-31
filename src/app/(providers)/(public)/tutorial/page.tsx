@@ -18,7 +18,7 @@ const Tutorial: React.FC = () => {
     }, [searchParams]);
 
     useEffect(() => {
-        if (step <= 4) {
+        if (step <= 5) {
             router.push(`/tutorial?funnel=${step}`, { scroll: false });
         } else {
             router.push('/login');
@@ -26,7 +26,7 @@ const Tutorial: React.FC = () => {
     }, [step, router]);
 
     const handleNext = () => {
-        if (step < 4) {
+        if (step < 5) {
             setStep(step + 1);
         } else {
             router.push('/login');
@@ -38,12 +38,12 @@ const Tutorial: React.FC = () => {
     };
 
     return (
-        <div className="relative flex flex-col items-center h-screen overflow-hidden">
+        <div className="relative flex flex-col items-center h-[850] overflow-hidden">
             <button
                 onClick={handleSkip}
-                className="absolute top-4 right-4 text-xl bg-gray-200 py-2 px-4 rounded"
+                className="absolute top-4 right-4 text-xl bg-gray-200 py-2 px-4 rounded mb-8"
             >
-                Skip
+                건너뛰기
             </button>
 
             <section className="flex flex-col items-center justify-center flex-grow max-h-screen">
@@ -51,14 +51,14 @@ const Tutorial: React.FC = () => {
             </section>
 
             <div className="mb-12">
-                <ProgressIndicator step={step} counts={5} />
+                <ProgressIndicator step={step} counts={6} />
             </div>
             <div className="w-full flex justify-center">
                 <button
                     onClick={handleNext}
                     className="text-2xl bg-main-color font-bold py-2 px-4 rounded w-11/12 max-w-md mb-4"
                 >
-                    {step < 4 ? '다음' : '완료'}
+                    {step < 5 ? '다음' : '완료'}
                 </button>
             </div>
         </div>

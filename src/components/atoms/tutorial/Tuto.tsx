@@ -14,29 +14,34 @@ type TutoProps = {
 const Tuto: React.FC<TutoProps> = ({ step }) => {
     const content: { [key: number]: Content } = {
         1: {
-            src: '/images/tuto1.webp',
+            src: '/images/recruitmentImg1.webp',
             alt: '첫 번째 튜토리얼 페이지에서 사용되는 이미지',
-            text: '튜토리얼 1페이지',
+            text: '같이 여행을 할 동료를 모집해보세요!',
         },
         2: {
-            src: '/images/tuto2.webp',
+            src: '/images/recruitmentImg2.webp',
             alt: '두 번째 튜토리얼 페이지에서 사용되는 이미지',
-            text: '튜토리얼 2페이지',
+            text: '모집중인 여정을 확인해보세요!',
         },
         3: {
-            src: '/images/tuto3.webp',
+            src: '/images/searchImg1.webp',
             alt: '세 번째 튜토리얼 페이지에서 사용되는 이미지',
-            text: '튜토리얼 3페이지',
+            text: '테마와 성향에 따른 검색기능',
         },
         4: {
-            src: '/images/tuto4.webp',
+            src: '/images/searchImg2.webp',
             alt: '네 번째 튜토리얼 페이지에서 사용되는 이미지',
-            text: '튜토리얼 4페이지',
+            text: '위치기반 검색기능',
         },
         5: {
-            src: '/images/tuto5.webp',
+            src: '/images/chatImg.webp',
             alt: '다섯 번째 튜토리얼 페이지에서 사용되는 이미지',
-            text: '튜토리얼 5페이지',
+            text: '같이 여행을 할 동료들과 채팅을 해보세요!',
+        },
+        6: {
+            src: '/images/myProfile.webp',
+            alt: '여섯 번째 튜토리얼 페이지에서 사용되는 이미지',
+            text: '튜토리얼 6페이지',
         },
         // 필요한 만큼 추가
     };
@@ -50,8 +55,8 @@ const Tuto: React.FC<TutoProps> = ({ step }) => {
                 <Image
                     src={src}
                     alt={alt}
-                    width={500}
-                    height={500}
+                    width={310}
+                    height={390}
                     className="max-w-full max-h-full h-auto"
                 />
             </div>
