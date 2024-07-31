@@ -5,6 +5,8 @@ import DraggableInput from './DraggableInput';
 import Image from 'next/image';
 import useLockBodyScroll from '@/hooks/common/useLockBodyScroll';
 import clsx from 'clsx';
+import { useStoryMutation } from '@/hooks/queries';
+import { StoryData } from '@/types/Story.type';
 
 type StoryWriteTextProps = {
     imageFile: File;
@@ -21,16 +23,20 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
     >([]);
     const isLocked = useLockBodyScroll();
 
+    const { mutate, isPending, error } = useStoryMutation();
+
     const handleSaveButtonClick = () => {
         console.log('save');
 
         if (!imageFile) return;
         if (!texts.length) return;
 
-        const payload = {
+        const payload: StoryData = {
             imageFile,
             texts,
         };
+
+        mutate(payload);
     };
 
     // 이미지 스토리지에 쓰기
@@ -44,6 +50,17 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
                 !isLocked && 'hidden',
             )}
         >
+            {isPending && (
+                <div className="z-10 text-white font-bold">
+                    스토리 생성중...
+                </div>
+            )}
+            {error && (
+                <div className="z-10 text-white font-bold">
+                    스토리 생성중 오류가 발생했습니다.
+                </div>
+            )}
+
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black/80 rounded-lg z-10"></div>
             <Image
                 src={selectedMedia}
