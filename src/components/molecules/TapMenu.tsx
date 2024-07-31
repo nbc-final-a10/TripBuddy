@@ -21,7 +21,11 @@ const TapMenu: React.FC<TapMenuProps> = ({ pathname }) => {
     // }, []);
 
     const hidden =
-        pathname.startsWith('/chat/') || pathname.startsWith('/writestory');
+        pathname.startsWith('/chat/') ||
+        pathname === '/writestory' ||
+        pathname === '/login' ||
+        pathname === '/signup' ||
+        pathname === '/recover';
 
     return (
         <div

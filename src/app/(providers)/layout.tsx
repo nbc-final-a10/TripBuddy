@@ -12,6 +12,7 @@ import Header from '@/components/atoms/common/Header';
 import { getBuddyServer } from '@/api-services/auth/server';
 import { getUserFromHeader } from '@/utils/auth/getUserFromHeader';
 import { getPathnameServer } from '@/utils/common/getPathnameServer';
+import MainSectionWrapper from '@/components/molecules/common/MainSectionWrapper';
 
 const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
     const userId = getUserFromHeader();
@@ -28,19 +29,17 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
 
     return (
         <main className="bg-slate-50 xl:bg-white min-h-dvh overflow-hidden">
-            <section className="max-w-[430px] min-w-[360px] mx-auto bg-white xl:w-[1080px] relative">
+            <MainSectionWrapper pathname={pathname as string}>
                 <Suspense fallback={<Loading />}>
                     <HydrationBoundary state={dehydratedState}>
                         <AuthProvider>
                             <Header />
-                            <div className="relative pb-[50px] xl:pt-[100px]">
-                                {children}
-                            </div>
+                            {children}
                             <TapMenu pathname={pathname as string} />
                         </AuthProvider>
                     </HydrationBoundary>
                 </Suspense>
-            </section>
+            </MainSectionWrapper>
         </main>
     );
 };
