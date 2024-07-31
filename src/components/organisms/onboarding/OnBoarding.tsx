@@ -24,10 +24,32 @@ import { onBoardingValidation } from '@/utils/onboarding/onBoardingValidation';
 import { PartialBuddy } from '@/types/Auth.types';
 import { getBirthDate } from '@/utils/common/getBirthDate';
 
+const buttonText = [
+    '다음',
+    '테스트시작하기',
+    '다음',
+    '다음',
+    '다음',
+    '다음',
+    '다음',
+    '다음',
+    '다음',
+    '트립버디즈 시작하기',
+];
+
 const OnBoarding: React.FC = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { logOut, buddy } = useAuth();
+
+    const nicknameRef = useRef<HTMLInputElement>(null);
+    const ageRef = useRef<HTMLInputElement>(null);
+    const buddyInfoRef = useRef<PartialBuddy>({ buddy_id: buddy?.buddy_id });
+
+    const [selectedGender, setSelectedGender] = useState<string>('');
+    const [selectedMbti, setSelectedMbti] = useState<string>('');
+    const [stepToDisplay, setStepToDisplay] = useState<number>(0);
+
     const { mutate, isPending, error } = useUpdateBuddyMutation();
     const [PreferBuddyTheme, selectedBuddyTheme] = usePreferTheme({
         mode: 'buddy',
@@ -37,36 +59,25 @@ const OnBoarding: React.FC = () => {
     });
     const { SelectRegion, secondLevelLocation, thirdLevelLocation } =
         useSelectRegion();
+
     const { NextButton, step, setStep } = useNextButton({
-        buttonText: '다음',
+        buttonText: buttonText[stepToDisplay],
         limit: 10,
     });
-
-    const nicknameRef = useRef<HTMLInputElement>(null);
-    const ageRef = useRef<HTMLInputElement>(null);
-    const buddyInfoRef = useRef<PartialBuddy>({ buddy_id: buddy?.buddy_id });
-    const [selectedGender, setSelectedGender] = useState<string>('');
-    const [selectedMbti, setSelectedMbti] = useState<string>('');
 
     const handleGenderButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
         const target = e.currentTarget;
         const selectedGender = target.innerText;
-        console.log('선택된 성별 ===>', selectedGender);
         setSelectedGender(selectedGender);
     };
 
     const handleMbtiChange = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
-        console.log('선택된 MBTI ===>', target.innerText);
         setSelectedMbti(target.innerText);
     };
 
     const handleNextButtonClick = () => {
         if (!buddy) return showAlert('error', '로그인을 먼저 해주세요.');
-
-        const buddyInfo: PartialBuddy = {
-            buddy_id: buddy.buddy_id,
-        };
 
         // step 번호에 따라 유효성 검사 진행
         // 유효성 검사 진행 후 fetch 날리고 다음 단계로 이동
@@ -85,7 +96,6 @@ const OnBoarding: React.FC = () => {
             if (!result) return setStep(2);
 
             const birthTimestamptz = getBirthDate(age);
-
             buddyInfoRef.current.buddy_birth = birthTimestamptz;
         }
         if (step === 3) {
@@ -127,7 +137,6 @@ const OnBoarding: React.FC = () => {
 
     useEffect(() => {
         if (error) {
-            // NextButton에서 onClick 순서 변경?
             if (error.message === '이미 존재하는 닉네임입니다.') setStep(0);
             return showAlert('error', error.message);
         }
@@ -142,10 +151,10 @@ const OnBoarding: React.FC = () => {
         if (step <= 9) router.push(`/onboarding?funnel=${step}`);
         if (step > 9) {
             buddyInfoRef.current.buddy_isOnBoarding = true;
-
             mutate(buddyInfoRef.current);
             router.push('/');
         }
+        setStepToDisplay(step);
     }, [step, router, buddy, mutate]);
 
     useEffect(() => {
@@ -223,7 +232,7 @@ const OnBoarding: React.FC = () => {
             </div>
             <div className="flex justify-center">
                 <NextButton
-                    className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded w-full"
+                    className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded-2xl w-full text-white"
                     onClick={handleNextButtonClick}
                 />
             </div>
