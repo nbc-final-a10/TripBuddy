@@ -1,3 +1,5 @@
+import MascotImage from '@/components/atoms/common/O_MascotImage';
+import BuddyTemperature from '@/components/atoms/profile/BuddyTemperature';
 import useTapScroll from '@/hooks/useTapScroll';
 import React, { useState, useEffect, useRef } from 'react';
 
@@ -38,9 +40,29 @@ function HomePageRecommnedBuddiesList() {
                         {Array.from({ length: 10 }).map((_, index) => (
                             <div
                                 key={index}
-                                className="min-w-[200px] h-[75px] mx-2 bg-gray-200 p-2 rounded"
+                                className="min-w-[200px] h-[75px] mx-1 rounded border border-gray-200 shadow-md"
                             >
-                                추천버디 {index + 1}
+                                <div className="flex items-center w-[120px] h-full">
+                                    <div className="flex-shrink-0 w-[75px] h-[75px]">
+                                        <MascotImage intent="happy" />
+                                    </div>
+                                    <div className="ml-2 flex flex-col">
+                                        <span className="text-xs font-bold text-gray-500 whitespace-nowrap">
+                                            #감성 #즉흥적
+                                        </span>
+                                        <div className="text-m font-bold whitespace-nowrap">
+                                            <span>장원영</span>
+                                            <span> / </span>
+                                            <span>34세</span>
+                                        </div>
+                                        <div>
+                                            <BuddyTemperature
+                                                isLabel={false}
+                                                isTempText={false}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         ))}
                     </div>
