@@ -1,11 +1,12 @@
-import Chip from '@/components/atoms/common/O_Chip';
-import StoryCard from '@/components/molecules/stories/StoryCard';
+// import Chip from '@/components/atoms/common/O_Chip';
+// import StoryCard from '@/components/molecules/stories/StoryCard';
+import DraggableComponent from '@/components/organisms/stories/DraggableComponent';
 import React from 'react';
 
 const StoriesPage: React.FC = () => {
     return (
         <section className="flex flex-col gap-4">
-            {Array.from({ length: 10 }, (_, index) => (
+            {/* {Array.from({ length: 10 }, (_, index) => (
                 <StoryCard
                     key={index}
                     name="김소희"
@@ -14,7 +15,8 @@ const StoriesPage: React.FC = () => {
                     background_image="/images/test2.webp"
                     mode="my"
                 />
-            ))}
+            ))} */}
+            <DraggableComponent />
         </section>
     );
 };

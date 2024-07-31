@@ -12,6 +12,7 @@
         "genTypes": "npx supabase gen types typescript --project-id \"pedixhwyfardtsanotrp\" --schema public > src/types/supabase.ts"
     },
     "dependencies": {
+        "@hello-pangea/dnd": "^16.6.0",
         "@internationalized/date": "^3.5.5",
         "@nextui-org/calendar": "^2.0.11",
         "@nextui-org/system": "^2.2.5",
