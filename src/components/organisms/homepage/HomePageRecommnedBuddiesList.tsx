@@ -2,15 +2,17 @@ import MascotImage from '@/components/atoms/common/O_MascotImage';
 import BuddyTemperature from '@/components/atoms/profile/BuddyTemperature';
 import SkeletonLoader from '@/components/atoms/profile/SkeletonLoader';
 import useTapScroll from '@/hooks/useTapScroll';
+import Image from 'next/image';
 import React, { useState, useEffect, useRef } from 'react';
 
 type Buddy = {
     buddy_nickname: string;
     buddy_birth: number;
     buddy_temperature: number;
-    buddy_preferred_theme1: string;
-    buddy_preferred_theme2: string;
-    buddy_preferred_theme3: string;
+    buddy_preferred_buddy1: string;
+    buddy_preferred_buddy2: string;
+    buddy_preferred_buddy3: string;
+    buddy_profile_pic: string;
 };
 
 function HomePageRecommnedBuddiesList() {
@@ -56,29 +58,38 @@ function HomePageRecommnedBuddiesList() {
                                       key={index}
                                       className="min-w-[200px] h-[75px] mx-1 rounded border border-gray-200 shadow-md"
                                   >
-                                      <div className="flex items-center w-[120px] h-full">
+                                      <div className="flex items-center w-full h-full">
                                           <div className="flex-shrink-0 w-[75px] h-[75px]">
-                                              <MascotImage intent="happy" />
+                                              {buddy.buddy_profile_pic ? (
+                                                  <Image
+                                                      src={
+                                                          buddy.buddy_profile_pic
+                                                      }
+                                                      alt="profile"
+                                                      width={75}
+                                                      height={75}
+                                                  />
+                                              ) : (
+                                                  <MascotImage intent="happy" />
+                                              )}
                                           </div>
-                                          <div className="ml-2 flex flex-col">
-                                              <span className="text-xs font-bold text-gray-500 whitespace-nowrap">
-                                                  #
-                                                  {buddy.buddy_preferred_theme1}{' '}
-                                                  #
-                                                  {buddy.buddy_preferred_theme2}{' '}
-                                                  #
-                                                  {buddy.buddy_preferred_theme3}
+                                          <div className="mx-1 flex flex-col w-full">
+                                              <span className="text-xs font-bold text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis">
+                                                  {buddy.buddy_preferred_buddy1 &&
+                                                  buddy.buddy_preferred_buddy2
+                                                      ? `#${buddy.buddy_preferred_buddy1} #${buddy.buddy_preferred_buddy2}`
+                                                      : '#태그없음'}
                                               </span>
-                                              <div className="text-m font-bold whitespace-nowrap">
-                                                  <span>
+                                              <div className="text-m font-bold whitespace-nowrap overflow-hidden text-ellipsis w-full">
+                                                  <span className="block truncate">
                                                       {buddy.buddy_nickname}
                                                   </span>
-                                                  <span> / </span>
-                                                  <span>
+                                                  {/* <span> / </span> */}
+                                                  {/* <span>
                                                       {buddy.buddy_birth}세
-                                                  </span>
+                                                  </span> */}
                                               </div>
-                                              <div>
+                                              <div className="w-full">
                                                   <BuddyTemperature
                                                       isLabel={false}
                                                       isTempText={false}
