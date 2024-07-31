@@ -19,6 +19,8 @@ const SearchPage: React.FC = () => {
     const [showResult, setShowResult] = useState(false);
     const resultRef = useRef<HTMLDivElement>(null);
 
+    // const { startAge, endAge, handleStartAge, handleEndAge } = useSelectAges();
+
     const [PreferBuddyTheme] = usePreferTheme({
         mode: 'buddy',
     });
@@ -85,7 +87,7 @@ const SearchPage: React.FC = () => {
             </div>
             <div className="my-10">
                 <SearchPageTitle title="나이" description="" />
-                <AgeCount />
+                {/* <AgeCount /> */}
             </div>
             <div className="my-10">
                 <SearchPageTitle
