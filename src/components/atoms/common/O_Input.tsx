@@ -88,7 +88,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                 )}
                 {type === 'password' && (
                     <div
-                        className="absolute right-3 cursor-pointer text-muted-foreground"
+                        className="absolute right-8 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground"
                         onClick={togglePasswordVisibility}
                     >
                         {showPassword ? <FaEye /> : <FaRegEyeSlash />}
