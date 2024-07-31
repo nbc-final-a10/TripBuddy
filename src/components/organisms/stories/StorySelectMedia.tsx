@@ -4,12 +4,23 @@ import Input from '@/components/atoms/common/O_Input';
 import useLockBodyScroll from '@/hooks/common/useLockBodyScroll';
 import clsx from 'clsx';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
-const StorySelectMedia: React.FC = () => {
-    const [isLoaded, setIsLoaded] = useState<boolean>(false);
-    const [selectedMedia, setSelectedMedia] = useState<string>('');
+type StorySelectMediaProps = {
+    handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+const StorySelectMedia: React.FC<StorySelectMediaProps> = ({
+    handleFileChange,
+}) => {
     const isLocked = useLockBodyScroll();
+    const inputRef = useRef<HTMLInputElement>(null);
+    const formRef = useRef<HTMLFormElement>(null);
+
+    const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        inputRef.current?.click();
+    };
 
     return (
         <section
@@ -19,27 +30,25 @@ const StorySelectMedia: React.FC = () => {
             )}
         >
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black/80 rounded-lg z-10"></div>
-            {selectedMedia && (
-                <Image
-                    src={selectedMedia}
-                    alt="my-profile-background"
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    onLoad={() => setIsLoaded(true)}
-                    className={clsx(
-                        'object-contain',
-                        isLoaded ? 'opacity-100' : 'opacity-0',
-                    )}
-                />
-            )}
-            <form>
+
+            <form
+                className="z-10 w-full flex justify-center items-center h-[calc(100dvh-57px)] top-0 left-0"
+                ref={formRef}
+            >
                 <Input
                     type="file"
                     accept="image/*"
-                    className="z-10"
                     intent={false}
-                    // onChange={handleFileChange}
+                    ref={inputRef}
+                    onChange={handleFileChange}
                 />
+                <button
+                    type="button"
+                    className="text-sm text-white bg-main-color px-4 py-2 rounded-lg relative font-bold"
+                    onClick={handleButtonClick}
+                >
+                    업로드
+                </button>
             </form>
         </section>
     );

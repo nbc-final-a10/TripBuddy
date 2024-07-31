@@ -6,7 +6,15 @@ import Image from 'next/image';
 import useLockBodyScroll from '@/hooks/common/useLockBodyScroll';
 import clsx from 'clsx';
 
-const StoryWriteText: React.FC = () => {
+type StoryWriteTextProps = {
+    imageFile: File;
+    selectedMedia: string;
+};
+
+const StoryWriteText: React.FC<StoryWriteTextProps> = ({
+    imageFile,
+    selectedMedia,
+}) => {
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
     const isLocked = useLockBodyScroll();
 
@@ -19,7 +27,7 @@ const StoryWriteText: React.FC = () => {
         >
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black/80 rounded-lg z-10"></div>
             <Image
-                src="/images/test2.webp"
+                src={selectedMedia}
                 alt="my-profile-background"
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
