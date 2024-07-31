@@ -34,7 +34,7 @@ const DraggableText = () => {
                         left: position.x,
                         transform: 'translate(-50%, -50%)',
                     }}
-                    className="absolute border-2 border-gray-300 rounded-md p-2"
+                    className="absolute border-b-2 border-gray-300 rounded-md p-2"
                 />
             </Draggable>
             <button onClick={handleSave}>Save</button>
