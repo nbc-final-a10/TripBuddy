@@ -1,9 +1,12 @@
 import { StoryWithBuddies } from '@/types/Story.type';
 import { createClient } from '@/utils/supabase/server';
 import { PostgrestError } from '@supabase/supabase-js';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET(
+    req: NextRequest,
+    { params }: { params: { id: string } },
+) {
     const { id } = params;
 
     const supabase = createClient();
