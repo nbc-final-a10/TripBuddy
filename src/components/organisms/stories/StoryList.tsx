@@ -8,14 +8,14 @@ import React from 'react';
 
 const StoryList: React.FC = () => {
     const { buddy } = useAuth();
-    const { data: story, isPending, error: storyError } = useStoriesQuery();
+    const { data: stories, isPending, error: storyError } = useStoriesQuery();
 
     if (storyError) return <div>Error</div>;
     if (isPending) return <Loading />;
 
     return (
         <section className="grid grid-cols-2 place-items-center gap-4 overflow-hidden xl:grid-cols-4">
-            {story?.map(story => (
+            {stories?.map(story => (
                 <StoryCard
                     key={story.story_id}
                     id={story.story_id}

@@ -22,7 +22,7 @@ const StoryCard: React.FC<StoryCardProps> = ({
     id,
 }) => {
     return (
-        <div className="relative flex flex-col justify-center items-center w-[139px] h-[190px] bg-gray-300 rounded-lg gap-2 aspect-auto">
+        <div className="relative flex flex-col justify-center items-center min-w-[139px] w-[139px] h-[190px] bg-gray-300 rounded-lg gap-2 aspect-auto">
             <Link
                 className="w-full h-full absolute aspect-auto flex justify-center items-center"
                 href={`/stories/${id}`}
