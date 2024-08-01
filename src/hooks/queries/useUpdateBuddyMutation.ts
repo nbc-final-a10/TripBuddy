@@ -3,7 +3,7 @@ import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import { Buddy, PartialBuddy } from '@/types/Auth.types';
 import { patchBuddyInfo } from '@/api-services/auth/client';
 
-export function useUpdateBuddyMutation() {
+export default function useUpdateBuddyMutation() {
     const queryClient = useQueryClient();
     return useMutation<Buddy, Error, PartialBuddy>({
         mutationFn: (buddyInfo: PartialBuddy) => patchBuddyInfo(buddyInfo),

@@ -26,3 +26,16 @@ export async function getStories(): Promise<StoryWithBuddies[]> {
         throw error;
     }
 }
+
+export async function getStory(id: string): Promise<StoryWithBuddies> {
+    const url = `/api/stories/${id}`;
+    try {
+        const data = await fetchWrapper<StoryWithBuddies>(url, {
+            method: 'GET',
+            cache: 'no-store',
+        });
+        return data;
+    } catch (error: any) {
+        throw error;
+    }
+}
