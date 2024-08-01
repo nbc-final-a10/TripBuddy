@@ -33,6 +33,8 @@ const OnBoardingSelectLocationMbti = ({
                             <Chip
                                 key={mbti.mbti}
                                 selected={selected.includes(mbti.mbti)}
+                                intent="onBoarding"
+                                className="py-2.5"
                                 onClick={handleChange}
                             >
                                 {mbti.mbti}

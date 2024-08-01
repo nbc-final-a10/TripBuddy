@@ -12,9 +12,9 @@ const SignUpPage: React.FC = () => {
             <AuthPageBottom />
 
             <p className="text-sm text-gray-500">
-                <span>Already have an account?</span>
-                <Link href="/login" className="text-blue-500">
-                    Log In
+                <span>이미 계정이 있으신가요?&nbsp;</span>
+                <Link href="/login" className="text-main-color">
+                    로그인
                 </Link>
             </p>
         </AuthPageWrapper>

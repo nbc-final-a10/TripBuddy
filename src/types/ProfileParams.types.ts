@@ -7,7 +7,9 @@ type ProfilePageProps = {
 };
 
 type BuddyProfileProps = {
-    id: string;
+    id?: string;
+    isLabel?: boolean;
+    isTempText?: boolean;
 };
 
 export type { Params, ProfilePageProps, BuddyProfileProps };

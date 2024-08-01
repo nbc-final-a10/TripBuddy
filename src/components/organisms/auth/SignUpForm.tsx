@@ -1,5 +1,6 @@
 'use client';
 
+import AuthSubText from '@/components/atoms/auth/AuthSubText';
 import Input from '@/components/atoms/common/O_Input';
 import { SubmitButton } from '@/components/atoms/common/O_Submit-button';
 import { useAuth } from '@/hooks/auth';
@@ -32,43 +33,45 @@ function SignUpForm() {
         <>
             <div className="flex flex-col items-center justify-center gap-2 pb-6">
                 <h1 className="text-2xl font-bold">회원가입</h1>
-                <p className="text-sm text-gray-500">
-                    Please enter the details below to continue
-                </p>
             </div>
 
             <form
                 onSubmit={handleSubmit}
-                className="w-full h-fit min-h-[35%] flex flex-col items-center justify-center gap-10"
+                className="w-full h-fit min-h-[35%] flex flex-col items-center justify-center gap-40"
             >
                 <div className="w-[90%] flex flex-col items-center justify-center gap-10">
                     <div className="w-full flex flex-col gap-4">
-                        <Input
-                            type="text"
-                            placeholder="your email"
-                            name="email"
-                        />
-                        {/* <Input
-                            type="text"
-                            placeholder="your nickname"
-                            name="name"
-                        /> */}
-                        <Input
-                            type="password"
-                            placeholder="password"
-                            name="password"
-                        />
-                        <Input
-                            type="password"
-                            placeholder="repeat password"
-                            name="passwordConfirm"
-                        />
+                        <div className="w-full flex flex-col gap-2 justify-center">
+                            <Input
+                                type="text"
+                                placeholder="이메일 입력"
+                                name="email"
+                            />
+                            <AuthSubText text="ex) abcd1234@gmail.com" />
+                        </div>
+                        <div className="w-full flex flex-col gap-2 justify-center">
+                            <Input
+                                type="password"
+                                placeholder="비밀번호 입력"
+                                name="password"
+                            />
+                            <AuthSubText text="영문자 및 숫자 조합으로 8자 ~ 16자 이내 입력" />
+                        </div>
+                        <div className="w-full flex flex-col gap-2 justify-center">
+                            <Input
+                                type="password"
+                                placeholder="비밀번호 입력"
+                                name="passwordConfirm"
+                            />
+                            <AuthSubText text="영문자 및 숫자 조합으로 8자 ~ 16자 이내 입력" />
+                        </div>
                     </div>
                 </div>
 
                 <SubmitButton
-                    className="bg-sky-500 w-[70%] text-white rounded-lg px-4 py-2"
-                    pendingText="회원가입중..."
+                    className="bg-main-color w-[90%] text-white rounded-2xl px-4 py-3 font-bold text-xl"
+                    type="submit"
+                    pendingText="진행중..."
                     pending={isPending}
                 >
                     회원가입
