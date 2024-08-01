@@ -5,17 +5,7 @@ import useTapScroll from '@/hooks/useTapScroll';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState, useEffect, useRef } from 'react';
-
-type Buddy = {
-    buddy_id: string;
-    buddy_nickname: string;
-    buddy_birth: number;
-    buddy_temperature: number;
-    buddy_preferred_buddy1: string;
-    buddy_preferred_buddy2: string;
-    buddy_preferred_buddy3: string;
-    buddy_profile_pic: string;
-};
+import { Buddy } from '@/types/Auth.types';
 
 function HomePageRecommnedBuddiesList() {
     const buddiesRef = useRef<HTMLDivElement>(null);
