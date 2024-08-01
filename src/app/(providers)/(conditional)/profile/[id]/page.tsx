@@ -45,7 +45,7 @@ function ProfilePage({ params }: ProfilePageProps) {
                 <BuddyFollow id={params.id} />
             </section>
 
-            <section>
+            <section className="mx-8">
                 <BuddyTemperature temperature={buddy?.buddy_temperature || 0} />
             </section>
 
