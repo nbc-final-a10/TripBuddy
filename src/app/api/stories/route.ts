@@ -1,5 +1,7 @@
+import { StoryWithBuddies } from '@/types/Story.type';
 import convertToWebP from '@/utils/common/convertToWebp';
 import { createClient } from '@/utils/supabase/server';
+import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
@@ -65,7 +67,13 @@ export async function POST(req: NextRequest) {
 export async function GET() {
     const supabase = createClient();
 
-    const { data: story, error: storyError } = await supabase
+    const {
+        data: story,
+        error: storyError,
+    }: {
+        data: StoryWithBuddies[] | null;
+        error: PostgrestError | null;
+    } = await supabase
         .from('stories')
         .select('*, buddies:story_created_by (*)')
         .order('story_created_at', { ascending: false });
@@ -75,6 +83,13 @@ export async function GET() {
         return NextResponse.json(
             { error: storyError?.message },
             { status: 401 },
+        );
+    }
+
+    if (!story) {
+        return NextResponse.json(
+            { error: 'Stories not found' },
+            { status: 404 },
         );
     }
     return NextResponse.json(story, { status: 200 });
