@@ -37,8 +37,8 @@ const useNextButton = ({
         <button
             onClick={e => {
                 e.preventDefault();
-                if (onClick) onClick();
                 handleNext();
+                if (onClick) onClick();
             }}
             className={className}
         >

@@ -20,7 +20,7 @@ const OnBoardingSelectPrefer = ({
                     : '어떤 유형의 여행을 더 선호하세요?'}
             </Title>
             <OnBoardingInnerWrapper>
-                <div className="w-[90%]">{component}</div>
+                <div className="w-[90%] flex justify-center">{component}</div>
             </OnBoardingInnerWrapper>
         </OnBoardingWrapper>
     );

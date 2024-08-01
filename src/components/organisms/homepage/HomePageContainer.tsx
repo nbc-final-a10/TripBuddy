@@ -8,6 +8,7 @@ import React, { useRef } from 'react';
 import useTapScroll from '@/hooks/useTapScroll';
 import HomePageTitle from '@/components/molecules/homepage/HomePageTitle';
 import Link from 'next/link';
+import HomePageRecommnedBuddiesList from './HomePageRecommnedBuddiesList';
 
 const HomePageContainer = () => {
     const buddiesRef = useRef<HTMLDivElement>(null);
@@ -33,7 +34,7 @@ const HomePageContainer = () => {
                     ref={buddiesRef}
                     onMouseDown={createMouseDownHandler(buddiesRef)}
                 >
-                    <HomePageBuddies />
+                    <HomePageRecommnedBuddiesList />
                 </div>
             </div>
 
