@@ -10,12 +10,14 @@ const StoryList: React.FC = () => {
     const { buddy } = useAuth();
     const { data: stories, isPending, error: storyError } = useStoriesQuery();
 
+    // 추후 변경 요망
     if (storyError) return <div>Error</div>;
     if (isPending) return <Loading />;
+    if (!stories) return <div>No stories</div>;
 
     return (
         <section className="grid grid-cols-2 place-items-center gap-4 overflow-hidden xl:grid-cols-4">
-            {stories?.map(story => (
+            {stories.map(story => (
                 <StoryCard
                     key={story.story_id}
                     id={story.story_id}

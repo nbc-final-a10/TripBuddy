@@ -1,7 +1,6 @@
 'use client';
 
 import HomePageSearchBar from '@/components/atoms/HomePageSearchBar';
-import HomePageBuddies from '@/components/molecules/homepage/HomePageBuddies';
 import HomePageStories from '@/components/molecules/homepage/HomePageStories';
 import HomePageTrips from '@/components/molecules/homepage/HomePageTrips';
 import React, { useRef } from 'react';
@@ -81,7 +80,7 @@ const HomePageContainer = () => {
                     ref={tripsRef}
                     onMouseDown={createMouseDownHandler(tripsRef)}
                 >
-                    <HomePageTrips />
+                    <HomePageTrips trips={buddyTripStory.trips} />
                 </div>
             </div>
         </div>

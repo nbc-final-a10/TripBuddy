@@ -6,3 +6,4 @@ export * from './useNaverLogInMutation';
 export * from './useStoryMutation';
 export * from './useStoriesQuery';
 export * from './useStoryQuery';
+export * from './useTripsQuery';

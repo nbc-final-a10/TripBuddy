@@ -6,26 +6,15 @@ import Distance from '../../../../public/svg/Distance.svg';
 import Groups from '../../../../public/svg/Groups.svg';
 import Chip from '@/components/atoms/common/O_Chip';
 import clsx from 'clsx';
-import TripCustomSlider from '@/components/atoms/trips/TripCustomSlider';
-import { getTimeSinceUpload } from '@/utils/common/getTimeSinceUpload';
 import TripTimeSinceUpload from '@/components/atoms/trips/TripTimeSinceUpload';
+import { Trip } from '@/types/Trips.types';
 
 type TripCardProps = {
-    title: string;
-    description: string;
-    date: string;
-    location: string;
-    participants: number;
+    trip: Trip;
     mode?: 'card' | 'detail' | 'main';
 };
 
-const TripCard: React.FC<TripCardProps> = ({
-    title,
-    date,
-    location,
-    participants,
-    mode = 'main',
-}) => {
+const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'main' }) => {
     return (
         <div
             className={clsx(
@@ -60,13 +49,20 @@ const TripCard: React.FC<TripCardProps> = ({
                                 </div>
                             )}
 
-                            {mode === 'card' && (
+                            {mode === 'main' && (
                                 <div className="flex flex-row gap-2">
                                     <span className="font-bold text-lg leading-none">
-                                        {'D-4'}
+                                        {`D-${
+                                            new Date().getDay() -
+                                            new Date(
+                                                trip.trip_start_date,
+                                            ).getDay()
+                                        }`}
                                     </span>
                                     <span className="text-sm leading-none">
-                                        {'24.07.20'}
+                                        {new Date(
+                                            trip.trip_created_at,
+                                        ).toLocaleDateString()}
                                     </span>
                                 </div>
                             )}
@@ -74,7 +70,7 @@ const TripCard: React.FC<TripCardProps> = ({
 
                         {mode === 'card' && (
                             <h2 className="text-xl font-bold leading-none">
-                                {'경주'}
+                                {trip.trip_final_destination}
                             </h2>
                         )}
                         <h3
@@ -84,28 +80,28 @@ const TripCard: React.FC<TripCardProps> = ({
                                 mode === 'card' && 'text-gray-600',
                             )}
                         >
-                            {title}
+                            {trip.trip_title}
                         </h3>
 
                         <div className="flex flex-row justify-between">
                             <div className="flex gap-1">
                                 <Chip selected={false} intent="square">
-                                    {'힐링'}
+                                    {trip.trip_theme1}
                                 </Chip>
                                 <Chip selected={false} intent="square_white">
-                                    {'쇼핑'}
+                                    {trip.trip_theme2}
                                 </Chip>
                                 <Chip selected={false} intent="square_white">
-                                    {'즉흥'}
+                                    {trip.trip_theme3}
                                 </Chip>
                                 <Chip selected={false} intent="square_white">
-                                    {'여자만'}
+                                    {trip.trip_wanted_sex}
                                 </Chip>
                             </div>
 
                             {mode === 'detail' && (
                                 <TripTimeSinceUpload
-                                    time={'2024-07-30 15:00:00'}
+                                    time={trip.trip_created_at}
                                 />
                             )}
                         </div>
@@ -120,27 +116,32 @@ const TripCard: React.FC<TripCardProps> = ({
                     >
                         <div className="flex gap-2 items-center">
                             <Distance />
-                            <span>{location}</span>
+                            <span>{trip.trip_final_destination}</span>
                         </div>
 
                         <div className="flex gap-2 items-center">
                             <Calendar_month />
-                            <span>{date}</span>
+                            <span>
+                                {new Date(
+                                    trip.trip_start_date,
+                                ).toLocaleDateString()}
+                            </span>
                         </div>
 
+                        {/** 추후 수정 필요 */}
                         <div className="flex gap-2 items-center">
                             <Groups />
-                            <span>{`${participants}/4`}</span>
+                            <span>{`${trip.trip_max_buddies_counts}/4`}</span>
                         </div>
                     </div>
 
-                    {/** 인원수 카드에서만 보임 */}
+                    {/** 인원수 카드에서만 보임 여기도 추후 수정 필요 */}
                     {mode === 'card' && (
                         <>
                             <div className="flex flex-col gap-1">
                                 <div className="flex flex-row">
                                     <p className="text-sm leading-none">
-                                        {`신청 ${participants}`}
+                                        {`신청 ${trip.trip_max_buddies_counts}`}
                                         <span className="text-gray-500">
                                             /4
                                         </span>
@@ -148,7 +149,7 @@ const TripCard: React.FC<TripCardProps> = ({
                                 </div>
                             </div>
 
-                            <TripTimeSinceUpload time={'2024-07-30 15:00:00'} />
+                            <TripTimeSinceUpload time={trip.trip_created_at} />
                         </>
                     )}
 
