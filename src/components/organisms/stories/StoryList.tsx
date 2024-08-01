@@ -14,14 +14,14 @@ const StoryList: React.FC = () => {
     if (isPending) return <Loading />;
 
     return (
-        <section className="flex flex-col gap-4 overflow-hidden">
+        <section className="grid grid-cols-2 place-items-center gap-4 overflow-hidden xl:grid-cols-4">
             {story?.map(story => (
                 <StoryCard
                     key={story.story_id}
                     name={story.buddies.buddy_nickname}
                     created_at={story.story_created_at}
                     profile_image={
-                        story.buddies.buddy_profile_pic || '/images/test.webp'
+                        story.buddies.buddy_profile_pic || '/images/test.webp' // 추후변경요망
                     }
                     background_image={story.story_media}
                     mode={
