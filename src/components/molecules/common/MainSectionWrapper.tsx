@@ -1,16 +1,16 @@
-import clsx from 'clsx';
+'use client';
+
+import { usePathname } from 'next/navigation';
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 
 type MainSectionWrapperProps = {
     children: React.ReactNode;
-    pathname: string;
 };
 
-const MainSectionWrapper = ({
-    children,
-    pathname,
-}: MainSectionWrapperProps) => {
+const MainSectionWrapper = ({ children }: MainSectionWrapperProps) => {
+    const pathname = usePathname();
+
     const isHidePaddingBottom =
         pathname.startsWith('/chat/') ||
         pathname.startsWith('/stories/') ||
