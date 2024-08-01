@@ -8,10 +8,10 @@ const HomePageBanner = () => {
                     src="/images/test_city.jpg"
                     alt="banner"
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 100vw, 33vw"
                     className="object-cover relative z-0"
                 />
-                <div className="absolute inset-0 bg-black/50 z-10" />
+                <div className="absolute inset-0 bg-black/30 z-10" />
                 <div className="relative z-20 text-white h-full flex flex-col justify-center gap-3">
                     <p>
                         <span className="font-bold text-3xl">여행자</span>님,
