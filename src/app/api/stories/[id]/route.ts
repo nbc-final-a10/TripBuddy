@@ -20,7 +20,7 @@ export async function GET(
     } = await supabase
         .from('stories')
         .select('*, buddies:story_created_by (*)')
-        .eq('id', id)
+        .eq('story_id', id)
         .maybeSingle();
 
     if (storyError) {

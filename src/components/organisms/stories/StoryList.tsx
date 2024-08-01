@@ -18,6 +18,7 @@ const StoryList: React.FC = () => {
             {story?.map(story => (
                 <StoryCard
                     key={story.story_id}
+                    id={story.story_id}
                     name={story.buddies.buddy_nickname}
                     created_at={story.story_created_at}
                     profile_image={
