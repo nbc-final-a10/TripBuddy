@@ -7,15 +7,42 @@ import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
 import { useAuth } from '@/hooks/auth';
 import { ProfilePageProps } from '@/types/ProfileParams.types';
 import { Buddy } from '@/types/Auth.types';
+import { useEffect, useState } from 'react';
 
 function ProfilePage({ params }: ProfilePageProps) {
     const { buddy } = useAuth();
+
+    const [clickedBuddy, setClickedBuddy] = useState<Buddy | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchClickedBuddy = async () => {
+            try {
+                const response = await fetch(
+                    `/api/buddyProfile/buddy?id=${params.id}`,
+                );
+                const data = await response.json();
+                console.log(data);
+                setClickedBuddy(data.buddies[0]);
+                setLoading(false);
+            } catch (error) {
+                console.error('버디 통신 오류 발생:', error);
+            }
+        };
+        fetchClickedBuddy();
+    }, [params.id]);
+
+    console.log('클릭드 버디', clickedBuddy);
+
     return (
         <>
             <section>유저 아이디 {params.id}</section>
 
             <section className="flex flex-col items-center justify-center w-full h-full">
-                <BuddyProfile />
+                <BuddyProfile
+                    clickedBuddy={clickedBuddy || null}
+                    loading={loading}
+                />
             </section>
 
             <section className="w-full h-full">

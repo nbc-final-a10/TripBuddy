@@ -17,7 +17,7 @@ function HomePageRecommnedBuddiesList() {
         const fetchBuddies = async () => {
             try {
                 const response = await fetch(
-                    '/api/home/BuddiesRecommendationList',
+                    '/api/buddyProfile/buddiesRecommendationList',
                 );
                 const data = await response.json();
                 console.log(data);
