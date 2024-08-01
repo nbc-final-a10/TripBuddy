@@ -33,7 +33,7 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
         };
 
         return (
-            <div className="flex flex-col items-center p-4min-h-screen">
+            <div className="flex flex-col items-center p-4 min-h-screen">
                 <div className="w-full max-w-lg rounded-lg p-6">
                     <div className="flex flex-col items-center mt-6">
                         <div className="relative">
@@ -68,10 +68,6 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                             </button>
                         </div>
                         <button className="mt-2">프로필 사진 삭제</button>
-                        {/* Todo: 추후 구현 - 컬럼 추가? */}
-                        {/* <p className="mt-2 text-gray-500">
-                            카카오 로그인 상태입니다
-                        </p> */}
                     </div>
                     <div className="mt-6">
                         <table className="w-full">
@@ -98,61 +94,61 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                                     label="거주지"
                                     value={buddy.buddy_region || ''}
                                 />
-                                <div
-                                    className="flex justify-between py-2"
-                                    onClick={() => toggleAccordion('journey')}
-                                >
-                                    <span className="w-1/2 text-gray-600">
-                                        선호 여정
-                                    </span>
-                                    <span className="w-1/2 text-blue-500 text-right">
-                                        {isOpen.journey ? '-' : '+'}
-                                    </span>
-                                </div>
-                                {isOpen.journey && (
-                                    <div className="pl-4">
-                                        <span className="inline-block bg-main-color rounded-full px-3 py-1 text-sm text-white mr-2">
-                                            {buddy.buddy_preferred_theme1}
-                                        </span>
-                                        <span className="inline-block bg-main-color rounded-full px-3 py-1 text-sm text-white mr-2">
-                                            {buddy.buddy_preferred_theme2}
-                                        </span>
-                                        <span className="inline-block bg-main-color rounded-full px-3 py-1 text-sm text-white mr-2">
-                                            {buddy.buddy_preferred_theme3}
-                                        </span>
-                                    </div>
-                                )}
-                                <div
-                                    className="flex justify-between py-2"
-                                    onClick={() =>
-                                        toggleAccordion('personality')
-                                    }
-                                >
-                                    <span className="w-1/2 text-gray-600">
-                                        버디즈 성향
-                                    </span>
-                                    <span className="w-1/2 text-blue-500 text-right">
-                                        {isOpen.personality ? '-' : '+'}
-                                    </span>
-                                </div>
-                                {isOpen.personality && (
-                                    <div className="pl-4">
-                                        <span className="inline-block bg-main-color rounded-full px-3 py-1 text-sm text-white mr-2">
-                                            {buddy.buddy_preferred_buddy1}
-                                        </span>
-                                        <span className="inline-block bg-main-color rounded-full px-3 py-1 text-sm text-white mr-2">
-                                            {buddy.buddy_preferred_buddy2}
-                                        </span>
-                                        <span className="inline-block bg-main-color rounded-full px-3 py-1 text-sm text-white mr-2">
-                                            {buddy.buddy_preferred_buddy3}
-                                        </span>
-                                    </div>
-                                )}
                             </tbody>
                         </table>
-                        {/* 비밀번호 변경 섹션 */}
+
                         <div
-                            className="flex justify-between py-2"
+                            className="flex justify-between py-2 cursor-pointer"
+                            onClick={() => toggleAccordion('journey')}
+                        >
+                            <span className="w-1/2 text-gray-600">
+                                선호 여정
+                            </span>
+                            <span className="w-1/2 text-blue-500 text-right">
+                                {isOpen.journey ? '-' : '+'}
+                            </span>
+                        </div>
+                        {isOpen.journey && (
+                            <div className="pl-4 mb-4">
+                                <span className="inline-block bg-main-color rounded-full px-3 py-1 text-sm text-white mr-2">
+                                    {buddy.buddy_preferred_theme1}
+                                </span>
+                                <span className="inline-block bg-main-color rounded-full px-3 py-1 text-sm text-white mr-2">
+                                    {buddy.buddy_preferred_theme2}
+                                </span>
+                                <span className="inline-block bg-main-color rounded-full px-3 py-1 text-sm text-white mr-2">
+                                    {buddy.buddy_preferred_theme3}
+                                </span>
+                            </div>
+                        )}
+
+                        <div
+                            className="flex justify-between py-2 cursor-pointer"
+                            onClick={() => toggleAccordion('personality')}
+                        >
+                            <span className="w-1/2 text-gray-600">
+                                버디즈 성향
+                            </span>
+                            <span className="w-1/2 text-blue-500 text-right">
+                                {isOpen.personality ? '-' : '+'}
+                            </span>
+                        </div>
+                        {isOpen.personality && (
+                            <div className="pl-4 mb-4">
+                                <span className="inline-block bg-main-color rounded-full px-3 py-1 text-sm text-white mr-2">
+                                    {buddy.buddy_preferred_buddy1}
+                                </span>
+                                <span className="inline-block bg-main-color rounded-full px-3 py-1 text-sm text-white mr-2">
+                                    {buddy.buddy_preferred_buddy2}
+                                </span>
+                                <span className="inline-block bg-main-color rounded-full px-3 py-1 text-sm text-white mr-2">
+                                    {buddy.buddy_preferred_buddy3}
+                                </span>
+                            </div>
+                        )}
+
+                        <div
+                            className="flex justify-between py-2 cursor-pointer"
                             onClick={() => toggleAccordion('password')}
                         >
                             <span className="w-1/2 text-gray-600">
@@ -170,7 +166,7 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
         );
     } else {
         return (
-            <div className="flex flex-col items-center p-4min-h-screen">
+            <div className="flex flex-col items-center p-4 min-h-screen">
                 <div className="w-full max-w-lg rounded-lg p-6 flex flex-col items-center">
                     <Image
                         src="/images/mascot_main.webp"
