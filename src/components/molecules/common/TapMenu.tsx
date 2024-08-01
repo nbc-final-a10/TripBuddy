@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import TapMenuButton from '../atoms/TapMenuButton';
 import { useAuth } from '@/hooks/auth';
 import clsx from 'clsx';
+import TapMenuButton from '@/components/atoms/TapMenuButton';
 
 type TapMenuProps = {
     pathname: string;
@@ -25,7 +25,8 @@ const TapMenu: React.FC<TapMenuProps> = ({ pathname }) => {
         pathname === '/write/story' ||
         pathname === '/login' ||
         pathname === '/signup' ||
-        pathname === '/recover';
+        pathname === '/recover' ||
+        pathname === '/tutorial';
 
     return (
         <div
