@@ -19,6 +19,7 @@ export async function getStory(): Promise<StoryWithBuddies[]> {
     try {
         const data = await fetchWrapper<StoryWithBuddies[]>(url, {
             method: 'GET',
+            cache: 'no-store',
         });
         return data;
     } catch (error: any) {

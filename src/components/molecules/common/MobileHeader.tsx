@@ -1,15 +1,15 @@
+'use client';
 import React from 'react';
 import Arrow_Back from '../../../../public/svg/Arrow_back.svg';
 import Close from '../../../../public/svg/Close.svg';
 import Notification from '../../../../public/svg/Notifications_unread.svg';
 import Search from '../../../../public/svg/Search.svg';
 import MobileHeaderSettingsButton from '@/components/atoms/common/MobileHeaderSettingsButton';
+import { usePathname } from 'next/navigation';
 
-type MobileHeaderProps = {
-    pathname: string;
-};
+const MobileHeader: React.FC = () => {
+    const pathname = usePathname();
 
-const MobileHeader: React.FC<MobileHeaderProps> = ({ pathname }) => {
     const isTrips = pathname === '/trips';
     const isTripDetail = pathname.startsWith('/trips/');
     const isLogin = pathname === '/login';

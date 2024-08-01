@@ -34,7 +34,7 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
                 <Suspense fallback={<Loading />}>
                     <HydrationBoundary state={dehydratedState}>
                         <AuthProvider>
-                            <MobileHeader pathname={pathname as string} />
+                            <MobileHeader />
                             <Header />
                             {children}
                             <TapMenu pathname={pathname as string} />

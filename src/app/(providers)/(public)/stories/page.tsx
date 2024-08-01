@@ -20,9 +20,7 @@ const StoriesPage: React.FC = async () => {
     return (
         <Suspense fallback={<Loading />}>
             <HydrationBoundary state={dehydratedState}>
-                <section className="flex flex-col gap-4 h-[calc(100vh-50px)] overflow-hidden">
-                    <StoryList />
-                </section>
+                <StoryList />
             </HydrationBoundary>
         </Suspense>
     );

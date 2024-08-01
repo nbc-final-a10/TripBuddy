@@ -12,7 +12,7 @@ const StoryList: React.FC = () => {
     if (isPending) return <Loading />;
 
     return (
-        <>
+        <section className="flex flex-col gap-4 overflow-hidden">
             {story?.map(story => (
                 <StoryCard
                     key={story.story_id}
@@ -25,7 +25,7 @@ const StoryList: React.FC = () => {
                     mode="my"
                 />
             ))}
-        </>
+        </section>
     );
 };
 
