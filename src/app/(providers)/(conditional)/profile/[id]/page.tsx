@@ -41,12 +41,23 @@ function ProfilePage({ params }: ProfilePageProps) {
                 />
             </section>
 
-            <section className="w-full h-full">
-                <BuddyFollow id={params.id} />
-            </section>
-
-            <section className="mx-8">
-                <BuddyTemperature temperature={buddy?.buddy_temperature || 0} />
+            <section className="w-full h-full flex justify-center items-center my-4">
+                <div className="flex flex-row items-center mx-4 space-x-4 w-full">
+                    <span className="flex-1">
+                        <BuddyFollow id={params.id} type="팔로워" count={20} />
+                    </span>
+                    <span className="border-l border-gray-300 h-10 mx-2" />
+                    <span className="flex-1">
+                        <BuddyFollow id={params.id} type="팔로잉" count={13} />
+                    </span>
+                </div>
+                <div className="flex flex-col items-center mr-8 w-full">
+                    <span className="w-full">
+                        <BuddyTemperature
+                            temperature={buddy?.buddy_temperature || 0}
+                        />
+                    </span>
+                </div>
             </section>
 
             <section className="mt-16 mx-8">
