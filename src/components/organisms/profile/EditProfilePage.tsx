@@ -1,9 +1,20 @@
 import ProfileEditColumn from '@/components/atoms/profile/ProfileEditColumn';
-import ProfileImage from '@/components/atoms/profile/ProfileImage';
 import { BuddyProfileProps } from '@/types/ProfileParams.types';
 import React from 'react';
+import Image from 'next/image';
+import { Buddy } from '@/types/Auth.types';
+import EditProfileSkeleton from '@/components/molecules/profile/EditProfileSkeleton';
+import MascotImage from '@/components/atoms/common/O_MascotImage';
 
-function EditProfilePage({ id }: BuddyProfileProps) {
+type EditProfilePageProps = {
+    buddy: Buddy;
+};
+
+function EditProfilePage({ buddy }: EditProfilePageProps) {
+    if (!buddy) {
+        return <EditProfileSkeleton />;
+    }
+
     return (
         <div className="flex flex-col items-center p-4min-h-screen">
             <div className="w-full max-w-lg rounded-lg p-6">
@@ -11,10 +22,14 @@ function EditProfilePage({ id }: BuddyProfileProps) {
                     <div className="relative">
                         {/* 프로필 이미지 */}
                         <Image
-                            src="/default-profile.png"
+                            src={
+                                buddy?.buddy_profile_pic ||
+                                '/images/mascot_happy.webp'
+                            }
                             alt="profile"
                             width={100}
                             height={100}
+                            className="rounded-full w-[100px] h-[100px]"
                         />
 
                         {/* 프로필 사진 변경 버튼 */}

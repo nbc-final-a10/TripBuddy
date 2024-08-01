@@ -32,8 +32,6 @@ function ProfilePage({ params }: ProfilePageProps) {
         fetchClickedBuddy();
     }, [params.id]);
 
-    console.log('클릭드 버디', clickedBuddy);
-
     return (
         <>
             <section>유저 아이디 {params.id}</section>

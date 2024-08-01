@@ -1,4 +1,3 @@
-import Loading from '@/app/(providers)/loading';
 import EditProfileButton from '@/components/atoms/profile/EditProfileButton';
 import { useAuth } from '@/hooks/auth';
 import { Buddy } from '@/types/Auth.types';
@@ -7,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import BuddyProfileSkeleton from './BuddyProfileSkeleton';
+import MascotImage from '@/components/atoms/common/O_MascotImage';
 
 type BuddyProfileProps = {
     clickedBuddy: Buddy | null;
@@ -17,8 +17,6 @@ export default function BuddyProfile({
     clickedBuddy,
     loading,
 }: BuddyProfileProps) {
-    const { buddy } = useAuth();
-
     if (loading) {
         return <BuddyProfileSkeleton />;
     }
@@ -28,7 +26,10 @@ export default function BuddyProfile({
             <div className="flex items-center">
                 <div className="flex flex-col items-center">
                     <Image
-                        src={clickedBuddy?.buddy_profile_pic || ''}
+                        src={
+                            clickedBuddy?.buddy_profile_pic ||
+                            '/images/mascot_happy.webp'
+                        }
                         alt="profile"
                         width={100}
                         height={100}
