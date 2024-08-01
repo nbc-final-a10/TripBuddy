@@ -10,7 +10,7 @@ import { Buddy } from '@/types/Auth.types';
 import { useEffect, useState } from 'react';
 
 function ProfilePage({ params }: ProfilePageProps) {
-    const { buddy } = useAuth();
+    const { buddy, logOut } = useAuth();
 
     const [clickedBuddy, setClickedBuddy] = useState<Buddy | null>(null);
     const [loading, setLoading] = useState(true);
@@ -52,6 +52,17 @@ function ProfilePage({ params }: ProfilePageProps) {
             <section className="mt-16 mx-8">
                 <MyTrips id={params.id} />
             </section>
+
+            {buddy?.buddy_id === clickedBuddy?.buddy_id && (
+                <section className="mt-16 mx-8">
+                    <button
+                        className="bg-main-color text-white font-bold h-10 w-full rounded-xl"
+                        onClick={logOut}
+                    >
+                        로그아웃
+                    </button>
+                </section>
+            )}
         </>
     );
 }
