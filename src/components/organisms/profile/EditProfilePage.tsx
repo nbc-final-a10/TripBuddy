@@ -1,3 +1,5 @@
+'use client';
+
 import ProfileEditColumn from '@/components/atoms/profile/ProfileEditColumn';
 import React from 'react';
 import Image from 'next/image';
@@ -104,6 +106,21 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                         </table>
                     </div>
                 </div>
+            </div>
+        );
+    } else {
+        return (
+            <div className="flex flex-col items-center p-4min-h-screen">
+                <div className="w-full max-w-lg rounded-lg p-6 flex flex-col items-center">
+                    <Image
+                        src="/images/mascot_main.webp"
+                        alt="profile"
+                        width={100}
+                        height={100}
+                        className="rounded-full w-[100px] h-[100px]"
+                    />
+                </div>
+                <span className="text-gray-500">추가 정보를 기입해주세요!</span>
             </div>
         );
     }
