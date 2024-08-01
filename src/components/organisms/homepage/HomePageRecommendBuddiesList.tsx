@@ -51,17 +51,18 @@ function HomePageRecommnedBuddiesList() {
                                       href={`/profile/${buddy.buddy_id}`}
                                       passHref
                                   >
-                                      <div className="min-w-[200px] h-[75px] mx-1 rounded border border-gray-200 shadow-md cursor-pointer">
-                                          <div className="flex items-center w-full h-full">
-                                              <div className="flex-shrink-0 w-[75px] h-[75px]">
+                                      <div className="min-w-[200px] h-[75px] mx-1 rounded border border-gray-200 cursor-pointer flex items-center">
+                                          <div className="flex items-center justify-center w-full h-full">
+                                              <div className="flex-shrink-0 w-[75px] h-[75px] flex items-center justify-center">
                                                   {buddy.buddy_profile_pic ? (
                                                       <Image
                                                           src={
                                                               buddy.buddy_profile_pic
                                                           }
                                                           alt="profile"
-                                                          width={75}
-                                                          height={75}
+                                                          width={60}
+                                                          height={60}
+                                                          className="rounded-lg w-[60px] h-[60px]"
                                                       />
                                                   ) : (
                                                       <MascotImage intent="happy" />
@@ -78,10 +79,6 @@ function HomePageRecommnedBuddiesList() {
                                                       <span className="block truncate">
                                                           {buddy.buddy_nickname}
                                                       </span>
-                                                      {/* <span> / </span> */}
-                                                      {/* <span>
-                                                          {buddy.buddy_birth}세
-                                                      </span> */}
                                                   </div>
 
                                                   <div className="w-full">

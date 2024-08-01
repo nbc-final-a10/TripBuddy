@@ -7,7 +7,7 @@ import React, { useRef } from 'react';
 import useTapScroll from '@/hooks/useTapScroll';
 import HomePageTitle from '@/components/molecules/homepage/HomePageTitle';
 import Link from 'next/link';
-import HomePageRecommnedBuddiesList from './HomePageRecommnedBuddiesList';
+import HomePageRecommendBuddiesList from './HomePageRecommendBuddiesList';
 import { useAuth } from '@/hooks/auth';
 import useHomeQuery from '@/hooks/queries/useHomeQuery';
 import Loading from '@/app/(providers)/loading';
@@ -47,7 +47,7 @@ const HomePageContainer = () => {
                     ref={buddiesRef}
                     onMouseDown={createMouseDownHandler(buddiesRef)}
                 >
-                    <HomePageRecommnedBuddiesList />
+                    <HomePageRecommendBuddiesList />
                 </div>
             </div>
 
