@@ -41,6 +41,7 @@ const HomePageContainer = () => {
                     title="추천 인기 버디즈"
                     buttonText="전체보기"
                     description="버디즈에게 가장 인기있는 버디즈예요!"
+                    href="/"
                 />
                 <div
                     className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
@@ -56,6 +57,7 @@ const HomePageContainer = () => {
                     title="인기 스토리"
                     buttonText="전체보기"
                     description="버디즈의 스토리를 확인하세요!"
+                    href="/stories"
                 />
                 <div
                     className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
@@ -74,6 +76,7 @@ const HomePageContainer = () => {
                     title="지금 모집중인 여정"
                     buttonText="전체보기"
                     description="함께 여행할 버디즈를 찾아보세요!"
+                    href="/trips"
                 />
                 <div
                     className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
