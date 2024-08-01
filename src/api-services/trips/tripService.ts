@@ -13,3 +13,16 @@ export async function getTrips(): Promise<Trip[]> {
         throw error;
     }
 }
+
+export async function getTrip(id: string): Promise<Trip> {
+    const url = `/api/trips/${id}`;
+    try {
+        const data = await fetchWrapper<Trip>(url, {
+            method: 'GET',
+            cache: 'no-store',
+        });
+        return data;
+    } catch (error: any) {
+        throw error;
+    }
+}

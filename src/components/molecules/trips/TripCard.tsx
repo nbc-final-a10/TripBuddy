@@ -8,6 +8,7 @@ import Chip from '@/components/atoms/common/O_Chip';
 import clsx from 'clsx';
 import TripTimeSinceUpload from '@/components/atoms/trips/TripTimeSinceUpload';
 import { Trip } from '@/types/Trips.types';
+import Link from 'next/link';
 
 type TripCardProps = {
     trip: Trip;
@@ -21,7 +22,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'main' }) => {
                 'bg-white box-border h-fit shadow-lg',
                 mode === 'detail' && 'p-4',
                 mode === 'main' && 'rounded-lg',
-                mode === 'card' && 'w-[211px] h-[215px]',
+                mode === 'card' && 'w-[240px] h-[215px]',
             )}
         >
             <div
@@ -186,9 +187,10 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'main' }) => {
                 >
                     찜하기
                 </button>
-                <button
+                <Link
+                    href={`/trips/${trip.trip_id}`}
                     className={clsx(
-                        'p-2',
+                        'p-2 text-center',
                         mode === 'detail' &&
                             'bg-main-color text-white rounded-xl border border-main-color w-[48%]',
                         mode === 'main' &&
@@ -198,7 +200,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'main' }) => {
                     )}
                 >
                     참여하기
-                </button>
+                </Link>
             </div>
         </div>
     );

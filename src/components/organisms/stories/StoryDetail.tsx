@@ -1,7 +1,7 @@
 'use client';
 
 import useStoryQuery from '@/hooks/queries/useStoryQuery';
-import { StoryOverlay } from '@/types/Story.type';
+import { StoryOverlay } from '@/types/Story.types';
 import clsx from 'clsx';
 import Image from 'next/image';
 import React, { useState } from 'react';

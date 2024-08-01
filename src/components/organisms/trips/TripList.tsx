@@ -14,11 +14,11 @@ const TripList: React.FC = () => {
     if (!trips) return <div>No trips</div>;
 
     return (
-        <>
+        <section className="w-full flex flex-col gap-4 justify-center items-center">
             {trips.map(trip => (
                 <TripCard key={trip.trip_id} trip={trip} mode="card" />
             ))}
-        </>
+        </section>
     );
 };
 

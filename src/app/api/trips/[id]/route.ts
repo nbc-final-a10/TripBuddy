@@ -1,4 +1,4 @@
-import { StoryWithBuddies } from '@/types/Story.types';
+import { Trip } from '@/types/Chat.types';
 import { createClient } from '@/utils/supabase/server';
 import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
@@ -12,28 +12,29 @@ export async function GET(
     const supabase = createClient();
 
     const {
-        data: story,
-        error: storyError,
+        data: trip,
+        error: tripError,
     }: {
-        data: StoryWithBuddies | null;
+        data: Trip | null;
+
         error: PostgrestError | null;
     } = await supabase
-        .from('stories')
-        .select('*, buddies:story_created_by (*)')
-        .eq('story_id', id)
+        .from('trips')
+        .select('*')
+        .eq('trip_id', id)
         .maybeSingle();
 
-    if (storyError) {
-        console.error(storyError);
+    if (tripError) {
+        console.error(tripError);
         return NextResponse.json(
-            { error: storyError?.message },
+            { error: tripError?.message },
             { status: 401 },
         );
     }
 
-    if (!story) {
-        return NextResponse.json({ error: 'Story not found' }, { status: 404 });
+    if (!trip) {
+        return NextResponse.json({ error: 'Trip not found' }, { status: 404 });
     }
 
-    return NextResponse.json(story, { status: 200 });
+    return NextResponse.json(trip, { status: 200 });
 }
