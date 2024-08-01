@@ -31,12 +31,12 @@ const HomePageContainer = () => {
     if (isPending) return <Loading />;
 
     return (
-        <div className="rounded-t-[32px] bg-white p-4">
+        <div className="rounded-t-[32px] bg-white p-4 z-50 relative">
             <Link href="/search">
                 <HomePageSearchBar />
             </Link>
 
-            <div className="mt-4 mb-2">
+            <div className="mt-4 mb-2 relative">
                 <HomePageTitle
                     title="추천 인기 버디즈"
                     buttonText="전체보기"
