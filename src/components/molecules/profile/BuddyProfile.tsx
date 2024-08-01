@@ -3,6 +3,7 @@ import EditProfileButton from '@/components/atoms/profile/EditProfileButton';
 import ProfileImage from '@/components/atoms/profile/ProfileImage';
 import { useAuth } from '@/hooks/auth';
 import { Buddy } from '@/types/Auth.types';
+import { getAgeFromBirthDate } from '@/utils/common/getAgeFromBirthDate';
 import Link from 'next/link';
 import React from 'react';
 
@@ -41,8 +42,11 @@ export default function BuddyProfile({
                             </span>
                         </div>
                         <p className="mt-2 text-gray-500">
-                            {clickedBuddy?.buddy_birth} /{' '}
-                            {clickedBuddy?.buddy_sex}
+                            {clickedBuddy?.buddy_birth &&
+                                getAgeFromBirthDate(
+                                    clickedBuddy?.buddy_birth,
+                                )}{' '}
+                            / {clickedBuddy?.buddy_sex}
                         </p>
                         <p className="text-gray-500">
                             {clickedBuddy?.buddy_introduction}
