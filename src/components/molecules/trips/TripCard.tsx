@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import Calendar_month from '../../../../public/svg/Calendar_month.svg';
 import Distance from '../../../../public/svg/Distance.svg';
 import Groups from '../../../../public/svg/Groups.svg';
@@ -9,6 +9,7 @@ import clsx from 'clsx';
 import TripTimeSinceUpload from '@/components/atoms/trips/TripTimeSinceUpload';
 import { Trip } from '@/types/Trips.types';
 import Link from 'next/link';
+import remainDays from '@/utils/common/getRemainDays';
 
 type TripCardProps = {
     trip: Trip;
@@ -53,12 +54,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'main' }) => {
                             {mode === 'main' && (
                                 <div className="flex flex-row gap-2">
                                     <span className="font-bold text-lg leading-none">
-                                        {`D-${
-                                            new Date().getDay() -
-                                            new Date(
-                                                trip.trip_start_date,
-                                            ).getDay()
-                                        }`}
+                                        {`${remainDays(trip.trip_start_date)}`}
                                     </span>
                                     <span className="text-sm leading-none">
                                         {new Date(
@@ -180,27 +176,39 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'main' }) => {
                         'p-2',
                         mode === 'detail' &&
                             'bg-white text-main-color border-main-color rounded-xl border w-[48%]',
-                        mode === 'main' &&
-                            'bg-white text-main-color border-main-color font-bold border rounded-t-none rounded-br-none rounded-bl-lg w-1/2 ',
+                        mode === 'main' && 'hidden',
                         mode === 'card' && 'hidden',
                     )}
                 >
                     찜하기
                 </button>
-                <Link
-                    href={`/trips/${trip.trip_id}`}
+                <button
                     className={clsx(
                         'p-2 text-center',
                         mode === 'detail' &&
                             'bg-main-color text-white rounded-xl border border-main-color w-[48%]',
                         mode === 'main' &&
-                            'bg-main-color text-white font-bold rounded-t-none rounded-bl-none rounded-br-lg w-1/2',
+                            'bg-main-color text-white font-bold rounded-t-none rounded-b-lg w-full',
                         mode === 'card' &&
                             'w-full bg-main-color text-white rounded-b-lg leading-none py-2.5',
                     )}
                 >
-                    참여하기
-                </Link>
+                    {mode === 'main' ? (
+                        <Link
+                            href={`/trips/${trip.trip_id}`}
+                            className="relative block w-full h-full"
+                        >
+                            상세보기
+                        </Link>
+                    ) : (
+                        <Link
+                            href={`/chat/${trip.trip_id}`}
+                            className="relative block w-full h-full"
+                        >
+                            참여하기
+                        </Link>
+                    )}
+                </button>
             </div>
         </div>
     );
