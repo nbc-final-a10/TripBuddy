@@ -16,7 +16,7 @@ const TripList: React.FC = () => {
     return (
         <>
             {trips.map(trip => (
-                <TripCard key={trip.trip_id} trip={trip} />
+                <TripCard key={trip.trip_id} trip={trip} mode="card" />
             ))}
         </>
     );
