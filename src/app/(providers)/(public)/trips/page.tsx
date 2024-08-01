@@ -1,21 +1,29 @@
+import { getTrips } from '@/api-services/trips';
 import TripCard from '@/components/molecules/trips/TripCard';
-import React from 'react';
+import TripList from '@/components/organisms/trips/TripList';
+import { QUERY_KEY_TRIP } from '@/constants/query.constants';
+import {
+    dehydrate,
+    HydrationBoundary,
+    QueryClient,
+} from '@tanstack/react-query';
+import React, { Suspense } from 'react';
+import Loading from '../loading';
 
-const TripsPage: React.FC = () => {
+const TripsPage: React.FC = async () => {
+    const queryClient = new QueryClient();
+    await queryClient.prefetchQuery({
+        queryKey: [QUERY_KEY_TRIP],
+        queryFn: () => getTrips(),
+    });
+    const dehydratedState = dehydrate(queryClient);
+
     return (
-        <section className="grid grid-cols-1 xl:grid-cols-4 gap-4 px-4 py-4 xl:px-0">
-            {Array.from({ length: 10 }, (_, index) => (
-                <TripCard
-                    key={index}
-                    title={`Trip ${index}`}
-                    description={`Description ${index}`}
-                    date="2022-01-01"
-                    location="Seoul"
-                    participants={3}
-                    mode="main"
-                />
-            ))}
-        </section>
+        <Suspense fallback={<Loading />}>
+            <HydrationBoundary state={dehydratedState}>
+                <TripList />
+            </HydrationBoundary>
+        </Suspense>
     );
 };
 

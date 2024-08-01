@@ -3,8 +3,7 @@
 import Input from '@/components/atoms/common/O_Input';
 import useLockBodyScroll from '@/hooks/common/useLockBodyScroll';
 import clsx from 'clsx';
-import Image from 'next/image';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 
 type StorySelectMediaProps = {
     handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

@@ -1,14 +1,21 @@
-const HomePageTrips = () => {
-    const trips = Array.from({ length: 5 }, (_, index) => `trip ${index + 1}`);
+import { Trip } from '@/types/Trips.types';
+import React from 'react';
+import TripCard from '../trips/TripCard';
+
+type HomePageTripsProps = {
+    trips: Trip[];
+};
+
+const HomePageTrips: React.FC<HomePageTripsProps> = ({ trips }) => {
     return (
         <>
-            {trips.map((trip, index) => (
-                <div
-                    key={index}
-                    className="min-w-[201px] h-[192px] p-[12px] rounded-md bg-gray-200"
-                >
-                    {trip}
-                </div>
+            {trips.map(trip => (
+                <TripCard
+                    key={trip.trip_id}
+                    trip={trip}
+                    // participants={trip.trip_max_buddies_counts} // 추후변경요망 컨트랙트 참조해야함
+                    mode="main"
+                />
             ))}
         </>
     );

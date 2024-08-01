@@ -5,8 +5,8 @@ import DraggableInput from './DraggableInput';
 import Image from 'next/image';
 import useLockBodyScroll from '@/hooks/common/useLockBodyScroll';
 import clsx from 'clsx';
-import { useStoryMutation } from '@/hooks/queries';
-import { StoryData } from '@/types/Story.type';
+import useStoryMutation from '@/hooks/queries/useStoryMutation';
+import { StoryData } from '@/types/Story.types';
 
 type StoryWriteTextProps = {
     imageFile: File;
@@ -25,17 +25,17 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
 
     const { mutate, isPending, error } = useStoryMutation();
 
-    const handleSaveButtonClick = () => {
+    const handleSaveButtonClick = async () => {
         console.log('save');
 
         if (!imageFile) return;
         if (!texts.length) return;
 
-        const payload: StoryData = {
-            imageFile,
-            texts,
-        };
+        const formData = new FormData();
+        formData.append('imageFile', imageFile);
+        formData.append('texts', JSON.stringify(texts));
 
+        const payload: StoryData = formData;
         mutate(payload);
     };
 
