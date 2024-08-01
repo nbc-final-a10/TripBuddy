@@ -7,23 +7,7 @@ type ConditionalLayoutProps = {
 };
 
 const ConditionalLayout: React.FC<ConditionalLayoutProps> = ({ children }) => {
-    const { pathname, queryParams } = getPathnameServer();
-
-    return (
-        <>
-            {pathname?.includes('/trips') && (
-                <MobileHeader
-                    title="여정 보기"
-                    // notification
-                    // search
-                    // settings
-                    edit
-                    // close
-                />
-            )}
-            {children}
-        </>
-    );
+    return <>{children}</>;
 };
 
 export default ConditionalLayout;

@@ -7,9 +7,9 @@ function AuthPageBottom() {
     return (
         <>
             <div className="w-full flex items-center justify-center gap-2">
-                <hr className="w-28 border-gray-400" />
-                <p className="text-sm text-gray-500">SNS 계정으로 로그인</p>
-                <hr className="w-28 border-gray-400" />
+                <hr className="w-44 border-gray-400" />
+                <p className="text-sm text-gray-500">또는</p>
+                <hr className="w-44 border-gray-400" />
             </div>
 
             <div className="flex items-center justify-center gap-8">

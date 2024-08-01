@@ -8,6 +8,7 @@ export const QUERY_KEY_BUDDY = 'buddy';
 // contract 테이블 관련
 
 // stories / storylikes 테이블 관련
+export const QUERY_KEY_STORY = 'story';
 
 // notification 테이블 관련
 

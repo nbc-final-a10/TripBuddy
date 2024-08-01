@@ -11,10 +11,10 @@ const LogInPage: React.FC = () => {
 
             <AuthPageBottom />
 
-            <p className="text-sm text-gray-500">
-                <span>Create account?</span>
-                <Link href="/signup" className="text-blue-500">
-                    Sign up
+            <p className="text-xs text-gray-500">
+                <span>아직 회원이 아니신가요?&nbsp;</span>
+                <Link href="/signup" className="text-main-color">
+                    회원가입
                 </Link>
             </p>
         </AuthPageWrapper>
