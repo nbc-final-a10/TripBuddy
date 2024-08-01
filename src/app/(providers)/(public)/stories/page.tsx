@@ -1,20 +1,28 @@
-import StoryCard from '@/components/molecules/stories/StoryCard';
-import React from 'react';
+import { QUERY_KEY_STORY } from '@/constants/query.constants';
+import {
+    dehydrate,
+    HydrationBoundary,
+    QueryClient,
+} from '@tanstack/react-query';
+import React, { Suspense } from 'react';
+import Loading from '../loading';
+import StoryList from '@/components/organisms/stories/StoryList';
+import { getStories } from '@/api-services/stories';
 
-const StoriesPage: React.FC = () => {
+const StoriesPage: React.FC = async () => {
+    const queryClient = new QueryClient();
+    await queryClient.prefetchQuery({
+        queryKey: [QUERY_KEY_STORY],
+        queryFn: () => getStories(),
+    });
+    const dehydratedState = dehydrate(queryClient);
+
     return (
-        <section className="flex flex-col gap-4 h-[calc(100vh-50px)] overflow-hidden">
-            {Array.from({ length: 10 }, (_, index) => (
-                <StoryCard
-                    key={index}
-                    name="김소희"
-                    created_at="2024-07-26"
-                    profile_image="/images/test.webp"
-                    background_image="/images/test2.webp"
-                    mode="my"
-                />
-            ))}
-        </section>
+        <Suspense fallback={<Loading />}>
+            <HydrationBoundary state={dehydratedState}>
+                <StoryList />
+            </HydrationBoundary>
+        </Suspense>
     );
 };
 

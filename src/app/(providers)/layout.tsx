@@ -30,11 +30,11 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
 
     return (
         <main className="bg-slate-50 xl:bg-white min-h-dvh overflow-hidden">
-            <MainSectionWrapper pathname={pathname as string}>
+            <MainSectionWrapper>
                 <Suspense fallback={<Loading />}>
                     <HydrationBoundary state={dehydratedState}>
                         <AuthProvider>
-                            <MobileHeader pathname={pathname as string} />
+                            <MobileHeader />
                             <Header />
                             {children}
                             <TapMenu pathname={pathname as string} />
