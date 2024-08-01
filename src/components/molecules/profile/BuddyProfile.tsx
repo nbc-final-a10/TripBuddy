@@ -1,9 +1,9 @@
 import Loading from '@/app/(providers)/loading';
 import EditProfileButton from '@/components/atoms/profile/EditProfileButton';
-import ProfileImage from '@/components/atoms/profile/ProfileImage';
 import { useAuth } from '@/hooks/auth';
 import { Buddy } from '@/types/Auth.types';
 import { getAgeFromBirthDate } from '@/utils/common/getAgeFromBirthDate';
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
@@ -26,7 +26,13 @@ export default function BuddyProfile({
         <div className="flex flex-col items-center justify-center p-4 mt-4 xl:mt-8">
             <div className="flex items-center">
                 <div className="flex flex-col items-center">
-                    <ProfileImage />
+                    <Image
+                        src={clickedBuddy?.buddy_profile_pic || ''}
+                        alt="profile"
+                        width={100}
+                        height={100}
+                        className="rounded-full"
+                    />
                     <Link href={`/profile/edit/${clickedBuddy?.buddy_id}`}>
                         <EditProfileButton />
                     </Link>
@@ -46,7 +52,7 @@ export default function BuddyProfile({
                                 getAgeFromBirthDate(
                                     clickedBuddy?.buddy_birth,
                                 )}{' '}
-                            / {clickedBuddy?.buddy_sex}
+                            세 / {clickedBuddy?.buddy_sex}
                         </p>
                         <p className="text-gray-500">
                             {clickedBuddy?.buddy_introduction}
