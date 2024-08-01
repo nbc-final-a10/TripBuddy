@@ -13,6 +13,7 @@ const MainSectionWrapper = ({
 }: MainSectionWrapperProps) => {
     const isHidePaddingBottom =
         pathname.startsWith('/chat/') ||
+        pathname.startsWith('/stories/') ||
         pathname === '/writestory' ||
         pathname === '/login' ||
         pathname === '/signup' ||

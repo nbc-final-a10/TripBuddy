@@ -41,11 +41,11 @@ export async function POST(req: NextRequest) {
         .from('stories')
         .getPublicUrl(filePath);
 
-    const jsonb = JSON.stringify(texts);
+    // const jsonb = JSON.stringify(texts);
 
     const payload = {
         story_media: publicUrlData.publicUrl,
-        story_overlay: jsonb,
+        story_overlay: texts,
     };
 
     const { data: story, error: storyError } = await supabase

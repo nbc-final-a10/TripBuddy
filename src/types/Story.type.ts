@@ -10,3 +10,11 @@ export type StoryWithBuddies = Story & {
 export type PartialStory = Partial<Story>;
 
 export type StoryData = FormData;
+
+export type StoryOverlay = {
+    text: string;
+    position: {
+        x: number;
+        y: number;
+    };
+};
