@@ -1,17 +1,18 @@
+'use client';
 import React from 'react';
 import Arrow_Back from '../../../../public/svg/Arrow_back.svg';
 import Close from '../../../../public/svg/Close.svg';
 import Notification from '../../../../public/svg/Notifications_unread.svg';
 import Search from '../../../../public/svg/Search.svg';
 import MobileHeaderSettingsButton from '@/components/atoms/common/MobileHeaderSettingsButton';
+import { usePathname } from 'next/navigation';
 
-type MobileHeaderProps = {
-    pathname: string;
-};
+const MobileHeader: React.FC = () => {
+    const pathname = usePathname();
 
-const MobileHeader: React.FC<MobileHeaderProps> = ({ pathname }) => {
     const isTrips = pathname === '/trips';
     const isTripDetail = pathname.startsWith('/trips/');
+    const isStory = pathname.startsWith('/stories');
     const isLogin = pathname === '/login';
     const isSignup = pathname === '/signup';
     const isSearch = pathname === '/search';
@@ -29,6 +30,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ pathname }) => {
         (isSearch && '검색') ||
         (isOnboarding && '온보딩') ||
         (isProfile && '프로필') ||
+        (isStory && '스토리') ||
         (isStoryWrite && '스토리에 추가');
 
     const isShow =
@@ -40,7 +42,8 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ pathname }) => {
         isWrite ||
         isOnboarding ||
         isProfile ||
-        isStoryWrite;
+        isStoryWrite ||
+        isStory;
 
     if (!isShow) return null;
 

@@ -2,6 +2,7 @@
 export const QUERY_KEY_BUDDY = 'buddy';
 
 // trips / tripbookmarks 테이블 관련
+export const QUERY_KEY_TRIP = 'trip';
 
 // messages 테이블 관련
 
