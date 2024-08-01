@@ -3,12 +3,12 @@
 import Loading from '@/app/(providers)/loading';
 import StoryCard from '@/components/molecules/stories/StoryCard';
 import { useAuth } from '@/hooks/auth';
-import { useStoryQuery } from '@/hooks/queries';
+import { useStoriesQuery } from '@/hooks/queries';
 import React from 'react';
 
 const StoryList: React.FC = () => {
     const { buddy } = useAuth();
-    const { data: story, isPending, error: storyError } = useStoryQuery();
+    const { data: story, isPending, error: storyError } = useStoriesQuery();
 
     if (storyError) return <div>Error</div>;
     if (isPending) return <Loading />;

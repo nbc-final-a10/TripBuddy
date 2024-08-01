@@ -1,4 +1,3 @@
-import { getStory } from '@/api-services/stories';
 import { QUERY_KEY_STORY } from '@/constants/query.constants';
 import {
     dehydrate,
@@ -8,12 +7,13 @@ import {
 import React, { Suspense } from 'react';
 import Loading from '../loading';
 import StoryList from '@/components/organisms/stories/StoryList';
+import { getStories } from '@/api-services/stories';
 
 const StoriesPage: React.FC = async () => {
     const queryClient = new QueryClient();
     await queryClient.prefetchQuery({
         queryKey: [QUERY_KEY_STORY],
-        queryFn: () => getStory(),
+        queryFn: () => getStories(),
     });
     const dehydratedState = dehydrate(queryClient);
 

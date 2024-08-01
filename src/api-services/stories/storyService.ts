@@ -14,7 +14,7 @@ export async function postStory(payload: StoryData): Promise<Story> {
     }
 }
 
-export async function getStory(): Promise<StoryWithBuddies[]> {
+export async function getStories(): Promise<StoryWithBuddies[]> {
     const url = `/api/stories`;
     try {
         const data = await fetchWrapper<StoryWithBuddies[]>(url, {
