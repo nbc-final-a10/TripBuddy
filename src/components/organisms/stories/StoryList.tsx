@@ -3,7 +3,7 @@
 import Loading from '@/app/(providers)/loading';
 import StoryCard from '@/components/molecules/stories/StoryCard';
 import { useAuth } from '@/hooks/auth';
-import { useStoriesQuery } from '@/hooks/queries';
+import useStoriesQuery from '@/hooks/queries/useStoriesQuery';
 import React from 'react';
 
 const StoryList: React.FC = () => {

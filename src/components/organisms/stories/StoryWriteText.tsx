@@ -5,8 +5,8 @@ import DraggableInput from './DraggableInput';
 import Image from 'next/image';
 import useLockBodyScroll from '@/hooks/common/useLockBodyScroll';
 import clsx from 'clsx';
-import { useStoryMutation } from '@/hooks/queries';
 import { StoryData } from '@/types/Story.type';
+import useStoryMutation from '@/hooks/queries/useStoryMutation';
 
 type StoryWriteTextProps = {
     imageFile: File;
