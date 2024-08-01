@@ -49,7 +49,7 @@ const SearchPage: React.FC = () => {
     //     endAge: state.endAge,
     // }));
 
-    const [PreferBuddyTheme] = usePreferTheme({
+    const [PreferBuddyTheme, selectedBuddyThemes] = usePreferTheme({
         mode: 'buddy',
     });
 
@@ -63,10 +63,12 @@ const SearchPage: React.FC = () => {
 
     // const router = useRouter();
 
-    const { setItems, setSelectedThemes } = useSearchStore(state => ({
-        setItems: state.setItems,
-        setSelectedThemes: state.setSelectedThemes,
-    }));
+    const { setItems, setSelectedThemes, setSelectedBuddyThemes } =
+        useSearchStore(state => ({
+            setItems: state.setItems,
+            setSelectedThemes: state.setSelectedThemes,
+            setSelectedBuddyThemes: state.setSelectedBuddyThemes,
+        }));
 
     const handleShowResult = async () => {
         // 데이터 가져와서 상태 업데이트
@@ -78,6 +80,7 @@ const SearchPage: React.FC = () => {
         }
 
         setSelectedThemes(selectedTripThemes);
+        setSelectedBuddyThemes(selectedBuddyThemes);
 
         setShowResult(true);
         // 속도 지연

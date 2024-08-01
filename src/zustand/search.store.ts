@@ -33,6 +33,9 @@ type SearchStore = {
     selectedThemes: string[];
     setSelectedThemes: (themes: string[]) => void;
 
+    selectedBuddyThemes: string[];
+    setSelectedBuddyThemes: (themes: string[]) => void;
+
     getFilteredItems: () => Trip[];
 };
 
@@ -92,6 +95,10 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
     selectedThemes: [],
     setSelectedThemes: (themes: string[]) => set({ selectedThemes: themes }),
 
+    selectedBuddyThemes: [],
+    setSelectedBuddyThemes: (themes: string[]) =>
+        set({ selectedBuddyThemes: themes }),
+
     getFilteredItems: () => {
         const state = get();
         let filteredItems = state.items;
@@ -139,6 +146,18 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
                         item.trip_theme1,
                         item.trip_theme2,
                         item.trip_theme3,
+                    ].includes(theme),
+                ),
+            );
+        }
+
+        if (state.selectedBuddyThemes.length > 0) {
+            filteredItems = filteredItems.filter((item: Trip) =>
+                state.selectedBuddyThemes.every(theme =>
+                    [
+                        item.trip_wanted_buddies1,
+                        item.trip_wanted_buddies2,
+                        item.trip_wanted_buddies3,
                     ].includes(theme),
                 ),
             );

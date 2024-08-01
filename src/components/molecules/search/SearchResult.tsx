@@ -63,7 +63,16 @@ const SearchResult: React.FC = () => {
                                 </p> */}
                                 <p className="text-sm">{item.trip_theme1}</p>
                                 <p className="text-sm">{item.trip_theme2}</p>
-                                <p className="text-sm">{item.trip_theme3}</p>
+                                <p className="text-sm">{item.trip_theme3}</p>,
+                                <p className="text-sm">
+                                    {item.trip_wanted_buddies1}
+                                </p>
+                                <p className="text-sm">
+                                    {item.trip_wanted_buddies2}
+                                </p>
+                                <p className="text-sm">
+                                    {item.trip_wanted_buddies3}
+                                </p>
                             </div>
                         ),
                     )}
