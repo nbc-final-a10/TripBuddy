@@ -23,7 +23,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'main' }) => {
                 'bg-white box-border h-fit shadow-lg',
                 mode === 'detail' && 'p-4',
                 mode === 'main' && 'rounded-lg',
-                mode === 'card' && 'w-[90%] h-[215px]',
+                mode === 'card' && 'w-[90%] h-[215px] rounded-lg',
             )}
         >
             <div
@@ -177,7 +177,8 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'main' }) => {
                         mode === 'detail' &&
                             'bg-white text-main-color border-main-color rounded-xl border w-[48%]',
                         mode === 'main' && 'hidden',
-                        mode === 'card' && 'hidden',
+                        mode === 'card' &&
+                            'bg-white text-main-color border-main-color rounded-br-none rounded-bl-lg border w-1/2',
                     )}
                 >
                     찜하기
@@ -190,7 +191,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'main' }) => {
                         mode === 'main' &&
                             'bg-main-color text-white font-bold rounded-t-none rounded-b-lg w-full',
                         mode === 'card' &&
-                            'w-full bg-main-color text-white rounded-b-lg leading-none py-2.5',
+                            'w-1/2 bg-main-color text-white rounded-br-lg rounded-bl-none leading-none py-2.5',
                     )}
                 >
                     {mode === 'main' ? (
