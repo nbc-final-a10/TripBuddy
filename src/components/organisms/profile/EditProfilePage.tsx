@@ -1,22 +1,37 @@
 'use client';
 
 import ProfileEditColumn from '@/components/atoms/profile/ProfileEditColumn';
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { Buddy } from '@/types/Auth.types';
 import EditProfileSkeleton from '@/components/molecules/profile/EditProfileSkeleton';
+import { getAgeFromBirthDate } from '@/utils/common/getAgeFromBirthDate';
+import Link from 'next/link';
 
 type EditProfilePageProps = {
     buddy: Buddy;
 };
 
 function EditProfilePage({ buddy }: EditProfilePageProps) {
+    const [isOpen, setIsOpen] = useState({
+        journey: false,
+        personality: false,
+        password: false,
+    });
+
     if (!buddy) {
         return <EditProfileSkeleton />;
     }
 
     // Todo: 온보딩 없으면 예외 처리 하기
     if (buddy.buddy_isOnBoarding) {
+        const toggleAccordion = (key: keyof typeof isOpen) => {
+            setIsOpen(prev => ({
+                ...prev,
+                [key]: !prev[key],
+            }));
+        };
+
         return (
             <div className="flex flex-col items-center p-4min-h-screen">
                 <div className="w-full max-w-lg rounded-lg p-6">
@@ -53,57 +68,102 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                             </button>
                         </div>
                         <button className="mt-2">프로필 사진 삭제</button>
-                        <p className="mt-2 text-gray-500">
+                        {/* Todo: 추후 구현 - 컬럼 추가? */}
+                        {/* <p className="mt-2 text-gray-500">
                             카카오 로그인 상태입니다
-                        </p>
+                        </p> */}
                     </div>
                     <div className="mt-6">
                         <table className="w-full">
                             <tbody>
                                 <ProfileEditColumn
                                     label="닉네임"
-                                    value="김버디"
+                                    value={buddy.buddy_nickname}
                                 />
                                 <ProfileEditColumn label="성별" value="여성" />
                                 <ProfileEditColumn
                                     label="출생년도"
-                                    value="1997"
+                                    value={String(
+                                        getAgeFromBirthDate(
+                                            buddy?.buddy_birth || '',
+                                        ),
+                                    )}
                                 />
                                 <ProfileEditColumn
                                     label="소개"
-                                    value="맛집, 예쁜 카페 탐방 좋아해요~!"
+                                    value={buddy.buddy_introduction || ''}
                                 />
                                 <ProfileEditColumn label="MBTI" value="ENFP" />
                                 <ProfileEditColumn
                                     label="거주지"
-                                    value="경기도 수원"
+                                    value={buddy.buddy_region || ''}
                                 />
-                                <tr className="flex justify-between py-2">
-                                    <td className="w-1/2 text-gray-600">
+                                <div
+                                    className="flex justify-between py-2"
+                                    onClick={() => toggleAccordion('journey')}
+                                >
+                                    <span className="w-1/2 text-gray-600">
                                         선호 여정
-                                    </td>
-                                    <td className="w-1/2 text-blue-500 text-right">
-                                        &gt;
-                                    </td>
-                                </tr>
-                                <tr className="flex justify-between py-2">
-                                    <td className="w-1/2 text-gray-600">
+                                    </span>
+                                    <span className="w-1/2 text-blue-500 text-right">
+                                        {isOpen.journey ? '-' : '+'}
+                                    </span>
+                                </div>
+                                {isOpen.journey && (
+                                    <div className="pl-4">
+                                        <span className="inline-block bg-main-color rounded-full px-3 py-1 text-sm text-white mr-2">
+                                            {buddy.buddy_preferred_theme1}
+                                        </span>
+                                        <span className="inline-block bg-main-color rounded-full px-3 py-1 text-sm text-white mr-2">
+                                            {buddy.buddy_preferred_theme2}
+                                        </span>
+                                        <span className="inline-block bg-main-color rounded-full px-3 py-1 text-sm text-white mr-2">
+                                            {buddy.buddy_preferred_theme3}
+                                        </span>
+                                    </div>
+                                )}
+                                <div
+                                    className="flex justify-between py-2"
+                                    onClick={() =>
+                                        toggleAccordion('personality')
+                                    }
+                                >
+                                    <span className="w-1/2 text-gray-600">
                                         버디즈 성향
-                                    </td>
-                                    <td className="w-1/2 text-blue-500 text-right">
-                                        &gt;
-                                    </td>
-                                </tr>
-                                <tr className="flex justify-between py-2">
-                                    <td className="w-1/2 text-gray-600">
-                                        비밀번호 변경
-                                    </td>
-                                    <td className="w-1/2 text-blue-500 text-right">
-                                        &gt;
-                                    </td>
-                                </tr>
+                                    </span>
+                                    <span className="w-1/2 text-blue-500 text-right">
+                                        {isOpen.personality ? '-' : '+'}
+                                    </span>
+                                </div>
+                                {isOpen.personality && (
+                                    <div className="pl-4">
+                                        <span className="inline-block bg-main-color rounded-full px-3 py-1 text-sm text-white mr-2">
+                                            {buddy.buddy_preferred_buddy1}
+                                        </span>
+                                        <span className="inline-block bg-main-color rounded-full px-3 py-1 text-sm text-white mr-2">
+                                            {buddy.buddy_preferred_buddy2}
+                                        </span>
+                                        <span className="inline-block bg-main-color rounded-full px-3 py-1 text-sm text-white mr-2">
+                                            {buddy.buddy_preferred_buddy3}
+                                        </span>
+                                    </div>
+                                )}
                             </tbody>
                         </table>
+                        {/* 비밀번호 변경 섹션 */}
+                        <div
+                            className="flex justify-between py-2"
+                            onClick={() => toggleAccordion('password')}
+                        >
+                            <span className="w-1/2 text-gray-600">
+                                비밀번호 변경
+                            </span>
+                            <Link href="/recover">
+                                <span className="w-1/2 text-blue-500 text-right">
+                                    {'>'}
+                                </span>
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>
