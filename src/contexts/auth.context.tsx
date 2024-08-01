@@ -7,12 +7,11 @@ import {
     postSendingResetEmail,
 } from '@/api-services/auth/client';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
-import {
-    useBuddyQuery,
-    useLogInMutation,
-    useNaverLogInMutation,
-    useSignUpMutation,
-} from '@/hooks/queries';
+import useBuddyQuery from '@/hooks/queries/useBuddyQuery';
+import useLogInMutation from '@/hooks/queries/useLogInMutation';
+import useNaverLogInMutation from '@/hooks/queries/useNaverLogInMutation';
+import useSignUpMutation from '@/hooks/queries/useSignUpMutation';
+
 import { Buddy } from '@/types/Auth.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { Provider } from '@supabase/supabase-js';
