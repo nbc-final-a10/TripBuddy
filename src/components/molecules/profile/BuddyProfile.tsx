@@ -43,7 +43,7 @@ export default function BuddyProfile({
                             <span className="text-2xl font-bold xl:text-3xl">
                                 {clickedBuddy?.buddy_nickname}
                             </span>
-                            <span className="bg-gray-200 rounded-full px-3 py-1 text-sm text-gray-700 ml-2">
+                            <span className="bg-main-color rounded-full px-3 py-1 text-sm text-white ml-2">
                                 {clickedBuddy?.buddy_mbti}
                             </span>
                         </div>
@@ -63,13 +63,13 @@ export default function BuddyProfile({
 
                         {clickedBuddy?.buddy_preferred_buddy1 ? (
                             <div className="mt-4">
-                                <span className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
+                                <span className="bg-[#fff0d1] rounded-full px-3 py-1 text-sm font-semibold text-main-color mr-2">
                                     {clickedBuddy?.buddy_preferred_buddy1}
                                 </span>
-                                <span className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
+                                <span className="bg-[#fff0d1] rounded-full px-3 py-1 text-sm font-semibold text-main-color mr-2">
                                     {clickedBuddy?.buddy_preferred_buddy2}
                                 </span>
-                                <span className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
+                                <span className="bg-[#fff0d1] rounded-full px-3 py-1 text-sm font-semibold text-main-color">
                                     {clickedBuddy?.buddy_preferred_buddy3}
                                 </span>
                             </div>
