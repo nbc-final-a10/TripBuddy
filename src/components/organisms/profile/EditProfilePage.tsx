@@ -10,7 +10,12 @@ function EditProfilePage({ id }: BuddyProfileProps) {
                 <div className="flex flex-col items-center mt-6">
                     <div className="relative">
                         {/* 프로필 이미지 */}
-                        <ProfileImage />
+                        <Image
+                            src="/default-profile.png"
+                            alt="profile"
+                            width={100}
+                            height={100}
+                        />
 
                         {/* 프로필 사진 변경 버튼 */}
                         <button className="absolute bottom-0 right-0 p-2 bg-gray-200 rounded-full border-4 border-white">

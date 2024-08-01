@@ -6,6 +6,7 @@ import { getAgeFromBirthDate } from '@/utils/common/getAgeFromBirthDate';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import BuddyProfileSkeleton from './BuddyProfileSkeleton';
 
 type BuddyProfileProps = {
     clickedBuddy: Buddy | null;
@@ -19,7 +20,7 @@ export default function BuddyProfile({
     const { buddy } = useAuth();
 
     if (loading) {
-        return <Loading />;
+        return <BuddyProfileSkeleton />;
     }
 
     return (
@@ -31,7 +32,7 @@ export default function BuddyProfile({
                         alt="profile"
                         width={100}
                         height={100}
-                        className="rounded-full"
+                        className="rounded-full w-[100px] h-[100px]"
                     />
                     <Link href={`/profile/edit/${clickedBuddy?.buddy_id}`}>
                         <EditProfileButton />
