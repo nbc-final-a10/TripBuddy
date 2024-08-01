@@ -1,20 +1,17 @@
-import Loading from '@/app/(providers)/loading';
-import useStoriesQuery from '@/hooks/queries/useStoriesQuery';
 import StoryCard from '../stories/StoryCard';
-import { useAuth } from '@/hooks/auth';
+import { StoryWithBuddies } from '@/types/Story.types';
+import { Buddy } from '@/types/Auth.types';
+import React from 'react';
 
-const HomePageStories = () => {
-    // const stories = Array.from(
-    //     { length: 5 },
-    //     (_, index) => `스토리 ${index + 1}`,
-    // );
-    const { buddy } = useAuth();
+type HomePageStoriesProps = {
+    stories: StoryWithBuddies[];
+    buddy: Buddy | null;
+};
 
-    const { data: stories, isPending, error: storyError } = useStoriesQuery();
-
-    if (storyError) return <div>Error</div>;
-    if (isPending) return <Loading />;
-
+const HomePageStories: React.FC<HomePageStoriesProps> = ({
+    stories,
+    buddy,
+}: HomePageStoriesProps) => {
     return (
         <>
             {stories?.map(story => (

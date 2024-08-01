@@ -1,4 +1,4 @@
-import { StoryWithBuddies } from '@/types/Story.type';
+import { StoryWithBuddies } from '@/types/Story.types';
 import convertToWebP from '@/utils/common/convertToWebp';
 import { createClient } from '@/utils/supabase/server';
 import { PostgrestError } from '@supabase/supabase-js';
@@ -68,7 +68,7 @@ export async function GET() {
     const supabase = createClient();
 
     const {
-        data: story,
+        data: stories,
         error: storyError,
     }: {
         data: StoryWithBuddies[] | null;
@@ -86,11 +86,11 @@ export async function GET() {
         );
     }
 
-    if (!story) {
+    if (!stories) {
         return NextResponse.json(
             { error: 'Stories not found' },
             { status: 404 },
         );
     }
-    return NextResponse.json(story, { status: 200 });
+    return NextResponse.json(stories, { status: 200 });
 }

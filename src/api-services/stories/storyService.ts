@@ -1,4 +1,4 @@
-import { Story, StoryData, StoryWithBuddies } from '@/types/Story.type';
+import { Story, StoryData, StoryWithBuddies } from '@/types/Story.types';
 import fetchWrapper from '@/utils/api/fetchWrapper';
 
 export async function postStory(payload: StoryData): Promise<Story> {
