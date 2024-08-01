@@ -14,10 +14,10 @@ const Title: React.FC<O_TitleProps> = ({
 }) => {
     return (
         <div
-            className={clsx('flex flex-col w-full items-center py-4', {
-                'justify-start': align === 'left',
-                'justify-end': align === 'right',
-                'justify-center': align === 'center',
+            className={clsx('flex flex-col w-full py-1 px-3', {
+                'items-start': align === 'left',
+                'items-end': align === 'right',
+                'items-center': align === 'center',
             })}
         >
             <h2

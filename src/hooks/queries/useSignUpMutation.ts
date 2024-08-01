@@ -3,7 +3,7 @@ import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import { Buddy, LogInData } from '@/types/Auth.types';
 import { postSignUp } from '@/api-services/auth/client';
 
-export function useSignUpMutation() {
+export default function useSignUpMutation() {
     const queryClient = useQueryClient();
     return useMutation<Buddy | null, Error, LogInData>({
         mutationFn: (data: LogInData) => postSignUp(data),

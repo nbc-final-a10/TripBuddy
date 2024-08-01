@@ -1,13 +1,16 @@
 'use client';
 
 import HomePageSearchBar from '@/components/atoms/HomePageSearchBar';
-import HomePageBuddies from '@/components/molecules/homepage/HomePageBuddies';
 import HomePageStories from '@/components/molecules/homepage/HomePageStories';
 import HomePageTrips from '@/components/molecules/homepage/HomePageTrips';
 import React, { useRef } from 'react';
 import useTapScroll from '@/hooks/useTapScroll';
 import HomePageTitle from '@/components/molecules/homepage/HomePageTitle';
 import Link from 'next/link';
+import HomePageRecommnedBuddiesList from './HomePageRecommnedBuddiesList';
+import { useAuth } from '@/hooks/auth';
+import useHomeQuery from '@/hooks/queries/useHomeQuery';
+import Loading from '@/app/(providers)/loading';
 
 const HomePageContainer = () => {
     const buddiesRef = useRef<HTMLDivElement>(null);
@@ -15,6 +18,17 @@ const HomePageContainer = () => {
     const tripsRef = useRef<HTMLDivElement>(null);
 
     const { createMouseDownHandler } = useTapScroll();
+
+    const { buddy } = useAuth();
+
+    const {
+        data: buddyTripStory,
+        isPending,
+        error: storyError,
+    } = useHomeQuery();
+
+    if (storyError) return <div>Error</div>;
+    if (isPending) return <Loading />;
 
     return (
         <div className="rounded-t-[32px] bg-white p-4">
@@ -33,7 +47,7 @@ const HomePageContainer = () => {
                     ref={buddiesRef}
                     onMouseDown={createMouseDownHandler(buddiesRef)}
                 >
-                    <HomePageBuddies />
+                    <HomePageRecommnedBuddiesList />
                 </div>
             </div>
 
@@ -48,7 +62,10 @@ const HomePageContainer = () => {
                     ref={storiesRef}
                     onMouseDown={createMouseDownHandler(storiesRef)}
                 >
-                    <HomePageStories />
+                    <HomePageStories
+                        stories={buddyTripStory.stories}
+                        buddy={buddy || null}
+                    />
                 </div>
             </div>
 
@@ -63,7 +80,7 @@ const HomePageContainer = () => {
                     ref={tripsRef}
                     onMouseDown={createMouseDownHandler(tripsRef)}
                 >
-                    <HomePageTrips />
+                    <HomePageTrips trips={buddyTripStory.trips} />
                 </div>
             </div>
         </div>
