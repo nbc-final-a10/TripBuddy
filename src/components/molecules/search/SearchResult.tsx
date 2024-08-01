@@ -54,10 +54,10 @@ const SearchResult: React.FC = () => {
                                 <p className="text-sm">{item.trip_start_age}</p>
                                 최대:{' '}
                                 <p className="text-sm">{item.trip_end_age}</p>
-                                {/* 인원수:{' '}
+                                인원수:{' '}
                                 <p className="text-sm">
                                     {item.trip_max_buddies_counts}
-                                </p> */}
+                                </p>
                                 {/* <p className="text-sm">
                                     {item.trip_final_destination}
                                 </p> */}

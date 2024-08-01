@@ -13,11 +13,9 @@ type SearchStore = {
 
     selectedGender: string | null;
     setSelectedGender: (gender: string | null) => void;
-    // getGenderFilteredItems: () => Trip[];
 
     selectedMeetingPlace: string | null;
     setSelectedMeetingPlace: (place: string | null) => void;
-    // getSelectedMeetingPlace: () => Trip[];
 
     startAge: number;
     endAge: number;
@@ -57,28 +55,9 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
     setSelectedGender: (gender: string | null) =>
         set({ selectedGender: gender }),
 
-    // getGenderFilteredItems: () => {
-    //     const state = get();
-    //     return state.selectedGender
-    //         ? state.items.filter(
-    //               (item: Trip) => item.trip_wanted_sex === state.selectedGender,
-    //           )
-    //         : state.items;
-    // },
-
     selectedMeetingPlace: null,
     setSelectedMeetingPlace: (place: string | null) =>
         set({ selectedMeetingPlace: place }),
-
-    // getSelectedMeetingPlace: () => {
-    //     const state = get();
-    //     return state.selectedMeetingPlace
-    //         ? state.items.filter(
-    //               (item: Trip) =>
-    //                   item.trip_meet_location === state.selectedMeetingPlace,
-    //           )
-    //         : state.items;
-    // },
 
     startAge: 18,
     endAge: 150,
@@ -124,12 +103,12 @@ export const useSearchStore = create<SearchStore>((set, get) => ({
             );
         }
 
-        // if (state.buddyCount !== null) {
-        //     filteredItems = filteredItems.filter(
-        //         (item: Trip) =>
-        //             item.trip_max_buddies_counts === state.buddyCount,
-        //     );
-        // }
+        if (state.buddyCount !== null) {
+            filteredItems = filteredItems.filter(
+                (item: Trip) =>
+                    item.trip_max_buddies_counts === state.buddyCount,
+            );
+        }
 
         if (state.thirdLevelLocation !== null) {
             filteredItems = filteredItems.filter((item: Trip) =>

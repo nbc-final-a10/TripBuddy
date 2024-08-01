@@ -34,21 +34,15 @@ const SelectAgesRange: React.FC<SelectAgesRangeProps> = ({
                     type="number"
                     value={startAge}
                     onChange={e => handleStartAge(Number(e.target.value))}
-                    className="bg-gray-100 w-full px-4 py-1 xl:py-2 rounded-full hover:bg-gray-200 text-right pr-9"
+                    className="bg-gray-100 w-full px-4 py-1 xl:py-2 rounded-full hover:bg-gray-200 text-right pr-5"
                 />
-                <span className="absolute left-[120px] top-1/2 transform -translate-y-1/2">
-                    세
-                </span>
                 <span className="text-lg mx-2"> ~ </span>
                 <input
                     type="number"
                     value={endAge}
                     onChange={e => handleEndAge(Number(e.target.value))}
-                    className="bg-gray-100 w-full px-4 py-1 xl:py-2 rounded-full hover:bg-gray-200 text-right pr-9"
+                    className="bg-gray-100 w-full px-4 py-1 xl:py-2 rounded-full hover:bg-gray-200 text-right pr-5"
                 />
-                <span className="absolute right-9 top-1/2 transform -translate-y-1/2">
-                    세
-                </span>
             </div>
             <div className="relative w-full my-3 mt-5">
                 <Range

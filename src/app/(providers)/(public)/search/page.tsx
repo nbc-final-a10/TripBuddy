@@ -26,8 +26,8 @@ const SearchPage: React.FC = () => {
         setStartAge,
         setEndAge,
 
-        // buddyCount,
-        // setBuddyCount,
+        buddyCount,
+        setBuddyCount,
 
         // setThirdLevelLocation,
     } = useSearchStore(
@@ -37,8 +37,8 @@ const SearchPage: React.FC = () => {
             setStartAge: state.setStartAge,
             setEndAge: state.setEndAge,
 
-            // buddyCount: state.buddyCount,
-            // setBuddyCount: state.setBuddyCount,
+            buddyCount: state.buddyCount,
+            setBuddyCount: state.setBuddyCount,
 
             // setThirdLevelLocation: state.setThirdLevelLocation,
         })),
@@ -57,7 +57,7 @@ const SearchPage: React.FC = () => {
         mode: 'trip',
     });
 
-    const { SelectBuddyCounts } = useSelectBuddyCounts();
+    const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
     const { SelectRegion, thirdLevelLocation } = useSelectRegion();
     // console.log('Third Level Location:', thirdLevelLocation);
 
@@ -81,6 +81,7 @@ const SearchPage: React.FC = () => {
 
         setSelectedThemes(selectedTripThemes);
         setSelectedBuddyThemes(selectedBuddyThemes);
+        setBuddyCount(buddyCounts);
 
         setShowResult(true);
         // 속도 지연
