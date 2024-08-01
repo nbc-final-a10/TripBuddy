@@ -37,7 +37,7 @@ const ChatList = () => {
         const fetchContracts = async () => {
             const { data: contracts, error: contractsError } = await supabase
                 .from<Contract>('contract')
-                .select('contract_id, contract_trip_id, contract_buddy_id')
+                .select('contract_id, contract_trip_id')
                 .eq('contract_buddy_id', currentBuddy.buddy_id)
                 .eq('contract_isPending', false)
                 .eq('contract_isValidate', true);
@@ -49,34 +49,42 @@ const ChatList = () => {
 
             if (!contracts) return;
 
-            const contractIds = [
-                ...new Set(contracts.map(contract => contract.contract_id)),
-            ];
-            const tripIds = [
-                ...new Set(
-                    contracts.map(contract => contract.contract_trip_id),
-                ),
-            ];
+            const contractIds = contracts.map(contract => contract.contract_id);
+            const tripIds = contracts.map(
+                contract => contract.contract_trip_id,
+            );
 
             const { data: allBuddies, error: allBuddiesError } = await supabase
                 .from<Contract>('contract')
-                .select('contract_buddy_id, contract_id')
-                .in('contract_id', contractIds);
+                .select('contract_buddy_id, contract_id, contract_trip_id')
+                .in('contract_trip_id', tripIds);
 
             if (allBuddiesError) {
                 console.error('Error fetching all buddies:', allBuddiesError);
                 return;
-            }
+            } else console.log('buddy fetch 성공!', allBuddies);
 
-            const allBuddyIds = allBuddies.map(
-                buddy => buddy.contract_buddy_id,
+            const buddiesByTrip = new Map<string, Set<string>>();
+            allBuddies.forEach(buddy => {
+                if (!buddiesByTrip.has(buddy.contract_trip_id)) {
+                    buddiesByTrip.set(
+                        buddy.contract_trip_id,
+                        new Set<string>(),
+                    );
+                }
+                buddiesByTrip
+                    .get(buddy.contract_trip_id)!
+                    .add(buddy.contract_buddy_id);
+            });
+
+            const allBuddyIds = Array.from(
+                new Set(allBuddies.map(buddy => buddy.contract_buddy_id)),
             );
-            const uniqueBuddyIds = [...new Set(allBuddyIds)];
 
             const { data: buddyProfiles, error: buddyError } = await supabase
                 .from<BuddyProfile>('buddies')
                 .select('buddy_id, buddy_profile_pic')
-                .in('buddy_id', uniqueBuddyIds);
+                .in('buddy_id', allBuddyIds);
 
             if (buddyError) {
                 console.error('Error fetching buddy profiles:', buddyError);
@@ -124,11 +132,15 @@ const ChatList = () => {
                     });
                 }
 
-                const buddyProfile =
-                    buddyProfileMap.get(contract.contract_buddy_id) || '';
+                const buddyIds =
+                    buddiesByTrip.get(contract_trip_id) || new Set();
+                const buddyProfiles = Array.from(buddyIds).map(
+                    buddyId => buddyProfileMap.get(buddyId) || '',
+                );
+
                 const contractData = contractDataMap.get(contract_id);
-                if (contractData && buddyProfile) {
-                    contractData.contract_buddies_profiles.push(buddyProfile);
+                if (contractData) {
+                    contractData.contract_buddies_profiles = buddyProfiles;
                 }
             });
 
