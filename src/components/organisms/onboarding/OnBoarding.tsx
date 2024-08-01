@@ -2,7 +2,6 @@
 
 import ProgressIndicator from '@/components/atoms/write/ProgressIndicator';
 import { useAuth } from '@/hooks/auth';
-import { useUpdateBuddyMutation } from '@/hooks/queries';
 import useNextButton from '@/hooks/useFunnelNextStep';
 import usePreferTheme from '@/hooks/usePreferTheme';
 import { showAlert } from '@/utils/ui/openCustomAlert';
@@ -20,6 +19,7 @@ import { getBirthDate } from '@/utils/common/getBirthDate';
 import OnBoardingCalender from './OnBoardingCalender';
 import { CalendarDate, parseDate } from '@internationalized/date';
 import { getAgeFromBirthDate } from '@/utils/common/getAgeFromBirthDate';
+import useUpdateBuddyMutation from '@/hooks/queries/useUpdateBuddyMutation';
 
 const buttonText = [
     '다음',
