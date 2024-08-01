@@ -1,4 +1,3 @@
-import { StoryData } from '@/types/Story.type';
 import convertToWebP from '@/utils/common/convertToWebp';
 import { createClient } from '@/utils/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
