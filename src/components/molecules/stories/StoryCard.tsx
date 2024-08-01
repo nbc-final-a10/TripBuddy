@@ -25,6 +25,7 @@ const StoryCard: React.FC<StoryCardProps> = ({
                 src={background_image}
                 alt="my-profile-background"
                 fill
+                priority
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover rounded-lg"
             />

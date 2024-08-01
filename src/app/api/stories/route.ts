@@ -1,3 +1,4 @@
+import { Story } from '@/types/Story.type';
 import convertToWebP from '@/utils/common/convertToWebp';
 import { createClient } from '@/utils/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
@@ -59,5 +60,23 @@ export async function POST(req: NextRequest) {
         );
     }
 
+    return NextResponse.json(story, { status: 200 });
+}
+
+export async function GET() {
+    const supabase = createClient();
+
+    const { data: story, error: storyError } = await supabase
+        .from('stories')
+        .select('*, buddies:story_created_by (*)')
+        .order('story_created_at', { ascending: false });
+
+    if (storyError) {
+        console.error(storyError);
+        return NextResponse.json(
+            { error: storyError?.message },
+            { status: 401 },
+        );
+    }
     return NextResponse.json(story, { status: 200 });
 }
