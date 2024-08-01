@@ -32,15 +32,11 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
         if (!imageFile) return;
         if (!texts.length) return;
 
-        const imageBuffer = await convertToBuffer(imageFile);
+        const formData = new FormData();
+        formData.append('imageFile', imageFile);
+        formData.append('texts', JSON.stringify(texts));
 
-        if (!imageBuffer) return;
-
-        const payload: StoryData = {
-            imageBuffered: imageBuffer,
-            texts,
-        };
-
+        const payload: StoryData = formData;
         mutate(payload);
     };
 

@@ -6,7 +6,7 @@ export async function postStory(payload: StoryData): Promise<Story> {
     try {
         const data = await fetchWrapper<Story>(url, {
             method: 'POST',
-            body: JSON.stringify(payload),
+            body: payload,
         });
         return data;
     } catch (error: any) {

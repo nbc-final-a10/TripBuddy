@@ -4,12 +4,21 @@ import { createClient } from '@/utils/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
-    const { imageBuffered, texts }: StoryData = await req.json();
+    const formData = await req.formData();
+    const file = formData.get('imageFile') as Blob;
+    const texts = JSON.parse(formData.get('texts') as string);
+
+    if (!file) {
+        return NextResponse.json(
+            { error: 'No file uploaded' },
+            { status: 400 },
+        );
+    }
+
+    const imageBuffer = await convertToWebP(file, 1080);
+
     const supabase = createClient();
-
     const filePath = `stories_${Date.now()}.webp`;
-
-    const imageBuffer = await convertToWebP(imageBuffered, 1080);
 
     if (!imageBuffer) {
         return NextResponse.json(
