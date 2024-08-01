@@ -1,12 +1,10 @@
 import EditProfileButton from '@/components/atoms/profile/EditProfileButton';
-import { useAuth } from '@/hooks/auth';
 import { Buddy } from '@/types/Auth.types';
 import { getAgeFromBirthDate } from '@/utils/common/getAgeFromBirthDate';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import BuddyProfileSkeleton from './BuddyProfileSkeleton';
-import MascotImage from '@/components/atoms/common/O_MascotImage';
 
 type BuddyProfileProps = {
     clickedBuddy: Buddy | null;
@@ -63,17 +61,25 @@ export default function BuddyProfile({
                             {clickedBuddy?.buddy_region}
                         </p>
 
-                        <div className="mt-4">
-                            <span className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
-                                {clickedBuddy?.buddy_preferred_buddy1}
-                            </span>
-                            <span className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
-                                {clickedBuddy?.buddy_preferred_buddy2}
-                            </span>
-                            <span className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
-                                {clickedBuddy?.buddy_preferred_buddy3}
-                            </span>
-                        </div>
+                        {clickedBuddy?.buddy_preferred_buddy1 ? (
+                            <div className="mt-4">
+                                <span className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
+                                    {clickedBuddy?.buddy_preferred_buddy1}
+                                </span>
+                                <span className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
+                                    {clickedBuddy?.buddy_preferred_buddy2}
+                                </span>
+                                <span className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
+                                    {clickedBuddy?.buddy_preferred_buddy3}
+                                </span>
+                            </div>
+                        ) : (
+                            <div className="mt-4">
+                                <span className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
+                                    선호하는 버디를 등록해주세요.
+                                </span>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

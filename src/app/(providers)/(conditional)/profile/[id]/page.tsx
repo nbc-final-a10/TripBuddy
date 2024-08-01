@@ -34,8 +34,6 @@ function ProfilePage({ params }: ProfilePageProps) {
 
     return (
         <>
-            <section>유저 아이디 {params.id}</section>
-
             <section className="flex flex-col items-center justify-center w-full h-full">
                 <BuddyProfile
                     clickedBuddy={clickedBuddy || null}
