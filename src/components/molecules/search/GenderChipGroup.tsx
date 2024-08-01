@@ -1,16 +1,19 @@
 import React from 'react';
 import Chip from '@/components/atoms/common/O_Chip';
 import { Gender } from '@/types/Gender.types';
-import { useSearchStore } from '@/zustand/search.store';
+// import { useSearchStore } from '@/zustand/search.store';
 
 const genderOptions: Gender[] = ['여자만', '남자만', '상관없음'];
 
-const GenderChipGroup: React.FC = () => {
-    const { selectedGender, setSelectedGender } = useSearchStore(state => ({
-        selectedGender: state.selectedGender,
-        setSelectedGender: state.setSelectedGender,
-    }));
+type GenderChipGroupProps = {
+    selectedGender: string | null;
+    setSelectedGender: (gender: string | null) => void;
+};
 
+const GenderChipGroup: React.FC<GenderChipGroupProps> = ({
+    selectedGender,
+    setSelectedGender,
+}) => {
     const handleGenderClick = async (gender: string) => {
         const isSelected = selectedGender === gender;
         const newSelectedGender = isSelected ? null : gender;

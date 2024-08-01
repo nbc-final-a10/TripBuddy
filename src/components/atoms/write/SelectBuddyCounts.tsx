@@ -2,15 +2,23 @@ import React from 'react';
 
 import { useState } from 'react';
 
-export default function SelectBuddyCounts() {
-    const [buddyCounts, setBuddyCounts] = useState(1);
+type SelectBuddyCountsProps = {
+    buddyCounts: number | null;
+    setBuddyCounts: (count: number | null) => void;
+};
+
+export default function SelectBuddyCounts({
+    buddyCounts,
+    setBuddyCounts,
+}: SelectBuddyCountsProps) {
+    // const [buddyCounts, setBuddyCounts] = useState(1);
 
     return (
         <div className="flex flex-row gap-[2px]">
             <button
                 className="text-[#647484] w-[30px] h-[30px] xl:w-[50px] xl:h-[50px] bg-[#edeff1] hover:bg-gray-400 flex items-center justify-center"
                 onClick={() => {
-                    if (buddyCounts > 1) {
+                    if (buddyCounts !== null && buddyCounts > 1) {
                         setBuddyCounts(buddyCounts - 1);
                     }
                 }}
@@ -31,7 +39,7 @@ export default function SelectBuddyCounts() {
                 <button
                     className="text-[#647484] w-[30px] h-[30px] xl:w-[50px] xl:h-[50px] bg-[#edeff1] hover:bg-gray-400 flex items-center justify-center"
                     onClick={() => {
-                        if (buddyCounts < 5) {
+                        if (buddyCounts !== null && buddyCounts < 5) {
                             setBuddyCounts(buddyCounts + 1);
                         }
                     }}
