@@ -44,11 +44,19 @@ function ProfilePage({ params }: ProfilePageProps) {
             <section className="w-full h-full flex justify-center items-center my-4">
                 <div className="flex flex-row items-center mx-4 space-x-4 w-full">
                     <span className="flex-1">
-                        <BuddyFollow id={params.id} type="팔로워" count={20} />
+                        <BuddyFollow
+                            id={params.id}
+                            type="팔로잉"
+                            count={clickedBuddy?.buddy_following_counts || 0}
+                        />
                     </span>
                     <span className="border-l border-gray-300 h-10 mx-2" />
                     <span className="flex-1">
-                        <BuddyFollow id={params.id} type="팔로잉" count={13} />
+                        <BuddyFollow
+                            id={params.id}
+                            type="팔로워"
+                            count={clickedBuddy?.buddy_follower_counts || 0}
+                        />
                     </span>
                 </div>
                 <div className="flex flex-col items-center mr-8 w-full">
