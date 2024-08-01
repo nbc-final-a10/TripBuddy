@@ -7,6 +7,7 @@ import useLockBodyScroll from '@/hooks/common/useLockBodyScroll';
 import clsx from 'clsx';
 import { useStoryMutation } from '@/hooks/queries';
 import { StoryData } from '@/types/Story.type';
+import { convertToBuffer } from '@/utils/common/convertToBuffer';
 
 type StoryWriteTextProps = {
     imageFile: File;
@@ -25,14 +26,18 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
 
     const { mutate, isPending, error } = useStoryMutation();
 
-    const handleSaveButtonClick = () => {
+    const handleSaveButtonClick = async () => {
         console.log('save');
 
         if (!imageFile) return;
         if (!texts.length) return;
 
+        const imageBuffer = await convertToBuffer(imageFile);
+
+        if (!imageBuffer) return;
+
         const payload: StoryData = {
-            imageFile,
+            imageBuffered: imageBuffer,
             texts,
         };
 

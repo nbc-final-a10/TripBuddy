@@ -1,18 +1,26 @@
+import { StoryData } from '@/types/Story.type';
+import convertToWebP from '@/utils/common/convertToWebp';
 import { createClient } from '@/utils/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
-// 서버에서 요청할 때
 export async function POST(req: NextRequest) {
-    const { imageFile, texts } = await req.json();
+    const { imageBuffered, texts }: StoryData = await req.json();
     const supabase = createClient();
 
-    const filePath = `stories_${Date.now()}.png`;
+    const filePath = `stories_${Date.now()}.webp`;
 
-    console.log(imageFile);
+    const imageBuffer = await convertToWebP(imageBuffered, 1080);
+
+    if (!imageBuffer) {
+        return NextResponse.json(
+            { error: 'Image conversion failed' },
+            { status: 401 },
+        );
+    }
 
     const { data, error } = await supabase.storage
         .from('stories')
-        .upload(filePath, imageFile);
+        .upload(filePath, imageBuffer, { contentType: 'image/webp' });
 
     if (error) {
         console.error(error);
