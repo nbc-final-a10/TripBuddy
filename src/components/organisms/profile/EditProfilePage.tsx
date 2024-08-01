@@ -87,18 +87,14 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                         />
                         <button className="absolute bottom-0 right-0 p-2 bg-gray-200 rounded-full border-4 border-white">
                             <svg
-                                className="w-4 h-4 xl:w-6 xl:h-6"
+                                className="w-2 h-2"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
                                 xmlns="http://www.w3.org/2000/svg"
                             >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M12 4v16m8-8H4"
-                                ></path>
+                                <path d="M12 4.5a7.5 7.5 0 100 15 7.5 7.5 0 000-15zM12 2a10 10 0 100 20 10 10 0 000-20z" />
+                                <path d="M12 9a3 3 0 100 6 3 3 0 000-6z" />
                             </svg>
                         </button>
                     </div>
