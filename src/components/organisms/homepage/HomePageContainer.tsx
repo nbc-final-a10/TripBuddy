@@ -47,7 +47,9 @@ const HomePageContainer = () => {
                     ref={buddiesRef}
                     onMouseDown={createMouseDownHandler(buddiesRef)}
                 >
-                    <HomePageRecommendBuddiesList />
+                    <HomePageRecommendBuddiesList
+                        buddies={buddyTripStory.buddies}
+                    />
                 </div>
             </div>
 
