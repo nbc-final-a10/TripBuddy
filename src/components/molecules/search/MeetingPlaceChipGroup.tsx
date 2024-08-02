@@ -1,18 +1,23 @@
 import Chip from '@/components/atoms/common/O_Chip';
 import { MeetingPlace } from '@/types/MeetingPlace.types';
-import { useState } from 'react';
+import React from 'react';
 
 const meetingPlaceOptions: MeetingPlace[] = ['출발지', '여행지'];
 
-const MeetingPlaceChipGroup = () => {
-    const [selectedMeetingPlace, setSelectedMeetingPlace] = useState<
-        string | null
-    >(null);
+type MeetingPlaceChipGroupProps = {
+    selectedMeetingPlace: string | null;
+    setSelectedMeetingPlace: (place: string | null) => void;
+};
 
+const MeetingPlaceChipGroup: React.FC<MeetingPlaceChipGroupProps> = ({
+    selectedMeetingPlace,
+    setSelectedMeetingPlace,
+}) => {
     const handleMeetingPlaceClick = (place: string) => {
-        setSelectedMeetingPlace(prevSelectedPlace =>
-            prevSelectedPlace === place ? null : place,
-        );
+        const isSelected = selectedMeetingPlace === place;
+        const newSelectedMeetingPlace = isSelected ? null : place;
+
+        setSelectedMeetingPlace(newSelectedMeetingPlace);
     };
 
     return (
