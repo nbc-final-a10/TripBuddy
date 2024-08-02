@@ -9,11 +9,15 @@ import BuddyProfileSkeleton from './BuddyProfileSkeleton';
 type BuddyProfileProps = {
     clickedBuddy: Buddy | null;
     loading: boolean;
+    buddy: Buddy | null;
+    urlId: string;
 };
 
 export default function BuddyProfile({
     clickedBuddy,
     loading,
+    buddy,
+    urlId,
 }: BuddyProfileProps) {
     if (loading) {
         return <BuddyProfileSkeleton />;
@@ -33,9 +37,15 @@ export default function BuddyProfile({
                         height={100}
                         className="rounded-full w-[100px] h-[100px]"
                     />
-                    <Link href={`/profile/edit/${clickedBuddy?.buddy_id}`}>
-                        <EditProfileButton />
-                    </Link>
+                    {buddy?.buddy_id === urlId &&
+                        // url에 'profile'이 포함되어 있으면 편집 버튼 보여주기
+                        window.location.pathname.includes('profile') && (
+                            <Link
+                                href={`/profile/edit/${clickedBuddy?.buddy_id}`}
+                            >
+                                <EditProfileButton />
+                            </Link>
+                        )}
                 </div>
                 <div className="ml-4">
                     <div className="flex flex-col ">
@@ -76,7 +86,7 @@ export default function BuddyProfile({
                         ) : (
                             <div className="mt-4">
                                 <span className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
-                                    선호하는 버디를 등록해주세요.
+                                    선호하는 버디를 등록해주��요.
                                 </span>
                             </div>
                         )}

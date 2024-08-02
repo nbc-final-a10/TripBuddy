@@ -38,6 +38,8 @@ function ProfilePage({ params }: ProfilePageProps) {
                 <BuddyProfile
                     clickedBuddy={clickedBuddy || null}
                     loading={loading}
+                    buddy={buddy}
+                    urlId={`${params.id}`}
                 />
             </section>
 
