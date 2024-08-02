@@ -8,7 +8,7 @@ import supabase from '@/utils/supabase/client';
 type Trip = {
     trip_final_destination: string;
     trip_start_date: string;
-    trip_id: number;
+    trip_id: string;
 };
 
 const HomePageBanner = () => {
@@ -79,8 +79,15 @@ const HomePageBanner = () => {
                     } else {
                         console.log('No contracts found for the buddy');
                     }
-                } catch (error) {
-                    console.error('Error fetching trip data:', error.message);
+                } catch (error: unknown) {
+                    if (error instanceof Error) {
+                        console.error(
+                            'Error fetching trip data:',
+                            error.message,
+                        );
+                    } else {
+                        console.error('An unknown error occurred:', error);
+                    }
                 }
             };
 
