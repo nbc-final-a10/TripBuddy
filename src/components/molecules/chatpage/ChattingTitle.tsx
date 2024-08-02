@@ -16,7 +16,7 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
         const fetchTripData = async () => {
             try {
                 const { data, error } = await supabase
-                    .from<Trip>('trips')
+                    .from('trips')
                     .select('*')
                     .eq('trip_id', id)
                     .single();
@@ -37,7 +37,7 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
         <section className="relative">
             <div className="border-y-[1px] border-gray-200 px-6 py-2 mb-4">
                 <div className="flex items-center">
-                    <div className="w-[40px] h-[40px] bg-gray-200">
+                    <div className="w-[40px] h-[40px] flex items-center justify-center">
                         {tripData?.trip_thumbnail ? (
                             <Image
                                 src={tripData.trip_thumbnail}
@@ -46,7 +46,7 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
                                 alt="Trip Thumbnail"
                             />
                         ) : (
-                            <div></div>
+                            <div className="w-[40px] h-[40px] bg-gray-200 "></div>
                         )}
                     </div>
                     <div className="h-[40px] px-3 flex flex-col justify-between">
