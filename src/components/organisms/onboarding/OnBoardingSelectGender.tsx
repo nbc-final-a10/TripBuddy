@@ -1,5 +1,4 @@
-import Button from '@/components/atoms/common/O_Button';
-import Chip from '@/components/atoms/common/O_Chip';
+import Chip from '@/components/atoms/common/Chip';
 import Title from '@/components/atoms/common/O_Title';
 import OnBoardingInnerWrapper from '@/components/atoms/onboarding/OnBoardinginnerWrapper';
 import OnBoardingWrapper from '@/components/atoms/onboarding/OnBoardingWrapper';

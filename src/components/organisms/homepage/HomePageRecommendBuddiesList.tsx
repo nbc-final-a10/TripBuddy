@@ -1,10 +1,10 @@
-import MascotImage from '@/components/atoms/common/O_MascotImage';
 import BuddyTemperature from '@/components/atoms/profile/BuddyTemperature';
 import useTapScroll from '@/hooks/useTapScroll';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useRef } from 'react';
 import { Buddy } from '@/types/Auth.types';
+import MascotImage from '@/components/atoms/common/MascotImage';
 
 function HomePageRecommnedBuddiesList({ buddies }: { buddies: Buddy[] }) {
     const buddiesRef = useRef<HTMLDivElement>(null);

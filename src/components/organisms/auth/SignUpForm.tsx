@@ -1,8 +1,8 @@
 'use client';
 
 import AuthSubText from '@/components/atoms/auth/AuthSubText';
-import Input from '@/components/atoms/common/O_Input';
-import { SubmitButton } from '@/components/atoms/common/O_Submit-button';
+import Input from '@/components/atoms/common/Input';
+import { SubmitButton } from '@/components/atoms/common/SubmitButton';
 import { useAuth } from '@/hooks/auth';
 import { authValidation } from '@/utils/auth/validation';
 import { FormEvent } from 'react';

@@ -1,4 +1,4 @@
-import Input from '@/components/atoms/common/O_Input';
+import Input from '@/components/atoms/common/Input';
 import Title from '@/components/atoms/common/O_Title';
 import OnBoardingInnerWrapper from '@/components/atoms/onboarding/OnBoardinginnerWrapper';
 import OnBoardingWrapper from '@/components/atoms/onboarding/OnBoardingWrapper';

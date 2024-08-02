@@ -1,4 +1,4 @@
-import Chip from '@/components/atoms/common/O_Chip';
+import Chip from '@/components/atoms/common/Chip';
 import { MeetingPlace } from '@/types/MeetingPlace.types';
 import { useState } from 'react';
 

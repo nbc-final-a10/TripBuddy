@@ -4,12 +4,12 @@ import React, { useCallback } from 'react';
 import Calendar_month from '../../../../public/svg/Calendar_month.svg';
 import Distance from '../../../../public/svg/Distance.svg';
 import Groups from '../../../../public/svg/Groups.svg';
-import Chip from '@/components/atoms/common/O_Chip';
 import clsx from 'clsx';
 import TripTimeSinceUpload from '@/components/atoms/trips/TripTimeSinceUpload';
 import { Trip } from '@/types/Trips.types';
 import Link from 'next/link';
 import remainDays from '@/utils/common/getRemainDays';
+import Chip from '@/components/atoms/common/Chip';
 
 type TripCardProps = {
     trip: Trip;
