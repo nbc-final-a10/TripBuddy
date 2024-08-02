@@ -1,4 +1,5 @@
 'use client';
+
 import React from 'react';
 import Arrow_Back from '../../../../public/svg/Arrow_back.svg';
 import Close from '../../../../public/svg/Close.svg';

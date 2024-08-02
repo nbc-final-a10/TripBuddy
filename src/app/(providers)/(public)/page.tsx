@@ -22,18 +22,14 @@ const HomePage: React.FC = async () => {
     });
     const dehydratedState = dehydrate(queryClient);
     return (
-        <div className="bg-gray-300">
-            <section>
-                <div className="h-[200px]">
+        <main className="relative h-full w-full">
+            <Suspense fallback={<Loading />}>
+                <HydrationBoundary state={dehydratedState}>
                     <HomePageBanner />
-                </div>
-                <Suspense fallback={<Loading />}>
-                    <HydrationBoundary state={dehydratedState}>
-                        <HomePageContainer />
-                    </HydrationBoundary>
-                </Suspense>
-            </section>
-        </div>
+                    <HomePageContainer />
+                </HydrationBoundary>
+            </Suspense>
+        </main>
     );
 };
 

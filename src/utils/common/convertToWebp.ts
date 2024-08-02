@@ -11,7 +11,7 @@ export async function convertToWebPServer({
     maxWidth = 720,
     maxHeight = 720,
 }: ConvertToWebpProps): Promise<Buffer> {
-    let image = sharp(inputBuffer, { density: 100 });
+    let image = sharp(inputBuffer, { density: 72 });
 
     // EXIF 데이터를 기반으로 이미지 회전
     image = image.rotate();
