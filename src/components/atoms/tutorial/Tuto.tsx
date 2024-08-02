@@ -16,7 +16,7 @@ const Tuto: React.FC<TutoProps> = ({ step }) => {
         1: {
             src: '/images/tuto0.webp',
             alt: '첫 번째 튜토리얼 페이지에서 사용되는 이미지',
-            text: '',
+            text: '각자의 성향대로 즐기는 여행!',
         },
         2: {
             src: '/images/tuto1.webp',
@@ -52,8 +52,8 @@ const Tuto: React.FC<TutoProps> = ({ step }) => {
                         src={src}
                         alt={alt}
                         fill
-                        style={{ objectFit: 'contain' }} // objectFit을 스타일로 설정
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // 반응형 이미지 크기 설정
+                        style={{ objectFit: 'contain' }}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                 </div>
             </div>
