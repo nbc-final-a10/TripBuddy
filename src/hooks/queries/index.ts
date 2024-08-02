@@ -8,3 +8,5 @@ export * from './useStoriesQuery';
 export * from './useStoryQuery';
 export * from './useTripsQuery';
 export * from './useTripQuery';
+export * from './useSpecificBuddyQuery';
+export * from './useRecommendBuddiesQuery';

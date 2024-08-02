@@ -1,6 +1,6 @@
 'use client';
 
-import Input from '@/components/atoms/common/O_Input';
+import Input from '@/components/atoms/common/Input';
 import useLockBodyScroll from '@/hooks/common/useLockBodyScroll';
 import clsx from 'clsx';
 import React, { useRef } from 'react';

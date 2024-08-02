@@ -1,4 +1,4 @@
-import MascotImage from '@/components/atoms/common/O_MascotImage';
+import MascotImage from '@/components/atoms/common/MascotImage';
 import WelcomeMessage from '@/components/molecules/write/WelcomeMessage';
 import React from 'react';
 

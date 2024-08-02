@@ -1,7 +1,6 @@
 import React from 'react';
-import Chip from '@/components/atoms/common/O_Chip';
 import { Gender } from '@/types/Gender.types';
-// import { useSearchStore } from '@/zustand/search.store';
+import Chip from '@/components/atoms/common/Chip';
 
 const genderOptions: Gender[] = ['여자만', '남자만', '상관없음'];
 

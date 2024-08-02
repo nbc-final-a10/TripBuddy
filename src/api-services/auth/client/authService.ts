@@ -152,3 +152,36 @@ export async function postNaverLogIn(): Promise<Buddy | null> {
         throw error;
     }
 }
+
+export async function getSpecificBuddy(id: string): Promise<Buddy> {
+    console.log('getSpecificBuddy', id);
+    const url = `/api/auth/buddy/${id}`;
+    try {
+        const data = await fetchWrapper<Buddy>(url, {
+            method: 'GET',
+        });
+        return data;
+    } catch (error: any) {
+        throw error;
+    }
+}
+
+export async function getRecommendBuddies(): Promise<{
+    buddies: Buddy[];
+    isPending: boolean;
+}> {
+    console.log('실행은 되냐???');
+
+    const url = `/api/buddyProfile/buddiesRecommendationList`;
+    try {
+        const data = await fetchWrapper<{
+            buddies: Buddy[];
+            isPending: boolean;
+        }>(url, {
+            method: 'GET',
+        });
+        return data;
+    } catch (error: any) {
+        throw error;
+    }
+}

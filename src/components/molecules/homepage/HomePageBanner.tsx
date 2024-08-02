@@ -10,6 +10,7 @@ type Trip = {
     trip_start_date: string;
     trip_id: string;
 };
+import HomePageBannerText from './HomePageBannerText';
 
 const HomePageBanner = () => {
     const { buddy } = useAuth();
@@ -117,6 +118,7 @@ const HomePageBanner = () => {
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1280px) 100vw, 33vw"
                     className="object-cover relative z-0"
+                    priority
                 />
                 <div className="absolute inset-0 bg-black/30 z-10" />
                 <div className="relative z-20 text-white h-full flex flex-col justify-center gap-3">
