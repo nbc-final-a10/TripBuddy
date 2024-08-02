@@ -40,9 +40,7 @@ export default function BuddyProfile({
                     {buddy?.buddy_id === urlId &&
                         // url에 'profile'이 포함되어 있으면 편집 버튼 보여주기
                         window.location.pathname.includes('profile') && (
-                            <Link
-                                href={`/profile/edit/${clickedBuddy?.buddy_id}`}
-                            >
+                            <Link href={`/onboarding`}>
                                 <EditProfileButton />
                             </Link>
                         )}
