@@ -34,7 +34,7 @@ export default function FloatingButton() {
 
     return (
         <button
-            className="fixed bottom-20 right-8 bg-main-color text-white rounded-full p-4 shadow-lg"
+            className="absolute bottom-16 right-1 bg-main-color text-white rounded-full p-4 shadow-lg"
             style={{ opacity }}
             onClick={handleClick}
         >
