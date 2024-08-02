@@ -5,6 +5,7 @@ type AccordionProps = {
     isOpen: boolean;
     toggleAccordion: () => void;
     children: React.ReactNode;
+    icon?: React.ReactNode;
 };
 
 function useAccordion(initialOpen: boolean = false) {
@@ -24,45 +25,31 @@ function useAccordion(initialOpen: boolean = false) {
         closeAccordion,
     };
 }
+
 const Accordion: React.FC<AccordionProps> = ({
     title,
     isOpen,
     toggleAccordion,
     children,
+    icon,
 }) => {
     return (
-        <div className="py-6 border-b border-gray-200">
-            <details className="group" open={isOpen}>
-                <summary
-                    className="flex justify-between items-center font-medium cursor-pointer list-none my-2"
-                    onClick={e => {
-                        e.preventDefault();
-                        toggleAccordion();
-                    }}
-                >
-                    <span className="text-center font-semibold xl:text-xl">
-                        {title}
-                    </span>
-                    <span className="transition group-open:rotate-180 ml-auto">
-                        <svg
-                            fill="none"
-                            height="24"
-                            shapeRendering="geometricPrecision"
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="1.5"
-                            viewBox="0 0 24 24"
-                            width="24"
-                        >
-                            <path d="M6 9l6 6 6-6"></path>
-                        </svg>
-                    </span>
-                </summary>
-                <div className="text-neutral-600 group-open:animate-fadeIn">
-                    {children}
+        <div className="w-full rounded-lg mb-2">
+            <div
+                className="flex items-center justify-between p-4 cursor-pointer"
+                onClick={toggleAccordion}
+            >
+                <div className="flex items-center">
+                    {icon && <div className="text-xl mr-4">{icon}</div>}
                 </div>
-            </details>
+                <div className="flex-grow text-center">
+                    <div className="text-xl font-medium">{title}</div>
+                </div>
+                <div className="text-xl">
+                    {isOpen ? <span>&#9650;</span> : <span>&#9660;</span>}
+                </div>
+            </div>
+            {isOpen && <div className="border-t p-4">{children}</div>}
         </div>
     );
 };
