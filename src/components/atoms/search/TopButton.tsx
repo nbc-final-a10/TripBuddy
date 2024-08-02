@@ -29,10 +29,21 @@ export default function TopButton() {
         isVisible && (
             <button
                 onClick={scrollToTop}
-                className="fixed bottom-20 right-5 p-2 px-3 bg-main-color text-white rounded-full shadow-lg transition-transform transform xl:right-10 xl:bottom-10"
+                className="fixed bottom-16 right-1/2 p-2 px-3 transform translate-x-[570%] xl:right-auto xl:left-1/2 xl:transform xl:translate-x-[1350%] xl:bottom-2 bg-main-color text-white rounded-full shadow-lg z-[999]"
             >
                 ↑
             </button>
         )
     );
 }
+
+// return (
+//     isVisible && (
+//         <button
+//             onClick={scrollToTop}
+//             className="fixed bottom-20 right-5 p-2 px-3 bg-main-color text-white rounded-full shadow-lg transition-transform transform xl:right-10 xl:bottom-10"
+//         >
+//             ↑
+//         </button>
+//     )
+// );
