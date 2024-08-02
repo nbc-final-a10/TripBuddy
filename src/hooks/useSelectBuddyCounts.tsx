@@ -13,13 +13,13 @@ export default function useSelectBuddyCounts() {
     const [buddyCounts, setBuddyCounts] = useState<number>(2);
 
     const handleAddBuddyCounts = () => {
-        setBuddyCounts(buddyCounts + 1);
-        // setBuddyCounts(prev => Math.min(prev + 1, 4));
+        // setBuddyCounts(buddyCounts + 1);
+        setBuddyCounts(prev => Math.min(prev + 1, 4));
     };
 
     const handleSubBuddyCounts = () => {
-        setBuddyCounts(buddyCounts - 1);
-        // setBuddyCounts(prev => Math.max(prev - 1, 2));
+        // setBuddyCounts(buddyCounts - 1);
+        setBuddyCounts(prev => Math.max(prev - 1, 2));
     };
 
     const SelectBuddyCounts = () => {

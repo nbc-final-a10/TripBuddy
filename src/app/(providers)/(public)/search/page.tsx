@@ -220,8 +220,8 @@ const SearchPage: React.FC = () => {
                     description="인원수 최대 4명까지 가능해요."
                 />
                 <SelectBuddyCounts
-                    buddyCounts={buddyCounts}
-                    setBuddyCounts={SelectBuddyCounts}
+                // buddyCounts={buddyCounts}
+                // setBuddyCounts={SelectBuddyCounts}
                 />
             </div>
             <div className="my-10">
@@ -236,7 +236,7 @@ const SearchPage: React.FC = () => {
                     title="여행지를 선택해주세요."
                     description="지역, 국가, 도시를 1개 선택해주세요."
                 />
-                <SelectRegion setThirdLevelLocation={setThirdLevelLocation} />
+                <SelectRegion />
             </div>
             <div className="my-10" id="date-section">
                 <SearchPageTitle

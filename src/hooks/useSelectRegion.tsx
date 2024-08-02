@@ -6,7 +6,7 @@ import SelectedResultRealtimeText from '@/components/organisms/write/SelectedRes
 import locationData from '@/data/location';
 import { SecondLevel, ThirdLevel } from '@/types/Location.types';
 import clsx from 'clsx';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useTapScroll from './useTapScroll';
 
 type Location = {
@@ -14,16 +14,10 @@ type Location = {
     subLocations?: Location[];
 };
 
-type SelectRegionProps = {
-    setThirdLevelLocation: Dispatch<SetStateAction<string | null>>;
-};
-
 export default function useSelectRegion() {
     // Todo: 이거 클로저 패턴임 추가 학습요
     // finalSelectedLocation은 최종 선택한 지역 이름으로 초기화 됨.
-    const [thirdLevelLocation, setThirdLevelLocation] = useState<string | null>(
-        null,
-    );
+    const [thirdLevelLocation, setThirdLevelLocation] = useState<string>('');
     // Todo: useState 말고 string으로 해도 될 듯
     // selectedLocationName은 국내의 경우는 선택한 도, 해외의 경우 선택한 대륙 하나만 초기화 됨. (예) 경상남도, 오세아니아
     const [secondLevelLocation, setSecondLevelLocation] = useState<
@@ -55,7 +49,7 @@ export default function useSelectRegion() {
         }
     }, [firstLevelLocation]);
 
-    const SelectRegion = ({ setThirdLevelLocation }: SelectRegionProps) => {
+    const SelectRegion = () => {
         // 국내/해외 선택 처리 : 1단계
         const handleLocationTypeClick = (isKoreaSelected: boolean) => {
             setFirstLevelLocation(isKoreaSelected ? '한국' : '해외');
