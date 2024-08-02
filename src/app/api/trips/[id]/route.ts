@@ -1,4 +1,4 @@
-import { Trip } from '@/types/Chat.types';
+import { Trip } from '@/types/Trips.types';
 import { createClient } from '@/utils/supabase/server';
 import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
