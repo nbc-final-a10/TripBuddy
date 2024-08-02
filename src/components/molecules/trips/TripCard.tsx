@@ -10,6 +10,8 @@ import { Trip } from '@/types/Trips.types';
 import Link from 'next/link';
 import remainDays from '@/utils/common/getRemainDays';
 import Chip from '@/components/atoms/common/Chip';
+import { useAuth } from '@/hooks/auth';
+import { createContract } from '@/utils/contract/createContract';
 
 type TripCardProps = {
     trip: Trip;
@@ -17,6 +19,22 @@ type TripCardProps = {
 };
 
 const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
+    const { buddy } = useAuth();
+
+    const handleCreateContract = useCallback(async () => {
+        if (!buddy?.buddy_id) {
+            console.error('인증되지 않은 사용자입니다.');
+            return;
+        }
+
+        try {
+            const result = await createContract(trip.trip_id, buddy.buddy_id);
+            console.log('contract 생성:', result);
+        } catch (error) {
+            console.error('contract 생성 중 오류 발생:', error);
+        }
+    }, [buddy, trip.trip_id]);
+
     return (
         <div
             className={clsx(
@@ -198,7 +216,10 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
                             'bg-main-color text-white font-bold rounded-t-none rounded-b-lg w-full',
                     )}
                 >
-                    <button className="flex justify-center items-center w-full h-full">
+                    <button
+                        className="flex justify-center items-center w-full h-full"
+                        onClick={handleCreateContract}
+                    >
                         {mode === 'card' || mode === 'list'
                             ? '상세보기'
                             : '참여하기'}
