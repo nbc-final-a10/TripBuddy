@@ -1,6 +1,5 @@
 'use client';
 
-import useStore from '@/app/store';
 import LocationSearchButton from '@/components/atoms/LocationSearchButton';
 import DateSearchButton from '@/components/atoms/search/DateSearchButton';
 import {
@@ -10,6 +9,7 @@ import {
     travelThemes,
 } from '@/components/molecules/H_chips';
 import SearchPageChipsTitle from '@/components/molecules/search/SearchMainPageChipsTitle';
+import useStore from '@/zustand/store';
 import React, { useState } from 'react';
 
 const SearchMainPage: React.FC = () => {
@@ -51,7 +51,7 @@ const SearchMainPage: React.FC = () => {
 
                 <div className="hidden xl:flex xl:gap-2 xl:w-full xl:ml-5">
                     <button
-                        className="flex-1 px-4 py-2 rounded-[10px] border border-gray-500 text-gray-500 font-semibold text-sm min-w-[130px] py-2.5"
+                        className="flex-1 px-4 rounded-[10px] border border-gray-500 text-gray-500 font-semibold text-sm min-w-[130px] py-2.5"
                         onClick={toggleChipsHidden}
                     >
                         접기
