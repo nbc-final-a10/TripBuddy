@@ -62,7 +62,7 @@ function ProfilePage({ params }: ProfilePageProps) {
                 <div className="flex flex-col items-center mr-8 w-full">
                     <span className="w-full">
                         <BuddyTemperature
-                            temperature={buddy?.buddy_temperature || 0}
+                            temperature={clickedBuddy?.buddy_temperature || 0}
                         />
                     </span>
                 </div>
