@@ -1,5 +1,6 @@
 'use client';
 
+import DefaultLoader from '@/components/atoms/common/defaultLoader';
 import TripCard from '@/components/molecules/trips/TripCard';
 import useTripQuery from '@/hooks/queries/useTripQuery';
 import { Trip } from '@/types/Trips.types';
@@ -13,7 +14,7 @@ type TripDetailProps = {
 const TripDetail: React.FC<TripDetailProps> = ({ id }) => {
     const { data: trip, isPending, error: tripError } = useTripQuery(id);
 
-    if (isPending) return <div>Loading...</div>;
+    if (isPending) return <DefaultLoader />;
     if (tripError) return <div>Error: {tripError.message}</div>;
 
     // 마스터 아이디로 유저 찾아오는 로직 추가할 것
