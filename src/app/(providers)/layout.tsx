@@ -14,6 +14,10 @@ import { getPathnameServer } from '@/utils/common/getPathnameServer';
 import MainSectionWrapper from '@/components/molecules/common/MainSectionWrapper';
 import MobileHeader from '@/components/molecules/common/MobileHeader';
 import TapMenu from '@/components/molecules/common/TapMenu';
+import { Metadata } from 'next';
+import { defaultMetaData } from '@/utils/common/defaultMetaData';
+
+export const metadata: Metadata = defaultMetaData;
 
 const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
     const userId = getUserFromHeader();
