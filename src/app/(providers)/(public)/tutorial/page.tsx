@@ -56,7 +56,7 @@ const Tutorial: React.FC = () => {
             <div className="w-full flex justify-center">
                 <button
                     onClick={handleNext}
-                    className="text-2xl bg-main-color font-bold py-2 px-4 rounded w-11/12 max-w-md mb-4 "
+                    className="text-2xl bg-main-color font-bold py-2 px-4 rounded-2xl w-11/12 max-w-md mb-4 "
                 >
                     {step < 4 ? '다음' : '시작하기'}
                 </button>
