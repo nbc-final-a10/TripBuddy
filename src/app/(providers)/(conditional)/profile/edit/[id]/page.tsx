@@ -1,10 +1,14 @@
-import EditProfilePage from '@/components/organisms/profile/EditProfilePage';
-import { ProfilePageProps } from '@/types/ProfileParams.types';
+'use client';
 
-function EditBuddyProfilePage({ params }: ProfilePageProps) {
+import EditProfilePage from '@/components/organisms/profile/EditProfilePage';
+import { useAuth } from '@/hooks/auth';
+
+function EditBuddyProfilePage() {
+    const { buddy } = useAuth();
+
     return (
         <div>
-            <EditProfilePage id={params.id} />
+            {buddy ? <EditProfilePage buddy={buddy} /> : <div>Loading...</div>}
         </div>
     );
 }

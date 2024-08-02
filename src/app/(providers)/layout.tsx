@@ -4,7 +4,6 @@ import {
     QueryClient,
     dehydrate,
 } from '@tanstack/react-query';
-import TapMenu from '@/components/molecules/TapMenu';
 import React, { PropsWithChildren, Suspense } from 'react';
 import Loading from './loading';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
@@ -14,6 +13,7 @@ import { getUserFromHeader } from '@/utils/auth/getUserFromHeader';
 import { getPathnameServer } from '@/utils/common/getPathnameServer';
 import MainSectionWrapper from '@/components/molecules/common/MainSectionWrapper';
 import MobileHeader from '@/components/molecules/common/MobileHeader';
+import TapMenu from '@/components/molecules/common/TapMenu';
 
 const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
     const userId = getUserFromHeader();
