@@ -12,6 +12,7 @@ import remainDays from '@/utils/common/getRemainDays';
 import Chip from '@/components/atoms/common/Chip';
 import { useAuth } from '@/hooks/auth';
 import { createContract } from '@/utils/contract/createContract';
+import { showAlert } from '@/utils/ui/openCustomAlert';
 
 type TripCardProps = {
     trip: Trip;
@@ -30,8 +31,13 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
         try {
             const result = await createContract(trip.trip_id, buddy.buddy_id);
             console.log('contract 생성:', result);
+            showAlert(
+                'success',
+                '버디장에게 참여 요청이 전달되었습니다. 베타 기간에는 자동으로 참여됩니다.',
+            );
         } catch (error) {
             console.error('contract 생성 중 오류 발생:', error);
+            showAlert('error', (error as Error).message);
         }
     }, [buddy, trip.trip_id]);
 
