@@ -6,7 +6,8 @@ import SelectedResultRealtimeText from '@/components/organisms/write/SelectedRes
 import locationData from '@/data/location';
 import { SecondLevel, ThirdLevel } from '@/types/Location.types';
 import clsx from 'clsx';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import useTapScroll from './useTapScroll';
 
 type Location = {
     name: string;
@@ -39,6 +40,9 @@ export default function useSelectRegion() {
     // selectedSecondLevelLocations는 국내는 도, 해외는 대륙을 선택한 경우 해당 대륙에 포함된 나라, 도시들이 배열로 초기화 됨.
     const [selectedSecondLevelLocations, setSelectedSecondLevelLocations] =
         useState<ThirdLevel[]>([]);
+
+    const buddiesRef = useRef<HTMLDivElement>(null);
+    const { createMouseDownHandler } = useTapScroll();
 
     useEffect(() => {
         const selectedLocationData =
@@ -86,7 +90,11 @@ export default function useSelectRegion() {
                 </section>
 
                 {/* 도시/대륙 선택 */}
-                <section className="py-3">
+                <section
+                    className="py-3 overflow-x-scroll scrollbar-hidden flex gap-[10px]"
+                    ref={buddiesRef}
+                    onMouseDown={createMouseDownHandler(buddiesRef)}
+                >
                     <LocationList
                         locations={secondLevelLocations}
                         selectedLocationName={secondLevelLocation || ''}
