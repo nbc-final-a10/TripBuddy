@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import HomePageBannerText from './HomePageBannerText';
 
 const HomePageBanner = () => {
     return (
@@ -13,16 +14,7 @@ const HomePageBanner = () => {
                     priority
                 />
                 <div className="absolute inset-0 bg-black/30 z-10" />
-                <div className="relative z-20 text-white h-full flex flex-col justify-center gap-3">
-                    <p>
-                        <span className="font-bold text-3xl">여행자</span>님,
-                    </p>
-                    <p>예정된 대만 여행이</p>
-                    <p>
-                        <span className="font-bold text-3xl">3일</span>{' '}
-                        남았어요!
-                    </p>
-                </div>
+                <HomePageBannerText />
             </div>
         </div>
     );

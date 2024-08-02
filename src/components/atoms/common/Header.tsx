@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import MyPageIcon from '../../../../public/svg/mypageicon.svg';
+import HeaderMyPageLink from './HeaderMyPageLink';
 
 export default function Header() {
     return (
@@ -21,10 +21,7 @@ export default function Header() {
             <div className="flex gap-12 items-center font-bold">
                 <Link href="/login">LOGIN</Link>
                 <Link href="/signup">JOIN</Link>
-                {/** 추후수정요망 */}
-                <Link href="/">
-                    <MyPageIcon />
-                </Link>
+                <HeaderMyPageLink />
             </div>
         </header>
     );
