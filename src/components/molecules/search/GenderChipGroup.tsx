@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Gender } from '@/types/Gender.types';
 import Chip from '@/components/atoms/common/Chip';
 
