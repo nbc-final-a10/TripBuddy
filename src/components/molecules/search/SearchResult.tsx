@@ -25,23 +25,20 @@ const SearchResult: React.FC<SearchResultProps> = ({
     const tripsRef = useRef<HTMLDivElement>(null);
     const { createMouseDownHandler } = useTapScroll();
 
-    if (items.length === 0) {
-        return <div>검색 결과가 없습니다.</div>;
-    }
-
-    console.log('검색된 여정: ', items);
-
     return (
         <>
             <section className="my-5">
-                {/* <h3 className="text-lg font-semibold mb-5">여정 검색 결과</h3> */}
-                <div
-                    className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
-                    ref={tripsRef}
-                    onMouseDown={createMouseDownHandler(tripsRef)}
-                >
-                    <HomePageTrips trips={items} />
-                </div>
+                {items.length === 0 ? (
+                    <div>검색 결과가 없습니다.</div>
+                ) : (
+                    <div
+                        className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
+                        ref={tripsRef}
+                        onMouseDown={createMouseDownHandler(tripsRef)}
+                    >
+                        <HomePageTrips trips={items} />
+                    </div>
+                )}
 
                 {visibleFirstItems < items.length && (
                     <button
