@@ -35,6 +35,7 @@ const WritePage: React.FC = () => {
         firstLevelLocation,
         secondLevelLocation,
         thirdLevelLocation,
+        setThirdLevelLocation,
     } = useSelectRegion();
     const [PreferTripThemesToRender, selectedTripThemes] = usePreferTheme({
         mode: 'trip',

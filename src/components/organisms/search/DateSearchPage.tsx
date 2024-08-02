@@ -4,9 +4,20 @@ import React from 'react';
 import useCalendar from '@/hooks/useCalendar';
 import SelectedResultRealtimeText from '../write/SelectedResultRealtimeText';
 
-const DateSearchPage: React.FC = () => {
+type DateSearchPageProps = {
+    setDateChange: (start: string, end: string) => void;
+};
+
+const DateSearchPage: React.FC<DateSearchPageProps> = ({ setDateChange }) => {
     const { SelectCalendar, startDateTimestamp, endDateTimestamp } =
         useCalendar();
+
+    React.useEffect(() => {
+        if (startDateTimestamp && endDateTimestamp) {
+            setDateChange(startDateTimestamp, endDateTimestamp);
+        }
+    }, [startDateTimestamp, endDateTimestamp, setDateChange]);
+
     return (
         <section>
             <div className="flex justify-center">
