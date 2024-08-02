@@ -84,7 +84,7 @@ export default function BuddyProfile({
                         ) : (
                             <div className="mt-4">
                                 <span className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
-                                    선호하는 버디를 등록해주��요.
+                                    선호하는 버디를 등록해주세요.
                                 </span>
                             </div>
                         )}
