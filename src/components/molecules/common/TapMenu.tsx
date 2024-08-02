@@ -3,7 +3,7 @@
 import React from 'react';
 import { useAuth } from '@/hooks/auth';
 import clsx from 'clsx';
-import TapMenuButton from '@/components/atoms/TapMenuButton';
+import TapMenuButton from '@/components/atoms/common/TapMenuButton';
 
 type TapMenuProps = {
     pathname: string;
