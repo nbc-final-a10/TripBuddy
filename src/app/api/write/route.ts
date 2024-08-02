@@ -1,62 +1,84 @@
-import convertToWebP from '@/utils/common/convertToWebp';
 import { createClient } from '@/utils/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
+import { getUserIdFromHeader } from '@/utils/auth/getUserIdFromHeader';
 
 export async function POST(req: NextRequest) {
     const supabase = createClient();
+
     try {
+        // 헤더에서 사용자 ID를 가져옴
+        const userId = getUserIdFromHeader(req);
+        if (!userId) {
+            return NextResponse.json(
+                { trip: null, error: 'Unauthorized' },
+                { status: 401 },
+            );
+        }
+
         const formData = await req.formData();
-        const tripData = JSON.parse(formData.get('trip_json') as string);
-        const tripImageFile = formData.get('trip_image') as File;
-
-        const imageBuffer = await convertToWebP(tripImageFile, 1080);
-        const filePath = `trips_${Date.now()}_${tripData.trip_id}.webp`;
-
-        if (!imageBuffer) {
+        const tripDataString = formData.get('trip_json');
+        if (!tripDataString) {
             return NextResponse.json(
-                { trip: null, error: '이미지 변환 중 오류 발생' },
-                { status: 500 },
+                { trip: null, error: 'Invalid trip data' },
+                { status: 400 },
             );
         }
 
-        const { data: imageData, error: imageError } = await supabase.storage
-            .from('trips')
-            .upload(filePath, imageBuffer, { contentType: 'image/webp' });
+        const tripData = JSON.parse(tripDataString as string);
 
-        if (imageError) {
-            return NextResponse.json(
-                { trip: null, error: '이미지 업로드 중 오류 발생' },
-                { status: 500 },
-            );
-        }
-
-        const { data: publicUrl } = supabase.storage
-            .from('trips')
-            .getPublicUrl(filePath);
-
-        tripData.trip_thumbnail = publicUrl.publicUrl;
-
-        const { data: trip, error } = await supabase
+        // 'trips' 테이블에 여행 데이터를 삽입
+        const { data: trip, error: tripError } = await supabase
             .from('trips')
             .insert(tripData)
             .select();
 
-        // 데이터베이스 에러 처리
-        if (error) {
-            console.error('게시글 업데이트 중 오류 발생:', error);
+        if (tripError || !trip || trip.length === 0) {
+            console.error('게시글 업데이트 중 오류 발생:', tripError);
             return NextResponse.json(
-                { trip: null, error: error?.message },
+                { trip: null, error: tripError?.message },
                 { status: 500 },
             );
         }
 
-        // 성공 시 응답
-        return NextResponse.json({ trip }, { status: 200 });
-    } catch (error) {
-        // 일반 에러 처리
-        console.error('게시글 업데이트 중 오류 발생:', error);
+        const tripRecord = trip[0];
+        const tripId = tripRecord.trip_id;
+
+        const today = new Date();
+        const tripEndDate = new Date(tripRecord.trip_end_date);
+        const isValidate = today <= tripEndDate;
+
+        const contractData = {
+            contract_trip_id: tripId,
+            contract_buddy_id: userId,
+            contract_start_date: tripRecord.trip_start_date,
+            contract_end_date: tripRecord.trip_end_date,
+            contract_isLeader: true,
+            contract_isPending: true,
+            contract_isValidate: isValidate,
+        };
+
+        // 'contract' 테이블에 계약 데이터를 삽입
+        const { data: contract, error: contractError } = await supabase
+            .from('contract')
+            .insert(contractData)
+            .select();
+
+        if (contractError) {
+            console.error('컨트랙트 생성 중 오류 발생:', contractError);
+            return NextResponse.json(
+                { contract: null, error: contractError?.message },
+                { status: 500 },
+            );
+        }
+
         return NextResponse.json(
-            { trip: null, error: '서버 오류' },
+            { trip: tripRecord, contract: contract[0] },
+            { status: 200 },
+        );
+    } catch (error) {
+        console.error('요청 처리 중 오류 발생:', error);
+        return NextResponse.json(
+            { trip: null, contract: null, error: '서버 오류' },
             { status: 500 },
         );
     }
