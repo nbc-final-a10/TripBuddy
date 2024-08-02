@@ -45,7 +45,7 @@ const OnBoardingCalender = ({
             <Title className="text-2xl text-left py-1" align="left">
                 생일을 입력해 주세요
             </Title>
-            <Paragraph className="text-left">{`력해주세요`}</Paragraph>
+            {/* <Paragraph className="text-left">{`입력해주세요`}</Paragraph> */}
             <OnBoardingInnerWrapper>
                 <Calendar
                     aria-label="Date (Show Month and Year Picker Controlled)"
