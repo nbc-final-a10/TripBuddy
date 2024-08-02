@@ -44,7 +44,7 @@ const SelectAgesRange: React.FC<SelectAgesRangeProps> = ({
                     className="bg-gray-100 w-full px-4 py-1 xl:py-2 rounded-full hover:bg-gray-200 text-right pr-5"
                 />
             </div>
-            <div className="relative w-full my-3 mt-5">
+            <div className="relative w-full my-3 mt-5 px-2">
                 <Range
                     values={values}
                     step={STEP}
