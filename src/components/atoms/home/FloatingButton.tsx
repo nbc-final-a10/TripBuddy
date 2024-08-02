@@ -34,12 +34,12 @@ export default function FloatingButton() {
 
     return (
         <button
-            className="absolute bottom-16 right-1 bg-main-color text-white rounded-full p-4 shadow-lg"
+            className="fixed bottom-16 right-1/2 transform translate-x-[375%] xl:right-auto xl:left-1/2 xl:transform xl:translate-x-[830%] xl:bottom-2 bg-main-color text-white rounded-full p-4 shadow-lg z-[999]"
             style={{ opacity }}
             onClick={handleClick}
         >
             <svg
-                className="w-6 h-6"
+                className="w-6 h-6 mx-auto"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -55,3 +55,5 @@ export default function FloatingButton() {
         </button>
     );
 }
+
+// <div className="fixed bottom-0 right-1/2 translate-x-1/2 w-dvw min-w-[360px] max-w-[430px] xl:w-dvw xl:max-w-[1080px] h-dvh mx-auto">

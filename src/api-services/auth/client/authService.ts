@@ -170,8 +170,6 @@ export async function getRecommendBuddies(): Promise<{
     buddies: Buddy[];
     isPending: boolean;
 }> {
-    console.log('실행은 되냐???');
-
     const url = `/api/buddyProfile/buddiesRecommendationList`;
     try {
         const data = await fetchWrapper<{

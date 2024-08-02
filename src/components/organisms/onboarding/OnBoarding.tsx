@@ -248,7 +248,6 @@ const OnBoarding: React.FC = () => {
                     onClick={handleNextButtonClick}
                 />
             </div>
-            <button onClick={logOut}>임시로그아웃</button>
         </section>
     );
 };

@@ -85,9 +85,6 @@ const HomePageContainer = () => {
                 >
                     <HomePageTrips trips={buddyTripStory.trips} />
                 </div>
-                <div className="fixed bottom-0 right-1/2 translate-x-1/2 w-dvw min-w-[360px] max-w-[430px] xl:w-dvw xl:max-w-[1080px] h-dvh mx-auto">
-                    <FloatingButton />
-                </div>
             </div>
         </div>
     );

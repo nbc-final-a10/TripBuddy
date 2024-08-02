@@ -23,7 +23,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
                 'bg-white box-border h-fit shadow-xl',
                 mode === 'detail' && 'p-4',
                 mode === 'list' && 'w-[90%] rounded-lg',
-                mode === 'card' && 'h-[215px] rounded-lg min-w-[240px]',
+                mode === 'card' && 'h-[215px] rounded-lg min-w-[250px]',
             )}
         >
             <div

@@ -13,6 +13,7 @@ import {
 import React, { Suspense } from 'react';
 import Loading from '../loading';
 import { getBuddyTripStory } from '@/api-services/home';
+import FloatingButton from '@/components/atoms/home/FloatingButton';
 
 const HomePage: React.FC = async () => {
     const queryClient = new QueryClient();
@@ -25,6 +26,8 @@ const HomePage: React.FC = async () => {
         <main className="relative h-full w-full">
             <Suspense fallback={<Loading />}>
                 <HydrationBoundary state={dehydratedState}>
+                    <FloatingButton />
+
                     <HomePageBanner />
                     <HomePageContainer />
                 </HydrationBoundary>
