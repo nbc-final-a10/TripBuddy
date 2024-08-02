@@ -1,5 +1,5 @@
 import Input from '@/components/atoms/common/Input';
-import Title from '@/components/atoms/common/O_Title';
+import Title from '@/components/atoms/common/Title';
 import OnBoardingInnerWrapper from '@/components/atoms/onboarding/OnBoardinginnerWrapper';
 import OnBoardingWrapper from '@/components/atoms/onboarding/OnBoardingWrapper';
 import React, { forwardRef } from 'react';

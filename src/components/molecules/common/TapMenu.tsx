@@ -4,13 +4,11 @@ import React from 'react';
 import { useAuth } from '@/hooks/auth';
 import clsx from 'clsx';
 import TapMenuButton from '@/components/atoms/common/TapMenuButton';
+import { usePathname } from 'next/navigation';
 
-type TapMenuProps = {
-    pathname: string;
-};
-
-const TapMenu: React.FC<TapMenuProps> = ({ pathname }) => {
+const TapMenu: React.FC = () => {
     const { buddy } = useAuth();
+    const pathname = usePathname();
     const buddy_id = buddy ? buddy.buddy_id : '';
 
     const hidden =

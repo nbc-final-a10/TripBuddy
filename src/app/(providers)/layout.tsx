@@ -10,7 +10,6 @@ import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import Header from '@/components/atoms/common/Header';
 import { getBuddyServer } from '@/api-services/auth/server';
 import { getUserFromHeader } from '@/utils/auth/getUserFromHeader';
-import { getPathnameServer } from '@/utils/common/getPathnameServer';
 import MainSectionWrapper from '@/components/molecules/common/MainSectionWrapper';
 import MobileHeader from '@/components/molecules/common/MobileHeader';
 import TapMenu from '@/components/molecules/common/TapMenu';
@@ -21,7 +20,6 @@ export const metadata: Metadata = defaultMetaData;
 
 const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
     const userId = getUserFromHeader();
-    const { pathname, queryParams } = getPathnameServer();
 
     console.log('헤더에서 user =====>', userId);
 
@@ -41,7 +39,7 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
                             <MobileHeader />
                             <Header />
                             {children}
-                            <TapMenu pathname={pathname as string} />
+                            <TapMenu />
                         </AuthProvider>
                     </HydrationBoundary>
                 </Suspense>
