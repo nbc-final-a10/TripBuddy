@@ -4,7 +4,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import React, { PropsWithChildren } from 'react';
 import Script from 'next/script';
-import { defaultMetaData } from '@/utils/common/defaultMetaData';
+import { defaultMetaData } from '@/data/defaultMetaData';
 
 const inter = Inter({ subsets: ['latin'] });
 

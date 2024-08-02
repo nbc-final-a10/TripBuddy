@@ -1,4 +1,5 @@
 export const defaultMetaData = {
+    metadataBase: new URL('https://nbc-final.vercel.app'),
     title: 'TripBuddies',
     description: 'TripBuddies',
     generator: 'Next.js',
