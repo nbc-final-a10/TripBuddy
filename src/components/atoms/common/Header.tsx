@@ -11,14 +11,17 @@ export default function Header() {
                     alt="logo"
                     width={170}
                     height={64}
+                    className="w-auto h-auto"
+                    priority
                 />
                 <Link href="/">HOME</Link>
                 <Link href="/trips">여정</Link>
                 <Link href="/chat">채팅</Link>
             </div>
-            <div className="flex gap-12 items-center">
+            <div className="flex gap-12 items-center font-bold">
                 <Link href="/login">LOGIN</Link>
                 <Link href="/signup">JOIN</Link>
+                {/** 추후수정요망 */}
                 <Link href="/">
                     <MyPageIcon />
                 </Link>
