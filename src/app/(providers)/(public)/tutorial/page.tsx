@@ -21,7 +21,7 @@ const Tutorial: React.FC = () => {
         if (step <= 4) {
             router.push(`/tutorial?funnel=${step}`, { scroll: false });
         } else {
-            router.push('/login');
+            router.push('/');
         }
     }, [step, router]);
 
@@ -29,24 +29,24 @@ const Tutorial: React.FC = () => {
         if (step < 4) {
             setStep(step + 1);
         } else {
-            router.push('/login');
+            router.push('/');
         }
     };
 
     const handleSkip = () => {
-        router.push('/login');
+        router.push('/');
     };
 
     return (
-        <div className="relative flex flex-col items-center h-[850] overflow-hidden bg-white">
+        <div className="relative flex flex-col items-center h-full overflow-hidden bg-white">
             <button
                 onClick={handleSkip}
-                className="absolute top-4 right-3 text-base  py-1 px-1 rounded mb-4"
+                className="absolute top-4 right-3 text-base py-1 px-1 rounded mb-4"
             >
                 건너뛰기
             </button>
 
-            <section className="flex flex-col items-center justify-center flex-grow max-h-screen ">
+            <section className="flex flex-col items-center justify-center flex-grow w-full max-h-screen">
                 <Tuto step={step + 1} />
             </section>
 
@@ -56,9 +56,9 @@ const Tutorial: React.FC = () => {
             <div className="w-full flex justify-center">
                 <button
                     onClick={handleNext}
-                    className="text-2xl bg-main-color font-bold py-2 px-4 rounded-2xl w-11/12 max-w-md mb-4 "
+                    className="text-2xl bg-main-color font-bold py-2 px-4 rounded-2xl w-11/12 max-w-md mb-4"
                 >
-                    {step < 4 ? '다음' : '시작하기'}
+                    {step < 4 ? '다음' : '홈으로'}
                 </button>
             </div>
         </div>
