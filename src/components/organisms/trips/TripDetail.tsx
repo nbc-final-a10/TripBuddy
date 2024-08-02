@@ -25,8 +25,6 @@ const TripDetail: React.FC<TripDetailProps> = ({ id }) => {
         error: buddyError,
     } = useSpecificBuddyQuery(trip?.trip_master_id || '');
 
-    console.log(buddy);
-
     const {
         data: recommendBuddies,
         isPending: recommendBuddiesPending,
@@ -40,8 +38,6 @@ const TripDetail: React.FC<TripDetailProps> = ({ id }) => {
     if (recommendBuddiesPending) return <DefaultLoader />;
     if (recommendBuddiesError)
         return <div>Error: {recommendBuddiesError.message}</div>;
-
-    console.log(recommendBuddies);
 
     // 마스터 아이디로 유저 찾아오는 로직 추가할 것
     return (
