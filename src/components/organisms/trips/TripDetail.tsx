@@ -19,17 +19,11 @@ type TripDetailProps = {
 const TripDetail: React.FC<TripDetailProps> = ({ id }) => {
     const { data: trip, isPending, error: tripError } = useTripQuery(id);
 
-    const [tripMasterId, setTripMasterId] = useState<string | null>(null);
-
-    useEffect(() => {
-        if (trip?.trip_master_id) setTripMasterId(trip.trip_master_id);
-    }, [trip]);
-
     const {
         data: buddy,
         isPending: buddyPending,
         error: buddyError,
-    } = useSpecificBuddyQuery(tripMasterId || '');
+    } = useSpecificBuddyQuery(trip?.trip_master_id || '');
 
     console.log(buddy);
 
