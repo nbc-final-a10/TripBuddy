@@ -4,6 +4,7 @@ import { Tables } from '@/types/supabase';
 import HomePageTrips from '../homepage/HomePageTrips';
 import useTapScroll from '@/hooks/useTapScroll';
 import { Trip } from '@/types/Trips.types';
+import Image from 'next/image';
 
 // type Trip = Tables<'trips'>;
 
@@ -46,7 +47,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
         <>
             <section className="my-10">
                 {filteredItems.length === 0 ? (
-                    <div>
+                    <div className="flex flex-col justify-center items-center mx-auto">
                         <p className="flex justify-center items-center mx-auto">
                             아쉽게도 일치하는 여정 결과가 없어요
                         </p>
