@@ -1,6 +1,9 @@
+'use client';
+import { useAuth } from '@/hooks/auth';
 import Image from 'next/image';
 
 const HomePageBanner = () => {
+    const { buddy } = useAuth();
     const bannerImgs = [
         'test_city.jpg',
         'test_city2.jpg',
