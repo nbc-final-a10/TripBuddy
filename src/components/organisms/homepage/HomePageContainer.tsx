@@ -11,6 +11,7 @@ import HomePageRecommnedBuddiesList from './HomePageRecommnedBuddiesList';
 import { useAuth } from '@/hooks/auth';
 import useHomeQuery from '@/hooks/queries/useHomeQuery';
 import Loading from '@/app/(providers)/loading';
+import FloatingButton from '@/components/atoms/home/FloatingButton';
 
 const HomePageContainer = () => {
     const buddiesRef = useRef<HTMLDivElement>(null);
@@ -82,6 +83,7 @@ const HomePageContainer = () => {
                 >
                     <HomePageTrips trips={buddyTripStory.trips} />
                 </div>
+                <FloatingButton />
             </div>
         </div>
     );
