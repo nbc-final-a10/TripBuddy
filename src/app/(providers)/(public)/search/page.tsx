@@ -19,6 +19,7 @@ type Trip = Tables<'trips'>;
 const SearchPage: React.FC = () => {
     const [showResult, setShowResult] = useState(false);
     const [resultItems, setResultItems] = useState<Trip[]>([]);
+    const [allItems, setAllItems] = useState<Trip[]>([]);
     const [visibleFirstItems, setVisibleFirstItems] = useState(8);
     const [visibleSecondItems, setVisibleSecondItems] = useState(6);
     const resultRef = useRef<HTMLDivElement>(null);
@@ -62,6 +63,10 @@ const SearchPage: React.FC = () => {
             console.error('Error fetching trips:', error.message);
             return;
         }
+
+        // setAllItems(data as Trip[]);
+        setResultItems(data as Trip[]);
+        setAllItems(data as Trip[]);
 
         let filteredItems = data as Trip[];
 
@@ -272,6 +277,7 @@ const SearchPage: React.FC = () => {
                 <div ref={resultRef}>
                     <SearchResult
                         items={resultItems}
+                        allTrips={allItems}
                         visibleFirstItems={visibleFirstItems}
                         visibleSecondItems={visibleSecondItems}
                         loadMoreFirstItems={loadMoreFirstItems}
