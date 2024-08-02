@@ -53,20 +53,20 @@ const SearchResult: React.FC<SearchResultProps> = ({
                 )}
             </section>
 
-            {/* <section className="mt-10 xl:mt-24">
+            <section className="mt-10 xl:mt-24">
                 <SearchPageTitle
-                    title="이런 여정은 어떠세요?"
-                    description="모집 마감이 얼마 남지 않은 여정들이에요!"
+                    title="여행자님, 이런 여정은 어떠세요?"
+                    description="모집 마감이 얼마 남지 않은 여정들이에요"
                 />
 
-                <ul className="grid grid-cols-1 gap-1 xl:grid-cols-3 xl:gap-2 xl:w-full">
+                {/* <ul className="grid grid-cols-1 gap-1 xl:grid-cols-3 xl:gap-2 xl:w-full">
                     {items.slice(0, visibleSecondItems).map((item, index) => (
                         <li
                             key={index}
                             className="shadow-md w-[335px] h-[93px] rounded-[11px] mx-auto mb-6 xl:mx-0 xl:w-full xl:h-[120px]"
                         ></li>
                     ))}
-                </ul>
+                </ul> */}
                 {visibleSecondItems < items.length && (
                     <button
                         className="mt-4 px-4 py-2 bg-main-color text-white rounded-2xl text-sm mx-auto block"
@@ -75,7 +75,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
                         더보기
                     </button>
                 )}
-            </section> */}
+            </section>
         </>
     );
 };
