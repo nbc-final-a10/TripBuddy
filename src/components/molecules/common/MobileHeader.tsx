@@ -75,7 +75,12 @@ const MobileHeader: React.FC = () => {
                     <MobileHeaderSettingsButton pathname={pathname} />
                 )}
                 {isTripDetail && <span>수정</span>}
-                {(isSearch || isWrite) && <Close />}
+                {(isSearch || isWrite) && (
+                    <Close
+                        onClick={() => router.push('/trips')}
+                        className="cursor-pointer"
+                    />
+                )}
             </div>
         </header>
     );
