@@ -32,11 +32,11 @@ const SearchResult: React.FC<SearchResultProps> = ({
 
     const filteredItems = items.slice(0, visibleFirstItems);
 
-    // 최신 등록순으로 정렬
+    // 작성된 순으로 정렬
     const sortItems = [...allTrips].sort((a, b) => {
         return (
-            new Date(b.trip_created_at).getTime() -
-            new Date(a.trip_created_at).getTime()
+            new Date(a.trip_created_at).getTime() -
+            new Date(b.trip_created_at).getTime()
         );
     });
 
@@ -88,10 +88,16 @@ const SearchResult: React.FC<SearchResultProps> = ({
                                 <div className="cursor-pointer flex items-center h-full">
                                     <div className="bg-gray-200 rounded-lg w-[60px] h-[60px]"></div>
                                     <div className="flex flex-col justify-between w-[218px] ml-8">
-                                        <p className="font-semibold truncate">
+                                        <span className="text-xs font-bold text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis">
+                                            {item.trip_theme1 &&
+                                            item.trip_theme2
+                                                ? `#${item.trip_theme1} #${item.trip_theme2}`
+                                                : '#태그없음'}
+                                        </span>
+                                        <p className="font-semibold truncate mt-1 mb-2.5">
                                             {item.trip_title}
                                         </p>
-                                        <div className="flex items-center justify-between w-full">
+                                        <div className="flex items-center justify-between w-full mb-1">
                                             <p className="truncate max-w-[calc(100%-70px)]">
                                                 {item.trip_content}
                                             </p>
