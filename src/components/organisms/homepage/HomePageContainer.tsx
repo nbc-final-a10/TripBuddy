@@ -1,6 +1,6 @@
 'use client';
 
-import HomePageSearchBar from '@/components/atoms/HomePageSearchBar';
+import HomePageSearchBar from './HomePageSearchBar';
 import HomePageStories from '@/components/molecules/homepage/HomePageStories';
 import HomePageTrips from '@/components/molecules/homepage/HomePageTrips';
 import React, { useRef } from 'react';
@@ -33,10 +33,7 @@ const HomePageContainer = () => {
 
     return (
         <div className="rounded-t-[32px] bg-white p-4 z-50 relative">
-            <Link href="/search">
-                <HomePageSearchBar />
-            </Link>
-
+            <HomePageSearchBar />
             <div className="mt-4 mb-2 relative">
                 <HomePageTitle
                     title="추천 인기 버디즈"
