@@ -20,7 +20,7 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
-                hostname: 'ssl.pstatic.net',
+                hostname: '**.pstatic.net',
             },
             { protocol: 'https', hostname: 'encrypted-tbn3.gstatic.com' },
             { protocol: 'https', hostname: 'example.com' },
