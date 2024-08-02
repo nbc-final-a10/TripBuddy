@@ -49,7 +49,7 @@ const MobileHeader: React.FC = () => {
     if (!isShow) return null;
 
     return (
-        <header className="relative h-[57px] w-full flex flex-row items-center px-5 xl:hidden">
+        <header className="relative h-[57px] w-full flex flex-row items-center px-5 xl:hidden bg-white">
             <div className="w-[calc(100%/3)] flex justify-start items-center">
                 <Arrow_Back />
             </div>

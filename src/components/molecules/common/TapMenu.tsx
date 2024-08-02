@@ -29,7 +29,7 @@ const TapMenu: React.FC<TapMenuProps> = ({ pathname }) => {
             )} // 변경 필요
         >
             <TapMenuButton iconName="Home" href="/" />
-            <TapMenuButton iconName="Trip" href="/" />
+            <TapMenuButton iconName="Trip" href="/trips" />
             <TapMenuButton iconName="Chat" href="/chat" />
             <TapMenuButton
                 iconName="Mypage"
