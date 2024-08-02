@@ -18,7 +18,7 @@ const Tutorial: React.FC = () => {
     }, [searchParams]);
 
     useEffect(() => {
-        if (step <= 5) {
+        if (step <= 4) {
             router.push(`/tutorial?funnel=${step}`, { scroll: false });
         } else {
             router.push('/login');
@@ -26,7 +26,7 @@ const Tutorial: React.FC = () => {
     }, [step, router]);
 
     const handleNext = () => {
-        if (step < 5) {
+        if (step < 4) {
             setStep(step + 1);
         } else {
             router.push('/login');
@@ -38,27 +38,27 @@ const Tutorial: React.FC = () => {
     };
 
     return (
-        <div className="relative flex flex-col items-center h-[850] overflow-hidden">
+        <div className="relative flex flex-col items-center h-[850] overflow-hidden bg-white">
             <button
                 onClick={handleSkip}
-                className="absolute top-4 right-4 text-xl bg-gray-200 py-2 px-4 rounded mb-8"
+                className="absolute top-4 right-3 text-base  py-1 px-1 rounded mb-4"
             >
                 건너뛰기
             </button>
 
-            <section className="flex flex-col items-center justify-center flex-grow max-h-screen">
+            <section className="flex flex-col items-center justify-center flex-grow max-h-screen ">
                 <Tuto step={step + 1} />
             </section>
 
             <div className="mb-12">
-                <ProgressIndicator step={step} counts={6} />
+                <ProgressIndicator step={step} counts={5} />
             </div>
             <div className="w-full flex justify-center">
                 <button
                     onClick={handleNext}
-                    className="text-2xl bg-main-color font-bold py-2 px-4 rounded w-11/12 max-w-md mb-4"
+                    className="text-2xl bg-main-color font-bold py-2 px-4 rounded w-11/12 max-w-md mb-4 "
                 >
-                    {step < 5 ? '다음' : '완료'}
+                    {step < 4 ? '다음' : '시작하기'}
                 </button>
             </div>
         </div>
