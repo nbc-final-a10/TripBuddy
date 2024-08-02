@@ -4,13 +4,19 @@ import {
     QueryClient,
     dehydrate,
 } from '@tanstack/react-query';
-import TapMenu from '@/components/molecules/TapMenu';
 import React, { PropsWithChildren, Suspense } from 'react';
 import Loading from './loading';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import Header from '@/components/atoms/common/Header';
 import { getBuddyServer } from '@/api-services/auth/server';
 import { getUserFromHeader } from '@/utils/auth/getUserFromHeader';
+import MainSectionWrapper from '@/components/molecules/common/MainSectionWrapper';
+import MobileHeader from '@/components/molecules/common/MobileHeader';
+import TapMenu from '@/components/molecules/common/TapMenu';
+import { Metadata } from 'next';
+import { defaultMetaData } from '@/data/defaultMetaData';
+
+export const metadata: Metadata = defaultMetaData;
 
 const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
     const userId = getUserFromHeader();
@@ -25,20 +31,19 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
     const dehydratedState = dehydrate(queryClient);
 
     return (
-        <main className="bg-slate-50 xl:bg-white">
-            <section className="w-[375px] mx-auto bg-white xl:w-[1080px] min-h-screen relative">
+        <main className="bg-slate-50 xl:bg-white min-h-dvh overflow-hidden">
+            <MainSectionWrapper>
                 <Suspense fallback={<Loading />}>
                     <HydrationBoundary state={dehydratedState}>
                         <AuthProvider>
+                            <MobileHeader />
                             <Header />
-                            <div className="pb-[50px] xl:pt-[100px]">
-                                {children}
-                            </div>
+                            {children}
                             <TapMenu />
                         </AuthProvider>
                     </HydrationBoundary>
                 </Suspense>
-            </section>
+            </MainSectionWrapper>
         </main>
     );
 };

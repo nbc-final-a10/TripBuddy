@@ -16,15 +16,15 @@ function CustomAlert({
     onJustClose,
 }: CustomAlertProps) {
     return (
-        <div className="bg-black/50 fixed top-0 left-0 w-full h-full flex justify-center items-center">
-            <dialog open className="rounded-xl">
+        <div className="bg-black/50 fixed top-0 left-0 w-full h-full flex justify-center items-center z-50">
+            <dialog open className="rounded-xl z-50">
                 <div className="bg-white w-[300px] min-h-[200px] rounded-lg flex flex-col justify-center items-center gap-5 transition-all duration-300">
                     <div className="flex flex-col items-center gap-2 w-full">
                         <h2
                             className={`text-2xl font-bold w-full text-center ${
                                 title === 'success'
-                                    ? 'text-lime-600'
-                                    : 'text-red-400'
+                                    ? 'text-main-color'
+                                    : 'text-red-300'
                             }`}
                         >
                             {title}

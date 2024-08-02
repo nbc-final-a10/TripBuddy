@@ -12,7 +12,7 @@ const ChattingPage = () => {
 
     return (
         <div className="bg-white">
-            <ChattingTitle />
+            <ChattingTitle id={id} />
             <ChatMessageList currentBuddy={currentBuddy} id={id} />
             <ChatMessageSend currentBuddy={currentBuddy} id={id} />
         </div>

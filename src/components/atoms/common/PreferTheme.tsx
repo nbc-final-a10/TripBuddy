@@ -1,5 +1,5 @@
 import { type AllBuddyTheme, type AllTripTheme } from '@/types/Themes.types';
-import Chip from './O_Chip';
+import Chip from './Chip';
 import { MouseEvent } from 'react';
 import clsx from 'clsx';
 

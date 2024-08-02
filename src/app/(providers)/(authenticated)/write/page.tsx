@@ -35,6 +35,7 @@ const WritePage: React.FC = () => {
         firstLevelLocation,
         secondLevelLocation,
         thirdLevelLocation,
+        setThirdLevelLocation,
     } = useSelectRegion();
     const [PreferTripThemesToRender, selectedTripThemes] = usePreferTheme({
         mode: 'trip',
@@ -48,8 +49,10 @@ const WritePage: React.FC = () => {
         tripTitle,
         tripContent,
         tripImage,
+        tripImageFile,
         handleTitleChange,
         handleContentChange,
+        handleImageChange,
     } = useTripWrite();
     const { wantedSex, SelectWantedSexButton } = useSelectSex();
     const { startAge, endAge, handleStartAge, handleEndAge } = useSelectAges();
@@ -82,7 +85,7 @@ const WritePage: React.FC = () => {
         const tripData: PartialTripData = {
             trip_title: tripTitle,
             trip_content: tripContent,
-            trip_thumbnail: tripImage,
+            trip_thumbnail: '',
             trip_master_id: buddy?.buddy_id ?? '',
             trip_max_buddies_counts: buddyCounts,
             trip_bookmarks_counts: buddyCounts,
@@ -100,13 +103,15 @@ const WritePage: React.FC = () => {
             trip_start_age: startAge,
             trip_end_age: endAge,
         };
+        const formData = new FormData();
+        if (tripImageFile) {
+            formData.append('trip_image', tripImageFile);
+            formData.append('trip_json', JSON.stringify(tripData));
+        }
         try {
             const response = await fetch('/api/write', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(tripData),
+                body: formData,
             });
             if (response.ok) {
                 console.log('게시글 업데이트 성공');
@@ -161,8 +166,11 @@ const WritePage: React.FC = () => {
                         <WriteTrip
                             tripTitle={tripTitle}
                             tripContent={tripContent}
+                            tripImage={tripImage}
+                            tripImageFile={tripImageFile}
                             handleTitleChange={handleTitleChange}
                             handleContentChange={handleContentChange}
+                            handleImageChange={handleImageChange}
                         />
                     )}
                     {step === 6 && <CompletePage />}

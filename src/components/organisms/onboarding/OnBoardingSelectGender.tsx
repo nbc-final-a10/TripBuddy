@@ -1,6 +1,5 @@
-import Button from '@/components/atoms/common/O_Button';
-import Chip from '@/components/atoms/common/O_Chip';
-import Title from '@/components/atoms/common/O_Title';
+import Chip from '@/components/atoms/common/Chip';
+import Title from '@/components/atoms/common/Title';
 import OnBoardingInnerWrapper from '@/components/atoms/onboarding/OnBoardinginnerWrapper';
 import OnBoardingWrapper from '@/components/atoms/onboarding/OnBoardingWrapper';
 import React, { useState } from 'react';

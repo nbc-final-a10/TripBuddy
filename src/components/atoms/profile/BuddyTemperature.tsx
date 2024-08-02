@@ -1,21 +1,30 @@
-'use client';
+type BuddyTemperatureProps = {
+    temperature: number;
+    isLabel?: boolean;
+    isTempText?: boolean;
+};
 
-import { BuddyProfileProps } from '@/types/ProfileParams.types';
-import React, { useState } from 'react';
-
-const BuddyTemperature = ({ id }: BuddyProfileProps) => {
-    const [temperature, setTemperature] = useState(36.5);
-
+const BuddyTemperature = ({
+    temperature,
+    isLabel = true,
+    isTempText = true,
+}: BuddyTemperatureProps) => {
     return (
-        <div className="mt-4 xl:mt-8 mx-2 xl:mx-8">
-            <span className="block text-left xl:text-xl">버디즈 온도</span>
-            <span className="block text-gray-500 text-right">
-                {temperature}°C
-            </span>
-            <div className="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700">
+        <div className="flex flex-col w-full">
+            {isLabel && (
+                <div className="flex w-full justify-between">
+                    <span className="block text-left xl:text-xl">
+                        버디 온도
+                    </span>
+                    <span className="text-gray-500">
+                        {temperature ? `${temperature} °C` : '온도정보없음'}
+                    </span>
+                </div>
+            )}
+            <div className="w-full rounded-full h-2 bg-[#A67000] mt-1">
                 <div
-                    className={`h-3 rounded-full bg-main-color`}
-                    style={{ width: `${temperature}%` }}
+                    className="h-2 rounded-full bg-main-color"
+                    style={{ width: `${temperature} °C` }}
                 ></div>
             </div>
         </div>

@@ -3,6 +3,7 @@ const PHASE_PRODUCTION_BUILD = process.env.NODE_ENV === 'production';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    reactStrictMode: false,
     images: {
         remotePatterns: [
             {
@@ -21,6 +22,8 @@ const nextConfig = {
                 protocol: 'https',
                 hostname: 'ssl.pstatic.net',
             },
+            { protocol: 'https', hostname: 'encrypted-tbn3.gstatic.com' },
+            { protocol: 'https', hostname: 'example.com' },
         ],
     },
     webpack(config) {

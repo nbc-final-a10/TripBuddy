@@ -1,6 +1,5 @@
-import Input from '@/components/atoms/common/O_Input';
-import Paragraph from '@/components/atoms/common/O_Paragraph';
-import Title from '@/components/atoms/common/O_Title';
+import Paragraph from '@/components/atoms/common/Paragraph';
+import Title from '@/components/atoms/common/Title';
 import OnBoardingInnerWrapper from '@/components/atoms/onboarding/OnBoardinginnerWrapper';
 import OnBoardingWrapper from '@/components/atoms/onboarding/OnBoardingWrapper';
 import { Calendar, CalendarDate } from '@nextui-org/calendar';

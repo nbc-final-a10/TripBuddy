@@ -1,4 +1,4 @@
-import Chip from '../common/O_Chip';
+import Chip from '../common/Chip';
 import { SecondLevel } from '@/types/Location.types';
 import React from 'react';
 

@@ -1,29 +1,16 @@
-import MobileHeader from '@/components/molecules/common/MobileHeader';
+import { defaultMetaData } from '@/data/defaultMetaData';
 import { getPathnameServer } from '@/utils/common/getPathnameServer';
+import { Metadata } from 'next';
 import React from 'react';
 
 type ConditionalLayoutProps = {
     children: React.ReactNode;
 };
 
-const ConditionalLayout: React.FC<ConditionalLayoutProps> = ({ children }) => {
-    const { pathname, queryParams } = getPathnameServer();
+export const metadata: Metadata = defaultMetaData;
 
-    return (
-        <>
-            {pathname?.includes('/trips') && (
-                <MobileHeader
-                    title="여정 보기"
-                    // notification
-                    // search
-                    // settings
-                    edit
-                    // close
-                />
-            )}
-            {children}
-        </>
-    );
+const ConditionalLayout: React.FC<ConditionalLayoutProps> = ({ children }) => {
+    return <>{children}</>;
 };
 
 export default ConditionalLayout;
