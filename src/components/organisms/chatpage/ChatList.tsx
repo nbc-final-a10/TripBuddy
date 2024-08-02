@@ -1,213 +1,178 @@
 'use client';
-import ChatListItem from '@/components/molecules/chatpage/ChatListItem';
+
 import React, { useEffect, useState } from 'react';
+import ChatListItem from '@/components/molecules/chatpage/ChatListItem';
 import supabase from '@/utils/supabase/client';
 import { useAuth } from '@/hooks/auth';
-
-type Contract = {
-    contract_id: string;
-    contract_trip_id: string;
-    contract_buddy_id: string;
-    isPending: boolean;
-    isValidate: boolean;
-};
-
-type BuddyProfile = {
-    buddy_id: string;
-    buddy_profile_pic: string;
-};
-
-type Trip = {
-    trip_id: string;
-    trip_title: string;
-};
-
-type ContractData = {
-    contract_id: string;
-    contract_trip_id: string;
-    trip_title: string;
-    contract_buddies_profiles: string[];
-    last_message_content?: string;
-    last_message_time?: string;
-};
+import { ContractData } from '@/types/Chat.types';
 
 const ChatList = () => {
     const { buddy: currentBuddy } = useAuth();
     const [chatData, setChatData] = useState<ContractData[]>([]);
 
     useEffect(() => {
-        const fetchContracts = async () => {
-            const { data: contracts, error: contractsError } = await supabase
-                .from<Contract>('contract')
-                .select('contract_id, contract_trip_id')
-                .eq('contract_buddy_id', currentBuddy.buddy_id)
-                .eq('contract_isPending', false)
-                .eq('contract_isValidate', true);
+        const fetchChatData = async () => {
+            if (!currentBuddy) return;
 
-            if (contractsError) {
-                console.error('Error fetching contracts:', contractsError);
-                return;
-            } else console.log('contracts fetch 성공', contracts);
+            try {
+                const { data: contracts, error: contractsError } =
+                    await supabase
+                        .from('contract')
+                        .select('contract_id, contract_trip_id')
+                        .eq('contract_buddy_id', currentBuddy.buddy_id)
+                        .eq('contract_isPending', false)
+                        .eq('contract_isValidate', true);
 
-            if (!contracts) return;
+                if (contractsError) throw contractsError;
 
-            const contractIds = contracts.map(contract => contract.contract_id);
-            const tripIds = contracts.map(
-                contract => contract.contract_trip_id,
-            );
+                if (!contracts) return;
 
-            const { data: allBuddies, error: allBuddiesError } = await supabase
-                .from<Contract>('contract')
-                .select('contract_buddy_id, contract_id, contract_trip_id')
-                .in('contract_trip_id', tripIds);
-
-            if (allBuddiesError) {
-                console.error('Error fetching all buddies:', allBuddiesError);
-                return;
-            } else console.log('buddy fetch 성공!', allBuddies);
-
-            const buddiesByTrip = new Map<string, Set<string>>();
-            allBuddies.forEach(buddy => {
-                if (!buddiesByTrip.has(buddy.contract_trip_id)) {
-                    buddiesByTrip.set(
-                        buddy.contract_trip_id,
-                        new Set<string>(),
-                    );
-                }
-                buddiesByTrip
-                    .get(buddy.contract_trip_id)!
-                    .add(buddy.contract_buddy_id);
-            });
-
-            const allBuddyIds = Array.from(
-                new Set(allBuddies.map(buddy => buddy.contract_buddy_id)),
-            );
-
-            const { data: buddyProfiles, error: buddyError } = await supabase
-                .from<BuddyProfile>('buddies')
-                .select('buddy_id, buddy_profile_pic')
-                .in('buddy_id', allBuddyIds);
-
-            if (buddyError) {
-                console.error('Error fetching buddy profiles:', buddyError);
-                return;
-            }
-
-            if (!buddyProfiles) return;
-
-            const buddyProfileMap = new Map<string, string>();
-            buddyProfiles.forEach(profile => {
-                buddyProfileMap.set(
-                    profile.buddy_id,
-                    profile.buddy_profile_pic,
+                const contractIds = contracts.map(
+                    contract => contract.contract_id,
                 );
-            });
+                const tripIds = contracts.map(
+                    contract => contract.contract_trip_id,
+                );
 
-            const { data: trips, error: tripError } = await supabase
-                .from<Trip>('trips')
-                .select('trip_id, trip_title')
-                .in('trip_id', tripIds);
+                const { data: allBuddies, error: allBuddiesError } =
+                    await supabase
+                        .from('contract')
+                        .select('contract_buddy_id, contract_trip_id')
+                        .in('contract_trip_id', tripIds);
 
-            if (tripError) {
-                console.error('Error fetching trips:', tripError);
-                return;
-            }
+                if (allBuddiesError) throw allBuddiesError;
 
-            if (!trips) return;
+                const buddiesByTrip = allBuddies.reduce(
+                    (acc, buddy) => {
+                        if (!acc[buddy.contract_trip_id]) {
+                            acc[buddy.contract_trip_id] = new Set();
+                        }
+                        acc[buddy.contract_trip_id].add(
+                            buddy.contract_buddy_id,
+                        );
+                        return acc;
+                    },
+                    {} as Record<string, Set<string>>,
+                );
 
-            const tripTitleMap = new Map<string, string>();
-            trips.forEach(trip => {
-                tripTitleMap.set(trip.trip_id, trip.trip_title);
-            });
+                const allBuddyIds = Array.from(
+                    new Set(allBuddies.map(buddy => buddy.contract_buddy_id)),
+                );
 
-            const contractDataMap = new Map<string, ContractData>();
+                const { data: buddyProfiles, error: buddyError } =
+                    await supabase
+                        .from('buddies')
+                        .select('buddy_id, buddy_profile_pic')
+                        .in('buddy_id', allBuddyIds);
 
-            contracts.forEach(contract => {
-                const { contract_id, contract_trip_id } = contract;
+                if (buddyError) throw buddyError;
 
-                if (!contractDataMap.has(contract_id)) {
+                const buddyProfileMap = buddyProfiles?.reduce(
+                    (acc, profile) => {
+                        acc[profile.buddy_id] = profile.buddy_profile_pic;
+                        return acc;
+                    },
+                    {} as Record<string, string>,
+                );
+
+                const { data: trips, error: tripError } = await supabase
+                    .from('trips')
+                    .select('trip_id, trip_title')
+                    .in('trip_id', tripIds);
+
+                if (tripError) throw tripError;
+
+                const tripTitleMap = trips?.reduce(
+                    (acc, trip) => {
+                        acc[trip.trip_id] = trip.trip_title;
+                        return acc;
+                    },
+                    {} as Record<string, string>,
+                );
+
+                const contractDataMap = new Map<string, ContractData>();
+
+                contracts.forEach(contract => {
+                    const { contract_id, contract_trip_id } = contract;
+
+                    const buddyIds = Array.from(
+                        buddiesByTrip[contract_trip_id] || [],
+                    );
+                    const buddyProfiles = buddyIds.map(
+                        buddyId => buddyProfileMap[buddyId] || '',
+                    );
+
                     contractDataMap.set(contract_id, {
                         contract_id,
                         contract_trip_id,
-                        trip_title: tripTitleMap.get(contract_trip_id) || '',
-                        contract_buddies_profiles: [],
+                        trip_title: tripTitleMap[contract_trip_id] || '',
+                        contract_buddies_profiles: buddyProfiles,
                         last_message_content: 'No messages yet',
                         last_message_time: '',
                     });
-                }
-
-                const buddyIds =
-                    buddiesByTrip.get(contract_trip_id) || new Set();
-                const buddyProfiles = Array.from(buddyIds).map(
-                    buddyId => buddyProfileMap.get(buddyId) || '',
-                );
-
-                const contractData = contractDataMap.get(contract_id);
-                if (contractData) {
-                    contractData.contract_buddies_profiles = buddyProfiles;
-                }
-            });
-
-            // Fetch last messages for each trip
-            const fetchLastMessages = async () => {
-                const lastMessagesMap = new Map<
-                    string,
-                    { message_content: string; message_created_at: string }
-                >();
-
-                for (const tripId of tripIds) {
-                    const { data: lastMessages, error: lastMessagesError } =
-                        await supabase
-                            .from('messages')
-                            .select(
-                                'message_content, message_created_at, message_trip_id',
-                            )
-                            .eq('message_trip_id', tripId)
-                            .order('message_created_at', { ascending: false })
-                            .limit(1);
-
-                    if (lastMessagesError) {
-                        console.error(
-                            'Error fetching last messages:',
-                            lastMessagesError,
-                        );
-                        continue;
-                    }
-
-                    if (lastMessages && lastMessages.length > 0) {
-                        const lastMessage = lastMessages[0];
-                        lastMessagesMap.set(tripId, {
-                            message_content: lastMessage.message_content,
-                            message_created_at: lastMessage.message_created_at,
-                        });
-                    }
-                }
-
-                lastMessagesMap.forEach((message, tripId) => {
-                    const contractData = Array.from(
-                        contractDataMap.values(),
-                    ).find(c => c.contract_trip_id === tripId);
-                    if (contractData) {
-                        contractData.last_message_content =
-                            message.message_content;
-                        contractData.last_message_time = new Date(
-                            message.message_created_at,
-                        ).toLocaleTimeString('en-GB', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                        });
-                    }
                 });
 
-                // Convert Map to array
-                const data = Array.from(contractDataMap.values());
-                setChatData(data);
-            };
+                const fetchLastMessages = async () => {
+                    const lastMessagesMap = new Map<
+                        string,
+                        { message_content: string; message_created_at: string }
+                    >();
 
-            fetchLastMessages();
+                    for (const tripId of tripIds) {
+                        const { data: lastMessages, error: lastMessagesError } =
+                            await supabase
+                                .from('messages')
+                                .select('message_content, message_created_at')
+                                .eq('message_trip_id', tripId)
+                                .order('message_created_at', {
+                                    ascending: false,
+                                })
+                                .limit(1);
+
+                        if (lastMessagesError) {
+                            console.error(
+                                'Error fetching last messages:',
+                                lastMessagesError,
+                            );
+                            continue;
+                        }
+
+                        if (lastMessages?.length > 0) {
+                            lastMessagesMap.set(tripId, {
+                                message_content:
+                                    lastMessages[0].message_content,
+                                message_created_at:
+                                    lastMessages[0].message_created_at,
+                            });
+                        }
+                    }
+
+                    lastMessagesMap.forEach((message, tripId) => {
+                        const contractData = Array.from(
+                            contractDataMap.values(),
+                        ).find(c => c.contract_trip_id === tripId);
+                        if (contractData) {
+                            contractData.last_message_content =
+                                message.message_content;
+                            contractData.last_message_time = new Date(
+                                message.message_created_at,
+                            ).toLocaleTimeString('en-GB', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                            });
+                        }
+                    });
+
+                    setChatData(Array.from(contractDataMap.values()));
+                };
+
+                fetchLastMessages();
+            } catch (error) {
+                console.error('Error fetching chat data:', error);
+            }
         };
 
-        fetchContracts();
+        fetchChatData();
 
         const messageSubscription = supabase
             .channel('chat-room')
@@ -249,7 +214,7 @@ const ChatList = () => {
         return () => {
             messageSubscription.unsubscribe();
         };
-    }, [currentBuddy.buddy_id]);
+    }, [currentBuddy]);
 
     return (
         <div className="flex flex-col p-4">
