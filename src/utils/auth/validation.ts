@@ -1,5 +1,5 @@
-import { showAlert } from '../ui/openCustomAlert';
 import { emailRegex } from '../common/regexs';
+import { showAlert } from '../ui/openCustomAlert';
 export const validateWhiteSpace = (inputs: (string | undefined)[]) =>
     inputs?.some(input => input !== undefined && /\s/.test(input));
 

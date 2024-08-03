@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserIdFromHeader } from '@/utils/auth/getUserIdFromHeader';
+import convertToWebP from '@/utils/common/convertToWebp';
 
 export async function POST(req: NextRequest) {
     const supabase = createClient();
@@ -17,6 +18,8 @@ export async function POST(req: NextRequest) {
 
         const formData = await req.formData();
         const tripDataString = formData.get('trip_json');
+        const tripImageFile = formData.get('trip_image') as File;
+
         if (!tripDataString) {
             return NextResponse.json(
                 { trip: null, error: 'Invalid trip data' },
@@ -24,7 +27,41 @@ export async function POST(req: NextRequest) {
             );
         }
 
+        if (!tripImageFile) {
+            return NextResponse.json(
+                { trip: null, error: 'Invalid trip image' },
+                { status: 400 },
+            );
+        }
+
+        const imageBuffer = await convertToWebP(tripImageFile, 1080);
+
         const tripData = JSON.parse(tripDataString as string);
+        const filePath = `trips_${Date.now()}_${tripData.trip_id}.webp`;
+
+        if (!imageBuffer) {
+            return NextResponse.json(
+                { trip: null, error: '이미지 변환 중 오류 발생' },
+                { status: 500 },
+            );
+        }
+
+        const { data: imageData, error: imageError } = await supabase.storage
+            .from('trips')
+            .upload(filePath, imageBuffer, { contentType: 'image/webp' });
+
+        if (imageError) {
+            return NextResponse.json(
+                { trip: null, error: '이미지 업로드 중 오류 발생' },
+                { status: 500 },
+            );
+        }
+
+        const { data: publicUrl } = supabase.storage
+            .from('trips')
+            .getPublicUrl(filePath);
+
+        tripData.trip_thumbnail = publicUrl.publicUrl;
 
         // 'trips' 테이블에 여행 데이터를 삽입
         const { data: trip, error: tripError } = await supabase

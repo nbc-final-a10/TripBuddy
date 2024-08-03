@@ -1,8 +1,8 @@
+import { showAlert } from '../ui/openCustomAlert';
 import {
     SecondLevelNames,
     ThirdLevelNames,
 } from './../../types/Location.types';
-import { showAlert } from '../ui/openCustomAlert';
 import { BuddyTheme, TripTheme } from '@/types/Themes.types';
 
 type InPutValue =

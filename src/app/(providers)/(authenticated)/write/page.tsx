@@ -123,10 +123,11 @@ const WritePage: React.FC = () => {
         }
     };
 
+    // h-[calc(100dvh-180px)]
     return (
         <>
             <ProgressIndicator step={step} counts={7} />
-            <section className="h-dvh flex flex-col">
+            <section className="h-auto flex flex-col">
                 <div className="flex flex-col">
                     {step === 0 && (
                         <WelcomePage SelectBuddyCounts={SelectBuddyCounts} />

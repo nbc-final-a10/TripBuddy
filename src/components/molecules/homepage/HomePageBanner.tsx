@@ -10,7 +10,6 @@ type Trip = {
     trip_start_date: string;
     trip_id: string;
 };
-import HomePageBannerText from './HomePageBannerText';
 
 const HomePageBanner = () => {
     const { buddy } = useAuth();
@@ -124,7 +123,7 @@ const HomePageBanner = () => {
                 )}
                 <div className="absolute inset-0 bg-black/30 z-10" />
                 <div className="relative z-20 text-white h-full flex flex-col justify-center gap-3">
-                    {expectedTrip ? (
+                    {expectedTrip && (
                         <>
                             <p>
                                 <span className="font-bold text-3xl">
@@ -143,8 +142,25 @@ const HomePageBanner = () => {
                                 일 남았어요!
                             </p>
                         </>
-                    ) : (
-                        <p>아직 여행 일정이 없군요!</p>
+                    )}
+                    {!expectedTrip && buddy && (
+                        <>
+                            <p>
+                                <span className="font-bold text-3xl">
+                                    {buddy?.buddy_nickname}
+                                </span>
+                                님,
+                            </p>
+                            <p>아직 여행 일정이 없군요!</p>
+                        </>
+                    )}
+
+                    {!buddy && (
+                        <>
+                            <p className="font-bold text-3xl">트립버디즈와</p>
+                            <p>즐거운 여정을</p>
+                            <p className="font-bold text-3xl">시작해보세요!</p>
+                        </>
                     )}
                 </div>
             </div>

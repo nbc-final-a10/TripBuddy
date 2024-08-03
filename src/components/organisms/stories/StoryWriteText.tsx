@@ -21,7 +21,7 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
     const [texts, setTexts] = useState<
         { text: string; position: { x: number; y: number } }[]
     >([]);
-    const isLocked = useLockBodyScroll();
+    const { isLocked } = useLockBodyScroll(true);
 
     const { mutate, isPending, error } = useStoryMutation();
 

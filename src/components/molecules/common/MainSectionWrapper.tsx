@@ -17,12 +17,13 @@ const MainSectionWrapper = ({ children }: MainSectionWrapperProps) => {
         pathname === '/writestory' ||
         pathname === '/login' ||
         pathname === '/signup' ||
-        pathname === '/recover';
+        pathname === '/recover' ||
+        pathname === '/onboarding';
 
     return (
         <section
             className={twMerge(
-                'relative max-w-[430px] min-w-[360px] mx-auto min-h-dvh pb-[50px] xl:w-[1080px] xl:max-w-[1280px]',
+                'relative max-w-[430px] min-w-[320px] mx-auto min-h-dvh pb-[50px] xl:w-[1080px] xl:max-w-[1280px] xl:min-h-full',
                 isHidePaddingBottom && 'pb-0',
             )}
         >

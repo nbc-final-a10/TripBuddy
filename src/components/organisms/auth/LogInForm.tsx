@@ -1,8 +1,8 @@
 'use client';
 
 import clsx from 'clsx';
-import { useSearchParams } from 'next/navigation';
-import { FormEvent, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { FormEvent, useEffect, useState } from 'react';
 import { SubmitButton } from '../../atoms/common/SubmitButton';
 import { useAuth } from '@/hooks/auth';
 import { authValidation } from '@/utils/auth/validation';
@@ -12,10 +12,11 @@ import Input from '@/components/atoms/common/Input';
 
 function LogInForm() {
     const { isPending, logIn, sendingResetEmail } = useAuth();
+    const router = useRouter();
     const searchParams = useSearchParams();
-    const search = searchParams.get('mode');
+    const mode = searchParams.get('mode');
     const [isRecoverPassword, setIsRecoverPassword] = useState(
-        search === 'recover',
+        mode === 'recover',
     );
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -49,6 +50,22 @@ function LogInForm() {
         sendingResetEmail(email);
     };
 
+    useEffect(() => {
+        if (isRecoverPassword) {
+            router.push('/login?mode=recover');
+        } else {
+            router.push('/login?mode=login');
+        }
+    }, [isRecoverPassword, router]);
+
+    useEffect(() => {
+        if (mode === 'recover') {
+            setIsRecoverPassword(true);
+        } else {
+            setIsRecoverPassword(false);
+        }
+    }, [mode]);
+
     return (
         <>
             <div className="flex flex-col items-center justify-center gap-2 pb-4">
@@ -63,7 +80,7 @@ function LogInForm() {
                 }
                 className={twMerge(
                     'w-full h-fit min-h-[35%] flex flex-col items-center justify-center',
-                    isRecoverPassword && 'gap-72',
+                    isRecoverPassword && 'gap-30',
                 )}
             >
                 <div className="w-[90%] flex flex-col items-center justify-center gap-8">
