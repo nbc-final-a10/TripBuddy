@@ -1,3 +1,4 @@
+import { Contract, ContractWithTrips } from '@/types/Contract.types';
 import { Trip } from '@/types/Trips.types';
 import { createClient } from '@/utils/supabase/server';
 import { PostgrestError } from '@supabase/supabase-js';
@@ -32,5 +33,37 @@ export async function GET(
         return NextResponse.json({ error: 'Trip not found' }, { status: 404 });
     }
 
-    return NextResponse.json(trip, { status: 200 });
+    // 참여중인 여정 (contract)
+    const {
+        data: contract,
+        error: contractError,
+    }: {
+        data: ContractWithTrips[] | null;
+
+        error: PostgrestError | null;
+    } = await supabase
+        .from('contract')
+        .select('*, trips:contract_trip_id (*)')
+        .eq('contract_buddy_id', id)
+        .eq('contract_isLeader', false);
+
+    if (contractError) {
+        console.error(contractError);
+        return NextResponse.json(
+            { error: contractError?.message },
+            { status: 401 },
+        );
+    }
+
+    if (!contract) {
+        return NextResponse.json(
+            { error: 'Contract not found' },
+            { status: 404 },
+        );
+    }
+
+    return NextResponse.json(
+        { created: trip, participated: contract },
+        { status: 200 },
+    );
 }

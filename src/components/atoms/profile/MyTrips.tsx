@@ -8,11 +8,16 @@ import TripCard from '@/components/molecules/trips/TripCard';
 import fetchWrapper from '@/utils/api/fetchWrapper';
 import { Trip } from '@/types/Trips.types';
 import useTapScroll from '@/hooks/useTapScroll';
+import { ContractWithTrips } from '@/types/Contract.types';
 
 export default function MyTrips({ id }: BuddyProfileProps) {
     const participatingAccordion = useAccordion();
     const createdAccordion = useAccordion();
-    const [trips, setTrips] = useState<Trip[]>([]);
+    const [trips, setTrips] = useState<{
+        created: Trip[];
+        participated: ContractWithTrips[];
+    }>({ created: [], participated: [] });
+
     const createdTripsRef = useRef<HTMLDivElement>(null);
     const participatingTripsRef = useRef<HTMLDivElement>(null);
 
@@ -21,7 +26,10 @@ export default function MyTrips({ id }: BuddyProfileProps) {
     useEffect(() => {
         const fetchTrips = async () => {
             try {
-                const data = await fetchWrapper<Trip[]>(`/api/trips/my/${id}`, {
+                const data = await fetchWrapper<{
+                    created: Trip[];
+                    participated: ContractWithTrips[];
+                }>(`/api/trips/my/${id}`, {
                     method: 'GET',
                 });
                 setTrips(data);
@@ -46,7 +54,7 @@ export default function MyTrips({ id }: BuddyProfileProps) {
                     ref={createdTripsRef}
                     onMouseDown={createMouseDownHandler(createdTripsRef)}
                 >
-                    {trips.map(trip => (
+                    {trips.created.map(trip => (
                         <TripCard key={trip.trip_id} trip={trip} mode="card" />
                     ))}
                 </div>
@@ -57,7 +65,19 @@ export default function MyTrips({ id }: BuddyProfileProps) {
                 toggleAccordion={participatingAccordion.toggleAccordion}
                 icon={<FaCalendarCheck />}
             >
-                내가 참여한 여정의 내용
+                <div
+                    className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
+                    ref={participatingTripsRef}
+                    onMouseDown={createMouseDownHandler(participatingTripsRef)}
+                >
+                    {trips.participated.map(contract => (
+                        <TripCard
+                            key={contract.trips.trip_id}
+                            trip={contract.trips}
+                            mode="card"
+                        />
+                    ))}
+                </div>
             </Accordion>
         </div>
     );
