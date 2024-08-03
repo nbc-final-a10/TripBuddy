@@ -15,11 +15,14 @@ const OnBoardingInnerWrapper = ({
     return (
         <div
             className={twMerge(
-                clsx('flex flex-col gap-4 w-full h-[80%] items-center', {
-                    'justify-start': align === 'start',
-                    'justify-end': align === 'end',
-                    'justify-center': align === 'center',
-                }),
+                clsx(
+                    'flex flex-col gap-4 w-full h-full items-center xl:h-[90%]',
+                    {
+                        'justify-start': align === 'start',
+                        'justify-end': align === 'end',
+                        'justify-center': align === 'center',
+                    },
+                ),
                 className,
             )}
         >

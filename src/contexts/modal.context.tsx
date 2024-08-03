@@ -29,7 +29,6 @@ export const ModalProviderDefault: React.FC<{ children: React.ReactNode }> = ({
 
     const open = useCallback(
         (options: ModalOptions) => {
-            console.log('open', options);
             setModalOptions(options);
             setLock(true);
         },
@@ -37,9 +36,10 @@ export const ModalProviderDefault: React.FC<{ children: React.ReactNode }> = ({
     );
 
     const close = useCallback(() => {
-        setModalOptions(null);
+        if (modalOptions?.options.onConfirm) modalOptions.options.onConfirm();
         setLock(false);
-    }, [setLock]);
+        setModalOptions(null);
+    }, [modalOptions, setLock]);
 
     useEffect(() => {
         setLock(false);
