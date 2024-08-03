@@ -40,7 +40,6 @@ const OnBoarding: React.FC = () => {
     const { logOut, buddy } = useAuth();
 
     const nicknameRef = useRef<HTMLInputElement>(null);
-    const ageRef = useRef<HTMLInputElement>(null);
     const buddyInfoRef = useRef<PartialBuddy>({ buddy_id: buddy?.buddy_id });
 
     const [selectedGender, setSelectedGender] = useState<string>('');
