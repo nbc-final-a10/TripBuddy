@@ -6,8 +6,19 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-// Todo: 나중에 메달 별로 넣기 금은동
 const medalIcons = ['/public/gif/medal.gif'];
+
+const Skeleton: React.FC = () => {
+    return (
+        <div className="bg-gray-100 rounded-lg p-4 relative animate-pulse">
+            <div className="relative rounded-lg overflow-hidden h-48 bg-gray-300"></div>
+            <div className="mt-4 flex justify-between items-center">
+                <span className="text-xl font-bold text-gray-300 bg-gray-300 rounded w-1/3 h-6"></span>
+                <div className="bg-gray-300 rounded w-1/4 h-6"></div>
+            </div>
+        </div>
+    );
+};
 
 const RankPage: React.FC = () => {
     const [buddies, setBuddies] = useState<Buddy[]>([]);
@@ -26,6 +37,7 @@ const RankPage: React.FC = () => {
                 setLoading(false);
             } catch (error) {
                 console.error('버디 추천 리스트 통신 오류 발생:', error);
+                setLoading(false);
             }
         };
         fetchBuddies();
@@ -45,59 +57,63 @@ const RankPage: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                {buddies.map((buddy, index) => (
-                    <div
-                        key={index}
-                        className="bg-gray-100 rounded-lg p-4 relative transform transition-transform duration-200 hover:-translate-y-2 cursor-pointer"
-                        onClick={() => {
-                            router.push(`/profile/${buddy.buddy_id}`);
-                        }}
-                    >
-                        <div className="relative rounded-lg overflow-hidden">
-                            <div className="relative w-full h-48">
-                                <Image
-                                    src={
-                                        buddy?.buddy_profile_pic ||
-                                        '/default-profile.png'
-                                    }
-                                    alt={buddy?.buddy_nickname}
-                                    layout="fill"
-                                    objectFit="cover"
-                                    className="rounded-t-lg"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-75"></div>
-                                <div className="absolute bottom-0 left-0 p-4 text-white">
-                                    <h3 className="text-2xl font-bold">
-                                        {buddy?.buddy_nickname}
-                                    </h3>
-                                    <p className="text-sm">
-                                        {buddy?.buddy_introduction}
-                                    </p>
-                                </div>
-                                {index < 3 && (
-                                    <div className="absolute top-4 right-4">
-                                        <Image
-                                            // Todo: 금은동 메달 배열에 들어가고 나면 사용
-                                            // src={medalIcons[index]}
-                                            src={'/icon/medal.png'}
-                                            alt={`${index + 1}위 메달`}
-                                            width={40}
-                                            height={40}
-                                        />
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                        <div className="mt-4 flex justify-between items-center">
-                            <span className="text-xl font-bold text-gray-800 whitespace-nowrap mr-2">
-                                {index + 1}위
-                            </span>
-                            <BuddyTemperature
-                                temperature={buddy?.buddy_temperature}
-                            />
-                        </div>
-                    </div>
-                ))}
+                {loading
+                    ? Array.from({ length: 10 }).map((_, index) => (
+                          <Skeleton key={index} />
+                      ))
+                    : buddies.map((buddy, index) => (
+                          <div
+                              key={index}
+                              className="bg-gray-100 rounded-lg p-4 relative transform transition-transform duration-200 hover:-translate-y-2 cursor-pointer"
+                              onClick={() => {
+                                  router.push(`/profile/${buddy.buddy_id}`);
+                              }}
+                          >
+                              <div className="relative rounded-lg overflow-hidden">
+                                  <div className="relative w-full h-48">
+                                      <Image
+                                          src={
+                                              buddy?.buddy_profile_pic ||
+                                              '/default-profile.png'
+                                          }
+                                          alt={buddy?.buddy_nickname}
+                                          layout="fill"
+                                          objectFit="cover"
+                                          className="rounded-t-lg"
+                                      />
+                                      <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-75"></div>
+                                      <div className="absolute bottom-0 left-0 p-4 text-white">
+                                          <h3 className="text-2xl font-bold">
+                                              {buddy?.buddy_nickname}
+                                          </h3>
+                                          <p className="text-sm">
+                                              {buddy?.buddy_introduction}
+                                          </p>
+                                      </div>
+                                      {index < 3 && (
+                                          <div className="absolute top-4 right-4">
+                                              <Image
+                                                  // Todo: 금은동 메달 배열에 들어가고 나면 사용
+                                                  // src={medalIcons[index]}
+                                                  src={'/icon/medal.png'}
+                                                  alt={`${index + 1}위 메달`}
+                                                  width={40}
+                                                  height={40}
+                                              />
+                                          </div>
+                                      )}
+                                  </div>
+                              </div>
+                              <div className="mt-4 flex justify-between items-center">
+                                  <span className="text-xl font-bold text-gray-800 whitespace-nowrap mr-2">
+                                      {index + 1}위
+                                  </span>
+                                  <BuddyTemperature
+                                      temperature={buddy?.buddy_temperature}
+                                  />
+                              </div>
+                          </div>
+                      ))}
             </div>
         </div>
     );
