@@ -6,7 +6,7 @@ type UseNextButtonProps = {
     initialStep?: number;
     limit: number;
     buttonText: string;
-    validateStep?: () => boolean;
+    validateStep?: () => boolean | Promise<boolean>;
 };
 
 const useNextButton = ({

@@ -21,6 +21,7 @@ import WriteTrip from '@/components/organisms/write/WriteTrip';
 import useSelectSex from '@/hooks/useSelectSex';
 import useSelectAges from '@/hooks/useSelectAges';
 import useSelectMeetPlace from '@/hooks/useSelectMeetPlace';
+import { useRouter } from 'next/navigation';
 
 // 버튼 라벨 배열
 const buttonText = [
@@ -35,7 +36,10 @@ const buttonText = [
 
 const WritePage: React.FC = () => {
     const [stepToDisplay, setStepToDisplay] = useState<number>(0);
+    const [tripId, setTripId] = useState<string>('');
+
     const { buddy } = useAuth();
+    const router = useRouter();
     const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
     const { SelectCalendar, startDateTimestamp, endDateTimestamp } =
         useCalendar();
@@ -63,17 +67,21 @@ const WritePage: React.FC = () => {
     const { meetPlace, SelectMeetPlaceButton } = useSelectMeetPlace();
 
     // 유효성 검사 함수
-    const validateStep = () => {
+    const validateStep = async () => {
         if (step === 2) {
             if (!startDateTimestamp || !endDateTimestamp) {
                 showAlert('error', '날짜를 선택해 주세요');
                 return false;
             }
         }
+        if (step === 5) {
+            const success = await handleWriteTrip();
+            return success; // 통신 성공 여부에 따라 true 또는 false 반환
+        }
         return true;
     };
 
-    const { NextButton, step, setStep } = useNextButton({
+    const { NextButton, step } = useNextButton({
         buttonText: buttonText[stepToDisplay],
         limit: 6,
         validateStep: validateStep,
@@ -121,14 +129,20 @@ const WritePage: React.FC = () => {
                 },
             });
             if (response.ok) {
+                const data = await response.json();
                 console.log('게시글 업데이트 성공');
+                setTripId(data.trip_id);
+                return true;
             } else {
                 const errorResult = await response.json();
                 console.error('게시글 업데이트 중 오류 발생:', errorResult);
-                showAlert('error', '게시글 업데이트 실패');
+                showAlert('error', '여정을 작성하지 못하였습니다.');
+                return false;
             }
         } catch (error) {
             console.error('게시글 업데이트 중 오류 발생:', error);
+            showAlert('error', '여정을 작성하지 못하였습니다.');
+            return false;
         }
     };
 
@@ -136,6 +150,10 @@ const WritePage: React.FC = () => {
         setStepToDisplay(step);
     }, [step]);
     console.log(buttonText[stepToDisplay]);
+
+    const handlePush = (path: string) => {
+        router.push(path);
+    };
 
     return (
         <>
@@ -193,6 +211,7 @@ const WritePage: React.FC = () => {
                         className="text-xl text-white bg-main-color font-bold py-2 px-4 mt-4 mx-2 mb-20 rounded-xl w-full hover:bg-main-color/80"
                         onClick={() => {
                             if (step === 5) handleWriteTrip();
+                            if (step === 6) handlePush(`/trip/${tripId}`);
                             validateStep();
                         }}
                     />
