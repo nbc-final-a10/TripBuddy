@@ -18,8 +18,6 @@ export const showAlert = (
         return;
     }
 
-    console.log(modalContext);
-
     modalContext.open({
         title,
         description,
