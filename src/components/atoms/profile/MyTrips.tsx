@@ -42,22 +42,32 @@ export default function MyTrips({ id }: BuddyProfileProps) {
     }, [id]);
 
     return (
-        <div className="p-4 bg-gray-100 rounded-xl">
+        <div className="p-2 bg-gray-100 rounded-xl">
             <Accordion
                 title="내가 만든 여정"
                 isOpen={createdAccordion.isOpen}
                 toggleAccordion={createdAccordion.toggleAccordion}
                 icon={<FaPen />}
             >
-                <div
-                    className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
-                    ref={createdTripsRef}
-                    onMouseDown={createMouseDownHandler(createdTripsRef)}
-                >
-                    {trips.created.map(trip => (
-                        <TripCard key={trip.trip_id} trip={trip} mode="card" />
-                    ))}
-                </div>
+                {trips.created.length > 0 ? (
+                    <div
+                        className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
+                        ref={createdTripsRef}
+                        onMouseDown={createMouseDownHandler(createdTripsRef)}
+                    >
+                        {trips.created.map(trip => (
+                            <TripCard
+                                key={trip.trip_id}
+                                trip={trip}
+                                mode="card"
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center text-gray-500">
+                        내가 만든 여정이 없습니다.
+                    </div>
+                )}
             </Accordion>
             <Accordion
                 title="내가 참여한 여정"
@@ -70,13 +80,19 @@ export default function MyTrips({ id }: BuddyProfileProps) {
                     ref={participatingTripsRef}
                     onMouseDown={createMouseDownHandler(participatingTripsRef)}
                 >
-                    {trips.participated.map(contract => (
-                        <TripCard
-                            key={contract.trips.trip_id}
-                            trip={contract.trips}
-                            mode="card"
-                        />
-                    ))}
+                    {trips.participated.length > 0 ? (
+                        trips.participated.map(contract => (
+                            <TripCard
+                                key={contract.trips.trip_id}
+                                trip={contract.trips}
+                                mode="card"
+                            />
+                        ))
+                    ) : (
+                        <div className="text-center text-gray-500">
+                            참여한 여정이 없습니다.
+                        </div>
+                    )}
                 </div>
             </Accordion>
         </div>
