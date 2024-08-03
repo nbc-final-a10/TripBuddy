@@ -24,7 +24,7 @@ const BuddyTemperature = ({
             <div className="w-full rounded-full h-2 bg-[#A67000] mt-1">
                 <div
                     className="h-2 rounded-full bg-main-color"
-                    style={{ width: `${temperature} °C` }}
+                    style={{ width: `${temperature}%` }}
                 ></div>
             </div>
         </div>

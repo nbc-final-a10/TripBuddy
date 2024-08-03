@@ -20,10 +20,11 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
 
     const [formData, setFormData] = useState({
         nickname: buddy.buddy_nickname,
-        gender: '여성',
-        birthYear: String(getAgeFromBirthDate(buddy?.buddy_birth || '')),
-        introduction: buddy.buddy_introduction || '',
-        mbti: 'ENFP',
+        gender: buddy.buddy_sex,
+        birthYear: buddy?.buddy_birth || '',
+        // Todo: 출생년도 포매팅
+        introduction: String(buddy.buddy_introduction || '').split('T')[0],
+        mbti: buddy.buddy_mbti || '',
         region: buddy.buddy_region || '',
         preferredTheme1: buddy.buddy_preferred_theme1,
         preferredTheme2: buddy.buddy_preferred_theme2,

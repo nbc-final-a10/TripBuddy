@@ -51,7 +51,7 @@ function LogInForm() {
 
     return (
         <>
-            <div className="flex flex-col items-center justify-center gap-2 pb-6">
+            <div className="flex flex-col items-center justify-center gap-2 pb-4">
                 <h1 className="text-2xl font-bold">
                     {isRecoverPassword ? '비밀번호 찾기' : '로그인'}
                 </h1>
@@ -62,11 +62,11 @@ function LogInForm() {
                     isRecoverPassword ? handleRecoverPassword : handleSubmit
                 }
                 className={twMerge(
-                    'w-full h-fit min-h-[35%] flex flex-col items-center justify-center gap-44',
+                    'w-full h-fit min-h-[35%] flex flex-col items-center justify-center',
                     isRecoverPassword && 'gap-72',
                 )}
             >
-                <div className="w-[90%] flex flex-col items-center justify-center gap-10">
+                <div className="w-[90%] flex flex-col items-center justify-center gap-8">
                     <div className="w-full flex flex-col gap-2 justify-center">
                         <Input
                             type="text"
@@ -116,6 +116,8 @@ function LogInForm() {
                         </div>
                     )}
                 </div>
+
+                <div className="w-full h-[10vh]"></div>
 
                 <SubmitButton
                     className="bg-main-color w-[90%] text-white rounded-2xl px-4 py-3 font-bold text-xl"

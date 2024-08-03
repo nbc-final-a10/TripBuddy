@@ -1,7 +1,7 @@
 // 'use client';
 
 // import useStore from '@/app/store';
-// import LocationSearchButton from '@/components/atoms/LocationSearchButton';
+// import LocationSearchButton from '@/components/atoms/search/LocationSearchButton';
 // import DateSearchButton from '@/components/atoms/search/DateSearchButton';
 // import {
 //     additionalAttributes,

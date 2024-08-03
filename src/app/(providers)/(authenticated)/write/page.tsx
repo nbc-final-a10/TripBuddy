@@ -30,13 +30,8 @@ const WritePage: React.FC = () => {
     const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
     const { SelectCalendar, startDateTimestamp, endDateTimestamp } =
         useCalendar();
-    const {
-        SelectRegion,
-        firstLevelLocation,
-        secondLevelLocation,
-        thirdLevelLocation,
-        setThirdLevelLocation,
-    } = useSelectRegion();
+    const { SelectRegion, secondLevelLocation, thirdLevelLocation } =
+        useSelectRegion();
     const [PreferTripThemesToRender, selectedTripThemes] = usePreferTheme({
         mode: 'trip',
     });
@@ -112,6 +107,9 @@ const WritePage: React.FC = () => {
             const response = await fetch('/api/write', {
                 method: 'POST',
                 body: formData,
+                headers: {
+                    user: buddy?.buddy_id ?? '', // 헤더에 사용자 ID 포함
+                },
             });
             if (response.ok) {
                 console.log('게시글 업데이트 성공');
