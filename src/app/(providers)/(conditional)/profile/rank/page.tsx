@@ -32,7 +32,7 @@ const RankPage: React.FC = () => {
     }, []);
 
     return (
-        <div className="bg-white p-8 rounded-md w-full max-w-4xl mx-auto">
+        <div className="p-8 rounded-md w-full max-w-4xl mx-auto">
             <div className="flex items-center justify-between pb-6">
                 <div>
                     <h1 className="text-4xl font-semibold text-gray-900">
@@ -48,7 +48,7 @@ const RankPage: React.FC = () => {
                 {buddies.map((buddy, index) => (
                     <div
                         key={index}
-                        className="bg-gray-100 rounded-lg shadow-lg p-4 relative transform transition-transform duration-200 hover:-translate-y-2 cursor-pointer"
+                        className="bg-gray-100 rounded-lg p-4 relative transform transition-transform duration-200 hover:-translate-y-2 cursor-pointer"
                         onClick={() => {
                             router.push(`/profile/${buddy.buddy_id}`);
                         }}
