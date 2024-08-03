@@ -6,12 +6,10 @@ import HomePageTrips from '@/components/molecules/homepage/HomePageTrips';
 import React, { useRef } from 'react';
 import useTapScroll from '@/hooks/useTapScroll';
 import HomePageTitle from '@/components/molecules/homepage/HomePageTitle';
-import Link from 'next/link';
 import HomePageRecommendBuddiesList from './HomePageRecommendBuddiesList';
 import { useAuth } from '@/hooks/auth';
 import useHomeQuery from '@/hooks/queries/useHomeQuery';
 import Loading from '@/app/(providers)/loading';
-import FloatingButton from '@/components/atoms/home/FloatingButton';
 
 const HomePageContainer = () => {
     const buddiesRef = useRef<HTMLDivElement>(null);

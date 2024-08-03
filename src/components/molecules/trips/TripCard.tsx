@@ -214,23 +214,26 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
                     }
                     className={clsx(
                         'p-2 text-center',
-                        mode === 'detail' &&
-                            'bg-main-color text-white rounded-xl border border-main-color w-[48%]',
+                        mode === 'detail' && 'hidden',
                         mode === 'list' &&
                             'w-1/2 bg-main-color text-white rounded-br-lg rounded-bl-none leading-none py-2.5',
                         mode === 'card' &&
                             'bg-main-color text-white font-bold rounded-t-none rounded-b-lg w-full',
                     )}
                 >
-                    <button
-                        className="flex justify-center items-center w-full h-full"
-                        onClick={handleCreateContract}
-                    >
-                        {mode === 'card' || mode === 'list'
-                            ? '상세보기'
-                            : '참여하기'}
+                    <button className="flex justify-center items-center w-full h-full">
+                        상세보기
                     </button>
                 </Link>
+
+                {mode === 'detail' && (
+                    <button
+                        className="flex justify-center items-center h-full bg-main-color text-white rounded-xl border border-main-color w-[48%] py-2.5"
+                        onClick={handleCreateContract}
+                    >
+                        참여하기
+                    </button>
+                )}
             </div>
         </div>
     );
