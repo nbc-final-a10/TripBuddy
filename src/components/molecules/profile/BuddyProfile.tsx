@@ -9,15 +9,15 @@ import BuddyProfileSkeleton from './BuddyProfileSkeleton';
 type BuddyProfileProps = {
     clickedBuddy: Buddy | null;
     loading: boolean;
-    buddy: Buddy | null;
-    urlId: string;
+    buddy?: Buddy | null;
+    urlId?: string;
 };
 
 export default function BuddyProfile({
     clickedBuddy,
     loading,
-    buddy,
-    urlId,
+    buddy = null,
+    urlId = '',
 }: BuddyProfileProps) {
     if (loading) {
         return <BuddyProfileSkeleton />;
