@@ -74,10 +74,11 @@ const WritePage: React.FC = () => {
                 return false;
             }
         }
-        if (step === 5) {
-            const success = await handleWriteTrip();
-            return success; // 통신 성공 여부에 따라 true 또는 false 반환
-        }
+        // // Todo: 페치 3번 날아가는 에러 발견
+        // if (step === 5) {
+        //     const success = await handleWriteTrip();
+        //     return success; // 통신 성공 여부에 따라 true 또는 false 반환
+        // }
         return true;
     };
 
@@ -94,13 +95,13 @@ const WritePage: React.FC = () => {
     // Todo: 핸들러 함수 정의 (커스텀 훅의 state를 supabase에 한번에 쓰는 함수) -> WritePage에 함수만 내려주기
     // Todo: 더 큰 함수로 바꾸어서 step 별로 유효성 검사 등 실행 로직 분리하기
     const handleWriteTrip = async () => {
+        console.log('페칭할 때 buddyCounts', buddyCounts);
         const tripData: PartialTripData = {
             trip_title: tripTitle,
             trip_content: tripContent,
             trip_thumbnail: '',
             trip_master_id: buddy?.buddy_id ?? '',
             trip_max_buddies_counts: buddyCounts,
-            trip_bookmarks_counts: buddyCounts,
             trip_start_date: startDateTimestamp,
             trip_end_date: endDateTimestamp,
             trip_final_destination: `${secondLevelLocation} ${thirdLevelLocation}`,
@@ -131,7 +132,8 @@ const WritePage: React.FC = () => {
             if (response.ok) {
                 const data = await response.json();
                 console.log('게시글 업데이트 성공');
-                setTripId(data.trip_id);
+                setTripId(data.trip.trip_id);
+                console.log('데이터', data);
                 return true;
             } else {
                 const errorResult = await response.json();
@@ -211,8 +213,8 @@ const WritePage: React.FC = () => {
                         className="text-xl text-white bg-main-color font-bold py-2 px-4 mt-4 mx-2 mb-20 rounded-xl w-full hover:bg-main-color/80"
                         onClick={() => {
                             if (step === 5) handleWriteTrip();
-                            if (step === 6) handlePush(`/trip/${tripId}`);
                             validateStep();
+                            if (step === 6) handlePush(`/trips/${tripId}`);
                         }}
                     />
                 </div>

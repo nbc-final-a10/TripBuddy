@@ -22,6 +22,8 @@ export default function useSelectBuddyCounts() {
         setBuddyCounts(prev => Math.max(prev - 1, 2));
     };
 
+    console.log('buddyCounts', buddyCounts);
+
     const SelectBuddyCounts = () => {
         return (
             <div className="flex justify-center items-center mx-auto flex-row gap-[2px] my-5">
