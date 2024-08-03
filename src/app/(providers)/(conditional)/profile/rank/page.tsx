@@ -44,11 +44,11 @@ const RankPage: React.FC = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
                 {buddies.map((buddy, index) => (
                     <div
                         key={index}
-                        className="bg-gray-100 rounded-lg shadow-lg p-4 relative"
+                        className="bg-gray-100 rounded-lg shadow-lg p-4 relative transform transition-transform duration-200 hover:-translate-y-2 cursor-pointer"
                         onClick={() => {
                             router.push(`/profile/${buddy.buddy_id}`);
                         }}
