@@ -34,17 +34,28 @@ const WriteTrip: React.FC<WriteTripProps> = ({
                     <label className="block mb-1 text-sm font-medium text-gray-700 mr-2">
                         대표 이미지
                     </label>
-                    <input
-                        type="file"
-                        className="flex items-center justify-center w-20 h-20 bg-gray-200 border border-gray-300 rounded mr-2"
-                        onChange={handleImageChange}
-                    />
-                    <Image
-                        src={tripImage}
-                        width={100}
-                        height={100}
-                        alt="tripImage"
-                    />
+                    <label className="flex items-center justify-center w-20 h-20 bg-gray-200 border border-gray-300 rounded mr-2 cursor-pointer">
+                        <Image
+                            src="/svg/Gallery.svg"
+                            alt="Gallery Icon"
+                            width={32}
+                            height={32}
+                        />
+                        <input
+                            type="file"
+                            className="hidden"
+                            onChange={handleImageChange}
+                        />
+                    </label>
+                    {tripImage && (
+                        <Image
+                            src={tripImage}
+                            width={100}
+                            height={100}
+                            alt="tripImage"
+                            className="w-20 h-20 object-cover rounded-lg"
+                        />
+                    )}
                 </div>
                 <div>
                     <label className="block mb-1 text-sm font-medium text-gray-700">
