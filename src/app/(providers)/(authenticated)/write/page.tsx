@@ -8,7 +8,7 @@ import SelectTripThemesPage from '@/components/organisms/write/SelectTripThemesP
 import SelectDatePage from '@/components/organisms/write/SelectDatePage';
 import WelcomePage from '@/components/organisms/write/WelcomePage';
 import useNextButton from '@/hooks/useFunnelNextStep';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/auth';
 import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
 import useCalendar from '@/hooks/useCalendar';
@@ -16,16 +16,25 @@ import useSelectRegion from '@/hooks/useSelectRegion';
 import usePreferTheme from '@/hooks/usePreferTheme';
 import { Tables } from '@/types/supabase';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import { useRouter } from 'next/navigation';
 import useTripWrite from '@/hooks/MyPage/useTripWrite';
 import WriteTrip from '@/components/organisms/write/WriteTrip';
 import useSelectSex from '@/hooks/useSelectSex';
 import useSelectAges from '@/hooks/useSelectAges';
 import useSelectMeetPlace from '@/hooks/useSelectMeetPlace';
 
-const WritePage: React.FC = () => {
-    const router = useRouter();
+// 버튼 라벨 배열
+const buttonText = [
+    '다음',
+    '다음',
+    '다음',
+    '다음',
+    '다음',
+    '여정 만들기',
+    '여정 페이지로',
+];
 
+const WritePage: React.FC = () => {
+    const [stepToDisplay, setStepToDisplay] = useState<number>(0);
     const { buddy } = useAuth();
     const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
     const { SelectCalendar, startDateTimestamp, endDateTimestamp } =
@@ -65,7 +74,7 @@ const WritePage: React.FC = () => {
     };
 
     const { NextButton, step, setStep } = useNextButton({
-        buttonText: '다음',
+        buttonText: buttonText[stepToDisplay],
         limit: 6,
         validateStep: validateStep,
     });
@@ -122,6 +131,11 @@ const WritePage: React.FC = () => {
             console.error('게시글 업데이트 중 오류 발생:', error);
         }
     };
+
+    useEffect(() => {
+        setStepToDisplay(step);
+    }, [step]);
+    console.log(buttonText[stepToDisplay]);
 
     return (
         <>
