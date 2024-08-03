@@ -4,10 +4,15 @@ import BuddyTemperature from '@/components/atoms/profile/BuddyTemperature';
 import { Buddy } from '@/types/Auth.types';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+// Todo: 나중에 메달 별로 넣기 금은동
+const medalIcons = ['/public/gif/medal.gif'];
 
 const RankPage: React.FC = () => {
     const [buddies, setBuddies] = useState<Buddy[]>([]);
     const [loading, setLoading] = useState(true);
+    const router = useRouter();
 
     useEffect(() => {
         const fetchBuddies = async () => {
@@ -27,45 +32,70 @@ const RankPage: React.FC = () => {
     }, []);
 
     return (
-        <div className="bg-white p-8 rounded-md w-full">
-            <div className=" flex items-center justify-between pb-6">
+        <div className="bg-white p-8 rounded-md w-full max-w-4xl mx-auto">
+            <div className="flex items-center justify-between pb-6">
                 <div>
-                    <h1 className="text-2xl font-semibold">
+                    <h1 className="text-4xl font-semibold text-gray-900">
                         버디즈 랭킹 TOP 10
                     </h1>
-                    <span className="text-xs">
+                    <span className="text-md text-gray-600">
                         TripBuddy 온도지수 TOP 10 버디즈를 소개합니다!
                     </span>
                 </div>
             </div>
 
-            <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {buddies.map((buddy, index) => (
-                    <div key={index}>
-                        <span className="text-black text-2xl font-bold">
-                            랭킹 {index + 1}위
-                        </span>
-                        <article className="relative isolate flex flex-col justify-end overflow-hidden rounded-2xl px-8 pb-8 pt-40 max-w-sm mx-auto mt-6">
-                            <Image
-                                src={buddy?.buddy_profile_pic || ''}
-                                alt={buddy?.buddy_nickname}
-                                width={100}
-                                height={100}
-                                className="absolute inset-0 h-full w-full object-cover"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
-                            <h3 className="z-10 mt-3 text-3xl font-bold text-white">
-                                {buddy?.buddy_nickname}
-                            </h3>
-                            <div className="z-10 gap-y-1 overflow-hidden text-sm leading-6 text-gray-300">
-                                {buddy?.buddy_introduction}
-                            </div>
-                            <div className="flex justify-end">
-                                <BuddyTemperature
-                                    temperature={buddy?.buddy_temperature}
+                    <div
+                        key={index}
+                        className="bg-gray-100 rounded-lg shadow-lg p-4 relative"
+                        onClick={() => {
+                            router.push(`/profile/${buddy.buddy_id}`);
+                        }}
+                    >
+                        <div className="relative rounded-lg overflow-hidden">
+                            <div className="relative w-full h-48">
+                                <Image
+                                    src={
+                                        buddy?.buddy_profile_pic ||
+                                        '/default-profile.png'
+                                    }
+                                    alt={buddy?.buddy_nickname}
+                                    layout="fill"
+                                    objectFit="cover"
+                                    className="rounded-t-lg"
                                 />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-75"></div>
+                                <div className="absolute bottom-0 left-0 p-4 text-white">
+                                    <h3 className="text-2xl font-bold">
+                                        {buddy?.buddy_nickname}
+                                    </h3>
+                                    <p className="text-sm">
+                                        {buddy?.buddy_introduction}
+                                    </p>
+                                </div>
+                                {index < 3 && (
+                                    <div className="absolute top-4 right-4">
+                                        <Image
+                                            // Todo: 금은동 메달 배열에 들어가고 나면 사용
+                                            // src={medalIcons[index]}
+                                            src={'/icon/medal.png'}
+                                            alt={`${index + 1}위 메달`}
+                                            width={40}
+                                            height={40}
+                                        />
+                                    </div>
+                                )}
                             </div>
-                        </article>
+                        </div>
+                        <div className="mt-4 flex justify-between items-center">
+                            <span className="text-xl font-bold text-gray-800 whitespace-nowrap mr-2">
+                                {index + 1}위
+                            </span>
+                            <BuddyTemperature
+                                temperature={buddy?.buddy_temperature}
+                            />
+                        </div>
                     </div>
                 ))}
             </div>
