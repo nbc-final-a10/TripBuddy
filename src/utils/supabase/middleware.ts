@@ -50,41 +50,27 @@ export async function updateSession(request: NextRequest) {
 
     // console.log(user);
 
-    // 완전 일치 경로 목록, 아래랑 완전히 일치하는 경우에는 로그인으로 안튕김
-    const exactPaths = [
-        '/',
-        '/login',
-        '/recover',
-        '/search',
-        '/signup',
-        '/stories',
-        '/trips',
-        '/loading',
-        '/tutorial',
-    ];
-
-    // 접두사 일치 경로 목록, 아래로 시작하는 경우에는 로그인으로 안튕김
-    const prefixPaths = ['/api'];
-
-    // 현재 경로가 완전 일치 경로 목록에 포함되지 않고, 접두사 일치 경로 목록에도 포함되지 않는 경우
     if (
         !user &&
-        !exactPaths.includes(request.nextUrl.pathname) &&
-        !prefixPaths.some(path => request.nextUrl.pathname.startsWith(path))
+        request.nextUrl.pathname !== '/' &&
+        request.nextUrl.pathname !== '/login' &&
+        request.nextUrl.pathname !== '/signup' &&
+        request.nextUrl.pathname !== '/recover' &&
+        request.nextUrl.pathname !== '/search' &&
+        request.nextUrl.pathname !== '/stories' &&
+        request.nextUrl.pathname !== '/trips' &&
+        request.nextUrl.pathname !== '/loading' &&
+        request.nextUrl.pathname !== '/tutorial' &&
+        !request.nextUrl.pathname.startsWith('/api')
     ) {
         const url = request.nextUrl.clone();
         url.pathname = '/login';
         return NextResponse.redirect(url);
     }
 
-    if (
-        (request.nextUrl.pathname.startsWith('/login') && user) ||
-        (request.nextUrl.pathname.startsWith('/signup') && user)
-    ) {
-        // user id(uuid) 를 서버컴포넌트에서 알고 시작하기 위해서
-        if (user) {
-            requestHeaders.set('x-user', user.id);
-        }
+    if (user) {
+        requestHeaders.set('x-user', user.id);
+
         // 새로운 응답 객체 생성
         supabaseResponse = NextResponse.next({
             request: {
@@ -92,14 +78,45 @@ export async function updateSession(request: NextRequest) {
             },
         });
 
-        // 유저가 있을 때, login, signup 은 무조건 홈으로 리다이렉트
-        const url = request.nextUrl.clone();
-        url.pathname = '/';
-        return NextResponse.redirect(url);
+        if (
+            (request.nextUrl.pathname.startsWith('/login') && user) ||
+            (request.nextUrl.pathname.startsWith('/signup') && user)
+        ) {
+            const url = request.nextUrl.clone();
+            url.pathname = '/';
+            return NextResponse.redirect(url);
+        }
     }
 
     return supabaseResponse;
 }
+
+//  // 완전 일치 경로 목록, 아래랑 완전히 일치하는 경우에는 로그인으로 안튕김
+//  const exactPaths = [
+//     '/',
+//     '/login',
+//     '/recover',
+//     '/search',
+//     '/signup',
+//     '/stories',
+//     '/trips',
+//     '/loading',
+//     '/tutorial',
+// ];
+
+// // 접두사 일치 경로 목록, 아래로 시작하는 경우에는 로그인으로 안튕김
+// const prefixPaths = ['/api'];
+
+// // 현재 경로가 완전 일치 경로 목록에 포함되지 않고, 접두사 일치 경로 목록에도 포함되지 않는 경우
+// if (
+//     !user &&
+//     !exactPaths.includes(request.nextUrl.pathname) &&
+//     !prefixPaths.some(path => request.nextUrl.pathname.startsWith(path))
+// ) {
+//     const url = request.nextUrl.clone();
+//     url.pathname = '/login';
+//     return NextResponse.redirect(url);
+// }
 
 // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
 // creating a new response object with NextResponse.next() make sure to:
