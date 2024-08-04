@@ -1,4 +1,7 @@
+'use client';
+
 import React, { useState } from 'react';
+import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
 
 type AccordionProps = {
     title: string;
@@ -46,7 +49,7 @@ const Accordion: React.FC<AccordionProps> = ({
                     <div className="text-xl font-medium">{title}</div>
                 </div>
                 <div className="text-xl">
-                    {isOpen ? <span>&#9650;</span> : <span>&#9660;</span>}
+                    {isOpen ? <FaChevronUp /> : <FaChevronDown />}
                 </div>
             </div>
             {isOpen && <div className="border-t p-4">{children}</div>}
