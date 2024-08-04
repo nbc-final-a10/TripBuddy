@@ -214,7 +214,7 @@ const SearchPage: React.FC = () => {
                     handleEndAge={setEndAge}
                 />
             </div>
-            <div className="my-10">
+            {/* <div className="my-10">
                 <SearchPageTitle
                     title="인원수"
                     description="인원수 최대 4명까지 가능해요."
@@ -223,7 +223,7 @@ const SearchPage: React.FC = () => {
                 // buddyCounts={buddyCounts}
                 // setBuddyCounts={SelectBuddyCounts}
                 />
-            </div>
+            </div> */}
             <div className="my-10">
                 <SearchPageTitle title="만남 장소" description="" />
                 <MeetingPlaceChipGroup
