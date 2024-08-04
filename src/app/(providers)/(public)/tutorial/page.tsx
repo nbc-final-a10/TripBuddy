@@ -39,12 +39,14 @@ const Tutorial: React.FC = () => {
 
     return (
         <div className="relative flex flex-col items-center h-full overflow-hidden bg-white">
-            <button
-                onClick={handleSkip}
-                className="absolute top-4 right-3 text-base py-1 px-1 rounded mb-4"
-            >
-                건너뛰기
-            </button>
+            {step < 4 && (
+                <button
+                    onClick={handleSkip}
+                    className="absolute top-4 right-3 text-base py-1 px-1 rounded mb-4"
+                >
+                    건너뛰기
+                </button>
+            )}
 
             <section className="flex flex-col items-center justify-center flex-grow w-full max-h-screen">
                 <Tuto step={step + 1} />
