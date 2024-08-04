@@ -151,7 +151,7 @@ const WritePage: React.FC = () => {
     useEffect(() => {
         setStepToDisplay(step);
     }, [step]);
-    console.log(buttonText[stepToDisplay]);
+    // console.log(buttonText[stepToDisplay]);
 
     const handlePush = (path: string) => {
         router.push(path);

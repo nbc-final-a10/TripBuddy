@@ -6,10 +6,11 @@ import useTripsQuery from '@/hooks/queries/useTripsQuery';
 import React from 'react';
 
 const TripList: React.FC = () => {
-    const { data: trips, isPending, isError } = useTripsQuery();
+    const { data: trips, isPending, error } = useTripsQuery();
 
+    console.log(trips);
     // 추후변경요망
-    if (isError) return <div>Error</div>;
+    if (error) return <div>Error</div>;
     if (isPending) return <Loading />;
     if (!trips) return <div>No trips</div>;
 
