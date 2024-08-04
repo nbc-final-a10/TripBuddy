@@ -113,7 +113,7 @@ const ChatList = () => {
                         contract_trip_id,
                         trip_title: tripTitleMap[contract_trip_id] || '',
                         contract_buddies_profiles: buddyProfiles,
-                        last_message_content: 'No messages yet',
+                        last_message_content: '채팅을 시작해보세요',
                         last_message_time: '',
                     });
                 });
