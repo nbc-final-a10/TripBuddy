@@ -5,10 +5,13 @@ import ChatListItem from '@/components/molecules/chatpage/ChatListItem';
 import supabase from '@/utils/supabase/client';
 import { useAuth } from '@/hooks/auth';
 import { ContractData } from '@/types/Chat.types';
+import { useRouter } from 'next/navigation';
 
 const ChatList = () => {
     const { buddy: currentBuddy } = useAuth();
     const [chatData, setChatData] = useState<ContractData[]>([]);
+    const router = useRouter();
+    const [contractsExist, setContractsExist] = useState(true);
 
     useEffect(() => {
         const fetchChatData = async () => {
@@ -25,7 +28,10 @@ const ChatList = () => {
 
                 if (contractsError) throw contractsError;
 
-                if (!contracts) return;
+                if (!contracts || contracts.length === 0) {
+                    setContractsExist(false);
+                    return;
+                }
 
                 const contractIds = contracts.map(
                     contract => contract.contract_id,
@@ -173,7 +179,6 @@ const ChatList = () => {
         };
 
         fetchChatData();
-
         const messageSubscription = supabase
             .channel('chat-room')
             .on(
@@ -215,6 +220,12 @@ const ChatList = () => {
             messageSubscription.unsubscribe();
         };
     }, [currentBuddy]);
+
+    useEffect(() => {
+        if (!contractsExist) {
+            router.push('/trips');
+        }
+    }, [contractsExist, router]);
 
     return (
         <div className="flex flex-col p-4">
