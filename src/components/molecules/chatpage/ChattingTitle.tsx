@@ -4,6 +4,7 @@ import { Trip } from '@/types/Trips.types';
 import supabase from '@/utils/supabase/client';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+import convertDateToStringWithWeekDay from '@/utils/common/convertDateToStringWithWeekDay';
 
 type ChattingTitleProps = {
     id: string;
@@ -56,7 +57,13 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
                         </p>
                         <div className="text-xs flex gap-6">
                             <span>{tripData?.trip_final_destination}</span>
-                            <span>{tripData?.trip_start_date}</span>
+                            <span>
+                                {tripData?.trip_start_date
+                                    ? convertDateToStringWithWeekDay(
+                                          new Date(tripData.trip_start_date),
+                                      )
+                                    : null}
+                            </span>
                             <span>3/4명</span>
                         </div>
                     </div>
