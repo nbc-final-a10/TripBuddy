@@ -23,7 +23,7 @@ const ChatList = () => {
                         .from('contract')
                         .select('contract_id, contract_trip_id')
                         .eq('contract_buddy_id', currentBuddy.buddy_id)
-                        .eq('contract_isPending', false)
+                        // .eq('contract_isPending', false)
                         .eq('contract_isValidate', true);
 
                 if (contractsError) throw contractsError;
