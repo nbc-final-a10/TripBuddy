@@ -152,7 +152,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
                         {/** 추후 수정 필요 */}
                         <div className="flex gap-2 items-center">
                             <Groups />
-                            <span>{`${trip.trip_max_buddies_counts}/4`}</span>
+                            <span>{`1/${trip.trip_max_buddies_counts}`}</span>
                         </div>
                     </div>
 
@@ -161,8 +161,8 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
                         <div className="flex flex-col gap-1">
                             <div className="flex flex-row">
                                 <p className="text-sm leading-none">
-                                    {`신청 ${trip.trip_max_buddies_counts}`}
-                                    <span className="text-gray-500">/4</span>
+                                    {`신청 1`}
+                                    <span className="text-gray-500">{`/${trip.trip_max_buddies_counts}`}</span>
                                 </p>
                             </div>
                         </div>
