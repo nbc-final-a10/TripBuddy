@@ -96,7 +96,7 @@ const OnBoarding: React.FC = () => {
             );
             if (!result) return setStep(0);
             buddyInfoRef.current.buddy_nickname = nicknameRef.current?.value;
-            if (isEdit) mutate({ buddyInfo: buddyInfoRef.current });
+            mutate({ buddyInfo: buddyInfoRef.current });
         }
         if (step === 2) {
             const jsDate = calenderValue.toDate('UTC'); // 'UTC' 타임존으로 변환
@@ -196,18 +196,17 @@ const OnBoarding: React.FC = () => {
                 onConfirm: () => router.push('/login'),
             });
         }
-        if (buddy.buddy_isOnBoarding)
-            return showAlert('caution', '이미 온보딩을 완료하셨습니다.', {
-                onConfirm: () => router.push('/'),
-            });
+        // if (buddy.buddy_isOnBoarding)
+        //     return showAlert('caution', '이미 온보딩을 완료하셨습니다.', {
+        //         onConfirm: () => router.push('/'),
+        //     });
         if (step <= 11) {
             if (isEdit) router.push(`/onboarding?funnel=${step}&mode=edit`);
             else router.push(`/onboarding?funnel=${step}`);
         }
         if (step > 11) {
-            // buddyInfoRef.current.buddy_isOnBoarding = true;
-            console.log('최종 버디즈 정보 =====>', buddyInfoRef.current);
-
+            buddyInfoRef.current.buddy_isOnBoarding = true;
+            // console.log('최종 버디즈 정보 =====>', buddyInfoRef.current);
             mutate({
                 buddyInfo: buddyInfoRef.current,
                 imageFile: selectedFile ? selectedFile : null,
@@ -229,7 +228,7 @@ const OnBoarding: React.FC = () => {
             <div className="relative w-full h-full flex flex-col justify-center xl:justify-start">
                 <ProgressIndicator
                     step={step}
-                    counts={9}
+                    counts={11}
                     className="relative h-[5%] pt-1 xl:pt-5 flex items-center xl:h-[3%]"
                 />
 
