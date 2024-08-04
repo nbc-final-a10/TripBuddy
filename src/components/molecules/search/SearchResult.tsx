@@ -16,6 +16,7 @@ type SearchResultProps = {
     visibleSecondItems: number;
     loadMoreFirstItems: () => void;
     loadMoreSecondItems: () => void;
+    isXL: boolean;
 };
 
 const SearchResult: React.FC<SearchResultProps> = ({
@@ -25,6 +26,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
     visibleSecondItems,
     loadMoreFirstItems,
     loadMoreSecondItems,
+    isXL,
 }) => {
     const tripsRef = useRef<HTMLDivElement>(null);
     const { createMouseDownHandler } = useTapScroll();
@@ -47,7 +49,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
 
     return (
         <>
-            <section className="my-10">
+            <section className="my-10 mt-20">
                 {filteredItems.length === 0 ? (
                     <div className="flex flex-col justify-center items-center mx-auto">
                         <Image
@@ -60,6 +62,10 @@ const SearchResult: React.FC<SearchResultProps> = ({
                         <p className="flex justify-center items-center mx-auto">
                             아쉽게도 일치하는 여정 결과가 없어요
                         </p>
+                    </div>
+                ) : isXL ? (
+                    <div className="grid grid-cols-1 gap-1 mt-8 xl:grid-cols-4 xl:gap-5 xl:w-full">
+                        <HomePageTrips trips={filteredItems} />
                     </div>
                 ) : (
                     <div

@@ -79,8 +79,8 @@ const SearchPage: React.FC = () => {
             return;
         }
 
-        setAllItems(data as Trip[]);
-        setResultItems(data as Trip[]);
+        // setAllItems(data as Trip[]);
+        // setResultItems(data as Trip[]);
 
         let filteredItems = data as Trip[];
 
@@ -167,9 +167,28 @@ const SearchPage: React.FC = () => {
             });
         }
 
-        setResultItems(
-            filteredItems.length > 0 ? filteredItems : (data as Trip[]),
-        );
+        // setResultItems(
+        //     filteredItems.length > 0 ? filteredItems : (data as Trip[]),
+        // );
+        // setShowResult(true);
+        setResultItems(filteredItems);
+
+        if (
+            !searchInput &&
+            !selectedGender &&
+            !selectedMeetingPlace &&
+            startAge === 18 &&
+            endAge === 150 &&
+            !thirdLevelLocation &&
+            !startDateTimestamp &&
+            !endDateTimestamp &&
+            selectedThemes.length === 0 &&
+            selectedBuddyThemes.length === 0
+        ) {
+            setVisibleFirstItems(data.length);
+        }
+
+        setAllItems(data as Trip[]);
         setShowResult(true);
 
         // 속도 지연
@@ -303,14 +322,11 @@ const SearchPage: React.FC = () => {
                     <SearchResult
                         items={resultItems}
                         allTrips={allItems}
-                        visibleFirstItems={
-                            isXL ? visibleFirstItems : resultItems.length
-                        }
-                        visibleSecondItems={
-                            isXL ? visibleSecondItems : resultItems.length
-                        }
+                        visibleFirstItems={visibleFirstItems}
+                        visibleSecondItems={visibleSecondItems}
                         loadMoreFirstItems={loadMoreFirstItems}
                         loadMoreSecondItems={loadMoreSecondItems}
+                        isXL={isXL}
                     />
                 </div>
             )}
