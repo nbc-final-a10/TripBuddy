@@ -128,13 +128,13 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                             className={`py-2 flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}
                         >
                             {!isCurrentUser && (
-                                <div className="w-[40px] h-[40px] text-xs rounded-full">
+                                <div className="w-[40px] h-[40px] text-xs rounded-full overflow-hidden flex justify-center items-center">
                                     <Image
                                         src={message.buddy?.buddy_profile_pic}
                                         alt="Profile Image"
                                         width={40}
                                         height={40}
-                                        className="rounded-full"
+                                        className="rounded-full object-cover"
                                     />
                                 </div>
                             )}
