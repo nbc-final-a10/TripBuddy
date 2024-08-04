@@ -43,8 +43,8 @@ export const onBoardingValidation: onBoardingValidationType = (value, step) => {
                 // 추가적인 밸리데이션이 있다면 여기에 작성합니다.
             }
             if (step === 9) {
-                if (typeof value === 'string' && value.length > 20) {
-                    showAlert('caution', '20자 이하로 입력해주세요.');
+                if (typeof value === 'string' && value.length > 30) {
+                    showAlert('caution', '30자 이하로 입력해주세요.');
                     return false;
                 }
             }
