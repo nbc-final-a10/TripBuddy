@@ -16,7 +16,7 @@ const chipVariants = cva(
         'border',
         'rounded-full',
         'px-2.5',
-        'py-1',
+        'py-2',
         'transition-opacity',
         'whitespace-nowrap',
         'cursor-pointer',
@@ -25,7 +25,7 @@ const chipVariants = cva(
     {
         variants: {
             intent: {
-                natural: 'bg-gray-400 border-gray-400 text-white',
+                natural: 'bg-gray-400 border-gray-400 text-gray-500',
                 square: 'rounded-md px-1',
                 square_white: 'rounded-md px-1',
                 rounded: 'px-[6px] py-[3px] rounded-xl',
@@ -51,7 +51,8 @@ const chipVariants = cva(
             {
                 intent: 'natural',
                 variant: 'unselected',
-                className: 'bg-gray-400 text-white opacity-100 cursor-pointer',
+                className:
+                    'bg-gray-200 text-gray-500 border-gray-200 opacity-100 cursor-pointer',
             },
             {
                 intent: 'square',

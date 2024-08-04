@@ -22,7 +22,7 @@ const MeetingPlaceChipGroup: React.FC<MeetingPlaceChipGroupProps> = ({
 
     return (
         <div className="mt-3 mb-5">
-            <div className="flex gap-1.5">
+            <div className="grid grid-cols-2 gap-2">
                 {meetingPlaceOptions.map(place => (
                     <Chip
                         key={place}

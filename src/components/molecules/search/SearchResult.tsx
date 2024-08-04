@@ -5,6 +5,7 @@ import HomePageTrips from '../homepage/HomePageTrips';
 import useTapScroll from '@/hooks/useTapScroll';
 import { Trip } from '@/types/Trips.types';
 import Image from 'next/image';
+import MascotImage from '@/components/atoms/common/MascotImage';
 
 // type Trip = Tables<'trips'>;
 
@@ -15,6 +16,7 @@ type SearchResultProps = {
     visibleSecondItems: number;
     loadMoreFirstItems: () => void;
     loadMoreSecondItems: () => void;
+    isXL: boolean;
 };
 
 const SearchResult: React.FC<SearchResultProps> = ({
@@ -24,33 +26,46 @@ const SearchResult: React.FC<SearchResultProps> = ({
     visibleSecondItems,
     loadMoreFirstItems,
     loadMoreSecondItems,
+    isXL,
 }) => {
     const tripsRef = useRef<HTMLDivElement>(null);
     const { createMouseDownHandler } = useTapScroll();
 
-    // console.log('items:', items);
-    // console.log('visibleSecondItems: ', visibleSecondItems);
-
     const filteredItems = items.slice(0, visibleFirstItems);
 
-    // 작성된 순으로 정렬
-    const sortItems = [...allTrips].sort((a, b) => {
-        return (
-            new Date(a.trip_created_at).getTime() -
-            new Date(b.trip_created_at).getTime()
-        );
-    });
+    // 시작 날짜 기준으로 빠른 순으로 정렬
+    // 검색 결과 여정은 제외
+    const sortItems = [...allTrips]
+        .filter(item => !filteredItems.includes(item))
+        .sort((a, b) => {
+            return (
+                new Date(a.trip_start_date).getTime() -
+                new Date(b.trip_start_date).getTime()
+            );
+        });
 
+    console.log('filteredItems: ', filteredItems);
     console.log('sortItems: ', sortItems);
 
     return (
         <>
-            <section className="my-10">
+            <section className="my-10 mt-20">
                 {filteredItems.length === 0 ? (
                     <div className="flex flex-col justify-center items-center mx-auto">
+                        <Image
+                            src={'/images/mascot_sad.webp'}
+                            alt="profile"
+                            width={100}
+                            height={100}
+                            className="mb-10"
+                        />
                         <p className="flex justify-center items-center mx-auto">
                             아쉽게도 일치하는 여정 결과가 없어요
                         </p>
+                    </div>
+                ) : isXL ? (
+                    <div className="grid grid-cols-1 gap-1 mt-8 xl:grid-cols-4 xl:gap-5 xl:w-full">
+                        <HomePageTrips trips={filteredItems} />
                     </div>
                 ) : (
                     <div
@@ -87,12 +102,28 @@ const SearchResult: React.FC<SearchResultProps> = ({
                                 className="shadow-md w-[335px] h-[93px] rounded-[11px] mx-auto mb-6 xl:mx-0 xl:w-full xl:h-[120px] p-3"
                             >
                                 <div className="cursor-pointer flex items-center h-full">
-                                    <div className="bg-gray-200 rounded-lg w-[60px] h-[60px]"></div>
+                                    <div className="bg-gray-200 rounded-lg w-[60px] h-[60px]">
+                                        {item.trip_thumbnail ? (
+                                            <Image
+                                                src={item.trip_thumbnail}
+                                                alt={
+                                                    item.trip_title ||
+                                                    'Thumnail'
+                                                }
+                                                width={60}
+                                                height={60}
+                                                className="w-[60px] h-[60px] rounded-lg object-cover"
+                                            />
+                                        ) : (
+                                            <MascotImage intent="happy" />
+                                        )}
+                                    </div>
                                     <div className="flex flex-col justify-between w-[218px] ml-8">
                                         <span className="text-xs font-bold text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis">
                                             {item.trip_theme1 &&
-                                            item.trip_theme2
-                                                ? `#${item.trip_theme1} #${item.trip_theme2}`
+                                            item.trip_theme2 &&
+                                            item.trip_theme3
+                                                ? `#${item.trip_theme1} #${item.trip_theme2} #${item.trip_theme3}`
                                                 : '#태그없음'}
                                         </span>
                                         <p className="font-semibold truncate mt-1 mb-2.5">

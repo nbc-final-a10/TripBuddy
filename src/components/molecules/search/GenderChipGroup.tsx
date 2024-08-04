@@ -21,7 +21,7 @@ const GenderChipGroup: React.FC<GenderChipGroupProps> = ({
     };
 
     return (
-        <div className="flex gap-1.5">
+        <div className="grid grid-cols-3 gap-2">
             {genderOptions.map(gender => (
                 <Chip
                     key={gender}
