@@ -1,8 +1,8 @@
 'use client';
 
 import AuthSubText from '@/components/atoms/auth/AuthSubText';
-import Input from '@/components/atoms/common/O_Input';
-import { SubmitButton } from '@/components/atoms/common/O_Submit-button';
+import Input from '@/components/atoms/common/Input';
+import { SubmitButton } from '@/components/atoms/common/SubmitButton';
 import { useAuth } from '@/hooks/auth';
 import { authValidation } from '@/utils/auth/validation';
 import { FormEvent } from 'react';
@@ -31,15 +31,15 @@ function SignUpForm() {
 
     return (
         <>
-            <div className="flex flex-col items-center justify-center gap-2 pb-6">
+            <div className="flex flex-col items-center justify-center gap-2 pb-4">
                 <h1 className="text-2xl font-bold">회원가입</h1>
             </div>
 
             <form
                 onSubmit={handleSubmit}
-                className="w-full h-fit min-h-[35%] flex flex-col items-center justify-center gap-40"
+                className="w-full h-fit min-h-[35%] flex flex-col items-center justify-center"
             >
-                <div className="w-[90%] flex flex-col items-center justify-center gap-10">
+                <div className="w-[90%] flex flex-col items-center justify-center gap-8">
                     <div className="w-full flex flex-col gap-4">
                         <div className="w-full flex flex-col gap-2 justify-center">
                             <Input
@@ -67,6 +67,8 @@ function SignUpForm() {
                         </div>
                     </div>
                 </div>
+
+                <div className="w-full h-[10vh]"></div>
 
                 <SubmitButton
                     className="bg-main-color w-[90%] text-white rounded-2xl px-4 py-3 font-bold text-xl"

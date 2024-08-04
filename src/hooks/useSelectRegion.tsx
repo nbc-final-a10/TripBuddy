@@ -6,7 +6,9 @@ import SelectedResultRealtimeText from '@/components/organisms/write/SelectedRes
 import locationData from '@/data/location';
 import { SecondLevel, ThirdLevel } from '@/types/Location.types';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import useTapScroll from './useTapScroll';
+import ThirdLevelSection from '@/components/molecules/onboarding/ThirdLevelSection';
 
 type Location = {
     name: string;
@@ -33,6 +35,9 @@ export default function useSelectRegion() {
     // selectedSecondLevelLocations는 국내는 도, 해외는 대륙을 선택한 경우 해당 대륙에 포함된 나라, 도시들이 배열로 초기화 됨.
     const [selectedSecondLevelLocations, setSelectedSecondLevelLocations] =
         useState<ThirdLevel[]>([]);
+
+    const buddiesRef = useRef<HTMLDivElement>(null);
+    const { createMouseDownHandler } = useTapScroll();
 
     useEffect(() => {
         const selectedLocationData =
@@ -80,7 +85,11 @@ export default function useSelectRegion() {
                 </section>
 
                 {/* 도시/대륙 선택 */}
-                <section className="py-3">
+                <section
+                    className="py-3 overflow-x-scroll scrollbar-hidden flex gap-[10px] h-[10%]"
+                    ref={buddiesRef}
+                    onMouseDown={createMouseDownHandler(buddiesRef)}
+                >
                     <LocationList
                         locations={secondLevelLocations}
                         selectedLocationName={secondLevelLocation || ''}
@@ -89,49 +98,17 @@ export default function useSelectRegion() {
                 </section>
 
                 {/* 선택한 지역 렌더링 */}
-                {/* Todo: vh말고 px이 안 먹힘 */}
-                <section>
-                    <div className="my-3">
-                        {secondLevelLocation && (
-                            <div>
-                                {selectedSecondLevelLocations.map(loc => (
-                                    <div
-                                        key={loc.name}
-                                        className="flex mt-2 ml-2 mr-2 border-b pb-3 cursor-pointer hover:bg-main-color"
-                                        onClick={() =>
-                                            setThirdLevelLocation(loc.name)
-                                        }
-                                    >
-                                        <div>
-                                            <div className="text-sm text-gray-500 xl:text-base">
-                                                {firstLevelLocation ===
-                                                '한국' ? (
-                                                    <div>
-                                                        <p className="font-bold">
-                                                            {loc.name}
-                                                        </p>
-                                                        <p>한국</p>
-                                                    </div>
-                                                ) : (
-                                                    <div>
-                                                        <p className="font-bold">
-                                                            {loc.name}
-                                                        </p>
-                                                        <p>
-                                                            {
-                                                                secondLevelLocation
-                                                            }
-                                                        </p>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                </section>
+                {/* Todo: vh말고 px이 안 먹힘 - 퍼센트로 해결 추후 수정요망 */}
+                {secondLevelLocation && (
+                    <ThirdLevelSection
+                        selectedSecondLevelLocations={
+                            selectedSecondLevelLocations
+                        }
+                        setThirdLevelLocation={setThirdLevelLocation}
+                        secondLevelLocation={secondLevelLocation}
+                        thirdLevelLocation={thirdLevelLocation}
+                    />
+                )}
 
                 <section>
                     {thirdLevelLocation && (
@@ -151,5 +128,6 @@ export default function useSelectRegion() {
         firstLevelLocation,
         secondLevelLocation,
         thirdLevelLocation,
+        setThirdLevelLocation,
     };
 }

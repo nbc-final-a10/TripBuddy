@@ -1,40 +1,65 @@
 'use client';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import Calendar_month from '../../../../public/svg/Calendar_month.svg';
 import Distance from '../../../../public/svg/Distance.svg';
 import Groups from '../../../../public/svg/Groups.svg';
-import Chip from '@/components/atoms/common/O_Chip';
 import clsx from 'clsx';
 import TripTimeSinceUpload from '@/components/atoms/trips/TripTimeSinceUpload';
 import { Trip } from '@/types/Trips.types';
 import Link from 'next/link';
+import remainDays from '@/utils/common/getRemainDays';
+import Chip from '@/components/atoms/common/Chip';
+import { useAuth } from '@/hooks/auth';
+import { createContract } from '@/utils/contract/createContract';
+import { showAlert } from '@/utils/ui/openCustomAlert';
 
 type TripCardProps = {
     trip: Trip;
-    mode?: 'card' | 'detail' | 'main';
+    mode?: 'card' | 'detail' | 'list';
 };
 
-const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'main' }) => {
+const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
+    const { buddy } = useAuth();
+
+    const handleCreateContract = useCallback(async () => {
+        if (!buddy?.buddy_id) {
+            console.error('인증되지 않은 사용자입니다.');
+            return;
+        }
+
+        try {
+            const result = await createContract(trip.trip_id, buddy.buddy_id);
+            console.log('contract 생성:', result);
+            showAlert(
+                'success',
+                '버디장에게 참여 요청이 전달되었습니다. 베타 기간에는 자동으로 참여됩니다.',
+            );
+        } catch (error) {
+            console.error('contract 생성 중 오류 발생:', error);
+            showAlert('error', (error as Error).message);
+        }
+    }, [buddy, trip.trip_id]);
+
     return (
         <div
             className={clsx(
-                'bg-white box-border h-fit shadow-lg',
+                'bg-white box-border h-fit shadow-xl',
                 mode === 'detail' && 'p-4',
-                mode === 'main' && 'rounded-lg',
-                mode === 'card' && 'w-[240px] h-[215px]',
+                mode === 'list' && 'w-[90%] rounded-lg',
+                mode === 'card' && 'h-[215px] rounded-lg min-w-[250px]',
             )}
         >
             <div
                 className={clsx(
-                    'bg-white p-2 rounded-lg box-border h-auto',
+                    'bg-white p-2 rounded-lg box-border h-auto w-full',
                     mode === 'detail' && 'bg-white rounded-none',
-                    mode === 'main' && 'bg-gray-200 rounded-b-none',
+                    mode === 'list' && 'bg-gray-200 rounded-b-none',
                     mode === 'card' && 'rounded-b-none',
                 )}
             >
-                <div className="flex flex-col gap-2">
-                    <div className="flex flex-col gap-2 box-border">
+                <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-3">
                         <div className="flex flex-row gap-2 justify-between">
                             {mode === 'card' && (
                                 <div className="flex flex-row gap-1">
@@ -50,17 +75,12 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'main' }) => {
                                 </div>
                             )}
 
-                            {mode === 'main' && (
-                                <div className="flex flex-row gap-2">
-                                    <span className="font-bold text-lg leading-none">
-                                        {`D-${
-                                            new Date().getDay() -
-                                            new Date(
-                                                trip.trip_start_date,
-                                            ).getDay()
-                                        }`}
+                            {mode === 'card' && (
+                                <div className="flex flex-row gap-2 text-sm">
+                                    <span className="font-bold text-md leading-none">
+                                        {`${remainDays(trip.trip_start_date)}`}
                                     </span>
-                                    <span className="text-sm leading-none">
+                                    <span className="text-xs leading-none">
                                         {new Date(
                                             trip.trip_created_at,
                                         ).toLocaleDateString()}
@@ -70,14 +90,14 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'main' }) => {
                         </div>
 
                         {mode === 'card' && (
-                            <h2 className="text-xl font-bold leading-none">
+                            <h2 className="text-xl font-bold leading-none pt-1">
                                 {trip.trip_final_destination}
                             </h2>
                         )}
                         <h3
                             className={clsx(
-                                'text-lg font-bold leading-none pb-2',
-                                mode === 'main' && 'text-black text-xl',
+                                'text-lg font-bold leading-none',
+                                mode === 'list' && 'text-black text-xl',
                                 mode === 'card' && 'text-gray-600',
                             )}
                         >
@@ -132,26 +152,24 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'main' }) => {
                         {/** 추후 수정 필요 */}
                         <div className="flex gap-2 items-center">
                             <Groups />
-                            <span>{`${trip.trip_max_buddies_counts}/4`}</span>
+                            <span>{`1/${trip.trip_max_buddies_counts}`}</span>
                         </div>
                     </div>
 
-                    {/** 인원수 카드에서만 보임 여기도 추후 수정 필요 */}
+                    {/** 추후 수정 필요 */}
                     {mode === 'card' && (
-                        <>
-                            <div className="flex flex-col gap-1">
-                                <div className="flex flex-row">
-                                    <p className="text-sm leading-none">
-                                        {`신청 ${trip.trip_max_buddies_counts}`}
-                                        <span className="text-gray-500">
-                                            /4
-                                        </span>
-                                    </p>
-                                </div>
+                        <div className="flex flex-col gap-1">
+                            <div className="flex flex-row">
+                                <p className="text-sm leading-none">
+                                    {`신청 1`}
+                                    <span className="text-gray-500">{`/${trip.trip_max_buddies_counts}`}</span>
+                                </p>
                             </div>
+                        </div>
+                    )}
 
-                            <TripTimeSinceUpload time={trip.trip_created_at} />
-                        </>
+                    {mode === 'list' && (
+                        <TripTimeSinceUpload time={trip.trip_created_at} />
                     )}
 
                     {/** 프로필 이미지 원형 */}
@@ -171,7 +189,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'main' }) => {
                     'flex w-full text-white rounded-lg h-[16%]',
                     mode === 'detail' &&
                         'bg-white text-gray-950 rounded-none justify-center gap-2',
-                    mode === 'main' && 'justify-between',
+                    mode === 'list' && 'justify-between',
                     mode === 'card' && 'rounded-b-lg',
                 )}
             >
@@ -180,27 +198,42 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'main' }) => {
                         'p-2',
                         mode === 'detail' &&
                             'bg-white text-main-color border-main-color rounded-xl border w-[48%]',
-                        mode === 'main' &&
-                            'bg-white text-main-color border-main-color font-bold border rounded-t-none rounded-br-none rounded-bl-lg w-1/2 ',
                         mode === 'card' && 'hidden',
+                        mode === 'list' &&
+                            'bg-white text-main-color border-main-color rounded-br-none rounded-bl-lg border w-1/2',
                     )}
                 >
                     찜하기
                 </button>
+
                 <Link
-                    href={`/trips/${trip.trip_id}`}
+                    href={
+                        mode === 'card' || mode === 'list'
+                            ? `/trips/${trip.trip_id}`
+                            : `/chat/${trip.trip_id}`
+                    }
                     className={clsx(
                         'p-2 text-center',
-                        mode === 'detail' &&
-                            'bg-main-color text-white rounded-xl border border-main-color w-[48%]',
-                        mode === 'main' &&
-                            'bg-main-color text-white font-bold rounded-t-none rounded-bl-none rounded-br-lg w-1/2',
+                        mode === 'detail' && 'hidden',
+                        mode === 'list' &&
+                            'w-1/2 bg-main-color text-white rounded-br-lg rounded-bl-none leading-none py-2.5',
                         mode === 'card' &&
-                            'w-full bg-main-color text-white rounded-b-lg leading-none py-2.5',
+                            'bg-main-color text-white font-bold rounded-t-none rounded-b-lg w-full',
                     )}
                 >
-                    참여하기
+                    <button className="flex justify-center items-center w-full h-full">
+                        상세보기
+                    </button>
                 </Link>
+
+                {mode === 'detail' && (
+                    <button
+                        className="flex justify-center items-center h-full bg-main-color text-white rounded-xl border border-main-color w-[48%] py-2.5"
+                        onClick={handleCreateContract}
+                    >
+                        참여하기
+                    </button>
+                )}
             </div>
         </div>
     );

@@ -1,17 +1,28 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
+
+// type useSelectBuddyCountsProps = {
+//     buddyCounts: number;
+//     handleAddBuddyCounts: () => void;
+//     handleSubBuddyCounts: () => void;
+//     SelectBuddyCounts: () => React.JSX.Element;
+// };
 
 export default function useSelectBuddyCounts() {
-    const [buddyCounts, setBuddyCounts] = useState(2);
+    const [buddyCounts, setBuddyCounts] = useState<number>(2);
 
     const handleAddBuddyCounts = () => {
-        setBuddyCounts(buddyCounts + 1);
+        // setBuddyCounts(buddyCounts + 1);
+        setBuddyCounts(prev => Math.min(prev + 1, 4));
     };
 
     const handleSubBuddyCounts = () => {
-        setBuddyCounts(buddyCounts - 1);
+        // setBuddyCounts(buddyCounts - 1);
+        setBuddyCounts(prev => Math.max(prev - 1, 2));
     };
+
+    // console.log('buddyCounts', buddyCounts);
 
     const SelectBuddyCounts = () => {
         return (

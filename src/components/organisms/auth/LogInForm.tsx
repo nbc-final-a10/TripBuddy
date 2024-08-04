@@ -1,21 +1,22 @@
 'use client';
 
 import clsx from 'clsx';
-import { useSearchParams } from 'next/navigation';
-import { FormEvent, useState } from 'react';
-import { SubmitButton } from '../../atoms/common/O_Submit-button';
-import Input from '@/components/atoms/common/O_Input';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { FormEvent, useEffect, useState } from 'react';
+import { SubmitButton } from '../../atoms/common/SubmitButton';
 import { useAuth } from '@/hooks/auth';
 import { authValidation } from '@/utils/auth/validation';
 import AuthSubText from '@/components/atoms/auth/AuthSubText';
 import { twMerge } from 'tailwind-merge';
+import Input from '@/components/atoms/common/Input';
 
 function LogInForm() {
     const { isPending, logIn, sendingResetEmail } = useAuth();
+    const router = useRouter();
     const searchParams = useSearchParams();
-    const search = searchParams.get('mode');
+    const mode = searchParams.get('mode');
     const [isRecoverPassword, setIsRecoverPassword] = useState(
-        search === 'recover',
+        mode === 'recover',
     );
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -49,9 +50,25 @@ function LogInForm() {
         sendingResetEmail(email);
     };
 
+    useEffect(() => {
+        if (isRecoverPassword) {
+            router.push('/login?mode=recover');
+        } else {
+            router.push('/login?mode=login');
+        }
+    }, [isRecoverPassword, router]);
+
+    useEffect(() => {
+        if (mode === 'recover') {
+            setIsRecoverPassword(true);
+        } else {
+            setIsRecoverPassword(false);
+        }
+    }, [mode]);
+
     return (
         <>
-            <div className="flex flex-col items-center justify-center gap-2 pb-6">
+            <div className="flex flex-col items-center justify-center gap-2 pb-4">
                 <h1 className="text-2xl font-bold">
                     {isRecoverPassword ? '비밀번호 찾기' : '로그인'}
                 </h1>
@@ -62,11 +79,11 @@ function LogInForm() {
                     isRecoverPassword ? handleRecoverPassword : handleSubmit
                 }
                 className={twMerge(
-                    'w-full h-fit min-h-[35%] flex flex-col items-center justify-center gap-44',
-                    isRecoverPassword && 'gap-72',
+                    'w-full h-fit min-h-[35%] flex flex-col items-center justify-center',
+                    isRecoverPassword && 'gap-30',
                 )}
             >
-                <div className="w-[90%] flex flex-col items-center justify-center gap-10">
+                <div className="w-[90%] flex flex-col items-center justify-center gap-8">
                     <div className="w-full flex flex-col gap-2 justify-center">
                         <Input
                             type="text"
@@ -116,6 +133,8 @@ function LogInForm() {
                         </div>
                     )}
                 </div>
+
+                <div className="w-full h-[10vh]"></div>
 
                 <SubmitButton
                     className="bg-main-color w-[90%] text-white rounded-2xl px-4 py-3 font-bold text-xl"

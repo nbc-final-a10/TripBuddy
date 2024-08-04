@@ -1,5 +1,4 @@
 import { getTrips } from '@/api-services/trips';
-import TripCard from '@/components/molecules/trips/TripCard';
 import TripList from '@/components/organisms/trips/TripList';
 import { QUERY_KEY_TRIP } from '@/constants/query.constants';
 import {
@@ -14,7 +13,7 @@ const TripsPage: React.FC = async () => {
     const queryClient = new QueryClient();
     await queryClient.prefetchQuery({
         queryKey: [QUERY_KEY_TRIP],
-        queryFn: () => getTrips(),
+        queryFn: getTrips,
     });
     const dehydratedState = dehydrate(queryClient);
 

@@ -2,13 +2,27 @@
 
 import React from 'react';
 import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
+import Image from 'next/image';
 
-const WriteTrip: React.FC<{
+type WriteTripProps = {
     tripTitle: string;
     tripContent: string;
+    tripImage: string;
+    tripImageFile: File | null;
     handleTitleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleContentChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-}> = ({ tripTitle, tripContent, handleTitleChange, handleContentChange }) => {
+    handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+const WriteTrip: React.FC<WriteTripProps> = ({
+    tripTitle,
+    tripContent,
+    tripImage,
+    tripImageFile,
+    handleTitleChange,
+    handleContentChange,
+    handleImageChange,
+}) => {
     return (
         <div className="p-4">
             <header className="mb-5">
@@ -16,13 +30,32 @@ const WriteTrip: React.FC<{
             </header>
 
             <form className="space-y-4">
-                <div>
-                    <label className="block mb-1 text-sm font-medium text-gray-700">
+                <div className="flex items-center">
+                    <label className="block mb-1 text-sm font-medium text-gray-700 mr-2">
                         대표 이미지
                     </label>
-                    <button className="flex items-center justify-center w-20 h-20 bg-gray-200 border border-gray-300 rounded">
-                        <span className="text-gray-400">📷</span>
-                    </button>
+                    <label className="flex items-center justify-center w-20 h-20 bg-gray-200 border border-gray-300 rounded mr-2 cursor-pointer">
+                        <Image
+                            src="/svg/Gallery.svg"
+                            alt="Gallery Icon"
+                            width={32}
+                            height={32}
+                        />
+                        <input
+                            type="file"
+                            className="hidden"
+                            onChange={handleImageChange}
+                        />
+                    </label>
+                    {tripImage && (
+                        <Image
+                            src={tripImage}
+                            width={100}
+                            height={100}
+                            alt="tripImage"
+                            className="w-20 h-20 object-cover rounded-lg"
+                        />
+                    )}
                 </div>
                 <div>
                     <label className="block mb-1 text-sm font-medium text-gray-700">

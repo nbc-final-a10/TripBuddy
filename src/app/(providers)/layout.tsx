@@ -4,20 +4,24 @@ import {
     QueryClient,
     dehydrate,
 } from '@tanstack/react-query';
-import TapMenu from '@/components/molecules/TapMenu';
 import React, { PropsWithChildren, Suspense } from 'react';
 import Loading from './loading';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import Header from '@/components/atoms/common/Header';
 import { getBuddyServer } from '@/api-services/auth/server';
 import { getUserFromHeader } from '@/utils/auth/getUserFromHeader';
-import { getPathnameServer } from '@/utils/common/getPathnameServer';
 import MainSectionWrapper from '@/components/molecules/common/MainSectionWrapper';
 import MobileHeader from '@/components/molecules/common/MobileHeader';
+import TapMenu from '@/components/molecules/common/TapMenu';
+import { Metadata } from 'next';
+import { defaultMetaData } from '@/data/defaultMetaData';
+import { ModalProviderSetter } from '@/providers/ModalProvider';
+import { ModalProviderDefault } from '@/contexts/modal.context';
+
+export const metadata: Metadata = defaultMetaData;
 
 const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
     const userId = getUserFromHeader();
-    const { pathname, queryParams } = getPathnameServer();
 
     console.log('헤더에서 user =====>', userId);
 
@@ -33,12 +37,16 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
             <MainSectionWrapper>
                 <Suspense fallback={<Loading />}>
                     <HydrationBoundary state={dehydratedState}>
-                        <AuthProvider>
-                            <MobileHeader />
-                            <Header />
-                            {children}
-                            <TapMenu pathname={pathname as string} />
-                        </AuthProvider>
+                        <ModalProviderDefault>
+                            <ModalProviderSetter>
+                                <AuthProvider>
+                                    <MobileHeader />
+                                    <Header />
+                                    {children}
+                                    <TapMenu />
+                                </AuthProvider>
+                            </ModalProviderSetter>
+                        </ModalProviderDefault>
                     </HydrationBoundary>
                 </Suspense>
             </MainSectionWrapper>

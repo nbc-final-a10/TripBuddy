@@ -17,12 +17,15 @@ type UsePreferThemeProps = {
     mode: 'trip' | 'buddy';
     isLabel?: boolean;
 };
-
+// setSelectedTheme를 props로 내려받고 싶어서 추가.
 const usePreferTheme = ({
     mode,
     isLabel = false,
 }: UsePreferThemeProps): [
-    ({ className }: { className?: string }) => React.JSX.Element,
+    React.FC<{
+        className?: string;
+        setSelectedTheme?: React.Dispatch<React.SetStateAction<string[]>>;
+    }>,
     (TripTheme | BuddyTheme)[],
 ] => {
     const themeRef = useRef<AllTripTheme[] | AllBuddyTheme[]>(

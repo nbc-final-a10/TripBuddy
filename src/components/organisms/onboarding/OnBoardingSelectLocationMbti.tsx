@@ -1,5 +1,5 @@
-import Chip from '@/components/atoms/common/O_Chip';
-import Title from '@/components/atoms/common/O_Title';
+import Chip from '@/components/atoms/common/Chip';
+import Title from '@/components/atoms/common/Title';
 import OnBoardingInnerWrapper from '@/components/atoms/onboarding/OnBoardinginnerWrapper';
 import OnBoardingWrapper from '@/components/atoms/onboarding/OnBoardingWrapper';
 import { mbtis } from '@/data/mbtis';
@@ -43,7 +43,7 @@ const OnBoardingSelectLocationMbti = ({
                     </section>
                 )}
                 {mode === 'location' && SelectRegion && (
-                    <section className="w-[90%] h-[80%] overflow-y-auto">
+                    <section className="relative w-[90%] h-full xl:h-[90%]">
                         <SelectRegion />
                     </section>
                 )}
@@ -53,3 +53,5 @@ const OnBoardingSelectLocationMbti = ({
 };
 
 export default OnBoardingSelectLocationMbti;
+
+//h-[80%] overflow-y-auto

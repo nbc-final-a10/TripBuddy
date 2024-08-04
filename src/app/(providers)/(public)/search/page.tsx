@@ -1,51 +1,196 @@
 'use client';
 
 import TopButton from '@/components/atoms/search/TopButton';
-import AgeCount from '@/components/molecules/search/AgeCount';
+import SelectAgesRange from '@/components/atoms/write/SelectAgesRange';
 import GenderChipGroup from '@/components/molecules/search/GenderChipGroup';
 import MeetingPlaceChipGroup from '@/components/molecules/search/MeetingPlaceChipGroup';
 import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
 import SearchResult from '@/components/molecules/search/SearchResult';
 import DateSearchPage from '@/components/organisms/search/DateSearchPage';
 import usePreferTheme from '@/hooks/usePreferTheme';
-import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
+// import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
 import useSelectRegion from '@/hooks/useSelectRegion';
+import { Tables } from '@/types/supabase';
 import supabase from '@/utils/supabase/client';
-import { useSearchStore } from '@/zustand/search.store';
-// import { useRouter } from 'next/navigation';
-import React, { useRef, useState } from 'react';
+import Image from 'next/image';
+import React, { useEffect, useRef, useState } from 'react';
+
+type Trip = Tables<'trips'>;
 
 const SearchPage: React.FC = () => {
     const [showResult, setShowResult] = useState(false);
+    const [resultItems, setResultItems] = useState<Trip[]>([]);
+    const [allItems, setAllItems] = useState<Trip[]>([]);
+    const [visibleFirstItems, setVisibleFirstItems] = useState(8);
+    const [visibleSecondItems, setVisibleSecondItems] = useState(6);
     const resultRef = useRef<HTMLDivElement>(null);
+    const [isXL, setIsXL] = useState<boolean>(false);
 
-    const [PreferBuddyTheme] = usePreferTheme({
-        mode: 'buddy',
-    });
+    const [searchInput, setSearchInput] = useState<string>('');
 
-    const [PreferTripTheme] = usePreferTheme({
-        mode: 'trip',
-    });
+    const [selectedGender, setSelectedGender] = useState<string | null>(null);
 
-    const { SelectBuddyCounts } = useSelectBuddyCounts();
-    const { SelectRegion } = useSelectRegion();
+    const [startAge, setStartAge] = useState<number>(18);
+    const [endAge, setEndAge] = useState<number>(150);
 
-    // const router = useRouter();
+    // const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
 
-    const { setItems } = useSearchStore(state => ({
-        setItems: state.setItems,
-    }));
+    const [selectedMeetingPlace, setSelectedMeetingPlace] = useState<
+        string | null
+    >(null);
+
+    const { SelectRegion, thirdLevelLocation, setThirdLevelLocation } =
+        useSelectRegion();
+
+    const [startDateTimestamp, setStartDateTimestamp] = useState<string>('');
+    const [endDateTimestamp, setEndDateTimestamp] = useState<string>('');
+
+    const [selectedThemes, setSelectedThemes] = useState<string[]>([]);
+    const [selectedBuddyThemes, setSelectedBuddyThemes] = useState<string[]>(
+        [],
+    );
+
+    const [PreferTripTheme] = usePreferTheme({ mode: 'trip' });
+    const [PreferBuddyTheme] = usePreferTheme({ mode: 'buddy' });
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsXL(window.matchMedia('(min-width: 1280px').matches);
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    const handleDateChange = (start: string, end: string) => {
+        setStartDateTimestamp(start);
+        setEndDateTimestamp(end);
+    };
 
     const handleShowResult = async () => {
         // 데이터 가져와서 상태 업데이트
         const { data, error } = await supabase.from('trips').select('*');
         if (error) {
             console.error('Error fetching trips:', error.message);
-        } else {
-            setItems(data);
+            return;
         }
 
+        // setAllItems(data as Trip[]);
+        // setResultItems(data as Trip[]);
+
+        let filteredItems = data as Trip[];
+
+        if (searchInput) {
+            filteredItems = filteredItems.filter(
+                (item: Trip) =>
+                    item.trip_title
+                        .toLowerCase()
+                        .includes(searchInput.toLowerCase()) ||
+                    item.trip_content
+                        .toLowerCase()
+                        .includes(searchInput.toLowerCase()),
+            );
+        }
+
+        if (selectedGender) {
+            filteredItems = filteredItems.filter(
+                (item: Trip) => item.trip_wanted_sex === selectedGender,
+            );
+        }
+
+        if (selectedMeetingPlace) {
+            filteredItems = filteredItems.filter(
+                (item: Trip) =>
+                    item.trip_meet_location === selectedMeetingPlace,
+            );
+        }
+
+        if (startAge !== undefined && endAge !== undefined) {
+            filteredItems = filteredItems.filter(
+                (item: Trip) =>
+                    item.trip_start_age >= startAge &&
+                    item.trip_end_age <= endAge,
+            );
+        }
+
+        // if (buddyCounts !== null) {
+        //     filteredItems = filteredItems.filter(
+        //         (item: Trip) => item.trip_max_buddies_counts === buddyCounts,
+        //     );
+        // }
+
+        if (thirdLevelLocation !== null) {
+            filteredItems = filteredItems.filter((item: Trip) =>
+                item.trip_final_destination.includes(
+                    thirdLevelLocation as string,
+                ),
+            );
+        }
+
+        if (startDateTimestamp && endDateTimestamp) {
+            const startDate = new Date(startDateTimestamp);
+            const endDate = new Date(endDateTimestamp);
+
+            filteredItems = filteredItems.filter((item: Trip) => {
+                const tripStartDate = new Date(item.trip_start_date);
+                const TripEndDate = new Date(item.trip_end_date);
+
+                return tripStartDate <= endDate && TripEndDate >= startDate;
+            });
+        }
+
+        if (selectedThemes.length > 0) {
+            filteredItems = filteredItems.filter((item: Trip) => {
+                const themes = [
+                    item.trip_theme1,
+                    item.trip_theme2,
+                    item.trip_theme3,
+                ];
+                return selectedThemes.every(theme => themes.includes(theme));
+            });
+        }
+
+        if (selectedBuddyThemes.length > 0) {
+            filteredItems = filteredItems.filter((item: Trip) => {
+                const buddyThemes = [
+                    item.trip_wanted_buddies1,
+                    item.trip_wanted_buddies2,
+                    item.trip_wanted_buddies3,
+                ];
+                return selectedBuddyThemes.every(theme =>
+                    buddyThemes.includes(theme),
+                );
+            });
+        }
+
+        // setResultItems(
+        //     filteredItems.length > 0 ? filteredItems : (data as Trip[]),
+        // );
+        // setShowResult(true);
+        setResultItems(filteredItems);
+
+        if (
+            !searchInput &&
+            !selectedGender &&
+            !selectedMeetingPlace &&
+            startAge === 18 &&
+            endAge === 150 &&
+            !thirdLevelLocation &&
+            !startDateTimestamp &&
+            !endDateTimestamp &&
+            selectedThemes.length === 0 &&
+            selectedBuddyThemes.length === 0
+        ) {
+            setVisibleFirstItems(data.length);
+        }
+
+        setAllItems(data as Trip[]);
         setShowResult(true);
+
         // 속도 지연
         setTimeout(() => {
             resultRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -59,6 +204,14 @@ const SearchPage: React.FC = () => {
         }
     };
 
+    const loadMoreFirstItems = () => {
+        setVisibleFirstItems(prev => prev + 8);
+    };
+
+    const loadMoreSecondItems = () => {
+        setVisibleSecondItems(prev => prev + 6);
+    };
+
     return (
         <main className="p-5 xl:p-0 xl:py-5">
             <section className="flex flex-col mx-auto mb-10 mt-6 xl:flex-row xl:items-center xl:justify-center xl:max-w-screen-xl">
@@ -66,9 +219,19 @@ const SearchPage: React.FC = () => {
                     <input
                         type="text"
                         placeholder="검색어를 입력하세요"
-                        className="w-full bg-gray-100 p-2 rounded-2xl"
+                        className="w-full bg-gray-200 p-2 pl-10 rounded-2xl"
                         onKeyDown={handleKeyDown}
+                        onChange={e => setSearchInput(e.target.value)}
                     />
+                    <div className="absolute left-8 top-[121px] transform -translate-y-1/2 xl:top-[164px] xl:left-3">
+                        <Image
+                            src="/svg/HomeSearch.svg"
+                            alt="Search"
+                            width={20}
+                            height={20}
+                            className="w-[20px] h-[20px]"
+                        />
+                    </div>
                 </div>
 
                 <button
@@ -81,22 +244,36 @@ const SearchPage: React.FC = () => {
 
             <div className="my-10">
                 <SearchPageTitle title="성별" description="" />
-                <GenderChipGroup />
+                <GenderChipGroup
+                    selectedGender={selectedGender}
+                    setSelectedGender={setSelectedGender}
+                />
             </div>
             <div className="my-10">
                 <SearchPageTitle title="나이" description="" />
-                <AgeCount />
+                <SelectAgesRange
+                    startAge={startAge}
+                    endAge={endAge}
+                    handleStartAge={setStartAge}
+                    handleEndAge={setEndAge}
+                />
             </div>
-            <div className="my-10">
+            {/* <div className="my-10">
                 <SearchPageTitle
                     title="인원수"
                     description="인원수 최대 4명까지 가능해요."
                 />
-                <SelectBuddyCounts />
-            </div>
+                <SelectBuddyCounts
+                // buddyCounts={buddyCounts}
+                // setBuddyCounts={SelectBuddyCounts}
+                />
+            </div> */}
             <div className="my-10">
                 <SearchPageTitle title="만남 장소" description="" />
-                <MeetingPlaceChipGroup />
+                <MeetingPlaceChipGroup
+                    selectedMeetingPlace={selectedMeetingPlace}
+                    setSelectedMeetingPlace={setSelectedMeetingPlace}
+                />
             </div>
             <div className="my-10">
                 <SearchPageTitle
@@ -110,21 +287,27 @@ const SearchPage: React.FC = () => {
                     title="언제 떠나시나요?"
                     description="버디즈와 함께 여행하고 싶은 날짜를 선택해주세요."
                 />
-                <DateSearchPage />
+                <DateSearchPage setDateChange={handleDateChange} />
             </div>
             <div className="my-10">
                 <SearchPageTitle
                     title="여정 테마"
                     description="3가지를 선택해주세요."
                 />
-                <PreferTripTheme />
+                <PreferTripTheme
+                    className="some-class"
+                    setSelectedTheme={setSelectedThemes}
+                />
             </div>
             <div className="my-10">
                 <SearchPageTitle
                     title="버디즈 성향"
                     description="3가지를 선택해주세요."
                 />
-                <PreferBuddyTheme />
+                <PreferBuddyTheme
+                    className="some-class"
+                    setSelectedTheme={setSelectedBuddyThemes}
+                />
             </div>
 
             <button
@@ -136,7 +319,15 @@ const SearchPage: React.FC = () => {
 
             {showResult && (
                 <div ref={resultRef}>
-                    <SearchResult />
+                    <SearchResult
+                        items={resultItems}
+                        allTrips={allItems}
+                        visibleFirstItems={visibleFirstItems}
+                        visibleSecondItems={visibleSecondItems}
+                        loadMoreFirstItems={loadMoreFirstItems}
+                        loadMoreSecondItems={loadMoreSecondItems}
+                        isXL={isXL}
+                    />
                 </div>
             )}
 

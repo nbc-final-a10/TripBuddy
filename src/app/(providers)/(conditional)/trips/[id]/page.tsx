@@ -1,4 +1,3 @@
-import TripCard from '@/components/molecules/trips/TripCard';
 import TripDetail from '@/components/organisms/trips/TripDetail';
 import React from 'react';
 

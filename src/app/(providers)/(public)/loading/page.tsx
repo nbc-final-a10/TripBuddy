@@ -1,5 +1,6 @@
 'use client';
 
+import DefaultLoader from '@/components/atoms/common/defaultLoader';
 import { useAuth } from '@/hooks/auth';
 import React, { useEffect } from 'react';
 
@@ -16,7 +17,7 @@ const LoadingPage: React.FC = () => {
         }
     }, [naverLogIn]);
 
-    return <div>Loading...</div>;
+    return <DefaultLoader />;
 };
 
 export default LoadingPage;

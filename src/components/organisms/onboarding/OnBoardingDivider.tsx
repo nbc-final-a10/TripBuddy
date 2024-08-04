@@ -1,8 +1,8 @@
 'use client';
 
-import MascotImage from '@/components/atoms/common/O_MascotImage';
-import Paragraph from '@/components/atoms/common/O_Paragraph';
-import Title from '@/components/atoms/common/O_Title';
+import MascotImage from '@/components/atoms/common/MascotImage';
+import Paragraph from '@/components/atoms/common/Paragraph';
+import Title from '@/components/atoms/common/Title';
 import OnBoardingWrapper from '@/components/atoms/onboarding/OnBoardingWrapper';
 import React, { useRef } from 'react';
 

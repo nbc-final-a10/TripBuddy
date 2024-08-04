@@ -12,16 +12,18 @@ const nextConfig = {
             },
             {
                 protocol: 'http',
-                hostname: 'k.kakaocdn.net',
+                hostname: '**.kakaocdn.net',
             },
             {
                 protocol: 'https',
-                hostname: 'lh3.googleusercontent.com',
+                hostname: '**.googleusercontent.com',
             },
             {
                 protocol: 'https',
-                hostname: 'ssl.pstatic.net',
+                hostname: '**.pstatic.net',
             },
+            { protocol: 'https', hostname: 'encrypted-tbn3.gstatic.com' },
+            { protocol: 'https', hostname: 'example.com' },
         ],
     },
     webpack(config) {

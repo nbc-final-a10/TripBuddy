@@ -14,7 +14,7 @@ const HomePageTrips: React.FC<HomePageTripsProps> = ({ trips }) => {
                     key={trip.trip_id}
                     trip={trip}
                     // participants={trip.trip_max_buddies_counts} // 추후변경요망 컨트랙트 참조해야함
-                    mode="main"
+                    mode="card"
                 />
             ))}
         </>

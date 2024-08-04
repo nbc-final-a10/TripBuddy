@@ -2,8 +2,7 @@ import ChatList from '@/components/organisms/chatpage/ChatList';
 
 const ChatListPage = () => {
     return (
-        <div className="bg-white">
-            <div>채팅</div>
+        <div className="bg-white border-t-2 border-gray-200">
             <ChatList />
         </div>
     );
