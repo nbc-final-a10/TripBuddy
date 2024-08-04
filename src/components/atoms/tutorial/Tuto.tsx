@@ -17,7 +17,13 @@ const Tuto: React.FC<TutoProps> = ({ step }) => {
         1: {
             src: '/images/tuto0.webp',
             alt: '첫 번째 튜토리얼 페이지에서 사용되는 이미지',
-            title: <>각자의 성향대로 즐기는 여행!</>,
+            title: (
+                <>
+                    각자의 성향대로
+                    <br />
+                    즐기는 여행!
+                </>
+            ),
             description: (
                 <>
                     트립버디즈가 나에 대해 알아가는
@@ -111,8 +117,13 @@ const Tuto: React.FC<TutoProps> = ({ step }) => {
                 {description}
             </p>
             <div
-                className="relative w-full h-full"
-                style={{ aspectRatio: '3 / 4' }}
+                className="relative w-full "
+                style={{
+                    height: '350px',
+                    minHeight: '350px',
+                    maxHeight: '80vh',
+                    aspectRatio: '3 / 4',
+                }}
             >
                 <Image
                     src={src}
@@ -120,6 +131,7 @@ const Tuto: React.FC<TutoProps> = ({ step }) => {
                     layout="fill"
                     objectFit="contain"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    style={{ minHeight: '350px', maxHeight: '100%' }}
                 />
             </div>
         </div>
