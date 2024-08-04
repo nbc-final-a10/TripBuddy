@@ -1,7 +1,7 @@
 // 사용 방법 : convertDateToStringWithWeekDay(new Date(변환할값))
 // 출력 예시 : 8/24(토)
 
-const convertDateToStringWithWeekDay = (date: Date, dateFormat = 'M/d(E)') => {
+const convertDateToStringWithWeekDay = (date: Date, dateFormat = 'M/d (E)') => {
     const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
 
     const year = date.getFullYear();
