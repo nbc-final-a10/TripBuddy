@@ -63,7 +63,9 @@ const TripDetail: React.FC<TripDetailProps> = ({ id }) => {
 
             {/** 글 내용 */}
             <div className="flex flex-col bg-white gap-2 h-[217px] p-4">
-                <p className="text-gray-950 text-center">{trip.trip_content}</p>
+                <p className="text-gray-950 text-center whitespace-pre-wrap h-full flex items-center justify-center">
+                    {trip.trip_content}
+                </p>
             </div>
 
             {/** 추천인기 버디즈 */}

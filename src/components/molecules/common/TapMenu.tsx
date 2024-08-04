@@ -22,7 +22,7 @@ const TapMenu: React.FC = () => {
     return (
         <div
             className={clsx(
-                'z-50 fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[430px] min-w-[375px] bg-white border-t-2 border-gray-200 grid grid-cols-4 xl:hidden',
+                'z-40 fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[430px] min-w-[375px] bg-white border-t-2 border-gray-200 grid grid-cols-4 xl:hidden',
                 hidden && 'hidden',
             )} // 변경 필요
         >

@@ -14,16 +14,20 @@ import OnBoardingSelectPrefer from './OnBoardingSelectPrefer';
 import useSelectRegion from '@/hooks/useSelectRegion';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { onBoardingValidation } from '@/utils/onboarding/onBoardingValidation';
-import { PartialBuddy } from '@/types/Auth.types';
+import { Buddy, PartialBuddy } from '@/types/Auth.types';
 import { getBirthDate } from '@/utils/common/getBirthDate';
 import OnBoardingCalender from './OnBoardingCalender';
 import { CalendarDate, parseDate } from '@internationalized/date';
 import { getAgeFromBirthDate } from '@/utils/common/getAgeFromBirthDate';
 import useUpdateBuddyMutation from '@/hooks/queries/useUpdateBuddyMutation';
+import OnBoardingProfileImage from './OnBoardingProfileImage';
+import DefaultLoader from '@/components/atoms/common/defaultLoader';
 
 const buttonText = [
     '다음',
     '테스트시작하기',
+    '다음',
+    '다음',
     '다음',
     '다음',
     '다음',
@@ -40,7 +44,9 @@ const OnBoarding: React.FC = () => {
     const { buddy } = useAuth();
 
     const nicknameRef = useRef<HTMLInputElement>(null);
+    const introductionRef = useRef<HTMLInputElement>(null);
     const buddyInfoRef = useRef<PartialBuddy>({ buddy_id: buddy?.buddy_id });
+    const profileImageRef = useRef<HTMLInputElement>(null);
 
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [selectedGender, setSelectedGender] = useState<string>('');
@@ -49,6 +55,8 @@ const OnBoarding: React.FC = () => {
     const [calenderValue, setCalenderValue] = useState<CalendarDate>(
         parseDate(new Date().toISOString().split('T')[0]),
     );
+    const [selectedMedia, setSelectedMedia] = useState<string>('');
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
     const { mutate, isPending, error } = useUpdateBuddyMutation();
     const [PreferBuddyTheme, selectedBuddyTheme] = usePreferTheme({
@@ -62,7 +70,7 @@ const OnBoarding: React.FC = () => {
 
     const { NextButton, step, setStep } = useNextButton({
         buttonText: buttonText[stepToDisplay],
-        limit: 10,
+        limit: 12,
     });
 
     const handleGenderButtonClick = (e: MouseEvent<HTMLSpanElement>) => {
@@ -78,7 +86,7 @@ const OnBoarding: React.FC = () => {
 
     const handleNextButtonClick = () => {
         if (!buddy) return showAlert('error', '로그인을 먼저 해주세요.');
-
+        buddyInfoRef.current.buddy_id = buddy.buddy_id;
         // step 번호에 따라 유효성 검사 진행
         // 유효성 검사 진행 후 fetch 날리고 다음 단계로 이동
         if (step === 0) {
@@ -88,7 +96,7 @@ const OnBoarding: React.FC = () => {
             );
             if (!result) return setStep(0);
             buddyInfoRef.current.buddy_nickname = nicknameRef.current?.value;
-            if (isEdit) mutate(buddyInfoRef.current);
+            mutate({ buddyInfo: buddyInfoRef.current });
         }
         if (step === 2) {
             const jsDate = calenderValue.toDate('UTC'); // 'UTC' 타임존으로 변환
@@ -99,13 +107,13 @@ const OnBoarding: React.FC = () => {
             if (!result) return setStep(2);
 
             buddyInfoRef.current.buddy_birth = isoString;
-            if (isEdit) mutate(buddyInfoRef.current);
+            if (isEdit) mutate({ buddyInfo: buddyInfoRef.current });
         }
         if (step === 3) {
             const result = onBoardingValidation(selectedGender, step);
             if (!result) return setStep(3);
             buddyInfoRef.current.buddy_sex = selectedGender;
-            if (isEdit) mutate(buddyInfoRef.current);
+            if (isEdit) mutate({ buddyInfo: buddyInfoRef.current });
         }
         if (step === 4) {
             const result = onBoardingValidation(
@@ -117,13 +125,13 @@ const OnBoarding: React.FC = () => {
                 secondLevelLocation,
                 thirdLevelLocation,
             ].join(' ');
-            if (isEdit) mutate(buddyInfoRef.current);
+            if (isEdit) mutate({ buddyInfo: buddyInfoRef.current });
         }
         if (step === 5) {
             const result = onBoardingValidation(selectedMbti, step);
             if (!result) return setStep(5);
             buddyInfoRef.current.buddy_mbti = selectedMbti;
-            if (isEdit) mutate(buddyInfoRef.current);
+            if (isEdit) mutate({ buddyInfo: buddyInfoRef.current });
         }
         if (step === 7) {
             const result = onBoardingValidation(selectedBuddyTheme, step);
@@ -131,7 +139,7 @@ const OnBoarding: React.FC = () => {
             buddyInfoRef.current.buddy_preferred_buddy1 = selectedBuddyTheme[0];
             buddyInfoRef.current.buddy_preferred_buddy2 = selectedBuddyTheme[1];
             buddyInfoRef.current.buddy_preferred_buddy3 = selectedBuddyTheme[2];
-            if (isEdit) mutate(buddyInfoRef.current);
+            if (isEdit) mutate({ buddyInfo: buddyInfoRef.current });
         }
         if (step === 8) {
             const result = onBoardingValidation(selectedTripTheme, step);
@@ -139,9 +147,41 @@ const OnBoarding: React.FC = () => {
             buddyInfoRef.current.buddy_preferred_theme1 = selectedTripTheme[0];
             buddyInfoRef.current.buddy_preferred_theme2 = selectedTripTheme[1];
             buddyInfoRef.current.buddy_preferred_theme3 = selectedTripTheme[2];
-            if (isEdit) mutate(buddyInfoRef.current);
+            if (isEdit) mutate({ buddyInfo: buddyInfoRef.current });
+        }
+        if (step === 9) {
+            const result = onBoardingValidation(
+                introductionRef.current?.value,
+                step,
+            );
+            if (!result) {
+                if (introductionRef.current) introductionRef.current.value = '';
+                return setStep(9);
+            }
+            buddyInfoRef.current.buddy_introduction =
+                introductionRef.current?.value;
+            if (isEdit) mutate({ buddyInfo: buddyInfoRef.current });
+        }
+        if (step === 10) {
+            if (selectedFile) {
+                const file = selectedFile;
+                if (file && isEdit)
+                    mutate({
+                        buddyInfo: buddyInfoRef.current,
+                        imageFile: file,
+                    });
+            } else {
+                showAlert('error', '프로필 이미지를 선택해주세요.');
+            }
         }
     };
+
+    useEffect(() => {
+        if (selectedFile) {
+            const file = selectedFile;
+            setSelectedMedia(URL.createObjectURL(file));
+        }
+    }, [selectedFile]);
 
     useEffect(() => {
         if (error) {
@@ -156,22 +196,25 @@ const OnBoarding: React.FC = () => {
                 onConfirm: () => router.push('/login'),
             });
         }
-        if (buddy.buddy_isOnBoarding)
-            return showAlert('caution', '이미 온보딩을 완료하셨습니다.', {
-                onConfirm: () => router.push('/'),
-            });
-        if (step <= 9) {
+        // if (buddy.buddy_isOnBoarding)
+        //     return showAlert('caution', '이미 온보딩을 완료하셨습니다.', {
+        //         onConfirm: () => router.push('/'),
+        //     });
+        if (step <= 11) {
             if (isEdit) router.push(`/onboarding?funnel=${step}&mode=edit`);
             else router.push(`/onboarding?funnel=${step}`);
         }
-        if (step > 9) {
-            // buddyInfoRef.current.buddy_isOnBoarding = true;
-            console.log('최종 버디즈 정보 =====>', buddyInfoRef.current);
-            mutate(buddyInfoRef.current);
+        if (step > 11) {
+            buddyInfoRef.current.buddy_isOnBoarding = true;
+            // console.log('최종 버디즈 정보 =====>', buddyInfoRef.current);
+            mutate({
+                buddyInfo: buddyInfoRef.current,
+                imageFile: selectedFile ? selectedFile : null,
+            });
             router.push('/');
         }
         setStepToDisplay(step);
-    }, [step, router, buddy, mutate, isEdit]);
+    }, [step, router, buddy, mutate, isEdit, selectedFile]);
 
     useEffect(() => {
         const funnel = searchParams.get('funnel');
@@ -185,7 +228,7 @@ const OnBoarding: React.FC = () => {
             <div className="relative w-full h-full flex flex-col justify-center xl:justify-start">
                 <ProgressIndicator
                     step={step}
-                    counts={9}
+                    counts={11}
                     className="relative h-[5%] pt-1 xl:pt-5 flex items-center xl:h-[3%]"
                 />
 
@@ -193,9 +236,7 @@ const OnBoarding: React.FC = () => {
                     {/** mutate 중에 로딩 띄우기 추후수정요망*/}
                     {isPending && (
                         <div className="fixed z-50 top-0 left-0 w-full h-full bg-black/50 flex justify-center items-center">
-                            <div className="text-center text-white font-bold">
-                                업데이트 중...
-                            </div>
+                            <DefaultLoader />
                         </div>
                     )}
 
@@ -258,6 +299,20 @@ const OnBoarding: React.FC = () => {
                         />
                     )}
                     {step === 9 && (
+                        <OnBoardingInput
+                            mode="introduction"
+                            ref={introductionRef}
+                        />
+                    )}
+                    {step === 10 && (
+                        <OnBoardingProfileImage
+                            buddy={buddy as Buddy}
+                            ref={profileImageRef}
+                            selectedMedia={selectedMedia}
+                            setSelectedFile={setSelectedFile}
+                        />
+                    )}
+                    {step === 11 && (
                         <OnBoardingDivider
                             mode="end"
                             name={nicknameRef.current?.value || ''}
