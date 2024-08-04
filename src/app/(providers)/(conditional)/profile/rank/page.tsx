@@ -77,7 +77,7 @@ const RankPage: React.FC = () => {
                                               '/default-profile.png'
                                           }
                                           alt={buddy?.buddy_nickname}
-                                          layout="fill"
+                                          fill
                                           objectFit="cover"
                                           className="rounded-t-lg"
                                       />
