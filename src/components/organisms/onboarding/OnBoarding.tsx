@@ -37,11 +37,12 @@ const buttonText = [
 const OnBoarding: React.FC = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const { logOut, buddy } = useAuth();
+    const { buddy } = useAuth();
 
     const nicknameRef = useRef<HTMLInputElement>(null);
     const buddyInfoRef = useRef<PartialBuddy>({ buddy_id: buddy?.buddy_id });
 
+    const [isEdit, setIsEdit] = useState<boolean>(false);
     const [selectedGender, setSelectedGender] = useState<string>('');
     const [selectedMbti, setSelectedMbti] = useState<string>('');
     const [stepToDisplay, setStepToDisplay] = useState<number>(0);
@@ -87,10 +88,9 @@ const OnBoarding: React.FC = () => {
             );
             if (!result) return setStep(0);
             buddyInfoRef.current.buddy_nickname = nicknameRef.current?.value;
+            if (isEdit) mutate(buddyInfoRef.current);
         }
         if (step === 2) {
-            // const age = Number(ageRef.current?.value);
-
             const jsDate = calenderValue.toDate('UTC'); // 'UTC' 타임존으로 변환
             const isoString = jsDate.toISOString();
             const age = getAgeFromBirthDate(isoString);
@@ -98,13 +98,14 @@ const OnBoarding: React.FC = () => {
             const result = onBoardingValidation(age, step);
             if (!result) return setStep(2);
 
-            // const birthTimestamptz = getBirthDate(age);
             buddyInfoRef.current.buddy_birth = isoString;
+            if (isEdit) mutate(buddyInfoRef.current);
         }
         if (step === 3) {
             const result = onBoardingValidation(selectedGender, step);
             if (!result) return setStep(3);
             buddyInfoRef.current.buddy_sex = selectedGender;
+            if (isEdit) mutate(buddyInfoRef.current);
         }
         if (step === 4) {
             const result = onBoardingValidation(
@@ -116,11 +117,13 @@ const OnBoarding: React.FC = () => {
                 secondLevelLocation,
                 thirdLevelLocation,
             ].join(' ');
+            if (isEdit) mutate(buddyInfoRef.current);
         }
         if (step === 5) {
             const result = onBoardingValidation(selectedMbti, step);
             if (!result) return setStep(5);
             buddyInfoRef.current.buddy_mbti = selectedMbti;
+            if (isEdit) mutate(buddyInfoRef.current);
         }
         if (step === 7) {
             const result = onBoardingValidation(selectedBuddyTheme, step);
@@ -128,6 +131,7 @@ const OnBoarding: React.FC = () => {
             buddyInfoRef.current.buddy_preferred_buddy1 = selectedBuddyTheme[0];
             buddyInfoRef.current.buddy_preferred_buddy2 = selectedBuddyTheme[1];
             buddyInfoRef.current.buddy_preferred_buddy3 = selectedBuddyTheme[2];
+            if (isEdit) mutate(buddyInfoRef.current);
         }
         if (step === 8) {
             const result = onBoardingValidation(selectedTripTheme, step);
@@ -135,6 +139,7 @@ const OnBoarding: React.FC = () => {
             buddyInfoRef.current.buddy_preferred_theme1 = selectedTripTheme[0];
             buddyInfoRef.current.buddy_preferred_theme2 = selectedTripTheme[1];
             buddyInfoRef.current.buddy_preferred_theme3 = selectedTripTheme[2];
+            if (isEdit) mutate(buddyInfoRef.current);
         }
     };
 
@@ -155,7 +160,10 @@ const OnBoarding: React.FC = () => {
             return showAlert('caution', '이미 온보딩을 완료하셨습니다.', {
                 onConfirm: () => router.push('/'),
             });
-        if (step <= 9) router.push(`/onboarding?funnel=${step}`);
+        if (step <= 9) {
+            if (isEdit) router.push(`/onboarding?funnel=${step}&mode=edit`);
+            else router.push(`/onboarding?funnel=${step}`);
+        }
         if (step > 9) {
             // buddyInfoRef.current.buddy_isOnBoarding = true;
             console.log('최종 버디즈 정보 =====>', buddyInfoRef.current);
@@ -163,11 +171,13 @@ const OnBoarding: React.FC = () => {
             router.push('/');
         }
         setStepToDisplay(step);
-    }, [step, router, buddy, mutate]);
+    }, [step, router, buddy, mutate, isEdit]);
 
     useEffect(() => {
         const funnel = searchParams.get('funnel');
+        const mode = searchParams.get('mode');
         if (funnel) setStep(Number(funnel));
+        if (mode === 'edit') setIsEdit(true);
     }, [searchParams, setStep]);
 
     return (
@@ -254,9 +264,9 @@ const OnBoarding: React.FC = () => {
                         />
                     )}
                 </div>
-                <div className="flex justify-center">
+                <div className="flex justify-center items-center">
                     <NextButton
-                        className="text-2xl bg-main-color font-bold py-2 px-4 mt-4 rounded-2xl w-full text-white"
+                        className="text-2xl bg-main-color font-bold py-2 px-4 mt-2 mb-2 rounded-2xl w-[90%] text-white"
                         onClick={handleNextButtonClick}
                     />
                 </div>
