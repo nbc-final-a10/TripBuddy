@@ -29,9 +29,6 @@ const SearchResult: React.FC<SearchResultProps> = ({
     const tripsRef = useRef<HTMLDivElement>(null);
     const { createMouseDownHandler } = useTapScroll();
 
-    // console.log('items:', items);
-    // console.log('visibleSecondItems: ', visibleSecondItems);
-
     const filteredItems = items.slice(0, visibleFirstItems);
 
     // 작성된 순으로 정렬
@@ -45,6 +42,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
             );
         });
 
+    console.log('filteredItems: ', filteredItems);
     console.log('sortItems: ', sortItems);
 
     return (

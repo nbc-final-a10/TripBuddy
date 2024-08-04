@@ -8,12 +8,12 @@ import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
 import SearchResult from '@/components/molecules/search/SearchResult';
 import DateSearchPage from '@/components/organisms/search/DateSearchPage';
 import usePreferTheme from '@/hooks/usePreferTheme';
-import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
+// import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
 import useSelectRegion from '@/hooks/useSelectRegion';
 import { Tables } from '@/types/supabase';
 import supabase from '@/utils/supabase/client';
 import Image from 'next/image';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 type Trip = Tables<'trips'>;
 
@@ -24,6 +24,7 @@ const SearchPage: React.FC = () => {
     const [visibleFirstItems, setVisibleFirstItems] = useState(8);
     const [visibleSecondItems, setVisibleSecondItems] = useState(6);
     const resultRef = useRef<HTMLDivElement>(null);
+    const [isXL, setIsXL] = useState<boolean>(false);
 
     const [searchInput, setSearchInput] = useState<string>('');
 
@@ -32,7 +33,7 @@ const SearchPage: React.FC = () => {
     const [startAge, setStartAge] = useState<number>(18);
     const [endAge, setEndAge] = useState<number>(150);
 
-    const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
+    // const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
 
     const [selectedMeetingPlace, setSelectedMeetingPlace] = useState<
         string | null
@@ -52,6 +53,19 @@ const SearchPage: React.FC = () => {
     const [PreferTripTheme] = usePreferTheme({ mode: 'trip' });
     const [PreferBuddyTheme] = usePreferTheme({ mode: 'buddy' });
 
+    useEffect(() => {
+        const handleResize = () => {
+            setIsXL(window.matchMedia('(min-width: 1280px').matches);
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     const handleDateChange = (start: string, end: string) => {
         setStartDateTimestamp(start);
         setEndDateTimestamp(end);
@@ -65,9 +79,8 @@ const SearchPage: React.FC = () => {
             return;
         }
 
-        // setAllItems(data as Trip[]);
-        setResultItems(data as Trip[]);
         setAllItems(data as Trip[]);
+        setResultItems(data as Trip[]);
 
         let filteredItems = data as Trip[];
 
@@ -104,11 +117,11 @@ const SearchPage: React.FC = () => {
             );
         }
 
-        if (buddyCounts !== null) {
-            filteredItems = filteredItems.filter(
-                (item: Trip) => item.trip_max_buddies_counts === buddyCounts,
-            );
-        }
+        // if (buddyCounts !== null) {
+        //     filteredItems = filteredItems.filter(
+        //         (item: Trip) => item.trip_max_buddies_counts === buddyCounts,
+        //     );
+        // }
 
         if (thirdLevelLocation !== null) {
             filteredItems = filteredItems.filter((item: Trip) =>
@@ -154,7 +167,9 @@ const SearchPage: React.FC = () => {
             });
         }
 
-        setResultItems(filteredItems);
+        setResultItems(
+            filteredItems.length > 0 ? filteredItems : (data as Trip[]),
+        );
         setShowResult(true);
 
         // 속도 지연
@@ -288,8 +303,12 @@ const SearchPage: React.FC = () => {
                     <SearchResult
                         items={resultItems}
                         allTrips={allItems}
-                        visibleFirstItems={visibleFirstItems}
-                        visibleSecondItems={visibleSecondItems}
+                        visibleFirstItems={
+                            isXL ? visibleFirstItems : resultItems.length
+                        }
+                        visibleSecondItems={
+                            isXL ? visibleSecondItems : resultItems.length
+                        }
                         loadMoreFirstItems={loadMoreFirstItems}
                         loadMoreSecondItems={loadMoreSecondItems}
                     />
