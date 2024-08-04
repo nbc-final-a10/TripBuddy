@@ -8,7 +8,7 @@ import SelectTripThemesPage from '@/components/organisms/write/SelectTripThemesP
 import SelectDatePage from '@/components/organisms/write/SelectDatePage';
 import WelcomePage from '@/components/organisms/write/WelcomePage';
 import useNextButton from '@/hooks/useFunnelNextStep';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/auth';
 import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
 import useCalendar from '@/hooks/useCalendar';
@@ -16,27 +16,35 @@ import useSelectRegion from '@/hooks/useSelectRegion';
 import usePreferTheme from '@/hooks/usePreferTheme';
 import { Tables } from '@/types/supabase';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import { useRouter } from 'next/navigation';
 import useTripWrite from '@/hooks/MyPage/useTripWrite';
 import WriteTrip from '@/components/organisms/write/WriteTrip';
 import useSelectSex from '@/hooks/useSelectSex';
 import useSelectAges from '@/hooks/useSelectAges';
 import useSelectMeetPlace from '@/hooks/useSelectMeetPlace';
+import { useRouter } from 'next/navigation';
+
+// 버튼 라벨 배열
+const buttonText = [
+    '다음',
+    '다음',
+    '다음',
+    '다음',
+    '다음',
+    '여정 만들기',
+    '여정 페이지로',
+];
 
 const WritePage: React.FC = () => {
-    const router = useRouter();
+    const [stepToDisplay, setStepToDisplay] = useState<number>(0);
+    const [tripId, setTripId] = useState<string>('');
 
     const { buddy } = useAuth();
+    const router = useRouter();
     const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
     const { SelectCalendar, startDateTimestamp, endDateTimestamp } =
         useCalendar();
-    const {
-        SelectRegion,
-        firstLevelLocation,
-        secondLevelLocation,
-        thirdLevelLocation,
-        setThirdLevelLocation,
-    } = useSelectRegion();
+    const { SelectRegion, secondLevelLocation, thirdLevelLocation } =
+        useSelectRegion();
     const [PreferTripThemesToRender, selectedTripThemes] = usePreferTheme({
         mode: 'trip',
     });
@@ -59,18 +67,23 @@ const WritePage: React.FC = () => {
     const { meetPlace, SelectMeetPlaceButton } = useSelectMeetPlace();
 
     // 유효성 검사 함수
-    const validateStep = () => {
+    const validateStep = async () => {
         if (step === 2) {
             if (!startDateTimestamp || !endDateTimestamp) {
                 showAlert('error', '날짜를 선택해 주세요');
                 return false;
             }
         }
+        // // Todo: 페치 3번 날아가는 에러 발견
+        // if (step === 5) {
+        //     const success = await handleWriteTrip();
+        //     return success; // 통신 성공 여부에 따라 true 또는 false 반환
+        // }
         return true;
     };
 
-    const { NextButton, step, setStep } = useNextButton({
-        buttonText: '다음',
+    const { NextButton, step } = useNextButton({
+        buttonText: buttonText[stepToDisplay],
         limit: 6,
         validateStep: validateStep,
     });
@@ -82,13 +95,13 @@ const WritePage: React.FC = () => {
     // Todo: 핸들러 함수 정의 (커스텀 훅의 state를 supabase에 한번에 쓰는 함수) -> WritePage에 함수만 내려주기
     // Todo: 더 큰 함수로 바꾸어서 step 별로 유효성 검사 등 실행 로직 분리하기
     const handleWriteTrip = async () => {
+        console.log('페칭할 때 buddyCounts', buddyCounts);
         const tripData: PartialTripData = {
             trip_title: tripTitle,
             trip_content: tripContent,
             trip_thumbnail: '',
             trip_master_id: buddy?.buddy_id ?? '',
             trip_max_buddies_counts: buddyCounts,
-            trip_bookmarks_counts: buddyCounts,
             trip_start_date: startDateTimestamp,
             trip_end_date: endDateTimestamp,
             trip_final_destination: `${secondLevelLocation} ${thirdLevelLocation}`,
@@ -112,23 +125,42 @@ const WritePage: React.FC = () => {
             const response = await fetch('/api/write', {
                 method: 'POST',
                 body: formData,
+                headers: {
+                    user: buddy?.buddy_id ?? '', // 헤더에 사용자 ID 포함
+                },
             });
             if (response.ok) {
+                const data = await response.json();
                 console.log('게시글 업데이트 성공');
+                setTripId(data.trip.trip_id);
+                console.log('데이터', data);
+                return true;
             } else {
                 const errorResult = await response.json();
                 console.error('게시글 업데이트 중 오류 발생:', errorResult);
-                showAlert('error', '게시글 업데이트 실패');
+                showAlert('error', '여정을 작성하지 못하였습니다.');
+                return false;
             }
         } catch (error) {
             console.error('게시글 업데이트 중 오류 발생:', error);
+            showAlert('error', '여정을 작성하지 못하였습니다.');
+            return false;
         }
+    };
+
+    useEffect(() => {
+        setStepToDisplay(step);
+    }, [step]);
+    console.log(buttonText[stepToDisplay]);
+
+    const handlePush = (path: string) => {
+        router.push(path);
     };
 
     return (
         <>
             <ProgressIndicator step={step} counts={7} />
-            <section className="h-dvh flex flex-col">
+            <section className="h-auto flex flex-col">
                 <div className="flex flex-col">
                     {step === 0 && (
                         <WelcomePage SelectBuddyCounts={SelectBuddyCounts} />
@@ -182,6 +214,7 @@ const WritePage: React.FC = () => {
                         onClick={() => {
                             if (step === 5) handleWriteTrip();
                             validateStep();
+                            if (step === 6) handlePush(`/trips/${tripId}`);
                         }}
                     />
                 </div>

@@ -9,11 +9,15 @@ import BuddyProfileSkeleton from './BuddyProfileSkeleton';
 type BuddyProfileProps = {
     clickedBuddy: Buddy | null;
     loading: boolean;
+    buddy?: Buddy | null;
+    urlId?: string;
 };
 
 export default function BuddyProfile({
     clickedBuddy,
     loading,
+    buddy = null,
+    urlId = '',
 }: BuddyProfileProps) {
     if (loading) {
         return <BuddyProfileSkeleton />;
@@ -33,9 +37,13 @@ export default function BuddyProfile({
                         height={100}
                         className="rounded-full w-[100px] h-[100px]"
                     />
-                    <Link href={`/profile/edit/${clickedBuddy?.buddy_id}`}>
-                        <EditProfileButton />
-                    </Link>
+                    {buddy?.buddy_id === urlId &&
+                        // url에 'profile'이 포함되어 있으면 편집 버튼 보여주기
+                        window.location.pathname.includes('profile') && (
+                            <Link href={`/onboarding?funnel=0&mode=edit`}>
+                                <EditProfileButton />
+                            </Link>
+                        )}
                 </div>
                 <div className="ml-4">
                     <div className="flex flex-col ">
@@ -43,24 +51,48 @@ export default function BuddyProfile({
                             <span className="text-2xl font-bold xl:text-3xl">
                                 {clickedBuddy?.buddy_nickname}
                             </span>
-                            <span className="bg-main-color rounded-full px-3 py-1 text-sm text-white ml-2">
-                                {clickedBuddy?.buddy_mbti}
-                            </span>
+                            {clickedBuddy?.buddy_mbti ? (
+                                <span className="bg-main-color rounded-full px-3 py-1 text-sm text-white ml-2">
+                                    {clickedBuddy?.buddy_mbti}
+                                </span>
+                            ) : (
+                                <span className="bg-gray-200 rounded-full px-3 py-1 text-sm text-gray-700 ml-2">
+                                    MBTI 없음
+                                </span>
+                            )}
                         </div>
-                        <p className="mt-2 text-gray-500">
-                            {clickedBuddy?.buddy_birth &&
-                                getAgeFromBirthDate(
-                                    clickedBuddy?.buddy_birth,
-                                )}{' '}
-                            세 / {clickedBuddy?.buddy_sex}
-                        </p>
-                        <p className="text-gray-500">
-                            {clickedBuddy?.buddy_introduction}
-                        </p>
-                        <p className="mt-2 text-gray-500">
-                            {clickedBuddy?.buddy_region}
-                        </p>
 
+                        {/* 나이와 성별 */}
+                        {clickedBuddy?.buddy_birth ? (
+                            <p className="mt-2 text-gray-500">
+                                {getAgeFromBirthDate(clickedBuddy?.buddy_birth)}{' '}
+                                {clickedBuddy?.buddy_sex}
+                            </p>
+                        ) : (
+                            <p className="mt-2 text-gray-500">
+                                생년월일 정보가 없습니다.
+                            </p>
+                        )}
+                        {/* 소개글 */}
+                        {clickedBuddy?.buddy_introduction ? (
+                            <p className="text-gray-500">
+                                {clickedBuddy?.buddy_introduction}
+                            </p>
+                        ) : (
+                            <p className="text-gray-500">소개글이 없습니다.</p>
+                        )}
+                        {/* 지역 */}
+                        {clickedBuddy?.buddy_region ? (
+                            <p className="mt-2 text-gray-500">
+                                {clickedBuddy?.buddy_region}
+                            </p>
+                        ) : (
+                            <p className="mt-2 text-gray-500">
+                                지역 정보가 없습니다.
+                            </p>
+                        )}
+
+                        {/* 선호하는 버디 chips */}
                         {clickedBuddy?.buddy_preferred_buddy1 ? (
                             <div className="mt-4">
                                 <span className="bg-[#fff0d1] rounded-full px-3 py-1 text-sm font-semibold text-main-color mr-2">

@@ -8,9 +8,12 @@ import { useAuth } from '@/hooks/auth';
 import { ProfilePageProps } from '@/types/ProfileParams.types';
 import { Buddy } from '@/types/Auth.types';
 import { useEffect, useState } from 'react';
+import { showAlert } from '@/utils/ui/openCustomAlert';
+import { useRouter } from 'next/navigation';
 
 function ProfilePage({ params }: ProfilePageProps) {
     const { buddy, logOut } = useAuth();
+    const router = useRouter();
 
     const [clickedBuddy, setClickedBuddy] = useState<Buddy | null>(null);
     const [loading, setLoading] = useState(true);
@@ -32,12 +35,18 @@ function ProfilePage({ params }: ProfilePageProps) {
         fetchClickedBuddy();
     }, [params.id]);
 
+    const handleLogOut = () => {
+        logOut();
+        showAlert('success', '로그아웃 완료되었습니다.');
+    };
     return (
         <>
             <section className="flex flex-col items-center justify-center w-full h-full">
                 <BuddyProfile
                     clickedBuddy={clickedBuddy || null}
                     loading={loading}
+                    buddy={buddy}
+                    urlId={`${params.id}`}
                 />
             </section>
 
@@ -62,7 +71,7 @@ function ProfilePage({ params }: ProfilePageProps) {
                 <div className="flex flex-col items-center mr-8 w-full">
                     <span className="w-full">
                         <BuddyTemperature
-                            temperature={buddy?.buddy_temperature || 0}
+                            temperature={clickedBuddy?.buddy_temperature || 0}
                         />
                     </span>
                 </div>
@@ -76,7 +85,7 @@ function ProfilePage({ params }: ProfilePageProps) {
                 <section className="mt-16 mx-8">
                     <button
                         className="bg-main-color text-white font-bold h-10 w-full rounded-xl"
-                        onClick={logOut}
+                        onClick={handleLogOut}
                     >
                         로그아웃
                     </button>

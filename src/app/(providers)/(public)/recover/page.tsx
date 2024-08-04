@@ -13,7 +13,7 @@ const RecoverPage: React.FC = async () => {
     return (
         <AuthPageWrapper>
             {!id ? (
-                <p className="text-sm min-h-[35%]text-gray-500">
+                <p className="text-sm min-h-[35%] text-gray-500">
                     이메일 링크를 통한 접근만 가능합니다! 다시 시도해주세요
                 </p>
             ) : (
@@ -23,9 +23,9 @@ const RecoverPage: React.FC = async () => {
             <AuthPageBottom />
 
             <p className="text-sm text-gray-500">
-                Create account?{' '}
-                <Link href="/signup" className="text-turtleGreen">
-                    Sign up
+                <span>아직 회원이 아니신가요?&nbsp;</span>
+                <Link href="/signup" className="text-main-color">
+                    회원가입
                 </Link>
             </p>
         </AuthPageWrapper>

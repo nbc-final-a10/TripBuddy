@@ -3,11 +3,9 @@
 import DefaultLoader from '@/components/atoms/common/defaultLoader';
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
 import TripCard from '@/components/molecules/trips/TripCard';
-import { useAuth } from '@/hooks/auth';
-import useBuddyQuery from '@/hooks/queries/useBuddyQuery';
 import useTripQuery from '@/hooks/queries/useTripQuery';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import HomePageRecommnedBuddiesList from '../homepage/HomePageRecommendBuddiesList';
 import useRecommendBuddiesQuery from '@/hooks/queries/useRecommendBuddiesQuery';
 import useSpecificBuddyQuery from '@/hooks/queries/useSpecificBuddyQuery';
@@ -47,8 +45,7 @@ const TripDetail: React.FC<TripDetailProps> = ({ id }) => {
                 {/** 이미지 영역 */}
                 <div className="h-[217px] bg-gray-40 relative aspect-auto">
                     <Image
-                        //src={trip.trip_image}
-                        src="/images/test_city2.jpg"
+                        src={trip.trip_thumbnail}
                         alt="trip image"
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 33vw"

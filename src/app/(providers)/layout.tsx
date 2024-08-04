@@ -15,6 +15,8 @@ import MobileHeader from '@/components/molecules/common/MobileHeader';
 import TapMenu from '@/components/molecules/common/TapMenu';
 import { Metadata } from 'next';
 import { defaultMetaData } from '@/data/defaultMetaData';
+import { ModalProviderSetter } from '@/providers/ModalProvider';
+import { ModalProviderDefault } from '@/contexts/modal.context';
 
 export const metadata: Metadata = defaultMetaData;
 
@@ -35,12 +37,16 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
             <MainSectionWrapper>
                 <Suspense fallback={<Loading />}>
                     <HydrationBoundary state={dehydratedState}>
-                        <AuthProvider>
-                            <MobileHeader />
-                            <Header />
-                            {children}
-                            <TapMenu />
-                        </AuthProvider>
+                        <ModalProviderDefault>
+                            <ModalProviderSetter>
+                                <AuthProvider>
+                                    <MobileHeader />
+                                    <Header />
+                                    {children}
+                                    <TapMenu />
+                                </AuthProvider>
+                            </ModalProviderSetter>
+                        </ModalProviderDefault>
                     </HydrationBoundary>
                 </Suspense>
             </MainSectionWrapper>

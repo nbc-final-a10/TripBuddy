@@ -10,6 +10,9 @@ import { Trip } from '@/types/Trips.types';
 import Link from 'next/link';
 import remainDays from '@/utils/common/getRemainDays';
 import Chip from '@/components/atoms/common/Chip';
+import { useAuth } from '@/hooks/auth';
+import { createContract } from '@/utils/contract/createContract';
+import { showAlert } from '@/utils/ui/openCustomAlert';
 
 type TripCardProps = {
     trip: Trip;
@@ -17,6 +20,27 @@ type TripCardProps = {
 };
 
 const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
+    const { buddy } = useAuth();
+
+    const handleCreateContract = useCallback(async () => {
+        if (!buddy?.buddy_id) {
+            console.error('인증되지 않은 사용자입니다.');
+            return;
+        }
+
+        try {
+            const result = await createContract(trip.trip_id, buddy.buddy_id);
+            console.log('contract 생성:', result);
+            showAlert(
+                'success',
+                '버디장에게 참여 요청이 전달되었습니다. 베타 기간에는 자동으로 참여됩니다.',
+            );
+        } catch (error) {
+            console.error('contract 생성 중 오류 발생:', error);
+            showAlert('error', (error as Error).message);
+        }
+    }, [buddy, trip.trip_id]);
+
     return (
         <div
             className={clsx(
@@ -128,7 +152,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
                         {/** 추후 수정 필요 */}
                         <div className="flex gap-2 items-center">
                             <Groups />
-                            <span>{`${trip.trip_max_buddies_counts}/4`}</span>
+                            <span>{`1/${trip.trip_max_buddies_counts}`}</span>
                         </div>
                     </div>
 
@@ -137,8 +161,8 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
                         <div className="flex flex-col gap-1">
                             <div className="flex flex-row">
                                 <p className="text-sm leading-none">
-                                    {`신청 ${trip.trip_max_buddies_counts}`}
-                                    <span className="text-gray-500">/4</span>
+                                    {`신청 1`}
+                                    <span className="text-gray-500">{`/${trip.trip_max_buddies_counts}`}</span>
                                 </p>
                             </div>
                         </div>
@@ -190,8 +214,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
                     }
                     className={clsx(
                         'p-2 text-center',
-                        mode === 'detail' &&
-                            'bg-main-color text-white rounded-xl border border-main-color w-[48%]',
+                        mode === 'detail' && 'hidden',
                         mode === 'list' &&
                             'w-1/2 bg-main-color text-white rounded-br-lg rounded-bl-none leading-none py-2.5',
                         mode === 'card' &&
@@ -199,11 +222,18 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
                     )}
                 >
                     <button className="flex justify-center items-center w-full h-full">
-                        {mode === 'card' || mode === 'list'
-                            ? '상세보기'
-                            : '참여하기'}
+                        상세보기
                     </button>
                 </Link>
+
+                {mode === 'detail' && (
+                    <button
+                        className="flex justify-center items-center h-full bg-main-color text-white rounded-xl border border-main-color w-[48%] py-2.5"
+                        onClick={handleCreateContract}
+                    >
+                        참여하기
+                    </button>
+                )}
             </div>
         </div>
     );

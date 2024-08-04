@@ -58,7 +58,7 @@ function ResetForm() {
                 </div>
 
                 <SubmitButton
-                    className="bg-sky-500 w-[70%] text-white rounded-lg px-4 py-2"
+                    className="bg-main-color w-[90%] text-white rounded-lg px-4 py-2"
                     pendingText="변경 중..."
                     pending={isPending}
                 >

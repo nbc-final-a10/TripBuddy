@@ -6,12 +6,10 @@ import HomePageTrips from '@/components/molecules/homepage/HomePageTrips';
 import React, { useRef } from 'react';
 import useTapScroll from '@/hooks/useTapScroll';
 import HomePageTitle from '@/components/molecules/homepage/HomePageTitle';
-import Link from 'next/link';
 import HomePageRecommendBuddiesList from './HomePageRecommendBuddiesList';
 import { useAuth } from '@/hooks/auth';
 import useHomeQuery from '@/hooks/queries/useHomeQuery';
 import Loading from '@/app/(providers)/loading';
-import FloatingButton from '@/components/atoms/home/FloatingButton';
 
 const HomePageContainer = () => {
     const buddiesRef = useRef<HTMLDivElement>(null);
@@ -39,7 +37,7 @@ const HomePageContainer = () => {
                     title="추천 인기 버디즈"
                     buttonText="전체보기"
                     description="버디즈에게 가장 인기있는 버디즈예요!"
-                    href="/"
+                    href="/profile/rank"
                 />
                 <div
                     className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"

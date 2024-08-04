@@ -1,9 +1,8 @@
-import Paragraph from '@/components/atoms/common/Paragraph';
 import Title from '@/components/atoms/common/Title';
 import OnBoardingInnerWrapper from '@/components/atoms/onboarding/OnBoardinginnerWrapper';
 import OnBoardingWrapper from '@/components/atoms/onboarding/OnBoardingWrapper';
 import { Calendar, CalendarDate } from '@nextui-org/calendar';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { MouseEvent, useEffect, useRef, useState } from 'react';
 
 type OnBoardingCalenderProps = {
     calenderValue: CalendarDate;
@@ -23,6 +22,13 @@ const OnBoardingCalender = ({
 
     useEffect(() => {
         if (calenderRef.current) {
+            const selected = calenderRef.current.querySelector(
+                'td[data-selected="true"]',
+            );
+
+            if (selected)
+                (selected as HTMLElement).style.backgroundColor = '#ffb806';
+
             const rows = calenderRef.current.querySelectorAll(
                 'tr[data-slot="grid-body-row"]',
             );
@@ -39,6 +45,33 @@ const OnBoardingCalender = ({
             });
         }
     }, [isExpanded]);
+
+    useEffect(() => {
+        const onboardingWrapper = document.getElementById('onboarding-wrapper');
+
+        const handleClick = (e: Event) => {
+            const target = e.target as Element;
+            const isSame = target.closest('[data-slot="picker-wrapper"]');
+            const isSelected = target.closest('[data-selected="true"]');
+
+            const button = calenderRef.current?.querySelector(
+                'button[data-slot="header"]',
+            );
+            const pickerWrapper = calenderRef.current?.querySelector(
+                '[data-slot="picker-wrapper"]',
+            );
+
+            if (!isSame && !isSelected && button && pickerWrapper) {
+                (button as HTMLElement)?.click();
+            }
+        };
+
+        onboardingWrapper?.addEventListener('click', handleClick);
+
+        return () => {
+            onboardingWrapper?.removeEventListener('click', handleClick);
+        };
+    }, []);
 
     return (
         <OnBoardingWrapper>
@@ -59,6 +92,20 @@ const OnBoardingCalender = ({
                         headerWrapper: 'after:-z-50',
                         header: 'z-0',
                         pickerWrapper: 'z-0',
+                        pickerHighlight: 'bg-main-color',
+                        cellButton: [
+                            // default text color
+                            'text-black',
+                            // selected case
+                            'data-[selected=true]:bg-main-color',
+                            'data-[selected=true]:text-white',
+                            // hover case
+                            'data-[hover=true]:bg-main-color',
+                            'data-[hover=true]:text-white',
+                            // selected and hover case
+                            'data-[selected=true]:data-[hover=true]:bg-main-color',
+                            'data-[selected=true]:data-[hover=true]:text-white',
+                        ],
                     }}
                     ref={calenderRef}
                     value={calenderValue}
