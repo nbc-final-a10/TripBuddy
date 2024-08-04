@@ -12,6 +12,7 @@ import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
 import useSelectRegion from '@/hooks/useSelectRegion';
 import { Tables } from '@/types/supabase';
 import supabase from '@/utils/supabase/client';
+import Image from 'next/image';
 import React, { useRef, useState } from 'react';
 
 type Trip = Tables<'trips'>;
@@ -184,10 +185,19 @@ const SearchPage: React.FC = () => {
                     <input
                         type="text"
                         placeholder="검색어를 입력하세요"
-                        className="w-full bg-gray-100 p-2 rounded-2xl"
+                        className="w-full bg-gray-100 p-2 pl-10 rounded-2xl"
                         onKeyDown={handleKeyDown}
                         onChange={e => setSearchInput(e.target.value)}
                     />
+                    <div className="absolute left-8 top-[121px] transform -translate-y-1/2 xl:top-[164px] xl:left-3">
+                        <Image
+                            src="/svg/HomeSearch.svg"
+                            alt="Search"
+                            width={20}
+                            height={20}
+                            className="w-[20px] h-[20px]"
+                        />
+                    </div>
                 </div>
 
                 <button

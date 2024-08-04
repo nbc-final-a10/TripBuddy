@@ -34,12 +34,15 @@ const SearchResult: React.FC<SearchResultProps> = ({
     const filteredItems = items.slice(0, visibleFirstItems);
 
     // 작성된 순으로 정렬
-    const sortItems = [...allTrips].sort((a, b) => {
-        return (
-            new Date(a.trip_created_at).getTime() -
-            new Date(b.trip_created_at).getTime()
-        );
-    });
+    // 검색 결과 여정은 제외
+    const sortItems = [...allTrips]
+        .filter(item => !filteredItems.includes(item))
+        .sort((a, b) => {
+            return (
+                new Date(a.trip_created_at).getTime() -
+                new Date(b.trip_created_at).getTime()
+            );
+        });
 
     console.log('sortItems: ', sortItems);
 
