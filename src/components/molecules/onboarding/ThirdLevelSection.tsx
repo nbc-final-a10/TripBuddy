@@ -21,7 +21,7 @@ const ThirdLevelSection = ({
     return (
         <section
             className={twMerge(
-                'relative h-[80%] overflow-y-auto xl:h-[70%] my-3',
+                'relative h-[76%] overflow-y-auto xl:h-[70%]',
                 pathname === '/search' && 'h-[300px]',
                 pathname === '/write' && 'h-[40vh]',
             )}

@@ -14,7 +14,7 @@ const Title: React.FC<O_TitleProps> = ({
 }) => {
     return (
         <div
-            className={clsx('flex flex-col w-full py-1 px-3', {
+            className={clsx('flex flex-col w-[90%] py-1 px-3', {
                 'items-start': align === 'left',
                 'items-end': align === 'right',
                 'items-center': align === 'center',
