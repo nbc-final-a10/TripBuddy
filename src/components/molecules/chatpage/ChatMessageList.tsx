@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, MutableRefObject, useRef } from 'react';
 import { Message } from '@/types/Chat.types';
 import supabase from '@/utils/supabase/client';
 import Image from 'next/image';
@@ -13,6 +13,7 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
     currentBuddy,
     id,
 }) => {
+    const scrollRef = useRef() as MutableRefObject<HTMLDivElement>;
     const [messages, setMessages] = useState<
         (Message & {
             buddy: { buddy_profile_pic: string; buddy_nickname: string };
@@ -89,6 +90,13 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
         fetchMessages();
     }, [id]);
 
+    useEffect(() => {
+        const scrollContainer = scrollRef.current;
+        if (scrollContainer) {
+            scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        }
+    }, [messages]);
+
     const formatDate = (dateString: string) => {
         const options: Intl.DateTimeFormatOptions = {
             year: 'numeric',
@@ -99,7 +107,10 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
     };
 
     return (
-        <div className="px-6 pb-12">
+        <div
+            className="px-6 pb-12 h-[calc(100vh-150px)] overflow-y-auto scrollbar-hidden"
+            ref={scrollRef}
+        >
             {messages.map((message, index) => {
                 const isCurrentUser =
                     message.message_sender_id === currentBuddy?.buddy_id;
