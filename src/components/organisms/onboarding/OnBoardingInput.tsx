@@ -21,7 +21,7 @@ const OnBoardingInput = forwardRef(({ mode }: OnBoardingInputProps, ref) => {
                     type={mode === 'age' ? 'number' : 'text'}
                     placeholder={mode === 'age' ? '나이' : '이름'}
                     name={mode === 'age' ? 'age' : 'nickname'}
-                    className="w-full h-[80px] border-none bg-gray-200"
+                    className="w-[90%] h-[80px] border-none bg-gray-200"
                     ref={ref as React.LegacyRef<HTMLInputElement>}
                 />
             </OnBoardingInnerWrapper>

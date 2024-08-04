@@ -37,7 +37,7 @@ const HomePageContainer = () => {
                     title="추천 인기 버디즈"
                     buttonText="전체보기"
                     description="버디즈에게 가장 인기있는 버디즈예요!"
-                    href="/"
+                    href="/profile/rank"
                 />
                 <div
                     className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
