@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
         const imageBuffer = await convertToWebP(tripImageFile, 1080);
 
         const tripData = JSON.parse(tripDataString as string);
-        const filePath = `trips_${Date.now()}_${tripData.trip_id}.webp`;
+        const filePath = `trips_${Date.now()}.webp`;
 
         if (!imageBuffer) {
             return NextResponse.json(
@@ -63,11 +63,14 @@ export async function POST(req: NextRequest) {
 
         tripData.trip_thumbnail = publicUrl.publicUrl;
 
+        console.log('서버에서 tripData', tripData);
+
         // 'trips' 테이블에 여행 데이터를 삽입
         const { data: trip, error: tripError } = await supabase
             .from('trips')
             .insert(tripData)
-            .select();
+            .select()
+            .single();
 
         if (tripError || !trip || trip.length === 0) {
             console.error('게시글 업데이트 중 오류 발생:', tripError);
@@ -77,18 +80,17 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        const tripRecord = trip[0];
-        const tripId = tripRecord.trip_id;
+        const tripId = trip.trip_id;
 
         const today = new Date();
-        const tripEndDate = new Date(tripRecord.trip_end_date);
+        const tripEndDate = new Date(trip.trip_end_date);
         const isValidate = today <= tripEndDate;
 
         const contractData = {
             contract_trip_id: tripId,
             contract_buddy_id: userId,
-            contract_start_date: tripRecord.trip_start_date,
-            contract_end_date: tripRecord.trip_end_date,
+            contract_start_date: trip.trip_start_date,
+            contract_end_date: trip.trip_end_date,
             contract_isLeader: true,
             contract_isPending: true,
             contract_isValidate: isValidate,
@@ -98,7 +100,8 @@ export async function POST(req: NextRequest) {
         const { data: contract, error: contractError } = await supabase
             .from('contract')
             .insert(contractData)
-            .select();
+            .select()
+            .single();
 
         if (contractError) {
             console.error('컨트랙트 생성 중 오류 발생:', contractError);
@@ -109,7 +112,7 @@ export async function POST(req: NextRequest) {
         }
 
         return NextResponse.json(
-            { trip: tripRecord, contract: contract[0] },
+            { trip: trip, contract: contract },
             { status: 200 },
         );
     } catch (error) {
