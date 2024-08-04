@@ -8,11 +8,12 @@ import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
 import SearchResult from '@/components/molecules/search/SearchResult';
 import DateSearchPage from '@/components/organisms/search/DateSearchPage';
 import usePreferTheme from '@/hooks/usePreferTheme';
-import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
+// import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
 import useSelectRegion from '@/hooks/useSelectRegion';
 import { Tables } from '@/types/supabase';
 import supabase from '@/utils/supabase/client';
-import React, { useRef, useState } from 'react';
+import Image from 'next/image';
+import React, { useEffect, useRef, useState } from 'react';
 
 type Trip = Tables<'trips'>;
 
@@ -23,6 +24,7 @@ const SearchPage: React.FC = () => {
     const [visibleFirstItems, setVisibleFirstItems] = useState(8);
     const [visibleSecondItems, setVisibleSecondItems] = useState(6);
     const resultRef = useRef<HTMLDivElement>(null);
+    const [isXL, setIsXL] = useState<boolean>(false);
 
     const [searchInput, setSearchInput] = useState<string>('');
 
@@ -31,7 +33,7 @@ const SearchPage: React.FC = () => {
     const [startAge, setStartAge] = useState<number>(18);
     const [endAge, setEndAge] = useState<number>(150);
 
-    const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
+    // const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
 
     const [selectedMeetingPlace, setSelectedMeetingPlace] = useState<
         string | null
@@ -51,6 +53,19 @@ const SearchPage: React.FC = () => {
     const [PreferTripTheme] = usePreferTheme({ mode: 'trip' });
     const [PreferBuddyTheme] = usePreferTheme({ mode: 'buddy' });
 
+    useEffect(() => {
+        const handleResize = () => {
+            setIsXL(window.matchMedia('(min-width: 1280px').matches);
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     const handleDateChange = (start: string, end: string) => {
         setStartDateTimestamp(start);
         setEndDateTimestamp(end);
@@ -65,8 +80,7 @@ const SearchPage: React.FC = () => {
         }
 
         // setAllItems(data as Trip[]);
-        setResultItems(data as Trip[]);
-        setAllItems(data as Trip[]);
+        // setResultItems(data as Trip[]);
 
         let filteredItems = data as Trip[];
 
@@ -103,11 +117,11 @@ const SearchPage: React.FC = () => {
             );
         }
 
-        if (buddyCounts !== null) {
-            filteredItems = filteredItems.filter(
-                (item: Trip) => item.trip_max_buddies_counts === buddyCounts,
-            );
-        }
+        // if (buddyCounts !== null) {
+        //     filteredItems = filteredItems.filter(
+        //         (item: Trip) => item.trip_max_buddies_counts === buddyCounts,
+        //     );
+        // }
 
         if (thirdLevelLocation !== null) {
             filteredItems = filteredItems.filter((item: Trip) =>
@@ -153,7 +167,28 @@ const SearchPage: React.FC = () => {
             });
         }
 
+        // setResultItems(
+        //     filteredItems.length > 0 ? filteredItems : (data as Trip[]),
+        // );
+        // setShowResult(true);
         setResultItems(filteredItems);
+
+        if (
+            !searchInput &&
+            !selectedGender &&
+            !selectedMeetingPlace &&
+            startAge === 18 &&
+            endAge === 150 &&
+            !thirdLevelLocation &&
+            !startDateTimestamp &&
+            !endDateTimestamp &&
+            selectedThemes.length === 0 &&
+            selectedBuddyThemes.length === 0
+        ) {
+            setVisibleFirstItems(data.length);
+        }
+
+        setAllItems(data as Trip[]);
         setShowResult(true);
 
         // 속도 지연
@@ -184,10 +219,19 @@ const SearchPage: React.FC = () => {
                     <input
                         type="text"
                         placeholder="검색어를 입력하세요"
-                        className="w-full bg-gray-100 p-2 rounded-2xl"
+                        className="w-full bg-gray-200 p-2 pl-10 rounded-2xl"
                         onKeyDown={handleKeyDown}
                         onChange={e => setSearchInput(e.target.value)}
                     />
+                    <div className="absolute left-8 top-[121px] transform -translate-y-1/2 xl:top-[164px] xl:left-3">
+                        <Image
+                            src="/svg/HomeSearch.svg"
+                            alt="Search"
+                            width={20}
+                            height={20}
+                            className="w-[20px] h-[20px]"
+                        />
+                    </div>
                 </div>
 
                 <button
@@ -214,7 +258,7 @@ const SearchPage: React.FC = () => {
                     handleEndAge={setEndAge}
                 />
             </div>
-            <div className="my-10">
+            {/* <div className="my-10">
                 <SearchPageTitle
                     title="인원수"
                     description="인원수 최대 4명까지 가능해요."
@@ -223,7 +267,7 @@ const SearchPage: React.FC = () => {
                 // buddyCounts={buddyCounts}
                 // setBuddyCounts={SelectBuddyCounts}
                 />
-            </div>
+            </div> */}
             <div className="my-10">
                 <SearchPageTitle title="만남 장소" description="" />
                 <MeetingPlaceChipGroup
@@ -282,6 +326,7 @@ const SearchPage: React.FC = () => {
                         visibleSecondItems={visibleSecondItems}
                         loadMoreFirstItems={loadMoreFirstItems}
                         loadMoreSecondItems={loadMoreSecondItems}
+                        isXL={isXL}
                     />
                 </div>
             )}
