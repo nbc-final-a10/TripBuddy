@@ -3,7 +3,7 @@ const remainDays = (trip_start_date: string) => {
     const now = new Date();
     const timeDiff = startDate.getTime() - now.getTime();
     const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-    if (days === 0) {
+    if (days <= 0) {
         return 'D-0';
     }
     return `D-${days}`;

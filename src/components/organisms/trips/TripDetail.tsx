@@ -3,11 +3,9 @@
 import DefaultLoader from '@/components/atoms/common/defaultLoader';
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
 import TripCard from '@/components/molecules/trips/TripCard';
-import { useAuth } from '@/hooks/auth';
-import useBuddyQuery from '@/hooks/queries/useBuddyQuery';
 import useTripQuery from '@/hooks/queries/useTripQuery';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import HomePageRecommnedBuddiesList from '../homepage/HomePageRecommendBuddiesList';
 import useRecommendBuddiesQuery from '@/hooks/queries/useRecommendBuddiesQuery';
 import useSpecificBuddyQuery from '@/hooks/queries/useSpecificBuddyQuery';

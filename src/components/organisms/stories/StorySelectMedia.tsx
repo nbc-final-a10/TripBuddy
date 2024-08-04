@@ -12,7 +12,7 @@ type StorySelectMediaProps = {
 const StorySelectMedia: React.FC<StorySelectMediaProps> = ({
     handleFileChange,
 }) => {
-    const isLocked = useLockBodyScroll();
+    const { isLocked } = useLockBodyScroll(true);
     const inputRef = useRef<HTMLInputElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
 

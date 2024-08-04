@@ -1,16 +1,19 @@
 import React from 'react';
+import { twMerge } from 'tailwind-merge';
 
 type ProgressIndicatorProps = {
     step: number;
     counts: number;
+    className?: string;
 };
 
 export default function ProgressIndicator({
     step,
     counts,
+    className = '',
 }: ProgressIndicatorProps) {
     return (
-        <div className="flex ml-2 mt-16 xl:mt-28">
+        <div className={twMerge('flex ml-2 pt-16 xl:pt-28', className)}>
             {[...Array(counts)].map((_, index) => (
                 <div
                     key={index}

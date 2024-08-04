@@ -15,6 +15,8 @@ const MobileHeader: React.FC = () => {
     const isTrips = pathname === '/trips';
     const isTripDetail = pathname.startsWith('/trips/');
     const isStory = pathname.startsWith('/stories');
+    const isChatId = pathname.startsWith('/chat/');
+    const isChat = pathname === '/chat';
     const isLogin = pathname === '/login';
     const isSignup = pathname === '/signup';
     const isSearch = pathname === '/search';
@@ -33,7 +35,9 @@ const MobileHeader: React.FC = () => {
         (isOnboarding && '온보딩') ||
         (isProfile && '프로필') ||
         (isStory && '스토리') ||
-        (isStoryWrite && '스토리에 추가');
+        (isStoryWrite && '스토리에 추가') ||
+        (isChatId && '') ||
+        (isChat && '채팅');
 
     const isShow =
         isTrips ||
@@ -45,7 +49,9 @@ const MobileHeader: React.FC = () => {
         isOnboarding ||
         isProfile ||
         isStoryWrite ||
-        isStory;
+        isStory ||
+        isChatId ||
+        isChat;
 
     if (!isShow) return null;
 
