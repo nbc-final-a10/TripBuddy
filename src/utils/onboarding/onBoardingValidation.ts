@@ -21,6 +21,12 @@ export const onBoardingValidation: onBoardingValidationType = (value, step) => {
     console.log('value =====>', value);
     if (value !== undefined) {
         if (value === 0 || value) {
+            if (typeof value === 'string' && step === 0) {
+                if (value.length < 2) {
+                    showAlert('caution', '2글자 이상 입력해주세요.');
+                    return false;
+                }
+            }
             // value가 숫자이고, step이 2인 경우 추가 검사를 합니다.
             if (typeof value === 'number' && step === 2) {
                 if (isNaN(value)) {
@@ -35,6 +41,12 @@ export const onBoardingValidation: onBoardingValidationType = (value, step) => {
                     return false;
                 }
                 // 추가적인 밸리데이션이 있다면 여기에 작성합니다.
+            }
+            if (step === 9) {
+                if (typeof value === 'string' && value.length > 20) {
+                    showAlert('caution', '20자 이하로 입력해주세요.');
+                    return false;
+                }
             }
         } else {
             showAlert('caution', '필수 입력 사항입니다.');

@@ -31,6 +31,8 @@ const buttonText = [
     '다음',
     '다음',
     '다음',
+    '다음',
+    '다음',
     '트립버디즈 시작하기',
 ];
 
@@ -40,6 +42,7 @@ const OnBoarding: React.FC = () => {
     const { buddy } = useAuth();
 
     const nicknameRef = useRef<HTMLInputElement>(null);
+    const introductionRef = useRef<HTMLInputElement>(null);
     const buddyInfoRef = useRef<PartialBuddy>({ buddy_id: buddy?.buddy_id });
 
     const [isEdit, setIsEdit] = useState<boolean>(false);
@@ -141,6 +144,26 @@ const OnBoarding: React.FC = () => {
             buddyInfoRef.current.buddy_preferred_theme3 = selectedTripTheme[2];
             if (isEdit) mutate(buddyInfoRef.current);
         }
+        if (step === 9) {
+            const result = onBoardingValidation(
+                introductionRef.current?.value,
+                step,
+            );
+            if (!result) return setStep(9);
+            buddyInfoRef.current.buddy_introduction =
+                introductionRef.current?.value;
+            if (isEdit) mutate(buddyInfoRef.current);
+        }
+        if (step === 10) {
+            // const result = onBoardingValidation(
+            //     introductionRef.current?.value,
+            //     step,
+            // );
+            // if (!result) return setStep(9);
+            // buddyInfoRef.current.buddy_introduction =
+            //     introductionRef.current?.value;
+            // if (isEdit) mutate(buddyInfoRef.current);
+        }
     };
 
     useEffect(() => {
@@ -160,11 +183,11 @@ const OnBoarding: React.FC = () => {
             return showAlert('caution', '이미 온보딩을 완료하셨습니다.', {
                 onConfirm: () => router.push('/'),
             });
-        if (step <= 9) {
+        if (step <= 11) {
             if (isEdit) router.push(`/onboarding?funnel=${step}&mode=edit`);
             else router.push(`/onboarding?funnel=${step}`);
         }
-        if (step > 9) {
+        if (step > 11) {
             // buddyInfoRef.current.buddy_isOnBoarding = true;
             console.log('최종 버디즈 정보 =====>', buddyInfoRef.current);
             mutate(buddyInfoRef.current);
@@ -258,6 +281,20 @@ const OnBoarding: React.FC = () => {
                         />
                     )}
                     {step === 9 && (
+                        <OnBoardingInput
+                            mode="introduction"
+                            ref={introductionRef}
+                        />
+                    )}
+                    {step === 10 && (
+                        <OnBoardingSelectPrefer
+                            mode="trip"
+                            component={
+                                <PreferTripTheme className="px-4 py-2.5" />
+                            }
+                        />
+                    )}
+                    {step === 11 && (
                         <OnBoardingDivider
                             mode="end"
                             name={nicknameRef.current?.value || ''}
