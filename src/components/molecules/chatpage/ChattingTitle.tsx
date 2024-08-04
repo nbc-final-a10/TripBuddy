@@ -64,7 +64,7 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
                                       )
                                     : null}
                             </span>
-                            <span>3/4명</span>
+                            <span>{`n/${tripData?.trip_max_buddies_counts}명`}</span>
                         </div>
                     </div>
                 </div>
