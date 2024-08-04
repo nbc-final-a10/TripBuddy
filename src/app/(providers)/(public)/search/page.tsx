@@ -185,7 +185,7 @@ const SearchPage: React.FC = () => {
                     <input
                         type="text"
                         placeholder="검색어를 입력하세요"
-                        className="w-full bg-gray-100 p-2 pl-10 rounded-2xl"
+                        className="w-full bg-gray-200 p-2 pl-10 rounded-2xl"
                         onKeyDown={handleKeyDown}
                         onChange={e => setSearchInput(e.target.value)}
                     />
