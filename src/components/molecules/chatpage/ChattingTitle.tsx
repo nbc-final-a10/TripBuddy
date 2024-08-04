@@ -61,11 +61,6 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
                     </div>
                 </div>
             </div>
-            <div className="w-full text-[12px] flex justify-center">
-                <p className="w-fit bg-[#516FE6] text-white rounded-[4px] px-[8px] py-[2px]">
-                    2024년 7월 10일
-                </p>
-            </div>
         </section>
     );
 };
