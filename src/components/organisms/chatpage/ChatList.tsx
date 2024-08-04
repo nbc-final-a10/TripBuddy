@@ -5,10 +5,13 @@ import ChatListItem from '@/components/molecules/chatpage/ChatListItem';
 import supabase from '@/utils/supabase/client';
 import { useAuth } from '@/hooks/auth';
 import { ContractData } from '@/types/Chat.types';
+import { useRouter } from 'next/navigation';
 
 const ChatList = () => {
     const { buddy: currentBuddy } = useAuth();
     const [chatData, setChatData] = useState<ContractData[]>([]);
+    const router = useRouter();
+    const [contractsExist, setContractsExist] = useState(true);
 
     useEffect(() => {
         const fetchChatData = async () => {
@@ -20,12 +23,15 @@ const ChatList = () => {
                         .from('contract')
                         .select('contract_id, contract_trip_id')
                         .eq('contract_buddy_id', currentBuddy.buddy_id)
-                        .eq('contract_isPending', false)
+                        // .eq('contract_isPending', false)
                         .eq('contract_isValidate', true);
 
                 if (contractsError) throw contractsError;
 
-                if (!contracts) return;
+                if (!contracts || contracts.length === 0) {
+                    setContractsExist(false);
+                    return;
+                }
 
                 const contractIds = contracts.map(
                     contract => contract.contract_id,
@@ -107,7 +113,7 @@ const ChatList = () => {
                         contract_trip_id,
                         trip_title: tripTitleMap[contract_trip_id] || '',
                         contract_buddies_profiles: buddyProfiles,
-                        last_message_content: 'No messages yet',
+                        last_message_content: '채팅을 시작해보세요',
                         last_message_time: '',
                     });
                 });
@@ -173,7 +179,6 @@ const ChatList = () => {
         };
 
         fetchChatData();
-
         const messageSubscription = supabase
             .channel('chat-room')
             .on(
@@ -215,6 +220,12 @@ const ChatList = () => {
             messageSubscription.unsubscribe();
         };
     }, [currentBuddy]);
+
+    useEffect(() => {
+        if (!contractsExist) {
+            router.push('/trips');
+        }
+    }, [contractsExist, router]);
 
     return (
         <div className="flex flex-col p-4">

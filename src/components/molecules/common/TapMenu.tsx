@@ -28,7 +28,10 @@ const TapMenu: React.FC = () => {
         >
             <TapMenuButton iconName="Home" href="/" />
             <TapMenuButton iconName="Trip" href="/trips" />
-            <TapMenuButton iconName="Chat" href="/chat" />
+            <TapMenuButton
+                iconName="Chat"
+                href={buddy_id ? `/chat` : '/login'}
+            />
             <TapMenuButton
                 iconName="Mypage"
                 href={buddy_id ? `/profile/${buddy_id}` : '/login'}
