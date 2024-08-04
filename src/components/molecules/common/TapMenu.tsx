@@ -19,6 +19,7 @@ const TapMenu: React.FC = () => {
         pathname === '/recover' ||
         pathname === '/tutorial';
 
+    // 아래 svg 들 svgr 로 추후 수정 요망
     return (
         <div
             className={clsx(

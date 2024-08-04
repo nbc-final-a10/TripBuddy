@@ -59,7 +59,11 @@ const MobileHeader: React.FC = () => {
         <header className="relative h-[57px] w-full flex flex-row items-center px-5 xl:hidden bg-white">
             <div className="w-[calc(100%/3)] flex justify-start items-center">
                 <Arrow_Back
-                    onClick={() => router.back()}
+                    onClick={
+                        isLogin || isSignup
+                            ? () => router.push('/')
+                            : () => router.back()
+                    }
                     className="cursor-pointer"
                 />
             </div>
