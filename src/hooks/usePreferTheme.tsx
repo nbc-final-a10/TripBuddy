@@ -37,7 +37,7 @@ const usePreferTheme = ({
 
     const handleThemeChange = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
-
+        // console.log('Clickeed theme: ', target.innerText);
         const mutableThemes = themeRef.current?.map(theme => theme.ko);
         handleChipClick(target, mutableThemes, selectedTheme, setSelectedTheme);
     };

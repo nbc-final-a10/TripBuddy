@@ -144,7 +144,7 @@ const SearchPage: React.FC = () => {
         }
 
         if (selectedThemes.length > 0) {
-            filteredItems = filteredItems.filter((item: Trip) => {
+            filteredItems = filteredItems.filter(item => {
                 const themes = [
                     item.trip_theme1,
                     item.trip_theme2,
@@ -153,9 +153,8 @@ const SearchPage: React.FC = () => {
                 return selectedThemes.every(theme => themes.includes(theme));
             });
         }
-
         if (selectedBuddyThemes.length > 0) {
-            filteredItems = filteredItems.filter((item: Trip) => {
+            filteredItems = filteredItems.filter(item => {
                 const buddyThemes = [
                     item.trip_wanted_buddies1,
                     item.trip_wanted_buddies2,
@@ -167,11 +166,8 @@ const SearchPage: React.FC = () => {
             });
         }
 
-        // setResultItems(
-        //     filteredItems.length > 0 ? filteredItems : (data as Trip[]),
-        // );
-        // setShowResult(true);
         setResultItems(filteredItems);
+        console.log('selectedThemes: ', selectedThemes);
 
         if (
             !searchInput &&
