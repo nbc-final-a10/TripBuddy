@@ -45,8 +45,7 @@ const TripDetail: React.FC<TripDetailProps> = ({ id }) => {
                 {/** 이미지 영역 */}
                 <div className="h-[217px] bg-gray-40 relative aspect-auto">
                     <Image
-                        //src={trip.trip_image}
-                        src="/images/test_city2.jpg"
+                        src={trip.trip_thumbnail}
                         alt="trip image"
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 33vw"
