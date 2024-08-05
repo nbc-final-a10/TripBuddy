@@ -21,10 +21,8 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
     const [selectedStory, setSelectedStory] = useState<StoryWithBuddies>(
         stories[0],
     );
-    console.log(stories);
 
     const handleSelectStory = (story: StoryWithBuddies) => {
-        console.log(story);
         setSelectedStory(story);
     };
 
@@ -40,7 +38,7 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
     const storyOverlay = selectedStory?.story_overlay as StoryOverlay[];
 
     return (
-        <section className="relative w-full h-[calc(100dvh-57px)] bg-gray-800 aspect-auto">
+        <section className="relative w-full h-[calc(100dvh-57px-56px)] bg-gray-800 aspect-auto">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-row gap-2 z-30">
                 {stories.map(story => (
                     <button

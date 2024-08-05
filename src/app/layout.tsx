@@ -20,7 +20,7 @@ export const metadata: Metadata = defaultMetaData;
 
 const RootLayout: React.FC<PropsWithChildren> = ({ children }) => {
     return (
-        <html lang="en">
+        <html lang="ko">
             <body className={inter.className}>
                 <QueryProvider>{children}</QueryProvider>
             </body>
