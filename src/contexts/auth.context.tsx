@@ -6,6 +6,7 @@ import {
     patchResetPassword,
     postSendingResetEmail,
 } from '@/api-services/auth/client';
+import { PUBLIC_URL } from '@/constants/common.constants';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import useBuddyQuery from '@/hooks/queries/useBuddyQuery';
 import useLogInMutation from '@/hooks/queries/useLogInMutation';
@@ -157,10 +158,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
                             '알 수 없는 오류가 발생했어요',
                         );
                     }
-                    // queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
                     showAlert('success', '소셜 로그인을 진행합니다', {
                         onConfirm: () => router.replace(data.url),
                     });
+                    // queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
                 } catch (error) {
                     const errorMessage =
                         error instanceof Error
