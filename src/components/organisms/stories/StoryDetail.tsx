@@ -7,10 +7,11 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 
 type StoryDetailProps = {
+    nickname: string;
     id: string;
 };
 
-const StoryDetail: React.FC<StoryDetailProps> = ({ id }) => {
+const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id }) => {
     const { data: story, isPending, error: storyError } = useStoryQuery(id);
     const [isLoaded, setIsLoaded] = useState(false);
     // console.log(story);

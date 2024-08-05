@@ -1,4 +1,5 @@
 import AddButtonSmall from '@/components/atoms/stories/AddButtonSmall';
+import { Buddy } from '@/types/Auth.types';
 import { getTimeSinceUpload } from '@/utils/common/getTimeSinceUpload';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,6 +12,7 @@ type StoryCardProps = {
     background_image: string;
     mode: 'my' | 'story';
     id: string;
+    buddy: Buddy;
 };
 
 const StoryCard: React.FC<StoryCardProps> = ({
@@ -20,12 +22,13 @@ const StoryCard: React.FC<StoryCardProps> = ({
     background_image,
     mode,
     id,
+    buddy,
 }) => {
     return (
         <div className="relative flex flex-col justify-center items-center min-w-[139px] w-[139px] h-[190px] bg-gray-300 rounded-lg gap-2 aspect-auto">
             <Link
                 className="w-full h-full absolute aspect-auto flex justify-center items-center"
-                href={`/stories/${id}`}
+                href={`/stories/${name}?id=${id}`}
             >
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black/80 rounded-lg z-10"></div>
 
