@@ -13,22 +13,18 @@ const HomePageStories: React.FC<HomePageStoriesProps> = ({
     stories,
     buddy,
 }: HomePageStoriesProps) => {
-    console.log(stories);
-
     // stories에서 buddies.buddy_id 값이 같은 것들만 배열로 묶은 객체 생성
     const sortedStories = useMemo(
         () => groupStoriesByBuddyId(stories),
         [stories],
     );
 
-    console.log(sortedStories);
-
     return (
         <>
             {Object.entries(sortedStories).map(([buddyId, stories]) => (
                 <StoryCard
                     key={buddyId}
-                    id={buddyId}
+                    id={stories[0].story_id}
                     buddy={stories[0].buddies}
                     name={stories[0].buddies.buddy_nickname}
                     created_at={stories[0].story_created_at}
