@@ -100,7 +100,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
                                     className="shadow-md w-[335px] h-[93px] rounded-[11px] mx-auto mb-6 xl:mx-0 xl:w-full xl:h-[120px] p-3"
                                 >
                                     <div className="cursor-pointer flex items-center h-full">
-                                        <div className="bg-gray-200 rounded-lg w-[60px] h-[60px]">
+                                        <div className="bg-grayscale-color-85 rounded-lg w-[60px] h-[60px]">
                                             {item.trip_thumbnail ? (
                                                 <Image
                                                     src={item.trip_thumbnail}

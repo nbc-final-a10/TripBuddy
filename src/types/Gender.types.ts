@@ -1,1 +1,1 @@
-export type Gender = '여자만' | '남자만' | '상관없음';
+export type Gender = '여성' | '남성' | '성별무관';

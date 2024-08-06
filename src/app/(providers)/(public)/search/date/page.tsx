@@ -14,7 +14,7 @@ export default function DateSearchPage() {
     };
 
     return (
-        <div className="my-10" id="date-section">
+        <div className="p-5">
             <SearchPageTitle
                 title="언제 떠나시나요?"
                 description="버디즈와 함께 여행하고 싶은 날짜를 선택해주세요."

@@ -4,7 +4,7 @@ export default function TopButton() {
     const [isVisible, setIsVisible] = useState(false);
 
     const handleScroll = () => {
-        const dateSection = document.getElementById('date-section');
+        const dateSection = document.getElementById('result-section');
         if (dateSection) {
             const { top } = dateSection.getBoundingClientRect();
             setIsVisible(window.scrollY > top);

@@ -248,7 +248,6 @@ const SearchPage: React.FC = () => {
                 <LocationSearchButton onClick={() => {}} />
 
                 <DateSearchButton
-                    // onClick={() => {}}
                     startDate={formattedStartDate}
                     endDate={formattedEndDate}
                 />
@@ -330,6 +329,7 @@ const SearchPage: React.FC = () => {
             </div>
 
             <button
+                id="result-section"
                 className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-2xl bg-main-color font-semibold text-white text-sm m-3 mb-10 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:w-1/2 xl:mt-8"
                 onClick={() => {
                     handleShowResult();

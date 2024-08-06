@@ -2,7 +2,7 @@ import React from 'react';
 import { Gender } from '@/types/Gender.types';
 import Chip from '@/components/atoms/common/Chip';
 
-const genderOptions: Gender[] = ['여자만', '남자만', '상관없음'];
+const genderOptions: Gender[] = ['여성', '남성', '성별무관'];
 
 type GenderChipGroupProps = {
     selectedGender: string | null;

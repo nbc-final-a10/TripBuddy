@@ -12,7 +12,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ onKeyDown, onChange }) => {
             <input
                 type="text"
                 placeholder="검색어를 입력하세요"
-                className="w-full xl:w-[300px] bg-gray-200 py-1.5 pl-10 rounded-2xl"
+                className="w-full xl:w-[300px] bg-grayscale-color-85 py-1.5 pl-10 rounded-2xl"
                 onKeyDown={onKeyDown}
                 onChange={onChange}
             />
