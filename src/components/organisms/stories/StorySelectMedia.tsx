@@ -24,7 +24,7 @@ const StorySelectMedia: React.FC<StorySelectMediaProps> = ({
     return (
         <section
             className={clsx(
-                'relative flex flex-col gap-4 w-full h-dvh max-h-dvh overflow-hidden aspect-auto bg-gray-600',
+                'relative flex flex-col gap-4 w-full h-[calc(100dvh-57px)] max-h-dvh overflow-hidden aspect-auto bg-gray-600',
                 !isLocked && 'hidden',
             )}
         >

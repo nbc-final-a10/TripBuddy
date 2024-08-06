@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DraggableInput from './DraggableInput';
 import Image from 'next/image';
 import useLockBodyScroll from '@/hooks/common/useLockBodyScroll';
 import clsx from 'clsx';
 import useStoryMutation from '@/hooks/queries/useStoryMutation';
-import { StoryData } from '@/types/Story.types';
+import { StoryData, StoryOverlay } from '@/types/Story.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/auth';
@@ -14,19 +14,20 @@ import { useAuth } from '@/hooks/auth';
 type StoryWriteTextProps = {
     imageFile: File;
     selectedMedia: string;
+    texts: StoryOverlay[];
+    setTexts: (texts: StoryOverlay[]) => void;
 };
 
 const StoryWriteText: React.FC<StoryWriteTextProps> = ({
     imageFile,
     selectedMedia,
+    texts,
+    setTexts,
 }) => {
     const router = useRouter();
     const { buddy } = useAuth();
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
-    const [texts, setTexts] = useState<
-        { text: string; position: { x: number; y: number } }[]
-    >([]);
-    const { isLocked } = useLockBodyScroll(true);
+    const { isLocked, setLock } = useLockBodyScroll(true);
 
     const { mutateAsync, isPending, error } = useStoryMutation();
 
@@ -54,6 +55,10 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
         });
     };
 
+    useEffect(() => {
+        setLock(true);
+    }, [setLock]);
+
     // 이미지 스토리지에 쓰기
     // 데이터 테이블에 쓰기
     // 스토리 생성 완료 후 리다이렉트
@@ -61,7 +66,7 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
     return (
         <section
             className={clsx(
-                'relative flex flex-col gap-4 w-full h-dvh max-h-dvh overflow-hidden aspect-auto bg-gray-600',
+                'relative flex flex-col gap-4 w-full h-[calc(100dvh-57px)] max-h-dvh overflow-hidden aspect-auto bg-gray-600',
                 !isLocked && 'hidden',
             )}
         >
