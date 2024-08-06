@@ -51,7 +51,7 @@ const RankPage: React.FC = () => {
                         버디즈 랭킹 TOP 10
                     </h1>
                     <span className="text-md text-gray-600">
-                        TripBuddy 온도지수 TOP 10 버디즈를 소개합니다!
+                        🥇 TripBuddies 온도지수 TOP 10 버디즈를 소개합니다!
                     </span>
                 </div>
             </div>
