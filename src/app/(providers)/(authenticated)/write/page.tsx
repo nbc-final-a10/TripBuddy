@@ -74,6 +74,7 @@ const WritePage: React.FC = () => {
                 showAlert('error', '날짜를 선택해 주세요');
                 return false;
             }
+            return true;
         }
         // // Todo: 페치 3번 날아가는 에러 발견
         // if (step === 5) {
@@ -137,6 +138,8 @@ const WritePage: React.FC = () => {
                 setTripId(data.trip.trip_id);
                 console.log('데이터', data);
                 setIsLoading(false);
+                // showAlert('success', '여정을 작성하였습니다.');
+                // router.push(`/trips/${tripId}`);
                 return true;
             } else {
                 const errorResult = await response.json();
@@ -216,12 +219,12 @@ const WritePage: React.FC = () => {
                     <NextButton
                         className="text-xl text-white bg-main-color font-bold py-2 px-4 mt-4 mx-2 mb-20 rounded-xl w-full hover:bg-main-color/80"
                         onClick={async () => {
-                            if (step === 5) {
-                                const success = handleWriteTrip();
-                                if (!success) return; // 요청 실패 시 미진행
-                            }
                             const isValid = await validateStep();
                             if (!isValid) return; // 유효성 검사 실패 시 미진행
+                            if (step === 5) {
+                                const success = await handleWriteTrip();
+                                if (!success) return; // 요청 실패 시 미진행
+                            }
                             if (step === 6) handlePush(`/trips/${tripId}`);
                         }}
                         disabled={isLoading}

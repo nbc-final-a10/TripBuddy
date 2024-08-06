@@ -19,10 +19,10 @@ const useNextButton = ({
 }: UseNextButtonProps) => {
     const [step, setStep] = useState(initialStep);
 
-    const handleNext = useCallback(() => {
+    const handleNext = useCallback(async () => {
         if (disabled) return;
         if (validateStep) {
-            const isValid = validateStep();
+            const isValid = await validateStep();
             if (!isValid) return; // 유효성 검사 실패 시 스텝 증가 안 함
         }
         if (step < limit) {
