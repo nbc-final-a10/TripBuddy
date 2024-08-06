@@ -1,5 +1,3 @@
-import MobileHeader from '@/components/molecules/common/MobileHeader';
-import { getPathnameServer } from '@/utils/common/getPathnameServer';
 import React from 'react';
 
 type PublicLayoutProps = {

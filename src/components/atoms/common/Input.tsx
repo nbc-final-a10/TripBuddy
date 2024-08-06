@@ -33,7 +33,7 @@ const InputVariants = cva(
 type InputVariant = VariantProps<typeof InputVariants>;
 
 type InputProps = {
-    type: string;
+    type: 'password' | 'text' | 'file' | 'number';
     placeholder?: string;
     name?: string;
     className?: string;

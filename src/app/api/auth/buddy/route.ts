@@ -1,5 +1,7 @@
-import { PartialBuddy } from '@/types/Auth.types';
+import { Buddy, PartialBuddy } from '@/types/Auth.types';
+import convertToWebP from '@/utils/common/convertToWebp';
 import { createClient } from '@/utils/supabase/server';
+import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
 // 클라이언트에서 요청할 때
@@ -71,27 +73,116 @@ export async function POST(req: NextRequest) {
 
 // 클라이언트에서 업데이트 요청할 때
 export const PATCH = async (req: NextRequest) => {
-    const { buddyInfo }: { buddyInfo: PartialBuddy } = await req.json();
+    let finalBuddy: Buddy | null = null;
+    const formData = await req.formData();
+    const file = formData.get('imageFile') as Blob;
+    const buddyInfo: PartialBuddy = JSON.parse(
+        formData.get('buddyInfo') as string,
+    );
     const supabase = createClient();
 
-    // console.log('authBuddyInfo ===>', buddyInfo);
+    if (!buddyInfo) {
+        return NextResponse.json(
+            { error: 'Buddy info not found' },
+            { status: 404 },
+        );
+    }
 
-    const { data: buddy, error } = await supabase
-        .from('buddies')
-        .update([{ ...buddyInfo }])
-        .eq('buddy_id', buddyInfo.buddy_id)
-        .select();
+    if (file && buddyInfo) {
+        const imageBuffer = await convertToWebP(file, 320);
 
-    if (error) {
-        if (error.message.includes('duplicate')) {
+        if (!imageBuffer) {
             return NextResponse.json(
-                { error: '이미 존재하는 닉네임입니다.' },
+                { error: 'Image conversion failed' },
+                { status: 401 },
+            );
+        }
+        const filePath = `profile/profile_${Date.now()}.webp`;
+
+        const { error } = await supabase.storage
+            .from('buddies')
+            .upload(filePath, imageBuffer, { contentType: 'image/webp' });
+
+        if (error) {
+            console.error(error);
+            return NextResponse.json(
+                { error: error?.message },
+                { status: 401 },
+            );
+        }
+        const { data: publicUrlData } = await supabase.storage
+            .from('buddies')
+            .getPublicUrl(filePath);
+
+        buddyInfo.buddy_profile_pic = publicUrlData.publicUrl;
+
+        const {
+            data: buddy,
+            error: updateError,
+        }: { data: Buddy | null; error: PostgrestError | null } = await supabase
+            .from('buddies')
+            .update([{ ...buddyInfo }])
+            .eq('buddy_id', buddyInfo.buddy_id)
+            .select()
+            .single();
+
+        if (updateError) {
+            if (updateError.message.includes('duplicate')) {
+                return NextResponse.json(
+                    { error: '이미 존재하는 닉네임입니다.' },
+                    { status: 401 },
+                );
+            }
+            return NextResponse.json(
+                { error: updateError?.message },
                 { status: 401 },
             );
         }
 
-        return NextResponse.json({ error: error?.message }, { status: 401 });
+        if (!buddy) {
+            return NextResponse.json(
+                { error: 'Buddy not found' },
+                { status: 404 },
+            );
+        }
+        finalBuddy = buddy;
     }
 
-    return NextResponse.json(buddy, { status: 200 });
+    if (!file && buddyInfo) {
+        const {
+            data: buddy,
+            error,
+        }: { data: Buddy | null; error: PostgrestError | null } = await supabase
+            .from('buddies')
+            .update([{ ...buddyInfo }])
+            .eq('buddy_id', buddyInfo.buddy_id)
+            .select()
+            .single();
+
+        if (error) {
+            if (error.message.includes('duplicate')) {
+                return NextResponse.json(
+                    { error: '이미 존재하는 닉네임입니다.' },
+                    { status: 401 },
+                );
+            }
+            return NextResponse.json(
+                { error: error?.message },
+                { status: 401 },
+            );
+        }
+
+        if (!buddy) {
+            return NextResponse.json(
+                { error: 'Buddy not found' },
+                { status: 404 },
+            );
+        }
+        finalBuddy = buddy;
+    }
+
+    if (!finalBuddy)
+        return NextResponse.json({ error: 'Buddy not found' }, { status: 404 });
+
+    return NextResponse.json(finalBuddy, { status: 200 });
 };

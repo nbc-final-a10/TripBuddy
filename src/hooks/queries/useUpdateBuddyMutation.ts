@@ -5,8 +5,18 @@ import { patchBuddyInfo } from '@/api-services/auth/client';
 
 export default function useUpdateBuddyMutation() {
     const queryClient = useQueryClient();
-    return useMutation<Buddy, Error, PartialBuddy>({
-        mutationFn: (buddyInfo: PartialBuddy) => patchBuddyInfo(buddyInfo),
+    return useMutation<
+        Buddy,
+        Error,
+        { buddyInfo?: PartialBuddy | null; imageFile?: File | null }
+    >({
+        mutationFn: ({
+            buddyInfo = null,
+            imageFile = null,
+        }: {
+            buddyInfo?: PartialBuddy | null;
+            imageFile?: File | null;
+        }) => patchBuddyInfo({ buddyInfo, imageFile }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_BUDDY] });
         },

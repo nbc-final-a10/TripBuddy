@@ -22,7 +22,7 @@ export default function useSelectBuddyCounts() {
         setBuddyCounts(prev => Math.max(prev - 1, 2));
     };
 
-    console.log('buddyCounts', buddyCounts);
+    // console.log('buddyCounts', buddyCounts);
 
     const SelectBuddyCounts = () => {
         return (
