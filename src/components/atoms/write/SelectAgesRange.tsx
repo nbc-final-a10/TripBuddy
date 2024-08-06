@@ -29,7 +29,7 @@ const SelectAgesRange: React.FC<SelectAgesRangeProps> = ({
 
     return (
         <div className="flex flex-col justify-center items-center mt-4 w-full">
-            <div className="relative flex justify-between w-full px-4 mt-2">
+            <div className="relative flex justify-between w-full mt-2">
                 <input
                     type="number"
                     value={startAge}
