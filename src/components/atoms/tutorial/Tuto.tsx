@@ -5,7 +5,7 @@ type Content = {
     src: string;
     alt: string;
     title: React.ReactNode;
-    description: React.ReactNode; // description을 ReactNode로 변경하여 JSX 요소를 허용
+    description: React.ReactNode;
 };
 
 type TutoProps = {
@@ -128,10 +128,13 @@ const Tuto: React.FC<TutoProps> = ({ step }) => {
                 <Image
                     src={src}
                     alt={alt}
-                    layout="fill"
-                    objectFit="contain"
+                    fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    style={{ minHeight: '350px', maxHeight: '100%' }}
+                    style={{
+                        minHeight: '350px',
+                        maxHeight: '100%',
+                        objectFit: 'contain',
+                    }}
                 />
             </div>
         </div>
