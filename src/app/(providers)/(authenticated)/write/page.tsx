@@ -37,6 +37,7 @@ const buttonText = [
 const WritePage: React.FC = () => {
     const [stepToDisplay, setStepToDisplay] = useState<number>(0);
     const [tripId, setTripId] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const { buddy } = useAuth();
     const router = useRouter();
@@ -86,6 +87,7 @@ const WritePage: React.FC = () => {
         buttonText: buttonText[stepToDisplay],
         limit: 6,
         validateStep: validateStep,
+        disabled: isLoading,
     });
 
     type TripData = Tables<'trips'>;
@@ -95,7 +97,7 @@ const WritePage: React.FC = () => {
     // Todo: 핸들러 함수 정의 (커스텀 훅의 state를 supabase에 한번에 쓰는 함수) -> WritePage에 함수만 내려주기
     // Todo: 더 큰 함수로 바꾸어서 step 별로 유효성 검사 등 실행 로직 분리하기
     const handleWriteTrip = async () => {
-        console.log('페칭할 때 buddyCounts', buddyCounts);
+        setIsLoading(true);
         const tripData: PartialTripData = {
             trip_title: tripTitle,
             trip_content: tripContent,
@@ -134,16 +136,19 @@ const WritePage: React.FC = () => {
                 console.log('게시글 업데이트 성공');
                 setTripId(data.trip.trip_id);
                 console.log('데이터', data);
+                setIsLoading(false);
                 return true;
             } else {
                 const errorResult = await response.json();
                 console.error('게시글 업데이트 중 오류 발생:', errorResult);
                 showAlert('error', '여정을 작성하지 못하였습니다.');
+                setIsLoading(false);
                 return false;
             }
         } catch (error) {
             console.error('게시글 업데이트 중 오류 발생:', error);
             showAlert('error', '여정을 작성하지 못하였습니다.');
+            setIsLoading(false);
             return false;
         }
     };
@@ -208,14 +213,18 @@ const WritePage: React.FC = () => {
                     {step === 6 && <CompletePage />}
                 </div>
                 <div className="flex justify-center">
-                    {/* Todo: 마지막 스텝에서는 라벨을 '다음'이 아니라 '완료'로 띄워야 함 */}
                     <NextButton
                         className="text-xl text-white bg-main-color font-bold py-2 px-4 mt-4 mx-2 mb-20 rounded-xl w-full hover:bg-main-color/80"
-                        onClick={() => {
-                            if (step === 5) handleWriteTrip();
-                            validateStep();
+                        onClick={async () => {
+                            if (step === 5) {
+                                const success = handleWriteTrip();
+                                if (!success) return; // 요청 실패 시 미진행
+                            }
+                            const isValid = await validateStep();
+                            if (!isValid) return; // 유효성 검사 실패 시 미진행
                             if (step === 6) handlePush(`/trips/${tripId}`);
                         }}
+                        disabled={isLoading}
                     />
                 </div>
             </section>
