@@ -22,6 +22,7 @@ import useSelectSex from '@/hooks/useSelectSex';
 import useSelectAges from '@/hooks/useSelectAges';
 import useSelectMeetPlace from '@/hooks/useSelectMeetPlace';
 import { useRouter } from 'next/navigation';
+import { validateStep } from '@/utils/write/validateStep';
 
 // 버튼 라벨 배열
 const buttonText = [
@@ -67,27 +68,25 @@ const WritePage: React.FC = () => {
     const { startAge, endAge, handleStartAge, handleEndAge } = useSelectAges();
     const { meetPlace, SelectMeetPlaceButton } = useSelectMeetPlace();
 
-    // 유효성 검사 함수
-    const validateStep = async () => {
-        if (step === 2) {
-            if (!startDateTimestamp || !endDateTimestamp) {
-                showAlert('error', '날짜를 선택해 주세요');
-                return false;
-            }
-            return true;
-        }
-        // // Todo: 페치 3번 날아가는 에러 발견
-        // if (step === 5) {
-        //     const success = await handleWriteTrip();
-        //     return success; // 통신 성공 여부에 따라 true 또는 false 반환
-        // }
-        return true;
-    };
-
     const { NextButton, step } = useNextButton({
         buttonText: buttonText[stepToDisplay],
         limit: 6,
-        validateStep: validateStep,
+        validateStep: () =>
+            validateStep(step, {
+                secondLevelLocation,
+                thirdLevelLocation,
+                startDateTimestamp,
+                endDateTimestamp,
+                selectedTripThemes,
+                meetPlace,
+                wantedSex,
+                startAge,
+                endAge,
+                selectedWantedBuddies,
+                tripImageFile,
+                tripTitle,
+                tripContent,
+            }),
         disabled: isLoading,
     });
 
@@ -219,7 +218,21 @@ const WritePage: React.FC = () => {
                     <NextButton
                         className="text-xl text-white bg-main-color font-bold py-2 px-4 mt-4 mx-2 mb-20 rounded-xl w-full hover:bg-main-color/80"
                         onClick={async () => {
-                            const isValid = await validateStep();
+                            const isValid = await validateStep(step, {
+                                secondLevelLocation,
+                                thirdLevelLocation,
+                                startDateTimestamp,
+                                endDateTimestamp,
+                                selectedTripThemes,
+                                meetPlace,
+                                wantedSex,
+                                startAge,
+                                endAge,
+                                selectedWantedBuddies,
+                                tripImageFile,
+                                tripTitle,
+                                tripContent,
+                            });
                             if (!isValid) return; // 유효성 검사 실패 시 미진행
                             if (step === 5) {
                                 const success = await handleWriteTrip();
