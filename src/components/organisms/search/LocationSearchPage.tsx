@@ -1,58 +1,64 @@
 // 'use client';
 
-// import { Chip } from '@/components/molecules/H_chips';
 // import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
 // import locationData from '@/data/location';
+// import useSelectRegion from '@/hooks/useSelectRegion';
+// import { Tables } from '@/types/supabase';
 // import React, { useState } from 'react';
 
-// const getLocalName = (nameObj: { ko: string; en: string }, locale: string) => {
-//     return locale === 'en' ? nameObj.en : nameObj.ko;
-// };
+// type Trip = Tables<'trips'>;
+
+// // const getLocalName = (nameObj: { ko: string; en: string }, locale: string) => {
+// //     return locale === 'en' ? nameObj.en : nameObj.ko;
+// // };
 
 // const LocationSearchPage: React.FC = () => {
-//     const [isDomestic, setIsDomestic] = useState(true);
-//     const [selectedChips, setSelectedChips] = useState<string | null>(null);
-//     const [selectedThirdLocationName, setSelectedThirdLocationName] = useState<
-//         string | null
-//     >(null);
+//     // const [isDomestic, setIsDomestic] = useState(true);
+//     // const [selectedChips, setSelectedChips] = useState<string | null>(null);
+//     // const [selectedThirdLocationName, setSelectedThirdLocationName] = useState<
+//     //     string | null
+//     // >(null);
 
-//     const locale = 'ko';
+//     // const locale = 'ko';
 
-//     // 국내
-//     const handleDomesticClick = () => {
-//         setIsDomestic(true);
-//     };
+//     const { SelectRegion, thirdLevelLocation, setThirdLevelLocation } =
+//         useSelectRegion();
 
-//     // 해외
-//     const handleOverseasClick = () => {
-//         setIsDomestic(false);
-//     };
+//     // // 국내
+//     // const handleDomesticClick = () => {
+//     //     setIsDomestic(true);
+//     // };
 
-//     const selectedLocation = isDomestic ? locationData[0] : locationData[1];
+//     // // 해외
+//     // const handleOverseasClick = () => {
+//     //     setIsDomestic(false);
+//     // };
 
-//     // 칩 클릭 핸들러
-//     const handleChipClick = (label: string) => {
-//         setSelectedChips(prev => (prev === label ? null : label));
-//     };
+//     // const selectedLocation = isDomestic ? locationData[0] : locationData[1];
 
-//     // 선택된 칩의 하위 위치 찾기
-//     const selectedSubLocation = selectedLocation.subLocations?.find(
-//         subLocation => getLocalName(subLocation.name, 'ko') === selectedChips,
-//     )?.subLocations;
+//     // // 칩 클릭 핸들러
+//     // const handleChipClick = (label: string) => {
+//     //     setSelectedChips(prev => (prev === label ? null : label));
+//     // };
 
-//     // 세번째 선택 요소 클릭 핸들러
-//     const handleSubLocationClick = (name: string) => {
-//         setSelectedThirdLocationName(prev => (prev === name ? null : name));
-//     };
+//     // // 선택된 칩의 하위 위치 찾기
+//     // const selectedSubLocation = selectedLocation.subLocations?.find(
+//     //     subLocation => getLocalName(subLocation.name, 'ko') === selectedChips,
+//     // )?.subLocations;
 
-//     // 선택된 세번째 요소 데이터 가져오기
-//     const selectedThirdLocationData = selectedSubLocation?.find(
-//         loc => loc.name === selectedThirdLocationName,
-//     );
+//     // // 세번째 선택 요소 클릭 핸들러
+//     // const handleSubLocationClick = (name: string) => {
+//     //     setSelectedThirdLocationName(prev => (prev === name ? null : name));
+//     // };
+
+//     // // 선택된 세번째 요소 데이터 가져오기
+//     // const selectedThirdLocationData = selectedSubLocation?.find(
+//     //     loc => loc.name === selectedThirdLocationName,
+//     // );
 
 //     return (
 //         <main className="p-5">
-//             <section className="mb-2">
+//             {/* <section className="mb-2">
 //                 <SearchPageTitle
 //                     title="어디로 떠나시나요?"
 //                     description="지역, 국가, 도시를 1개 선택해주세요."
@@ -114,7 +120,7 @@
 //                                 className="flex items-center border-b border-gray-300 pb-3 mt-3"
 //                                 onClick={() => handleSubLocationClick(loc.name)}
 //                             >
-//                                 {/* <div className="w-9 h-9 bg-gray-300 mr-2 rounded-full"></div> */}
+//                                 <div className="w-9 h-9 bg-gray-300 mr-2 rounded-full"></div>
 //                                 <div>
 //                                     <h3
 //                                         className={`text-sm ${selectedThirdLocationName === loc.name ? 'font-bold' : 'font-medium'}`}
@@ -135,13 +141,15 @@
 //                 <h3 className="text-lg font-bold">
 //                     {selectedThirdLocationData?.name}
 //                 </h3>
-//             </div>
-//             <button
+//             </div> */}
+//             <LocationSearchPage />
+//             <SelectRegion />
+//             {/* <button
 //                 className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-xl bg-gray-500 text-white m-3 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:hidden"
 //                 // onClick={handleSelect}
 //             >
 //                 선택하기
-//             </button>
+//             </button> */}
 //         </main>
 //     );
 // };

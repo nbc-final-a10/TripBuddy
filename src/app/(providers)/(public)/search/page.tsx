@@ -2,13 +2,14 @@
 
 import DateSearchButton from '@/components/atoms/search/DateSearchButton';
 import LocationSearchButton from '@/components/atoms/search/LocationSearchButton';
+import SearchInput from '@/components/atoms/search/SearchInput';
 import TopButton from '@/components/atoms/search/TopButton';
 import SelectAgesRange from '@/components/atoms/write/SelectAgesRange';
 import GenderChipGroup from '@/components/molecules/search/GenderChipGroup';
 import MeetingPlaceChipGroup from '@/components/molecules/search/MeetingPlaceChipGroup';
 import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
 import SearchResult from '@/components/molecules/search/SearchResult';
-import DateSearchPage from '@/components/organisms/search/DateSearchPage';
+import DateSearchPage from '@/components/organisms/search/DateSearch';
 import usePreferTheme from '@/hooks/usePreferTheme';
 // import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
 import useSelectRegion from '@/hooks/useSelectRegion';
@@ -239,36 +240,18 @@ const SearchPage: React.FC = () => {
     return (
         <main className="p-5 xl:p-0 xl:py-5">
             <section className="flex flex-col mx-auto mb-10 mt-6 gap-[18px] xl:flex-row xl:items-center xl:justify-center xl:max-w-screen-xl xl:gap-5">
-                <div className="flex xl:w-[300px] relative box-border">
-                    <input
-                        type="text"
-                        placeholder="검색어를 입력하세요"
-                        className="w-full xl:w-[300px] bg-gray-200 py-1.5 pl-10 rounded-2xl"
-                        onKeyDown={handleKeyDown}
-                        onChange={e => setSearchInput(e.target.value)}
-                    />
-                    <div className="absolute left-3 top-[19px] xl:top-[19px] transform -translate-y-1/2 xl:top-[164px] xl:left-3">
-                        <Image
-                            src="/svg/HomeSearch.svg"
-                            alt="Search"
-                            width={20}
-                            height={20}
-                            className="w-[20px] h-[20px]"
-                        />
-                    </div>
-                </div>
+                <SearchInput
+                    onKeyDown={handleKeyDown}
+                    onChange={e => setSearchInput(e.target.value)}
+                />
 
-                <div className="xl:w-[300px] bg-gray-200 py-1.5 pl-10 rounded-2xl flex box-border">
-                    <LocationSearchButton onClick={() => {}} />
-                </div>
+                <LocationSearchButton onClick={() => {}} />
 
-                <div className="xl:w-[300px] bg-gray-200 py-1.5 pl-10 rounded-2xl flex box-border">
-                    <DateSearchButton
-                        onClick={() => {}}
-                        startDate={formattedStartDate}
-                        endDate={formattedEndDate}
-                    />
-                </div>
+                <DateSearchButton
+                    // onClick={() => {}}
+                    startDate={formattedStartDate}
+                    endDate={formattedEndDate}
+                />
 
                 <button
                     className="hidden xl:flex xl:w-[140px] xl:px-4 xl:py-2.5 rounded-xl bg-main-color justify-center items-center mx-auto font-semibold text-white text-sm transition-colors duration-200 ease-in-out active:bg-gray-300 whitespace-nowrap"
@@ -311,7 +294,7 @@ const SearchPage: React.FC = () => {
                     setSelectedMeetingPlace={setSelectedMeetingPlace}
                 />
             </div>
-            <div className="my-10">
+            {/* <div className="my-10">
                 <SearchPageTitle
                     title="여행지를 선택해주세요."
                     description="지역, 국가, 도시를 1개 선택해주세요."
@@ -324,7 +307,7 @@ const SearchPage: React.FC = () => {
                     description="버디즈와 함께 여행하고 싶은 날짜를 선택해주세요."
                 />
                 <DateSearchPage setDateChange={handleDateChange} />
-            </div>
+            </div> */}
             <div className="my-10">
                 <SearchPageTitle
                     title="여정 테마"
