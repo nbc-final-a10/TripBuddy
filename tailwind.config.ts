@@ -19,7 +19,7 @@ const config: Config = {
                 // 전부 변경 끝나시면 main-color, secondary-color 줄 삭제
                 'main-color': '#ffb806',
                 'secondary-color': '#2f00ff',
-                // Primary Color
+                // Primary
                 'primary-color-900': '#050300',
                 'primary-color-800': '#382600',
                 'primary-color-700': '#6b4900',
@@ -30,7 +30,7 @@ const config: Config = {
                 'primary-color-200': '#ffcf6b',
                 'primary-color-100': '#ffe09e',
                 'primary-color-50': '#fff0d1',
-                // Secondary Color
+                // Secondary
                 'secondary-color-900': '#010104',
                 'secondary-color-800': '#070f31',
                 'secondary-color-700': '#0d1d5e',
@@ -41,7 +41,7 @@ const config: Config = {
                 'secondary-color-200': '#7e94ec',
                 'secondary-color-100': '#aab9f3',
                 'secondary-color-50': '#d7def9',
-                // Primary Color
+                // Grayscale
                 'grayscale-color-900': '#141414',
                 'grayscale-color-800': '#2e2e2e',
                 'grayscale-color-700': '#474747',
@@ -51,8 +51,22 @@ const config: Config = {
                 'grayscale-color-300': '#adadad',
                 'grayscale-color-200': '#c7c7c7',
                 'grayscale-color-100': '#e0e0e0',
+                'grayscale-color-85': '#e8e8e8',
                 'grayscale-color-70': '#f4f4f4',
+                'grayscale-color-65': '#fbfbfb',
                 'grayscale-color-50': '#fafafa',
+                // Symentic Red Error
+                'symentic-red-color-900': '#D21C1C',
+                'symentic-red-color-800': '#DF1D1D',
+                'symentic-red-color-700': '#E7301D',
+                'symentic-red-color-600': '#E9462B',
+                'symentic-red-color-500': '#F5511D',
+                'symentic-red-color-400': '#F05C2E',
+                'symentic-red-color-300': '#EB683F',
+                'symentic-red-color-200': '#F57046',
+                'symentic-red-color-100': '#FF784D',
+                'symentic-red-color-70': '#FF9D7E',
+                'symentic-red-color-50': '#FFC2AF',
             },
             scrollbar: ['hidden'],
         },
