@@ -10,7 +10,7 @@ const HeaderMyPageLink: React.FC = () => {
     const buddy_id = buddy ? buddy.buddy_id : '';
 
     return (
-        <div className="flex gap-12 items-center font-bold">
+        <div className="flex gap-8 items-center font-bold">
             {buddy_id ? (
                 <button onClick={logOut}>LOGOUT</button>
             ) : (

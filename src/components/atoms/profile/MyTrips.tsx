@@ -6,15 +6,18 @@ import { BuddyProfileProps } from '@/types/ProfileParams.types';
 import { FaCalendarCheck, FaPen } from 'react-icons/fa';
 import TripCard from '@/components/molecules/trips/TripCard';
 import fetchWrapper from '@/utils/api/fetchWrapper';
-import { Trip } from '@/types/Trips.types';
+import { TripWithContract } from '@/types/Trips.types';
 import useTapScroll from '@/hooks/useTapScroll';
-import { ContractWithTrips } from '@/types/Contract.types';
+import {
+    ContractWithTrips,
+    ContractWithTripsWithContract,
+} from '@/types/Contract.types';
 
 export default function MyTrips({ id }: BuddyProfileProps) {
     const participatingAccordion = useAccordion();
     const createdAccordion = useAccordion();
     const [trips, setTrips] = useState<{
-        created: Trip[];
+        created: TripWithContract[];
         participated: ContractWithTrips[];
     }>({ created: [], participated: [] });
 
@@ -27,7 +30,7 @@ export default function MyTrips({ id }: BuddyProfileProps) {
         const fetchTrips = async () => {
             try {
                 const data = await fetchWrapper<{
-                    created: Trip[];
+                    created: TripWithContract[];
                     participated: ContractWithTrips[];
                 }>(`/api/trips/my/${id}`, {
                     method: 'GET',
@@ -81,13 +84,21 @@ export default function MyTrips({ id }: BuddyProfileProps) {
                     onMouseDown={createMouseDownHandler(participatingTripsRef)}
                 >
                     {trips.participated.length > 0 ? (
-                        trips.participated.map(contract => (
-                            <TripCard
-                                key={contract.trips.trip_id}
-                                trip={contract.trips}
-                                mode="card"
-                            />
-                        ))
+                        trips.participated.map((contract, index) => {
+                            const contractWithTrips =
+                                contract as ContractWithTripsWithContract;
+                            contractWithTrips.trips.contract =
+                                trips.participated;
+
+                            console.log(contractWithTrips);
+                            return (
+                                <TripCard
+                                    key={contract.trips.trip_id}
+                                    trip={contractWithTrips.trips}
+                                    mode="card"
+                                />
+                            );
+                        })
                     ) : (
                         <div className="text-center text-gray-500">
                             참여한 여정이 없습니다.
