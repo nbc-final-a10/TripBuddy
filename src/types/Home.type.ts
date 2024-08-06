@@ -1,9 +1,9 @@
 import { Buddy } from './Auth.types';
 import { StoryWithBuddies } from './Story.types';
-import { Trip } from './Trips.types';
+import { TripWithContract } from './Trips.types';
 
 export type BuddyTripStory = {
     buddies: Buddy[];
-    trips: Trip[];
+    trips: TripWithContract[];
     stories: StoryWithBuddies[];
 };
