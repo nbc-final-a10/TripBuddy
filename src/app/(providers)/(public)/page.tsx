@@ -27,7 +27,6 @@ const HomePage: React.FC = async () => {
             <Suspense fallback={<Loading />}>
                 <HydrationBoundary state={dehydratedState}>
                     <FloatingButton />
-
                     <HomePageBanner />
                     <HomePageContainer />
                 </HydrationBoundary>

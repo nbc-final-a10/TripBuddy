@@ -24,18 +24,41 @@ export async function convertToWebPServer({
     if (width && height) {
         const aspectRatio = width / height;
 
-        // maxWidth와 maxHeight를 사용하여 적절한 크기를 계산
-        if (aspectRatio > 1) {
-            // 가로가 더 긴 경우
-            if (width > maxWidth) {
+        // maxWidth만 넘어왔을 경우
+        if (maxWidth) {
+            if (aspectRatio > 1) {
+                // 가로가 더 긴 경우
                 width = maxWidth;
                 height = Math.floor(maxWidth / aspectRatio);
+            } else {
+                // 세로가 더 긴 경우
+                height = maxWidth;
+                width = Math.floor(maxWidth * aspectRatio);
             }
-        } else {
-            // 세로가 더 긴 경우
-            if (height > maxHeight) {
+        } else if (maxWidth && maxHeight) {
+            if (aspectRatio > 1) {
+                // 가로가 더 긴 경우
+                width = maxWidth;
+                height = Math.floor(maxWidth / aspectRatio);
+            } else {
+                // 세로가 더 긴 경우
                 height = maxHeight;
                 width = Math.floor(maxHeight * aspectRatio);
+            }
+        } else {
+            // maxWidth 또는 maxHeight가 제공되지 않은 경우 기존 로직 유지
+            if (aspectRatio > 1) {
+                // 가로가 더 긴 경우
+                if (width > 720) {
+                    width = 720;
+                    height = Math.floor(720 / aspectRatio);
+                }
+            } else {
+                // 세로가 더 긴 경우
+                if (height > 720) {
+                    height = 720;
+                    width = Math.floor(720 * aspectRatio);
+                }
             }
         }
 

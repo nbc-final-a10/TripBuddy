@@ -8,6 +8,7 @@ type ThirdLevelSectionProps = {
     selectedSecondLevelLocations: ThirdLevel[];
     setThirdLevelLocation: (loc: string) => void;
     secondLevelLocation: string;
+    thirdLevelLocation?: string;
 };
 
 //h-[80%]
@@ -15,6 +16,7 @@ const ThirdLevelSection = ({
     selectedSecondLevelLocations,
     setThirdLevelLocation,
     secondLevelLocation,
+    thirdLevelLocation = '',
 }: ThirdLevelSectionProps) => {
     const pathname = usePathname();
 
@@ -29,10 +31,13 @@ const ThirdLevelSection = ({
             {selectedSecondLevelLocations.map(loc => (
                 <div
                     key={loc.name}
-                    className="flex mt-2 ml-2 mr-2 border-b pb-3 cursor-pointer hover:bg-main-color"
+                    className={twMerge(
+                        'flex ml-2 mr-2 border-b cursor-pointer hover:bg-main-color items-center',
+                        thirdLevelLocation === loc.name && 'bg-main-color',
+                    )}
                     onClick={() => setThirdLevelLocation(loc.name)}
                 >
-                    <div className="text-sm text-gray-500 xl:text-base">
+                    <div className="text-sm text-gray-500 xl:text-base flex items-center p-1.5">
                         <div>
                             <p className="font-bold">{loc.name}</p>
                             <p>{secondLevelLocation}</p>

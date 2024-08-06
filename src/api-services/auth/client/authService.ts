@@ -62,15 +62,23 @@ export async function getLogInWithProvider(
     }
 }
 
-export async function patchBuddyInfo(buddyInfo: PartialBuddy): Promise<Buddy> {
+export async function patchBuddyInfo({
+    buddyInfo,
+    imageFile,
+}: {
+    buddyInfo: PartialBuddy | null;
+    imageFile: File | null;
+}): Promise<Buddy> {
     const url = `/api/auth/buddy`;
     try {
+        const formData = new FormData();
+
+        if (imageFile) formData.append('imageFile', imageFile);
+        if (buddyInfo) formData.append('buddyInfo', JSON.stringify(buddyInfo));
+
         const data = await fetchWrapper<Buddy>(url, {
             method: 'PATCH',
-            body: JSON.stringify({ buddyInfo }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            body: formData,
             next: { tags: ['buddy'] },
         });
         return data;
@@ -154,7 +162,6 @@ export async function postNaverLogIn(): Promise<Buddy | null> {
 }
 
 export async function getSpecificBuddy(id: string): Promise<Buddy> {
-    console.log('getSpecificBuddy', id);
     const url = `/api/auth/buddy/${id}`;
     try {
         const data = await fetchWrapper<Buddy>(url, {

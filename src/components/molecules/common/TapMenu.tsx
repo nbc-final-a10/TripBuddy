@@ -19,16 +19,20 @@ const TapMenu: React.FC = () => {
         pathname === '/recover' ||
         pathname === '/tutorial';
 
+    // 아래 svg 들 svgr 로 추후 수정 요망
     return (
         <div
             className={clsx(
-                'z-50 fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[430px] min-w-[375px] bg-white border-t-2 border-gray-200 grid grid-cols-4 xl:hidden',
+                'z-40 fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[430px] min-w-[375px] bg-white border-t-2 border-gray-200 grid grid-cols-4 xl:hidden',
                 hidden && 'hidden',
             )} // 변경 필요
         >
             <TapMenuButton iconName="Home" href="/" />
             <TapMenuButton iconName="Trip" href="/trips" />
-            <TapMenuButton iconName="Chat" href="/chat" />
+            <TapMenuButton
+                iconName="Chat"
+                href={buddy_id ? `/chat` : '/login'}
+            />
             <TapMenuButton
                 iconName="Mypage"
                 href={buddy_id ? `/profile/${buddy_id}` : '/login'}

@@ -3,7 +3,6 @@ import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import React, { PropsWithChildren } from 'react';
-import Script from 'next/script';
 import { defaultMetaData } from '@/data/defaultMetaData';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -21,7 +20,7 @@ export const metadata: Metadata = defaultMetaData;
 
 const RootLayout: React.FC<PropsWithChildren> = ({ children }) => {
     return (
-        <html lang="en">
+        <html lang="ko">
             <body className={inter.className}>
                 <QueryProvider>{children}</QueryProvider>
             </body>

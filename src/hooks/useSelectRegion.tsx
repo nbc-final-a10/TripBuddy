@@ -106,6 +106,7 @@ export default function useSelectRegion() {
                         }
                         setThirdLevelLocation={setThirdLevelLocation}
                         secondLevelLocation={secondLevelLocation}
+                        thirdLevelLocation={thirdLevelLocation}
                     />
                 )}
 

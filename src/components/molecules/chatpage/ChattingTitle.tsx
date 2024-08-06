@@ -4,6 +4,7 @@ import { Trip } from '@/types/Trips.types';
 import supabase from '@/utils/supabase/client';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+import convertDateToStringWithWeekDay from '@/utils/common/convertDateToStringWithWeekDay';
 
 type ChattingTitleProps = {
     id: string;
@@ -37,13 +38,14 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
         <section className="relative">
             <div className="border-y-[1px] border-gray-200 px-6 py-2 mb-4">
                 <div className="flex items-center">
-                    <div className="w-[40px] h-[40px] flex items-center justify-center">
+                    <div className="w-[40px] h-[40px] overflow-hidden flex justify-center items-centerr">
                         {tripData?.trip_thumbnail ? (
                             <Image
                                 src={tripData.trip_thumbnail}
                                 width={40}
                                 height={40}
                                 alt="Trip Thumbnail"
+                                className="object-cover"
                             />
                         ) : (
                             <div className="w-[40px] h-[40px] bg-gray-200 "></div>
@@ -55,16 +57,17 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
                         </p>
                         <div className="text-xs flex gap-6">
                             <span>{tripData?.trip_final_destination}</span>
-                            <span>{tripData?.trip_start_date}</span>
-                            <span>3/4명</span>
+                            <span>
+                                {tripData?.trip_start_date
+                                    ? convertDateToStringWithWeekDay(
+                                          new Date(tripData.trip_start_date),
+                                      )
+                                    : null}
+                            </span>
+                            <span>{`n/${tripData?.trip_max_buddies_counts}명`}</span>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="w-full text-[12px] flex justify-center">
-                <p className="w-fit bg-[#516FE6] text-white rounded-[4px] px-[8px] py-[2px]">
-                    2024년 7월 10일
-                </p>
             </div>
         </section>
     );
