@@ -20,6 +20,7 @@ import {
 } from '@/utils/search/filterAndSortTrips';
 import supabase from '@/utils/supabase/client';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 
 type Trip = Tables<'trips'>;
@@ -79,6 +80,16 @@ const SearchPage: React.FC = () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
+
+    const router = useRouter();
+    const [location, setLocation] = useState<string | undefined>(undefined);
+
+    // useEffect(() => {
+    //     const { location } = router.query;
+    //     if (typeof location === 'string') {
+    //         setLocation(location);
+    //     }
+    // }, [router.query]);
 
     useEffect(() => {
         console.log('updated selectedThemes: ', selectedThemes);
@@ -339,7 +350,7 @@ const SearchPage: React.FC = () => {
 
             <button
                 id="result-section"
-                className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-2xl bg-main-color font-semibold text-white text-sm m-3 mb-10 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:w-1/2 xl:mt-8"
+                className="flex justify-center items-center mx-auto w-full px-28 h-12 rounded-2xl bg-main-color font-semibold text-white text-sm m-3 mb-10 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:w-[348px] xl:mt-8"
                 onClick={() => {
                     handleShowResult();
                     handleThemesButtonClick();
