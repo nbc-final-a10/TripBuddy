@@ -4,6 +4,38 @@ import { createClient } from '@/utils/supabase/server';
 import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
+export async function GET() {
+    const supabase = createClient();
+
+    const {
+        data: stories,
+        error: storyError,
+    }: {
+        data: StoryWithBuddies[] | null;
+        error: PostgrestError | null;
+    } = await supabase
+        .from('stories')
+        .select('*, buddies:story_created_by (*)')
+        .order('story_created_at', { ascending: false });
+
+    if (storyError) {
+        console.error(storyError);
+        return NextResponse.json(
+            { error: storyError?.message },
+            { status: 401 },
+        );
+    }
+
+    if (!stories) {
+        return NextResponse.json(
+            { error: 'Stories not found' },
+            { status: 404 },
+        );
+    }
+
+    return NextResponse.json(stories, { status: 200 });
+}
+
 export async function POST(req: NextRequest) {
     const formData = await req.formData();
     const file = formData.get('imageFile') as Blob;
@@ -51,7 +83,8 @@ export async function POST(req: NextRequest) {
     const { data: story, error: storyError } = await supabase
         .from('stories')
         .insert({ ...payload })
-        .select();
+        .select()
+        .single();
 
     if (storyError) {
         console.error(storyError);
@@ -62,35 +95,4 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json(story, { status: 200 });
-}
-
-export async function GET() {
-    const supabase = createClient();
-
-    const {
-        data: stories,
-        error: storyError,
-    }: {
-        data: StoryWithBuddies[] | null;
-        error: PostgrestError | null;
-    } = await supabase
-        .from('stories')
-        .select('*, buddies:story_created_by (*)')
-        .order('story_created_at', { ascending: false });
-
-    if (storyError) {
-        console.error(storyError);
-        return NextResponse.json(
-            { error: storyError?.message },
-            { status: 401 },
-        );
-    }
-
-    if (!stories) {
-        return NextResponse.json(
-            { error: 'Stories not found' },
-            { status: 404 },
-        );
-    }
-    return NextResponse.json(stories, { status: 200 });
 }

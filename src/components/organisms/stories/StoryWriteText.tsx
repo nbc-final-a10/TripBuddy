@@ -1,12 +1,15 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import DraggableInput from './DraggableInput';
 import Image from 'next/image';
 import useLockBodyScroll from '@/hooks/common/useLockBodyScroll';
 import clsx from 'clsx';
 import useStoryMutation from '@/hooks/queries/useStoryMutation';
 import { StoryData } from '@/types/Story.types';
+import { showAlert } from '@/utils/ui/openCustomAlert';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/auth';
 
 type StoryWriteTextProps = {
     imageFile: File;
@@ -17,17 +20,20 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
     imageFile,
     selectedMedia,
 }) => {
+    const router = useRouter();
+    const { buddy } = useAuth();
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
     const [texts, setTexts] = useState<
         { text: string; position: { x: number; y: number } }[]
     >([]);
     const { isLocked } = useLockBodyScroll(true);
 
-    const { mutate, isPending, error } = useStoryMutation();
+    const { mutateAsync, isPending, error } = useStoryMutation();
 
     const handleSaveButtonClick = async () => {
         console.log('save');
 
+        if (!buddy) router.push('/login');
         if (!imageFile) return;
         if (!texts.length) return;
 
@@ -36,7 +42,16 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
         formData.append('texts', JSON.stringify(texts));
 
         const payload: StoryData = formData;
-        mutate(payload);
+        const data = await mutateAsync(payload);
+
+        console.log(data);
+        showAlert('success', '스토리 생성이 완료되었습니다.', {
+            onConfirm: () => {
+                router.push(
+                    `/stories/${buddy?.buddy_nickname}?id=${data?.story_id}`,
+                );
+            },
+        });
     };
 
     // 이미지 스토리지에 쓰기
