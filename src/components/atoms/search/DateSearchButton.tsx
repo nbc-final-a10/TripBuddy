@@ -1,32 +1,26 @@
 'use client';
 
+import Image from 'next/image';
 import React from 'react';
 
 type DateSearchMainPageProps = {
     onClick: () => void;
+    startDate: string;
+    endDate: string;
 };
 
-const DateSearchButton: React.FC<DateSearchMainPageProps> = ({ onClick }) => {
-    // 현재 날짜, 다음날 가져오기
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-
-    const formatDate = (date: Date) => {
-        const week = ['일', '월', '화', '수', '목', '금', '토'];
-        const dayOfWeek = week[today.getDay()];
-        return `${today.getFullYear().toString().slice(-2)}.${(today.getMonth() + 1).toString().padStart(2, '0')}.${today.getDate().toString().padStart(2, '0')}(${dayOfWeek})`;
-    };
-
-    const formattedToday = formatDate(today);
-    const formattedTomorrow = formatDate(tomorrow);
-
+const DateSearchButton: React.FC<DateSearchMainPageProps> = ({
+    onClick,
+    startDate,
+    endDate,
+}) => {
     return (
-        <button
-            className="w-full bg-gray-100 p-2 rounded-xl text-left"
-            onClick={onClick}
-        >
-            {formattedToday} ~ {formattedTomorrow}
+        <button onClick={onClick}>
+            {' '}
+            <div className="absolute left-8 top-[227px] xl:top-[164px] transform -translate-y-1/2 xl:top-[164px] xl:left-3 xl:left-[643px]">
+                <Image src="/svg/Date.svg" alt="Place" width={20} height={20} />
+            </div>
+            {startDate} ~ {endDate}
         </button>
     );
 };

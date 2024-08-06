@@ -1,5 +1,7 @@
 'use client';
 
+import DateSearchButton from '@/components/atoms/search/DateSearchButton';
+import LocationSearchButton from '@/components/atoms/search/LocationSearchButton';
 import TopButton from '@/components/atoms/search/TopButton';
 import SelectAgesRange from '@/components/atoms/write/SelectAgesRange';
 import GenderChipGroup from '@/components/molecules/search/GenderChipGroup';
@@ -11,6 +13,10 @@ import usePreferTheme from '@/hooks/usePreferTheme';
 // import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
 import useSelectRegion from '@/hooks/useSelectRegion';
 import { Tables } from '@/types/supabase';
+import {
+    filterAndSortTrips,
+    filterAndSortTripsBuddies,
+} from '@/utils/search/filterAndSortTrips';
 import supabase from '@/utils/supabase/client';
 import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
@@ -50,6 +56,13 @@ const SearchPage: React.FC = () => {
         [],
     );
 
+    const [localSelectedThemes, setLocalSelectedThemes] = useState<string[]>(
+        [],
+    );
+    const [localSelectedBuddyThemes, setLocalSelectedBuddyThemes] = useState<
+        string[]
+    >([]);
+
     const [PreferTripTheme] = usePreferTheme({ mode: 'trip' });
     const [PreferBuddyTheme] = usePreferTheme({ mode: 'buddy' });
 
@@ -66,21 +79,30 @@ const SearchPage: React.FC = () => {
         };
     }, []);
 
+    useEffect(() => {
+        console.log('updated selectedThemes: ', selectedThemes);
+        setLocalSelectedThemes(selectedThemes);
+    }, [selectedThemes]);
+
+    useEffect(() => {
+        console.log('updated selectedBuddyThemes: ', selectedBuddyThemes);
+        setLocalSelectedBuddyThemes(selectedBuddyThemes);
+    }, [selectedBuddyThemes]);
+
     const handleDateChange = (start: string, end: string) => {
         setStartDateTimestamp(start);
         setEndDateTimestamp(end);
     };
 
     const handleShowResult = async () => {
+        console.log('가져오기 전: ', selectedThemes);
+
         // 데이터 가져와서 상태 업데이트
         const { data, error } = await supabase.from('trips').select('*');
         if (error) {
             console.error('Error fetching trips:', error.message);
             return;
         }
-
-        // setAllItems(data as Trip[]);
-        // setResultItems(data as Trip[]);
 
         let filteredItems = data as Trip[];
 
@@ -144,30 +166,17 @@ const SearchPage: React.FC = () => {
         }
 
         if (selectedThemes.length > 0) {
-            filteredItems = filteredItems.filter(item => {
-                const themes = [
-                    item.trip_theme1,
-                    item.trip_theme2,
-                    item.trip_theme3,
-                ];
-                return selectedThemes.every(theme => themes.includes(theme));
-            });
+            filteredItems = filterAndSortTrips(filteredItems, selectedThemes);
         }
         if (selectedBuddyThemes.length > 0) {
-            filteredItems = filteredItems.filter(item => {
-                const buddyThemes = [
-                    item.trip_wanted_buddies1,
-                    item.trip_wanted_buddies2,
-                    item.trip_wanted_buddies3,
-                ];
-                return selectedBuddyThemes.every(theme =>
-                    buddyThemes.includes(theme),
-                );
-            });
+            filteredItems = filterAndSortTripsBuddies(
+                filteredItems,
+                selectedBuddyThemes,
+            );
         }
 
         setResultItems(filteredItems);
-        console.log('selectedThemes: ', selectedThemes);
+        console.log('패칭 후에 selectedThemes: ', selectedThemes);
 
         if (
             !searchInput &&
@@ -193,6 +202,11 @@ const SearchPage: React.FC = () => {
         }, 100);
     };
 
+    const handleThemesButtonClick = () => {
+        console.log('전 여정 테마: ', localSelectedThemes);
+        console.log('전 버디즈 성향: ', localSelectedBuddyThemes);
+    };
+
     // enter 누르면 검색 결과 보여주기
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
@@ -208,18 +222,32 @@ const SearchPage: React.FC = () => {
         setVisibleSecondItems(prev => prev + 6);
     };
 
+    // 현재 날짜, 다음날 가져오기
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    const formatDate = (date: Date) => {
+        const week = ['일', '월', '화', '수', '목', '금', '토'];
+        const dayOfWeek = week[today.getDay()];
+        return `${today.getFullYear().toString().slice(-2)}.${(today.getMonth() + 1).toString().padStart(2, '0')}.${today.getDate().toString().padStart(2, '0')}(${dayOfWeek})`;
+    };
+
+    const formattedStartDate = formatDate(today);
+    const formattedEndDate = formatDate(tomorrow);
+
     return (
         <main className="p-5 xl:p-0 xl:py-5">
-            <section className="flex flex-col mx-auto mb-10 mt-6 xl:flex-row xl:items-center xl:justify-center xl:max-w-screen-xl">
-                <div className="flex xl:flex-grow items-center">
+            <section className="flex flex-col mx-auto mb-10 mt-6 gap-[18px] xl:flex-row xl:items-center xl:justify-center xl:max-w-screen-xl xl:gap-5">
+                <div className="flex xl:w-[300px] relative box-border">
                     <input
                         type="text"
                         placeholder="검색어를 입력하세요"
-                        className="w-full bg-gray-200 p-2 pl-10 rounded-2xl"
+                        className="w-full xl:w-[300px] bg-gray-200 py-1.5 pl-10 rounded-2xl"
                         onKeyDown={handleKeyDown}
                         onChange={e => setSearchInput(e.target.value)}
                     />
-                    <div className="absolute left-8 top-[121px] transform -translate-y-1/2 xl:top-[164px] xl:left-3">
+                    <div className="absolute left-3 top-[19px] xl:top-[19px] transform -translate-y-1/2 xl:top-[164px] xl:left-3">
                         <Image
                             src="/svg/HomeSearch.svg"
                             alt="Search"
@@ -230,11 +258,23 @@ const SearchPage: React.FC = () => {
                     </div>
                 </div>
 
+                <div className="xl:w-[300px] bg-gray-200 py-1.5 pl-10 rounded-2xl flex box-border">
+                    <LocationSearchButton onClick={() => {}} />
+                </div>
+
+                <div className="xl:w-[300px] bg-gray-200 py-1.5 pl-10 rounded-2xl flex box-border">
+                    <DateSearchButton
+                        onClick={() => {}}
+                        startDate={formattedStartDate}
+                        endDate={formattedEndDate}
+                    />
+                </div>
+
                 <button
-                    className="hidden xl:flex xl:px-4 xl:py-2.5 xl:w-36 xl:ml-6 rounded-2xl bg-main-color justify-center items-center mx-auto font-semibold text-white text-sm transition-colors duration-200 ease-in-out active:bg-gray-300"
+                    className="hidden xl:flex xl:w-[140px] xl:px-4 xl:py-2.5 rounded-xl bg-main-color justify-center items-center mx-auto font-semibold text-white text-sm transition-colors duration-200 ease-in-out active:bg-gray-300 whitespace-nowrap"
                     onClick={handleShowResult}
                 >
-                    검색 결과 보기
+                    검색하기
                 </button>
             </section>
 
@@ -308,7 +348,10 @@ const SearchPage: React.FC = () => {
 
             <button
                 className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-2xl bg-main-color font-semibold text-white text-sm m-3 mb-10 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:w-1/2 xl:mt-8"
-                onClick={handleShowResult}
+                onClick={() => {
+                    handleShowResult();
+                    handleThemesButtonClick();
+                }}
             >
                 검색 결과 보기
             </button>

@@ -9,7 +9,13 @@ import {
     TripTheme,
 } from '@/types/Themes.types';
 import handleChipClick from '@/utils/common/handleChipClick';
-import React, { MouseEvent, ReactNode, useRef, useState } from 'react';
+import React, {
+    MouseEvent,
+    ReactNode,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 
 // (AllTripTheme | AllBuddyTheme)[];
 
@@ -37,10 +43,14 @@ const usePreferTheme = ({
 
     const handleThemeChange = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
-        // console.log('Clickeed theme: ', target.innerText);
+        // console.log('Clicked theme: ', target.innerText);
         const mutableThemes = themeRef.current?.map(theme => theme.ko);
         handleChipClick(target, mutableThemes, selectedTheme, setSelectedTheme);
     };
+
+    useEffect(() => {
+        console.log('selected Theme: ', selectedTheme);
+    }, [selectedTheme]);
 
     const PreferThemeToRender = ({ className }: { className?: string }) => {
         return (
