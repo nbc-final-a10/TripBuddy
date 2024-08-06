@@ -25,6 +25,22 @@ export const validateStep = async (step: number, params: any) => {
         return true;
     }
     if (step === 2) {
+        const startDate = new Date(startDateTimestamp).getTime();
+        const endDate = new Date(endDateTimestamp).getTime();
+        const now = Date.now();
+
+        if (startDate > endDate) {
+            showAlert('caution', '시작 날짜가 종료 날짜보다 늦습니다.');
+            return false;
+        }
+        if (startDate < now) {
+            showAlert('caution', '시작 날짜가 현재 날짜보다 이전입니다.');
+            return false;
+        }
+        if (endDate < now) {
+            showAlert('caution', '종료 날짜가 현재 날짜보다 이전입니다.');
+            return false;
+        }
         if (!startDateTimestamp || !endDateTimestamp) {
             showAlert('caution', '시작날짜와 종료 날짜를 선택해 주세요.');
             return false;
