@@ -23,6 +23,8 @@ import useSelectAges from '@/hooks/useSelectAges';
 import useSelectMeetPlace from '@/hooks/useSelectMeetPlace';
 import { useRouter } from 'next/navigation';
 import { validateStep } from '@/utils/write/validateStep';
+import FailPage from '@/components/organisms/write/FailPage';
+import SuccessNotificationPage from '@/components/organisms/write/SuccessNotificationPage';
 
 // 버튼 라벨 배열
 const buttonText = [
@@ -39,6 +41,7 @@ const WritePage: React.FC = () => {
     const [stepToDisplay, setStepToDisplay] = useState<number>(0);
     const [tripId, setTripId] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
 
     const { buddy } = useAuth();
     const router = useRouter();
@@ -137,6 +140,7 @@ const WritePage: React.FC = () => {
                 setTripId(data.trip.trip_id);
                 console.log('데이터', data);
                 setIsLoading(false);
+                setIsSuccess(true);
                 // showAlert('success', '여정을 작성하였습니다.');
                 // router.push(`/trips/${tripId}`);
                 return true;
@@ -145,12 +149,14 @@ const WritePage: React.FC = () => {
                 console.error('게시글 업데이트 중 오류 발생:', errorResult);
                 showAlert('error', '여정을 작성하지 못하였습니다.');
                 setIsLoading(false);
+                setIsSuccess(false);
                 return false;
             }
         } catch (error) {
             console.error('게시글 업데이트 중 오류 발생:', error);
             showAlert('error', '여정을 작성하지 못하였습니다.');
             setIsLoading(false);
+            setIsSuccess(false);
             return false;
         }
     };
@@ -212,7 +218,9 @@ const WritePage: React.FC = () => {
                             handleImageChange={handleImageChange}
                         />
                     )}
-                    {step === 6 && <CompletePage />}
+                    {step === 6 && (
+                        <SuccessNotificationPage isSuccess={isSuccess} />
+                    )}
                 </div>
                 <div className="flex justify-center">
                     <NextButton
