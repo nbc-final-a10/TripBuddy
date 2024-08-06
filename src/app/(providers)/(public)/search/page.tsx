@@ -198,8 +198,17 @@ const SearchPage: React.FC = () => {
         setShowResult(true);
 
         // 속도 지연
+        // 위에서 offset만큼 떨어진 위치로
         setTimeout(() => {
-            resultRef.current?.scrollIntoView({ behavior: 'smooth' });
+            const offset = 40;
+            if (resultRef.current) {
+                const top =
+                    resultRef.current.getBoundingClientRect().top +
+                    window.scrollY -
+                    offset;
+                window.scrollTo({ top, behavior: 'smooth' });
+            }
+            // resultRef.current?.scrollIntoView({ behavior: 'smooth' });
         }, 100);
     };
 
