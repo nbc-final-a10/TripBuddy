@@ -11,6 +11,24 @@ export async function updateSession(request: NextRequest) {
     const funnelParam = request.nextUrl.searchParams.get('funnel');
     if (funnelParam) requestHeaders.set('x-funnel', funnelParam);
 
+    // 튜토리얼 페이지 체크를 위한 쿠키 확인
+    const hasVisitedTutorial = request.cookies.get('hasVisitedTutorial');
+
+    // 튜토리얼 페이지로 리디렉션
+    if (
+        !hasVisitedTutorial &&
+        !request.nextUrl.pathname.startsWith('/tutorial')
+    ) {
+        const url = request.nextUrl.clone();
+        url.pathname = '/tutorial';
+        const response = NextResponse.redirect(url);
+        response.cookies.set('hasVisitedTutorial', 'true', {
+            path: '/',
+            maxAge: 60 * 60 * 24 * 365,
+        });
+        return response;
+    }
+
     let supabaseResponse = NextResponse.next({
         request: {
             headers: requestHeaders,
