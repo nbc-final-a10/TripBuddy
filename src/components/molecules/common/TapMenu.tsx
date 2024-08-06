@@ -19,6 +19,7 @@ const TapMenu: React.FC = () => {
         pathname === '/recover' ||
         pathname === '/tutorial';
 
+    // 아래 svg 들 svgr 로 추후 수정 요망
     return (
         <div
             className={clsx(
@@ -28,7 +29,10 @@ const TapMenu: React.FC = () => {
         >
             <TapMenuButton iconName="Home" href="/" />
             <TapMenuButton iconName="Trip" href="/trips" />
-            <TapMenuButton iconName="Chat" href="/chat" />
+            <TapMenuButton
+                iconName="Chat"
+                href={buddy_id ? `/chat` : '/login'}
+            />
             <TapMenuButton
                 iconName="Mypage"
                 href={buddy_id ? `/profile/${buddy_id}` : '/login'}

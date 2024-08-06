@@ -96,7 +96,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
                         )}
                         <h3
                             className={clsx(
-                                'text-lg font-bold leading-none',
+                                'text-lg font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap',
                                 mode === 'list' && 'text-black text-xl',
                                 mode === 'card' && 'text-gray-600',
                             )}

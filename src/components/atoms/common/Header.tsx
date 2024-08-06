@@ -20,11 +20,8 @@ export default function Header() {
                 <Link href="/trips">여정</Link>
                 <Link href="/chat">채팅</Link>
             </div>
-            <div className="flex gap-12 items-center font-bold">
-                <Link href="/login">LOGIN</Link>
-                <Link href="/signup">JOIN</Link>
-                <HeaderMyPageLink />
-            </div>
+
+            <HeaderMyPageLink />
         </header>
     );
 }
