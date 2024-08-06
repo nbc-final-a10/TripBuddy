@@ -3,15 +3,15 @@ import SearchPageTitle from './SearchPageTitle';
 import { Tables } from '@/types/supabase';
 import HomePageTrips from '../homepage/HomePageTrips';
 import useTapScroll from '@/hooks/useTapScroll';
-import { Trip } from '@/types/Trips.types';
+import { Trip, TripWithContract } from '@/types/Trips.types';
 import Image from 'next/image';
 import MascotImage from '@/components/atoms/common/MascotImage';
 
 // type Trip = Tables<'trips'>;
 
 type SearchResultProps = {
-    items: Trip[];
-    allTrips: Trip[];
+    items: TripWithContract[];
+    allTrips: TripWithContract[];
     visibleFirstItems: number;
     visibleSecondItems: number;
     loadMoreFirstItems: () => void;
