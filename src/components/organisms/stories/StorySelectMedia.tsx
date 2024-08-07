@@ -24,11 +24,11 @@ const StorySelectMedia: React.FC<StorySelectMediaProps> = ({
     return (
         <section
             className={clsx(
-                'relative flex flex-col gap-4 w-full h-[calc(100dvh-57px)] max-h-dvh overflow-hidden aspect-auto bg-gray-600',
+                'relative flex flex-col gap-4 w-full h-[calc(100dvh-57px)] max-h-dvh overflow-hidden aspect-auto',
                 !isLocked && 'hidden',
             )}
         >
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black/80 rounded-lg z-10"></div>
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black/80 z-10"></div>
 
             <form
                 className="z-10 w-full flex justify-center items-center h-[calc(100dvh-57px)] top-0 left-0"

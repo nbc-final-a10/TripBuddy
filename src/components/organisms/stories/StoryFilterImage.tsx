@@ -24,7 +24,7 @@ const StoryFilterImage: React.FC<StoryFilterImageProps> = ({
     const { isLocked, setLock } = useLockBodyScroll();
     const filterRef = useRef<HTMLDivElement>(null);
 
-    const { createMouseDownHandler } = useTapScroll();
+    useTapScroll({ refs: [filterRef] });
 
     useEffect(() => {
         setLock(true);
@@ -75,7 +75,6 @@ const StoryFilterImage: React.FC<StoryFilterImageProps> = ({
             <div
                 className="relative flex flex-row bottom-0 overflow-x-scroll scrollbar-hidden gap-2 px-3"
                 ref={filterRef}
-                onMouseDown={createMouseDownHandler(filterRef)}
             >
                 {filterImage.map(filter => (
                     <button

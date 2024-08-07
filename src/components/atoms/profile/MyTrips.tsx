@@ -24,7 +24,9 @@ export default function MyTrips({ id }: BuddyProfileProps) {
     const createdTripsRef = useRef<HTMLDivElement>(null);
     const participatingTripsRef = useRef<HTMLDivElement>(null);
 
-    const { createMouseDownHandler } = useTapScroll();
+    useTapScroll({
+        refs: [createdTripsRef, participatingTripsRef],
+    });
 
     useEffect(() => {
         const fetchTrips = async () => {
@@ -56,7 +58,6 @@ export default function MyTrips({ id }: BuddyProfileProps) {
                     <div
                         className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
                         ref={createdTripsRef}
-                        onMouseDown={createMouseDownHandler(createdTripsRef)}
                     >
                         {trips.created.map(trip => (
                             <TripCard
@@ -81,7 +82,6 @@ export default function MyTrips({ id }: BuddyProfileProps) {
                 <div
                     className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
                     ref={participatingTripsRef}
-                    onMouseDown={createMouseDownHandler(participatingTripsRef)}
                 >
                     {trips.participated.length > 0 ? (
                         trips.participated.map((contract, index) => {
