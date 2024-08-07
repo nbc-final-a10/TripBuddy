@@ -24,7 +24,7 @@ const WriteTrip: React.FC<WriteTripProps> = ({
     handleContentChange,
     handleImageChange,
 }) => {
-    const isMini = window.innerHeight < 629;
+    const isMini = window.innerHeight < 659;
     return (
         <div className="relative px-2">
             <header className="mb-5">
