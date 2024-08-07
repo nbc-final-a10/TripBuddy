@@ -27,9 +27,9 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
                 }
 
                 setTripData(data);
-                console.log(data);
+                // console.log(data);
             } catch (error) {
-                console.log(error);
+                // console.log(error);
             }
         };
         fetchTripData();

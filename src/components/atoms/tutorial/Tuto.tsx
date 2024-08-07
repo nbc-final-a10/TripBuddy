@@ -112,9 +112,9 @@ const Tuto: React.FC<TutoProps> = ({ step }) => {
     const [isImageLoaded, setIsImageLoaded] = useState(false);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-[75dvh] bg-white xl:p-4">
+        <div className="flex flex-col items-center justify-center min-h-[75dvh] bg-white xl:p-4 xl:min-h-full">
             {!isImageLoaded && <DefaultLoader />}
-            <h1 className="text-center font-bold text-2xl md:text-3xl mt-4 xl:mt-12 xl:mb-2">
+            <h1 className="text-center font-bold text-2xl md:text-3xl mt-4 xl:mt-2 xl:mb-2">
                 {title}
             </h1>
             <p className="text-center text-lg md:text-xl text-gray-600 mb-4 xl:mb-8">

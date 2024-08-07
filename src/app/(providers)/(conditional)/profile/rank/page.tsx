@@ -32,7 +32,7 @@ const RankPage: React.FC = () => {
                     '/api/buddyProfile/buddiesRecommendationList',
                 );
                 const data = await response.json();
-                console.log(data);
+                // console.log(data);
                 setBuddies(data.buddies);
                 setLoading(false);
             } catch (error) {

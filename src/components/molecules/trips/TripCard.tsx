@@ -31,7 +31,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
 
         try {
             const result = await createContract(trip.trip_id, buddy.buddy_id);
-            console.log('contract 생성:', result);
+            // console.log('contract 생성:', result);
             showAlert(
                 'success',
                 '버디장에게 참여 요청이 전달되었습니다. 베타 기간에는 자동으로 참여됩니다.',

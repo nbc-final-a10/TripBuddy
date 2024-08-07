@@ -34,7 +34,7 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
     const { mutateAsync, isPending, error } = useStoryMutation();
 
     const handleSaveButtonClick = async () => {
-        console.log('save', texts);
+        // console.log('save', texts);
 
         if (!buddy) router.push('/login');
         if (!imageFile) return;
@@ -47,7 +47,7 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
         const payload: StoryData = formData;
         const data = await mutateAsync(payload);
 
-        console.log(data);
+        // console.log(data);
         showAlert('success', '스토리 생성이 완료되었습니다.', {
             onConfirm: () => {
                 router.push(

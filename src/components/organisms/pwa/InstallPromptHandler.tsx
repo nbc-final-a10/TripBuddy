@@ -20,7 +20,7 @@ const InstallPromptHandler = () => {
 
     useEffect(() => {
         const handler = (e: Event) => {
-            console.log('beforeinstallprompt event fired');
+            // console.log('beforeinstallprompt event fired');
             e.preventDefault();
             setDeferredPrompt(e);
         };
@@ -46,14 +46,14 @@ const InstallPromptHandler = () => {
     }, [isPwa]);
 
     const handleInstallClick = () => {
-        console.log('버튼 클릭되었음');
+        // console.log('버튼 클릭되었음');
         if (deferredPrompt) {
             (deferredPrompt as any).prompt();
             (deferredPrompt as any).userChoice.then((choiceResult: any) => {
                 if (choiceResult.outcome === 'accepted') {
-                    console.log('User accepted the install prompt');
+                    // console.log('User accepted the install prompt');
                 } else {
-                    console.log('User dismissed the install prompt');
+                    // console.log('User dismissed the install prompt');
                 }
                 setDeferredPrompt(null);
             });
@@ -66,19 +66,19 @@ const InstallPromptHandler = () => {
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js', { type: 'module' }).then(
                 function (registration) {
-                    console.log(
-                        'Service Worker registered with scope:',
-                        registration.scope,
-                    );
+                    // console.log(
+                    //     'Service Worker registered with scope:',
+                    //     registration.scope,
+                    // );
                 },
                 function (error) {
-                    console.log('Service Worker registration failed:', error);
+                    // console.log('Service Worker registration failed:', error);
                 },
             );
         }
 
         const handler = (e: BeforeInstallPromptEvent) => {
-            console.log('beforeinstallprompt 이벤트 발생', e);
+            // console.log('beforeinstallprompt 이벤트 발생', e);
             e.preventDefault();
             setDeferredPrompt(e);
         };
