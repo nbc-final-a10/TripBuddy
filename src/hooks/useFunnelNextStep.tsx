@@ -39,7 +39,7 @@ const useNextButton = ({
         className: string;
         onClick?: () => void;
         disabled?: boolean;
-    }) => (
+    } & React.ButtonHTMLAttributes<HTMLButtonElement>) => (
         <button
             onClick={async e => {
                 e.preventDefault();
