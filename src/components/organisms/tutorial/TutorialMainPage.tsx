@@ -42,23 +42,23 @@ const TutorialMainPage: React.FC = () => {
     };
 
     return (
-        <div className="relative flex flex-col items-center h-dvh overflow-hidden bg-white">
+        <div className="relative flex flex-col items-center h-dvh overflow-hidden bg-white xl:h-[calc(100dvh-100px)]">
             {step < 4 ? (
                 <button
                     onClick={handleSkip}
-                    className="relative w-full text-right text-base py-1 px-1 rounded mb-4"
+                    className="relative w-full text-right text-base py-1 px-1 rounded mb-4 xl:mb-0"
                 >
                     건너뛰기
                 </button>
             ) : (
-                <button className="relative w-full text-right text-base p-2 rounded mb-4"></button>
+                <button className="relative w-full text-right text-base p-4 rounded mb-4"></button>
             )}
 
-            <section className="flex flex-col items-center justify-center w-full">
+            <section className="flex flex-col items-center justify-center w-full xl:h-[100%-64px]">
                 <Tuto step={step + 1} />
             </section>
 
-            <div className="mb-5 xl:mb-12">
+            <div className="mb-5 xl:mb-5">
                 <ProgressIndicator className="pt-5" step={step} counts={5} />
             </div>
             <div className="w-full flex justify-center">
