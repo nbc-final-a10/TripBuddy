@@ -9,7 +9,7 @@ type Content = {
     src: string;
     alt: string;
     title: React.ReactNode;
-    description: React.ReactNode; // description을 ReactNode로 변경하여 JSX 요소를 허용
+    description: React.ReactNode;
 };
 
 type TutoProps = {
