@@ -29,7 +29,7 @@ type Trip = Tables<'trips'>;
 const updateQueryParams = (params: Record<string, string | number | null>) => {
     const url = new URL(window.location.href);
     Object.keys(params).forEach(key => {
-        if (params[key] === null) {
+        if (params[key] === null || params[key] === '') {
             // url 쿼리 파라미터에서 해당 키 삭제
             url.searchParams.delete(key);
         } else {
@@ -37,7 +37,7 @@ const updateQueryParams = (params: Record<string, string | number | null>) => {
         }
     });
     // 브라우저 히스토리에 새로운 url 추가
-    window.history.pushState({}, ', url.toString()');
+    window.history.pushState({}, '', url.toString());
 };
 
 export default function SearchPage() {
@@ -100,7 +100,7 @@ export default function SearchPage() {
             setThirdLevelLocation(location);
             console.log('위치 선택 데이터 왔나: ', location);
         } else {
-            console.log('데이터 안옴');
+            console.log('파리미터 안옴');
         }
     }, [searchParams, setThirdLevelLocation]);
 
@@ -319,8 +319,8 @@ export default function SearchPage() {
             location: thirdLevelLocation,
             startDate: startDateTimestamp,
             endDate: endDateTimestamp,
-            themes: selectedThemes.join(','),
-            buddyThemes: selectedBuddyThemes.join(','),
+            themes: selectedThemes.join(', '),
+            buddyThemes: selectedBuddyThemes.join(', '),
         });
     }, [
         searchInput,
@@ -369,14 +369,18 @@ export default function SearchPage() {
                     onChange={e => setSearchInput(e.target.value)}
                 />
 
-                <LocationSearchButton
-                    onClick={() => {}}
-                    location={thirdLevelLocation}
-                />
-
                 <DateSearchButton
                     defaultStartDate={formattedStartDate}
                     defaultEndDate={formattedEndDate}
+                    setDateChange={(start, end) => {
+                        setStartDateTimestamp(start);
+                        setEndDateTimestamp(end);
+                    }}
+                />
+
+                <LocationSearchButton
+                    onClick={() => {}}
+                    location={thirdLevelLocation}
                 />
 
                 <button
@@ -456,7 +460,7 @@ export default function SearchPage() {
             </div>
 
             <button
-                className="flex justify-center items-center mx-auto w-full px-28 h-12 rounded-2xl bg-main-color font-semibold text-white text-sm m-3 mb-5 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:w-[348px] xl:mt-8"
+                className="flex justify-center items-center mx-auto w-full px-28 h-12 rounded-2xl bg-main-color font-semibold text-white text-xl m-3 mb-5 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:w-[348px] xl:mt-8 whitespace-nowrap"
                 onClick={handleFiltersReset}
             >
                 검색 옵션 리셋하기
@@ -464,7 +468,7 @@ export default function SearchPage() {
 
             <button
                 id="result-section"
-                className="flex justify-center items-center mx-auto w-full px-28 h-12 rounded-2xl bg-main-color font-semibold text-white text-sm m-3 mb-10 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:w-[348px] xl:mt-8"
+                className="flex justify-center items-center mx-auto w-full px-28 h-12 rounded-2xl bg-main-color font-semibold text-white text-xl m-3 mb-10 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:w-[348px] xl:mt-8 whitespace-nowrap"
                 onClick={() => {
                     handleShowResult();
                     handleThemesButtonClick();

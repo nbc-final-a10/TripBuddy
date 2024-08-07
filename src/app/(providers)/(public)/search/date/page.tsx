@@ -6,8 +6,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function DateSearchPage() {
-    const [startDateTimestamp, setStartDateTimestamp] = useState<string>('');
-    const [endDateTimestamp, setEndDateTimestamp] = useState<string>('');
+    const [startDate, setStartDate] = useState<string>('');
+    const [endDate, setEndDate] = useState<string>('');
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -16,29 +16,24 @@ export default function DateSearchPage() {
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
 
-    const formatDate = (date: Date) => {
-        const week = ['일', '월', '화', '수', '목', '금', '토'];
-        const dayOfWeek = week[today.getDay()];
-        return `${today.getFullYear().toString().slice(-2)}.${(today.getMonth() + 1).toString().padStart(2, '0')}.${today.getDate().toString().padStart(2, '0')}(${dayOfWeek})`;
-    };
-
-    const formattedStartDate = startDateTimestamp
-        ? formatDate(new Date(startDateTimestamp))
-        : formatDate(today);
-    const formattedEndDate = endDateTimestamp
-        ? formatDate(new Date(endDateTimestamp))
-        : formatDate(tomorrow);
+    useEffect(() => {
+        const startDateParam = searchParams.get('startDate') || '';
+        const endDateParam = searchParams.get('endDate') || '';
+        const locationParam = searchParams.get('location') || '';
+        setStartDate(startDateParam);
+        setEndDate(endDateParam);
+    }, [searchParams]);
 
     const handleDateChange = (start: string, end: string) => {
-        setStartDateTimestamp(start);
-        setEndDateTimestamp(end);
+        setStartDate(start);
+        setEndDate(end);
     };
 
     const handleSelectClick = () => {
-        if (startDateTimestamp && endDateTimestamp) {
+        if (startDate && endDate) {
             const query = new URLSearchParams();
-            query.set('startDate', startDateTimestamp);
-            query.set('endDate', endDateTimestamp);
+            query.set('startDate', startDate);
+            query.set('endDate', endDate);
             router.push(`/search?${query.toString()}`);
         }
     };

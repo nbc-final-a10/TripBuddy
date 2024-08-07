@@ -16,7 +16,17 @@ const LocationSearchButton: React.FC<LocationSearchMainPageProps> = ({
     const router = useRouter();
 
     const handleClick = () => {
-        router.push('/search/location');
+        // 현재 URL 쿼리 파라미터를 가져옴
+        const currentQuery = new URLSearchParams(window.location.search);
+        if (location) {
+            // 현재 선택 장소를 쿼리 파라미터에 추가
+            currentQuery.set('location', location);
+        } else {
+            currentQuery.delete('location');
+        }
+
+        // 페이지를 이동할 때 쿼리 파라미터를 포함한다
+        router.push(`/search/location?${currentQuery.toString()}`);
     };
 
     return (
