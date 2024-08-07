@@ -10,6 +10,7 @@ import { StoryData, StoryFilter, StoryOverlay } from '@/types/Story.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/auth';
+import DefaultLoader from '@/components/atoms/common/defaultLoader';
 
 type StoryWriteTextProps = {
     imageFile: File;
@@ -58,11 +59,7 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
 
     return (
         <section className="relative flex flex-col gap-4 w-full h-[calc(100dvh-57px-56px)] max-h-dvh overflow-hidden aspect-auto bg-gray-600">
-            {isPending && (
-                <div className="z-10 text-white font-bold">
-                    스토리 생성중...
-                </div>
-            )}
+            {isPending && <DefaultLoader />}
             {error && (
                 <div className="z-10 text-white font-bold">
                     스토리 생성중 오류가 발생했습니다.

@@ -1,11 +1,12 @@
 'use client';
 
 import DefaultLoader from '@/components/atoms/common/defaultLoader';
+import useTapScroll from '@/hooks/useTapScroll';
 import { StoryOverlay, StoryWithBuddies } from '@/types/Story.types';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { MouseEvent, useState } from 'react';
+import React, { MouseEvent, useRef, useState } from 'react';
 
 type StoryDetailProps = {
     nickname: string;
@@ -15,12 +16,13 @@ type StoryDetailProps = {
 
 const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
     const router = useRouter();
-    // const [selectedId, setSelectedId] = useState<string>(id);
+    const scrollRef = useRef<HTMLDivElement>(null);
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [selectedStory, setSelectedStory] = useState<StoryWithBuddies>(
         stories[0],
     );
+    useTapScroll({ refs: [scrollRef] });
 
     const handleNextBefore = (e: MouseEvent<HTMLDivElement>) => {
         const next = e.currentTarget.dataset.next;
@@ -70,10 +72,13 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
                     ></div>
                 </div>
 
-                <div className="absolute top-1 left-1/2 -translate-x-1/2 flex flex-row gap-2 z-30">
+                <div
+                    className="absolute w-full top-1 left-1/2 -translate-x-1/2 flex flex-row gap-1 z-30 overflow-x-scroll scrollbar-hidden"
+                    ref={scrollRef}
+                >
                     {stories.map((story, idx) => (
                         <button
-                            className="w-10 h-2 bg-gray-200 cursor-pointer"
+                            className="relative min-w-10 h-2 bg-gray-200 cursor-pointer rounded-lg"
                             key={story.story_id}
                             onClick={() => handleSelectStory(story, idx)}
                         ></button>

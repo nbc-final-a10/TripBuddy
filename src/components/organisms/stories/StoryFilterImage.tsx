@@ -30,13 +30,13 @@ const StoryFilterImage: React.FC<StoryFilterImageProps> = ({
         <section className="relative flex flex-col w-full h-[calc(100dvh-57px-56px)] max-h-dvh overflow-hidden aspect-auto bg-gradient-to-b from-transparent to-black/20">
             <div className="absolute flex justify-end w-full top-0 right-0 z-10 gap-2">
                 <button
-                    className=" bg-main-color text-white px-2 pt-0.5 pb-1.5 rounded-md leading-none shadow-md"
+                    className=" bg-main-color text-white px-2 py-1 rounded-md leading-none shadow-md"
                     onClick={() => handleStep(0)}
                 >
                     이전
                 </button>
                 <button
-                    className=" bg-main-color text-white px-2 pt-0.5 pb-1.5 rounded-md top-0 leading-none shadow-md"
+                    className=" bg-main-color text-white px-2 py-1 rounded-md top-0 leading-none shadow-md"
                     onClick={() => handleStep(2)}
                 >
                     다음

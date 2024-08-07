@@ -1,6 +1,7 @@
 export type AlertProps = {
     onConfirm?: () => void;
     isConfirm?: boolean;
+    onCancel?: () => void;
 };
 
 export type ModalOptions = {
