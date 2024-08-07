@@ -1,9 +1,9 @@
-import { Trip } from '@/types/Trips.types';
+import { Trip, TripWithContract } from '@/types/Trips.types';
 import React from 'react';
 import TripCard from '../trips/TripCard';
 
 type HomePageTripsProps = {
-    trips: Trip[];
+    trips: TripWithContract[];
 };
 
 const HomePageTrips: React.FC<HomePageTripsProps> = ({ trips }) => {

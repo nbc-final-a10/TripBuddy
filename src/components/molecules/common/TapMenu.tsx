@@ -13,7 +13,6 @@ const TapMenu: React.FC = () => {
 
     const hidden =
         pathname.startsWith('/chat/') ||
-        pathname === '/write/story' ||
         pathname === '/login' ||
         pathname === '/signup' ||
         pathname === '/recover' ||

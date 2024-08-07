@@ -16,7 +16,7 @@ const HomePageContainer = () => {
     const storiesRef = useRef<HTMLDivElement>(null);
     const tripsRef = useRef<HTMLDivElement>(null);
 
-    const { createMouseDownHandler } = useTapScroll();
+    useTapScroll({ refs: [buddiesRef, storiesRef, tripsRef] });
 
     const { buddy } = useAuth();
 
@@ -42,7 +42,6 @@ const HomePageContainer = () => {
                 <div
                     className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
                     ref={buddiesRef}
-                    onMouseDown={createMouseDownHandler(buddiesRef)}
                 >
                     <HomePageRecommendBuddiesList
                         buddies={buddyTripStory.buddies}
@@ -60,7 +59,6 @@ const HomePageContainer = () => {
                 <div
                     className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
                     ref={storiesRef}
-                    onMouseDown={createMouseDownHandler(storiesRef)}
                 >
                     <HomePageStories
                         stories={buddyTripStory.stories}
@@ -79,7 +77,6 @@ const HomePageContainer = () => {
                 <div
                     className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
                     ref={tripsRef}
-                    onMouseDown={createMouseDownHandler(tripsRef)}
                 >
                     <HomePageTrips trips={buddyTripStory.trips} />
                 </div>

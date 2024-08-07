@@ -6,16 +6,17 @@ import Distance from '../../../../public/svg/Distance.svg';
 import Groups from '../../../../public/svg/Groups.svg';
 import clsx from 'clsx';
 import TripTimeSinceUpload from '@/components/atoms/trips/TripTimeSinceUpload';
-import { Trip } from '@/types/Trips.types';
+import { Trip, TripWithContract } from '@/types/Trips.types';
 import Link from 'next/link';
 import remainDays from '@/utils/common/getRemainDays';
 import Chip from '@/components/atoms/common/Chip';
 import { useAuth } from '@/hooks/auth';
 import { createContract } from '@/utils/contract/createContract';
 import { showAlert } from '@/utils/ui/openCustomAlert';
+import { Contract } from '@/types/Contract.types';
 
 type TripCardProps = {
-    trip: Trip;
+    trip: TripWithContract;
     mode?: 'card' | 'detail' | 'list';
 };
 
@@ -152,7 +153,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
                         {/** 추후 수정 필요 */}
                         <div className="flex gap-2 items-center">
                             <Groups />
-                            <span>{`1/${trip.trip_max_buddies_counts}`}</span>
+                            <span>{`${(trip.contract as Contract[]).length}/${trip.trip_max_buddies_counts}`}</span>
                         </div>
                     </div>
 
@@ -161,7 +162,8 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
                         <div className="flex flex-col gap-1">
                             <div className="flex flex-row">
                                 <p className="text-sm leading-none">
-                                    {`신청 1`}
+                                    {`신청`}
+                                    <span className="text-gray-5000">{`${(trip.contract as Contract[]).length}`}</span>
                                     <span className="text-gray-500">{`/${trip.trip_max_buddies_counts}`}</span>
                                 </p>
                             </div>

@@ -5,9 +5,12 @@ import { useAccordion, Accordion } from '@/hooks/useAccordion';
 import { FaCalendarCheck, FaPen } from 'react-icons/fa';
 import TripCard from '@/components/molecules/trips/TripCard';
 import fetchWrapper from '@/utils/api/fetchWrapper';
-import { Trip } from '@/types/Trips.types';
+import { TripWithContract } from '@/types/Trips.types';
 import useTapScroll from '@/hooks/useTapScroll';
-import { ContractWithTrips } from '@/types/Contract.types';
+import {
+    ContractWithTrips,
+    ContractWithTripsWithContract,
+} from '@/types/Contract.types';
 
 type MyTripsProps = {
     id: string;
@@ -17,20 +20,22 @@ export default function MyTrips({ id }: MyTripsProps) {
     const participatingAccordion = useAccordion();
     const createdAccordion = useAccordion();
     const [trips, setTrips] = useState<{
-        created: Trip[];
+        created: TripWithContract[];
         participated: ContractWithTrips[];
     }>({ created: [], participated: [] });
 
     const createdTripsRef = useRef<HTMLDivElement>(null);
     const participatingTripsRef = useRef<HTMLDivElement>(null);
 
-    const { createMouseDownHandler } = useTapScroll();
+    useTapScroll({
+        refs: [createdTripsRef, participatingTripsRef],
+    });
 
     useEffect(() => {
         const fetchTrips = async () => {
             try {
                 const data = await fetchWrapper<{
-                    created: Trip[];
+                    created: TripWithContract[];
                     participated: ContractWithTrips[];
                 }>(`/api/trips/my/${id}`, {
                     method: 'GET',
@@ -56,7 +61,6 @@ export default function MyTrips({ id }: MyTripsProps) {
                     <div
                         className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
                         ref={createdTripsRef}
-                        onMouseDown={createMouseDownHandler(createdTripsRef)}
                     >
                         {trips.created.map(trip => (
                             <TripCard
@@ -81,16 +85,23 @@ export default function MyTrips({ id }: MyTripsProps) {
                 <div
                     className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
                     ref={participatingTripsRef}
-                    onMouseDown={createMouseDownHandler(participatingTripsRef)}
                 >
                     {trips.participated.length > 0 ? (
-                        trips.participated.map(contract => (
-                            <TripCard
-                                key={contract.trips.trip_id}
-                                trip={contract.trips}
-                                mode="card"
-                            />
-                        ))
+                        trips.participated.map((contract, index) => {
+                            const contractWithTrips =
+                                contract as ContractWithTripsWithContract;
+                            contractWithTrips.trips.contract =
+                                trips.participated;
+
+                            console.log(contractWithTrips);
+                            return (
+                                <TripCard
+                                    key={contract.trips.trip_id}
+                                    trip={contractWithTrips.trips}
+                                    mode="card"
+                                />
+                            );
+                        })
                     ) : (
                         <div className="text-center text-gray-500">
                             참여한 여정이 없습니다.

@@ -11,6 +11,7 @@ import usePreferTheme from '@/hooks/usePreferTheme';
 // import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
 import useSelectRegion from '@/hooks/useSelectRegion';
 import { Tables } from '@/types/supabase';
+import { TripWithContract } from '@/types/Trips.types';
 import supabase from '@/utils/supabase/client';
 import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
@@ -19,8 +20,8 @@ type Trip = Tables<'trips'>;
 
 const SearchPage: React.FC = () => {
     const [showResult, setShowResult] = useState(false);
-    const [resultItems, setResultItems] = useState<Trip[]>([]);
-    const [allItems, setAllItems] = useState<Trip[]>([]);
+    const [resultItems, setResultItems] = useState<TripWithContract[]>([]);
+    const [allItems, setAllItems] = useState<TripWithContract[]>([]);
     const [visibleFirstItems, setVisibleFirstItems] = useState(8);
     const [visibleSecondItems, setVisibleSecondItems] = useState(6);
     const resultRef = useRef<HTMLDivElement>(null);
@@ -73,7 +74,11 @@ const SearchPage: React.FC = () => {
 
     const handleShowResult = async () => {
         // 데이터 가져와서 상태 업데이트
-        const { data, error } = await supabase.from('trips').select('*');
+        const { data, error } = await supabase
+            .from(
+                'trips, contract:contract!contract_contract_trip_id_foreign (*)',
+            )
+            .select('*');
         if (error) {
             console.error('Error fetching trips:', error.message);
             return;
@@ -171,7 +176,7 @@ const SearchPage: React.FC = () => {
         //     filteredItems.length > 0 ? filteredItems : (data as Trip[]),
         // );
         // setShowResult(true);
-        setResultItems(filteredItems);
+        setResultItems(filteredItems as TripWithContract[]);
 
         if (
             !searchInput &&
@@ -188,7 +193,7 @@ const SearchPage: React.FC = () => {
             setVisibleFirstItems(data.length);
         }
 
-        setAllItems(data as Trip[]);
+        setAllItems(data as TripWithContract[]);
         setShowResult(true);
 
         // 속도 지연

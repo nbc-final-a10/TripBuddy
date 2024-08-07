@@ -1,5 +1,5 @@
-import { Contract, ContractWithTrips } from '@/types/Contract.types';
-import { Trip } from '@/types/Trips.types';
+import { ContractWithTrips } from '@/types/Contract.types';
+import { TripWithContract } from '@/types/Trips.types';
 import { createClient } from '@/utils/supabase/server';
 import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
@@ -16,10 +16,13 @@ export async function GET(
         data: trip,
         error: tripError,
     }: {
-        data: Trip[] | null;
+        data: TripWithContract[] | null;
 
         error: PostgrestError | null;
-    } = await supabase.from('trips').select('*').eq('trip_master_id', id);
+    } = await supabase
+        .from('trips')
+        .select('*, contract:contract!contract_contract_trip_id_foreign (*)')
+        .eq('trip_master_id', id);
 
     if (tripError) {
         console.error(tripError);

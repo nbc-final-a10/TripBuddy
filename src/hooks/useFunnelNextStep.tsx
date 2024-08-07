@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 type UseNextButtonProps = {
     initialStep?: number;
@@ -33,11 +33,11 @@ const useNextButton = ({
     const NextButton = ({
         className,
         onClick,
-        disabled = false,
+        ...props
     }: {
         className: string;
         onClick?: () => void;
-        disabled?: boolean;
+        disabled = false,
     }) => (
         <button
             onClick={async e => {
@@ -46,6 +46,7 @@ const useNextButton = ({
                 if (onClick) onClick();
             }}
             className={className}
+            {...props}
             disabled={disabled}
         >
             {buttonText}
