@@ -1,6 +1,7 @@
 // buddies / follow 테이블 관련
 export const QUERY_KEY_BUDDY = 'buddy';
 export const QUERY_KEY_BUDDY_RECOMMENDATION = 'buddyRecommendation';
+export const QUERY_KEY_BUDDY_PROFILE = 'buddyProfile';
 
 // trips / tripbookmarks 테이블 관련
 export const QUERY_KEY_TRIP = 'trip';

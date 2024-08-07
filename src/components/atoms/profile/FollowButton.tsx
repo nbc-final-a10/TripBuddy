@@ -3,12 +3,16 @@
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useAuth } from '@/hooks/auth';
 import React, { useEffect, useState } from 'react';
+import { QUERY_KEY_BUDDY_PROFILE } from '@/constants/query.constants';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function FollowButton() {
     const { buddy } = useAuth();
     const followingId = window.location.pathname.split('/').pop();
     const [isFollowing, setIsFollowing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         const checkFollowStatus = async () => {
@@ -31,7 +35,7 @@ export default function FollowButton() {
         };
 
         checkFollowStatus();
-    }, [buddy, followingId]);
+    }, [buddy, followingId, queryClient]);
 
     const handleFollow = async () => {
         if (isLoading) return;
@@ -60,6 +64,9 @@ export default function FollowButton() {
 
             showAlert('success', '팔로우 성공했습니다.');
             setIsFollowing(true);
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEY_BUDDY_PROFILE, followingId],
+            });
         } finally {
             setIsLoading(false);
         }
@@ -83,11 +90,13 @@ export default function FollowButton() {
                 return;
             }
 
-            const data = await response.json();
-            console.log('unfollow data', data);
+            // const data = await response.json();
 
             showAlert('success', '팔로우가 취소되었습니다.');
             setIsFollowing(false);
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEY_BUDDY_PROFILE, followingId],
+            });
         } finally {
             setIsLoading(false);
         }
