@@ -33,12 +33,13 @@ const useNextButton = ({
     const NextButton = ({
         className,
         onClick,
+        disabled = false,
         ...props
     }: {
         className: string;
         onClick?: () => void;
-        disabled = false,
-    }) => (
+        disabled?: boolean;
+    } & React.ButtonHTMLAttributes<HTMLButtonElement>) => (
         <button
             onClick={async e => {
                 e.preventDefault();
@@ -46,8 +47,8 @@ const useNextButton = ({
                 if (onClick) onClick();
             }}
             className={className}
-            {...props}
             disabled={disabled}
+            {...props}
         >
             {buttonText}
         </button>
