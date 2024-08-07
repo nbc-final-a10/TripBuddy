@@ -23,7 +23,7 @@ const ChatListItem: React.FC<ChatListItemProps> = ({
         return contract_buddies_profiles.map((profilePic, index) => (
             <div
                 key={index}
-                className={`rounded-full w-[23px] h-[23px] bg-[#d9d9d9] overflow-hidden flex items-center justify-center border-1 border-white ${index === 1 || 3 ? 'ml-[-5px]' : ''} ${index === 3 || 4 ? 'mt-[-5px]' : ''}`}
+                className={`rounded-full w-[23px] h-[23px] bg-[#d9d9d9] overflow-hidden flex justify-center border-1 border-white ${index === 1 || 3 ? 'ml-[-5px]' : ''} ${index === 3 || 4 ? 'mt-[-5px]' : ''}`}
             >
                 {profilePic && (
                     <Image
@@ -40,7 +40,7 @@ const ChatListItem: React.FC<ChatListItemProps> = ({
 
     return (
         <Link href={`/chat/${contract_trip_id}`}>
-            <div className="flex justify-between items-center p-2 border-b border-grayscale-color-50 hover:bg-grayscale-color-200">
+            <div className="flex justify-between items-center p-2 border-b border-grayscale-color-50 hover:bg-grayscale-color-70">
                 <div className="w-[45px] flex items-center justify-center flex-wrap">
                     {renderProfilePictures()}
                 </div>

@@ -129,8 +129,8 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                 return (
                     <div key={message.message_id}>
                         {showDate && (
-                            <div className="w-full text-[12px] flex justify-center my-2">
-                                <p className="w-fit bg-[#516FE6] text-white rounded-[4px] px-[8px] py-[2px]">
+                            <div className="w-full flex justify-center my-2">
+                                <p className="w-fit text-[12px] font-medium text-white bg-secondary-color-300 rounded-[4px] px-[8px] py-[2px]">
                                     {formatDate(message.message_created_at)}
                                 </p>
                             </div>
@@ -139,13 +139,13 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                             className={`py-2 flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}
                         >
                             {!isCurrentUser && (
-                                <div className="w-[40px] h-[40px] text-xs rounded-full overflow-hidden flex justify-center items-center">
+                                <div className="bg-grayscale-color-300 w-[40px] h-[40px] rounded-full overflow-hidden flex justify-center items-center">
                                     <Image
                                         src={message.buddy?.buddy_profile_pic}
                                         alt="Profile Image"
                                         width={40}
                                         height={40}
-                                        className="rounded-full object-cover"
+                                        className="object-cover"
                                     />
                                 </div>
                             )}
@@ -154,22 +154,22 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                             >
                                 <div>
                                     {!isCurrentUser && (
-                                        <p className="text-xs font-bold">
+                                        <p className="text-[14px] font-bold text-grayscale-color-700">
                                             {message.buddy?.buddy_nickname}
                                         </p>
                                     )}
                                     <p
-                                        className={`inline-block text-xs p-4 rounded-2xl ${
+                                        className={`text-[12px] font-semibold text-grayscale-color-800 inline-block p-4 rounded-2xl ${
                                             isCurrentUser
-                                                ? 'bg-main-color text-black rounded-tr-none'
-                                                : 'bg-gray-200 text-black rounded-tl-none'
+                                                ? 'bg-primary-color-300 rounded-tr-none'
+                                                : 'bg-grayscale-color-85 rounded-tl-none'
                                         }`}
                                     >
                                         {message.message_content}
                                     </p>
                                 </div>
 
-                                <span className="text-xs text-gray-500 mt-1 px-1">
+                                <span className="mt-1 px-1 text-[12px] font-medium text-grayscale-color-700">
                                     {new Date(
                                         message.message_created_at,
                                     ).toLocaleTimeString('en-GB', {
