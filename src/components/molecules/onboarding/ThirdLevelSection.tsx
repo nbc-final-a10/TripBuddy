@@ -23,7 +23,7 @@ const ThirdLevelSection = ({
     return (
         <section
             className={twMerge(
-                'relative h-[76%] overflow-y-auto xl:h-[70%]',
+                'relative h-[70%] overflow-y-auto xl:h-[70%]',
                 pathname === '/search' && 'h-[300px]',
                 pathname === '/write' && 'h-[40vh]',
             )}
@@ -32,7 +32,7 @@ const ThirdLevelSection = ({
                 <div
                     key={loc.name}
                     className={twMerge(
-                        'flex ml-2 mr-2 border-b cursor-pointer hover:bg-main-color items-center',
+                        'flex mx-2 border-b cursor-pointer hover:bg-main-color items-center',
                         thirdLevelLocation === loc.name && 'bg-main-color',
                     )}
                     onClick={() => setThirdLevelLocation(loc.name)}

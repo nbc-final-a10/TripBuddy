@@ -13,12 +13,12 @@ function useSelectSex() {
 
     const SelectWantedSexButton = () => {
         return (
-            <div className="flex justify-center items-center mt-4">
+            <div className="flex justify-center items-center mt-2">
                 {values.map((value, index) => (
                     <button
                         key={index}
                         onClick={() => setWantedSex(value)}
-                        className={`text-lg ${wantedSex === value ? 'bg-main-color text-white' : 'bg-gray-100'} w-full mx-2 px-4 py-1 xl:py-2 rounded-full hover:bg-gray-200`}
+                        className={`text-lg ${wantedSex === value ? 'bg-main-color text-white' : 'bg-gray-100'} w-full mx-2 px-4 py-1 xl:py-2 rounded-full`}
                     >
                         {value}
                     </button>
