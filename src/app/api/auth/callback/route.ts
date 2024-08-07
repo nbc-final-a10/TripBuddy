@@ -16,19 +16,30 @@ export async function GET(request: Request) {
             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
             {
                 cookies: {
-                    get(name: string) {
-                        return cookieStore.get(name)?.value;
+                    getAll() {
+                        return cookieStore.getAll();
                     },
-                    set(name: string, value: string, options: CookieOptions) {
-                        cookieStore.set({ name, value, ...options });
+                    setAll(cookiesToSet) {
+                        try {
+                            cookiesToSet.forEach(({ name, value, options }) =>
+                                cookieStore.set(name, value, options),
+                            );
+                        } catch {}
                     },
-                    remove(name: string, options: CookieOptions) {
-                        cookieStore.delete({ name, ...options });
-                    },
+                    // get(name: string) {
+                    //     return cookieStore.get(name)?.value;
+                    // },
+                    // set(name: string, value: string, options: CookieOptions) {
+                    //     cookieStore.set({ name, value, ...options });
+                    // },
+                    // remove(name: string, options: CookieOptions) {
+                    //     cookieStore.delete({ name, ...options });
+                    // },
                 },
             },
         );
         const { error } = await supabase.auth.exchangeCodeForSession(code);
+
         if (!error) {
             return NextResponse.redirect(`${origin}${next}`);
         }

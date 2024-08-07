@@ -18,7 +18,7 @@ type InPutValue =
 type onBoardingValidationType = (value: InPutValue, step: number) => boolean;
 
 export const onBoardingValidation: onBoardingValidationType = (value, step) => {
-    console.log('value =====>', value);
+    // console.log('value =====>', value);
     if (value !== undefined) {
         if (value === 0 || value) {
             if (typeof value === 'string' && step === 0) {
@@ -53,7 +53,7 @@ export const onBoardingValidation: onBoardingValidationType = (value, step) => {
             return false;
         }
         if (Array.isArray(value)) {
-            console.log('value ===>', value);
+            // console.log('value ===>', value);
             if (value.length === 0) {
                 showAlert('caution', '값을 확인해주세요!');
                 return false;

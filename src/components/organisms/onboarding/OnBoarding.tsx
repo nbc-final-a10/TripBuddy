@@ -90,6 +90,10 @@ const OnBoarding: React.FC = () => {
         // step 번호에 따라 유효성 검사 진행
         // 유효성 검사 진행 후 fetch 날리고 다음 단계로 이동
         if (step === 0) {
+            console.log(
+                'nicknameRef.current?.value',
+                nicknameRef.current?.value,
+            );
             const result = onBoardingValidation(
                 nicknameRef.current?.value,
                 step,
@@ -100,6 +104,15 @@ const OnBoarding: React.FC = () => {
         }
         if (step === 2) {
             const jsDate = calenderValue.toDate('UTC'); // 'UTC' 타임존으로 변환
+
+            if (
+                jsDate.toISOString().split('T')[0] ===
+                new Date().toISOString().split('T')[0]
+            ) {
+                showAlert('caution', '달력에서 날짜까지 선택해 주세요.');
+                return setStep(2);
+            }
+
             const isoString = jsDate.toISOString();
             const age = getAgeFromBirthDate(isoString);
 
@@ -171,7 +184,16 @@ const OnBoarding: React.FC = () => {
                         imageFile: file,
                     });
             } else {
-                showAlert('error', '프로필 이미지를 선택해주세요.');
+                showAlert(
+                    'caution',
+                    '프로필 이미지를 선택하지 않았습니다. 유지하시겠습니까?',
+                    {
+                        onConfirm: () => {
+                            setStep(11);
+                        },
+                    },
+                );
+                return setStep(10);
             }
         }
     };
@@ -321,6 +343,7 @@ const OnBoarding: React.FC = () => {
                 </div>
                 <div className="flex justify-center items-center">
                     <NextButton
+                        id="onboarding-next-button"
                         className="text-2xl bg-main-color font-bold py-2 px-4 mt-2 mb-2 rounded-2xl w-[90%] text-white"
                         onClick={handleNextButtonClick}
                     />

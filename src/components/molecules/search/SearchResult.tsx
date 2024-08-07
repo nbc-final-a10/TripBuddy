@@ -3,15 +3,15 @@ import SearchPageTitle from './SearchPageTitle';
 import { Tables } from '@/types/supabase';
 import HomePageTrips from '../homepage/HomePageTrips';
 import useTapScroll from '@/hooks/useTapScroll';
-import { Trip } from '@/types/Trips.types';
+import { Trip, TripWithContract } from '@/types/Trips.types';
 import Image from 'next/image';
 import MascotImage from '@/components/atoms/common/MascotImage';
 
 // type Trip = Tables<'trips'>;
 
 type SearchResultProps = {
-    items: Trip[];
-    allTrips: Trip[];
+    items: TripWithContract[];
+    allTrips: TripWithContract[];
     visibleFirstItems: number;
     visibleSecondItems: number;
     loadMoreFirstItems: () => void;
@@ -29,7 +29,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
     isXL,
 }) => {
     const tripsRef = useRef<HTMLDivElement>(null);
-    const { createMouseDownHandler } = useTapScroll();
+    useTapScroll({ refs: [tripsRef] });
 
     const filteredItems = items.slice(0, visibleFirstItems);
 
@@ -44,8 +44,8 @@ const SearchResult: React.FC<SearchResultProps> = ({
             );
         });
 
-    console.log('filteredItems: ', filteredItems);
-    console.log('sortItems: ', sortItems);
+    // console.log('filteredItems: ', filteredItems);
+    // console.log('sortItems: ', sortItems);
 
     return (
         <>
@@ -71,7 +71,6 @@ const SearchResult: React.FC<SearchResultProps> = ({
                     <div
                         className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
                         ref={tripsRef}
-                        onMouseDown={createMouseDownHandler(tripsRef)}
                     >
                         <HomePageTrips trips={filteredItems} />
                     </div>
@@ -79,7 +78,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
 
                 {visibleFirstItems < filteredItems.length && (
                     <button
-                        className="mt-4 px-4 py-2 bg-main-color text-white rounded-2xl text-sm mx-auto block hidden xl:block"
+                        className="mt-4 px-4 py-2 bg-main-color text-white rounded-2xl text-sm mx-auto hidden xl:block"
                         onClick={loadMoreFirstItems}
                     >
                         더보기

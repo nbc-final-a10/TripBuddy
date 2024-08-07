@@ -37,7 +37,7 @@ export default function useSelectRegion() {
         useState<ThirdLevel[]>([]);
 
     const buddiesRef = useRef<HTMLDivElement>(null);
-    const { createMouseDownHandler } = useTapScroll();
+    useTapScroll({ refs: [buddiesRef] });
 
     useEffect(() => {
         const selectedLocationData =
@@ -88,7 +88,6 @@ export default function useSelectRegion() {
                 <section
                     className="py-3 overflow-x-scroll scrollbar-hidden flex gap-[10px] h-[10%]"
                     ref={buddiesRef}
-                    onMouseDown={createMouseDownHandler(buddiesRef)}
                 >
                     <LocationList
                         locations={secondLevelLocations}

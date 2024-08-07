@@ -25,7 +25,7 @@ function ProfilePage({ params }: ProfilePageProps) {
                     `/api/buddyProfile/buddy?id=${params.id}`,
                 );
                 const data = await response.json();
-                console.log(data);
+                // console.log(data);
                 setClickedBuddy(data.buddies[0]);
                 setLoading(false);
             } catch (error) {

@@ -1,11 +1,16 @@
 import QueryProvider from '@/providers/QueryProvider';
 import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
+import localFont from 'next/font/local';
 import './globals.css';
 import React, { PropsWithChildren } from 'react';
 import { defaultMetaData } from '@/data/defaultMetaData';
 
-const inter = Inter({ subsets: ['latin'] });
+const pretendard = localFont({
+    src: '../font/PretendardVariable.woff2',
+    weight: '45 920',
+    style: 'normal',
+    display: 'swap',
+});
 
 export const viewport: Viewport = {
     themeColor: 'black',
@@ -20,8 +25,8 @@ export const metadata: Metadata = defaultMetaData;
 
 const RootLayout: React.FC<PropsWithChildren> = ({ children }) => {
     return (
-        <html lang="en">
-            <body className={inter.className}>
+        <html lang="ko">
+            <body className={pretendard.className}>
                 <QueryProvider>{children}</QueryProvider>
             </body>
         </html>

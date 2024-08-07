@@ -1,11 +1,12 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 type UseNextButtonProps = {
     initialStep?: number;
     limit: number;
     buttonText: string;
+    disabled?: boolean;
     validateStep?: () => boolean | Promise<boolean>;
 };
 
@@ -13,34 +14,41 @@ const useNextButton = ({
     initialStep = 0,
     limit,
     buttonText,
+    disabled = false,
     validateStep,
 }: UseNextButtonProps) => {
     const [step, setStep] = useState(initialStep);
 
-    const handleNext = useCallback(() => {
+    const handleNext = useCallback(async () => {
+        if (disabled) return;
         if (validateStep) {
-            const isValid = validateStep();
+            const isValid = await validateStep();
             if (!isValid) return; // 유효성 검사 실패 시 스텝 증가 안 함
         }
-        if (step < limit) {
-            setStep(prevStep => prevStep + 1);
-        }
-    }, [setStep, step, limit, validateStep]);
+    }, [validateStep, disabled]);
 
     const NextButton = ({
         className,
         onClick,
+        disabled = false,
+        ...props
     }: {
         className: string;
         onClick?: () => void;
-    }) => (
+        disabled?: boolean;
+    } & React.ButtonHTMLAttributes<HTMLButtonElement>) => (
         <button
-            onClick={e => {
+            onClick={async e => {
                 e.preventDefault();
-                handleNext();
+                await handleNext();
                 if (onClick) onClick();
+                if (step < limit) {
+                    setStep(prevStep => prevStep + 1);
+                }
             }}
             className={className}
+            disabled={disabled}
+            {...props}
         >
             {buttonText}
         </button>

@@ -8,7 +8,6 @@ import React from 'react';
 const TripList: React.FC = () => {
     const { data: trips, isPending, error } = useTripsQuery();
 
-    console.log(trips);
     // 추후변경요망
     if (error) return <div>Error</div>;
     if (isPending) return <Loading />;

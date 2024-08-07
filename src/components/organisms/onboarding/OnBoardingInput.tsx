@@ -17,6 +17,9 @@ const OnBoardingInput = forwardRef(({ mode }: OnBoardingInputProps, ref) => {
 
     return (
         <OnBoardingWrapper>
+            {mode === 'introduction' && (
+                <div className="relative w-full h-12"></div>
+            )}
             {mode === 'nickname' && (
                 <Title className="text-2xl py-4">안녕하세요!</Title>
             )}{' '}

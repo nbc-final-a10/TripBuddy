@@ -1,10 +1,10 @@
-import { Trip } from '@/types/Trips.types';
+import { TripWithContract } from '@/types/Trips.types';
 import fetchWrapper from '@/utils/api/fetchWrapper';
 
-export async function getTrips(): Promise<Trip[]> {
+export async function getTrips(): Promise<TripWithContract[]> {
     const url = `/api/trips`;
     try {
-        const data = await fetchWrapper<Trip[]>(url, {
+        const data = await fetchWrapper<TripWithContract[]>(url, {
             method: 'GET',
             cache: 'no-store',
         });
@@ -14,10 +14,10 @@ export async function getTrips(): Promise<Trip[]> {
     }
 }
 
-export async function getTrip(id: string): Promise<Trip> {
+export async function getTrip(id: string): Promise<TripWithContract> {
     const url = `/api/trips/${id}`;
     try {
-        const data = await fetchWrapper<Trip>(url, {
+        const data = await fetchWrapper<TripWithContract>(url, {
             method: 'GET',
             cache: 'no-store',
         });

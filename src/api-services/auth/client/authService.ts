@@ -162,7 +162,6 @@ export async function postNaverLogIn(): Promise<Buddy | null> {
 }
 
 export async function getSpecificBuddy(id: string): Promise<Buddy> {
-    console.log('getSpecificBuddy', id);
     const url = `/api/auth/buddy/${id}`;
     try {
         const data = await fetchWrapper<Buddy>(url, {

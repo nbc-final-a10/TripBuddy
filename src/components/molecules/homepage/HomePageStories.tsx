@@ -1,7 +1,9 @@
+'use client';
 import StoryCard from '../stories/StoryCard';
 import { StoryWithBuddies } from '@/types/Story.types';
 import { Buddy } from '@/types/Auth.types';
-import React from 'react';
+import React, { useMemo } from 'react';
+import groupStoriesByBuddyId from '@/utils/stories/groupStoriesByBuddyId';
 
 type HomePageStoriesProps = {
     stories: StoryWithBuddies[];
@@ -12,20 +14,38 @@ const HomePageStories: React.FC<HomePageStoriesProps> = ({
     stories,
     buddy,
 }: HomePageStoriesProps) => {
+    // stories에서 buddies.buddy_id 값이 같은 것들만 배열로 묶은 객체 생성
+    const sortedStories = useMemo(() => {
+        const groupedStories = groupStoriesByBuddyId(stories);
+        const array = Object.entries(groupedStories).map(
+            ([buddyId, stories]) => ({
+                buddyId,
+                stories,
+            }),
+        );
+        const sortedArray = array.sort((a, b) => {
+            return a.buddyId === buddy?.buddy_id ? -1 : 1;
+        });
+
+        return sortedArray;
+    }, [stories, buddy]);
+
     return (
         <>
-            {stories?.map(story => (
+            {sortedStories.map(story => (
                 <StoryCard
-                    key={story.story_id}
-                    id={story.story_id}
-                    name={story.buddies.buddy_nickname}
-                    created_at={story.story_created_at}
+                    key={story.buddyId}
+                    id={story.stories[0].story_id}
+                    buddy={story.stories[0].buddies}
+                    name={story.stories[0].buddies.buddy_nickname}
+                    created_at={story.stories[0].story_created_at}
                     profile_image={
-                        story.buddies.buddy_profile_pic || '/images/test.webp' // 추후변경요망
+                        story.stories[0].buddies.buddy_profile_pic ||
+                        '/images/test.webp' // 추후변경요망
                     }
-                    background_image={story.story_media}
+                    background_image={story.stories[0].story_media}
                     mode={
-                        buddy?.buddy_id === story.buddies.buddy_id
+                        buddy?.buddy_id === story.stories[0].buddies.buddy_id
                             ? 'my'
                             : 'story'
                     }
