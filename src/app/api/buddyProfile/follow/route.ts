@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
         if (originFollow.length > 0) {
             return NextResponse.json({ originFollow }, { status: 200 });
         } else {
-            return NextResponse.json({ originFollow: null }, { status: 404 });
+            return NextResponse.json({ originFollow: null }, { status: 200 });
         }
     } catch (error) {
         return new Response('팔로잉 중복 여부 검사가 되지 않았습니다.', {
