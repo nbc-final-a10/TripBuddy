@@ -25,7 +25,7 @@ export default function SelectAdditionalBuddyThemes({
     handleStartAge,
     handleEndAge,
 }: SelectAdditionalBuddyThemesProps) {
-    const isMini = window.innerHeight < 629;
+    const isMini = window.innerHeight < 659;
 
     return (
         <div className="relative">
