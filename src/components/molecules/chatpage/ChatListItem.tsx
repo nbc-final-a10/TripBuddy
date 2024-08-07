@@ -56,7 +56,7 @@ const ChatListItem: React.FC<ChatListItemProps> = ({
                     <span className="text-center text-[14px] font-medium text-grayscale-color-600">
                         {last_message_time}
                     </span>
-                    <span className="text-center text-[12px] font-semibold text-white bg-secondary-color-300 rounded-[40px] px-[7px] py-[4px]">{`+300`}</span>
+                    {/* <span className="text-center text-[12px] font-semibold text-white bg-secondary-color-300 rounded-[40px] px-[7px] py-[4px]">{`+300`}</span> */}
                 </div>
             </div>
         </Link>
