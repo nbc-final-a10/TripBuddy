@@ -1,5 +1,6 @@
+'use client';
 import clsx from 'clsx';
-import { PropsWithChildren } from 'react';
+import { FormEvent, PropsWithChildren } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 type OnBoardingInnerWrapperProps = PropsWithChildren<{
@@ -12,8 +13,17 @@ const OnBoardingInnerWrapper = ({
     className,
     align = 'center',
 }: OnBoardingInnerWrapperProps) => {
+    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const nextButton = document.getElementById('onboarding-next-button');
+        if (nextButton) {
+            nextButton.click();
+        }
+    };
     return (
-        <div
+        <form
+            onSubmit={onSubmit}
             className={twMerge(
                 clsx(
                     'flex flex-col gap-4 w-full h-full items-center xl:h-[90%]',
@@ -27,7 +37,7 @@ const OnBoardingInnerWrapper = ({
             )}
         >
             {children}
-        </div>
+        </form>
     );
 };
 

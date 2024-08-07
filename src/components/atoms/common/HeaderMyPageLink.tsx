@@ -10,7 +10,7 @@ const HeaderMyPageLink: React.FC = () => {
     const buddy_id = buddy ? buddy.buddy_id : '';
 
     return (
-        <div className="flex gap-12 items-center font-bold">
+        <div className="flex gap-8 items-center font-bold">
             {buddy_id ? (
                 <button onClick={logOut}>LOGOUT</button>
             ) : (
@@ -18,7 +18,11 @@ const HeaderMyPageLink: React.FC = () => {
             )}
             {!buddy_id && <Link href="/signup">JOIN</Link>}
             <Link href={buddy_id ? `/profile/${buddy_id}` : '/login'}>
-                <MyPageIcon />
+                <MyPageIcon
+                    className={
+                        buddy_id ? 'text-primary-color-400' : 'text-black'
+                    }
+                />
             </Link>
         </div>
     );

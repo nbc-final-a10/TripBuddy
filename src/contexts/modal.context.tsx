@@ -41,6 +41,12 @@ export const ModalProviderDefault: React.FC<{ children: React.ReactNode }> = ({
         setModalOptions(null);
     }, [modalOptions, setLock]);
 
+    const onCancel = useCallback(() => {
+        if (modalOptions?.options.onCancel) modalOptions.options.onCancel();
+        setLock(false);
+        setModalOptions(null);
+    }, [modalOptions, setLock]);
+
     useEffect(() => {
         setLock(false);
     }, [setLock]);
@@ -53,7 +59,7 @@ export const ModalProviderDefault: React.FC<{ children: React.ReactNode }> = ({
                     title={modalOptions.title}
                     description={modalOptions.description}
                     isConfirm={modalOptions.options.isConfirm}
-                    onJustClose={() => setModalOptions(null)}
+                    onCancel={onCancel}
                     onClose={close}
                 />
             )}
