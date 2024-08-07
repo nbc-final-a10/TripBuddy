@@ -20,9 +20,9 @@ import {
 } from '@/utils/search/filterAndSortTrips';
 import { TripWithContract } from '@/types/Trips.types';
 import supabase from '@/utils/supabase/client';
-import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
+import SearchBars from '@/components/molecules/search/SearchBars';
 
 type Trip = Tables<'trips'>;
 
@@ -96,7 +96,7 @@ export default function SearchPage() {
     }, []);
 
     useEffect(() => {
-        const location = searchParams.get('location');
+        const location = searchParams.get('location') || null;
         if (location) {
             setThirdLevelLocation(location);
             console.log('위치 선택 데이터 왔나: ', location);
@@ -372,33 +372,20 @@ export default function SearchPage() {
 
     return (
         <main className="p-5 xl:p-0 xl:py-5">
-            <section className="flex flex-col mx-auto mb-10 mt-6 gap-[18px] xl:flex-row xl:items-center xl:justify-center xl:max-w-screen-xl xl:gap-5">
-                <SearchInput
-                    onKeyDown={handleKeyDown}
-                    onChange={e => setSearchInput(e.target.value)}
-                />
-
-                <DateSearchButton
-                    defaultStartDate={formattedStartDate}
-                    defaultEndDate={formattedEndDate}
-                    setDateChange={(start, end) => {
-                        setStartDateTimestamp(start);
-                        setEndDateTimestamp(end);
-                    }}
-                />
-
-                <LocationSearchButton
-                    onClick={() => {}}
-                    location={thirdLevelLocation}
-                />
-
-                <button
-                    className="hidden xl:flex xl:w-[140px] xl:px-4 xl:py-2.5 rounded-xl bg-main-color justify-center items-center mx-auto font-semibold text-white text-sm transition-colors duration-200 ease-in-out active:bg-gray-300 whitespace-nowrap"
-                    onClick={handleShowResult}
-                >
-                    검색하기
-                </button>
-            </section>
+            <SearchBars
+                searchInput={searchInput}
+                setSearchInput={setSearchInput}
+                thirdLevelLocation={thirdLevelLocation}
+                setThirdLevelLocation={setThirdLevelLocation}
+                startDateTimestamp={startDateTimestamp}
+                setStartDateTimestamp={setStartDateTimestamp}
+                endDateTimestamp={endDateTimestamp}
+                setEndDateTimestamp={setEndDateTimestamp}
+                handleShowResult={handleShowResult}
+                handleKeyDown={handleKeyDown}
+                formattedStartDate={formattedStartDate}
+                formattedEndDate={formattedEndDate}
+            />
 
             <div className="my-10">
                 <SearchPageTitle title="성별" description="" />

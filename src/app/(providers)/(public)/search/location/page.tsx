@@ -23,18 +23,22 @@ export default function LocationSearchPage() {
     };
 
     return (
-        <div className="p-5">
-            <SearchPageTitle
-                title="어디로 떠나시나요?"
-                description="지역, 국가, 도시를 1개 선택해주세요."
-            />
-            <SelectRegion />
-            <button
-                className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-2xl bg-main-color font-semibold text-white text-xl m-3 mb-10 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:w-1/2 xl:mt-8"
-                onClick={handleSelectClick}
-            >
-                선택하기
-            </button>
+        <div className="p-5 xl:grid xl:grid-cols-3 xl:gap-4">
+            <div className="xl:col-span-1">
+                <SearchPageTitle
+                    title="어디로 떠나시나요?"
+                    description="지역, 국가, 도시를 1개 선택해주세요."
+                />
+            </div>
+            <div className="xl:col-span-2">
+                <SelectRegion />
+                <button
+                    className="flex justify-center items-center mx-auto w-full px-28 py-2 rounded-2xl bg-main-color font-semibold text-white text-xl m-3 mb-10 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:w-1/2 xl:mt-8"
+                    onClick={handleSelectClick}
+                >
+                    선택하기
+                </button>
+            </div>
         </div>
     );
 }

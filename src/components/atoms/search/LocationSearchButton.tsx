@@ -6,7 +6,7 @@ import React from 'react';
 
 type LocationSearchMainPageProps = {
     onClick: () => void;
-    location?: string;
+    location?: string | null;
 };
 
 const LocationSearchButton: React.FC<LocationSearchMainPageProps> = ({

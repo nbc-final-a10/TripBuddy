@@ -2,15 +2,21 @@ import Image from 'next/image';
 import React from 'react';
 
 type SearchInputProps = {
+    value: string;
     onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const SearchInput: React.FC<SearchInputProps> = ({ onKeyDown, onChange }) => {
+const SearchInput: React.FC<SearchInputProps> = ({
+    value,
+    onKeyDown,
+    onChange,
+}) => {
     return (
         <div className="flex xl:w-[300px] relative box-border">
             <input
                 type="text"
+                value={value}
                 placeholder="검색어를 입력하세요"
                 className="w-full xl:w-[300px] bg-grayscale-color-85 py-1.5 pl-10 rounded-2xl"
                 onKeyDown={onKeyDown}

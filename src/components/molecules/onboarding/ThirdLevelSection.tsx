@@ -8,7 +8,7 @@ type ThirdLevelSectionProps = {
     selectedSecondLevelLocations: ThirdLevel[];
     setThirdLevelLocation: (loc: string) => void;
     secondLevelLocation: string;
-    thirdLevelLocation?: string;
+    thirdLevelLocation?: string | null;
 };
 
 //h-[80%]

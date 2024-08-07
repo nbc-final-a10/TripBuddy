@@ -18,7 +18,9 @@ type Location = {
 export default function useSelectRegion() {
     // Todo: 이거 클로저 패턴임 추가 학습요
     // finalSelectedLocation은 최종 선택한 지역 이름으로 초기화 됨.
-    const [thirdLevelLocation, setThirdLevelLocation] = useState<string>('');
+    const [thirdLevelLocation, setThirdLevelLocation] = useState<string | null>(
+        null,
+    );
     // Todo: useState 말고 string으로 해도 될 듯
     // selectedLocationName은 국내의 경우는 선택한 도, 해외의 경우 선택한 대륙 하나만 초기화 됨. (예) 경상남도, 오세아니아
     const [secondLevelLocation, setSecondLevelLocation] = useState<
@@ -86,7 +88,7 @@ export default function useSelectRegion() {
 
                 {/* 도시/대륙 선택 */}
                 <section
-                    className="py-3 overflow-x-scroll scrollbar-hidden flex gap-[10px] h-[10%]"
+                    className="py-3 overflow-x-scroll scrollbar-hidden flex gap-[10px]"
                     ref={buddiesRef}
                 >
                     <LocationList
