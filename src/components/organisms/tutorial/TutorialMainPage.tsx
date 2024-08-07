@@ -18,27 +18,21 @@ const TutorialMainPage: React.FC = () => {
     }, [searchParams]);
 
     useEffect(() => {
-        if (step <= 4) {
-            router.push(`/tutorial?funnel=${step}`, { scroll: false });
-        } else {
-            router.push('/');
+        if (step < 4) {
+            router.push(`/tutorial?funnel=${step}`);
         }
     }, [step, router]);
 
-    const handleNext = () => {
-        if (step === 1) {
-            setCookieAction();
-        }
+    const handleNext = async () => {
         if (step < 4) {
-            setStep(step + 1);
+            setStep(prev => prev + 1);
         } else {
-            router.push('/');
+            await setCookieAction();
         }
     };
 
     const handleSkip = async () => {
         await setCookieAction();
-        router.push('/');
     };
 
     return (
@@ -55,7 +49,7 @@ const TutorialMainPage: React.FC = () => {
             )}
 
             <section className="flex flex-col items-center justify-center w-full xl:h-[100%-64px]">
-                <Tuto step={step + 1} />
+                <Tuto step={step} />
             </section>
 
             <div className="mb-5 xl:mb-5">
