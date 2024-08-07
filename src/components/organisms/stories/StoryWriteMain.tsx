@@ -5,7 +5,6 @@ import StorySelectMedia from './StorySelectMedia';
 import StoryWriteText from './StoryWriteText';
 import { StoryFilter, StoryOverlay } from '@/types/Story.types';
 import StoryFilterImage from './StoryFilterImage';
-import useLockBodyScroll from '@/hooks/common/useLockBodyScroll';
 
 const filterImage = [
     {
@@ -44,8 +43,6 @@ const StoryWriteMain: React.FC = () => {
         className: '',
     });
 
-    const { isLocked, setLock } = useLockBodyScroll();
-
     const handleStep = (step: number) => {
         if (step === 0) {
             setImageFile(null);
@@ -71,10 +68,6 @@ const StoryWriteMain: React.FC = () => {
         handleStep(1);
     }, [imageFile]);
 
-    useEffect(() => {
-        setLock(true);
-    }, [setLock]);
-
     return (
         <>
             {step === 0 && (
@@ -96,6 +89,7 @@ const StoryWriteMain: React.FC = () => {
                     selectedMedia={selectedMedia}
                     texts={texts}
                     setTexts={setTexts}
+                    selectedFilter={selectedFilter}
                 />
             )}
         </>

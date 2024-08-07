@@ -6,7 +6,7 @@ import Image from 'next/image';
 import useLockBodyScroll from '@/hooks/common/useLockBodyScroll';
 import clsx from 'clsx';
 import useStoryMutation from '@/hooks/queries/useStoryMutation';
-import { StoryData, StoryOverlay } from '@/types/Story.types';
+import { StoryData, StoryFilter, StoryOverlay } from '@/types/Story.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/auth';
@@ -16,6 +16,7 @@ type StoryWriteTextProps = {
     selectedMedia: string;
     texts: StoryOverlay[];
     setTexts: (texts: StoryOverlay[]) => void;
+    selectedFilter: StoryFilter;
 };
 
 const StoryWriteText: React.FC<StoryWriteTextProps> = ({
@@ -23,6 +24,7 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
     selectedMedia,
     texts,
     setTexts,
+    selectedFilter,
 }) => {
     const router = useRouter();
     const { buddy } = useAuth();
@@ -31,7 +33,7 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
     const { mutateAsync, isPending, error } = useStoryMutation();
 
     const handleSaveButtonClick = async () => {
-        console.log('save');
+        console.log('save', texts);
 
         if (!buddy) router.push('/login');
         if (!imageFile) return;
@@ -53,10 +55,6 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
             },
         });
     };
-
-    // 이미지 스토리지에 쓰기
-    // 데이터 테이블에 쓰기
-    // 스토리 생성 완료 후 리다이렉트
 
     return (
         <section className="relative flex flex-col gap-4 w-full h-[calc(100dvh-57px-56px)] max-h-dvh overflow-hidden aspect-auto bg-gray-600">
@@ -82,9 +80,14 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
                 className={clsx(
                     'object-contain',
                     isLoaded ? 'opacity-100' : 'opacity-0',
+                    selectedFilter.className,
                 )}
             />
-            <DraggableInput texts={texts} setTexts={setTexts} />
+            <DraggableInput
+                texts={texts}
+                setTexts={setTexts}
+                selectedFilter={selectedFilter}
+            />
             <button
                 className="absolute bg-main-color text-white px-2 pt-0.5 pb-1.5 rounded-md top-0 right-0 z-10 leading-none"
                 onClick={handleSaveButtonClick}

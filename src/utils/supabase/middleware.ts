@@ -90,7 +90,7 @@ export async function updateSession(request: NextRequest) {
     // 튜토리얼 페이지 체크를 위한 쿠키 확인
     const hasVisitedTutorial = request.cookies.get('hasVisitedTutorial');
 
-    console.log('hasVisitedTutorial =====>', hasVisitedTutorial);
+    // console.log('hasVisitedTutorial =====>', hasVisitedTutorial);
     // 튜토리얼 페이지로 리디렉션
     if (
         !hasVisitedTutorial &&
