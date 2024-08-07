@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useAccordion, Accordion } from '@/hooks/useAccordion';
-import { BuddyProfileProps } from '@/types/ProfileParams.types';
 import { FaCalendarCheck, FaPen } from 'react-icons/fa';
 import TripCard from '@/components/molecules/trips/TripCard';
 import fetchWrapper from '@/utils/api/fetchWrapper';
@@ -10,7 +9,11 @@ import { Trip } from '@/types/Trips.types';
 import useTapScroll from '@/hooks/useTapScroll';
 import { ContractWithTrips } from '@/types/Contract.types';
 
-export default function MyTrips({ id }: BuddyProfileProps) {
+type MyTripsProps = {
+    id: string;
+};
+
+export default function MyTrips({ id }: MyTripsProps) {
     const participatingAccordion = useAccordion();
     const createdAccordion = useAccordion();
     const [trips, setTrips] = useState<{
@@ -44,7 +47,7 @@ export default function MyTrips({ id }: BuddyProfileProps) {
     return (
         <div className="p-2 bg-gray-100 rounded-xl">
             <Accordion
-                title="내가 만든 여정"
+                title={'만든 여정'}
                 isOpen={createdAccordion.isOpen}
                 toggleAccordion={createdAccordion.toggleAccordion}
                 icon={<FaPen />}
@@ -65,12 +68,12 @@ export default function MyTrips({ id }: BuddyProfileProps) {
                     </div>
                 ) : (
                     <div className="text-center text-gray-500">
-                        내가 만든 여정이 없습니다.
+                        만든 여정이 없습니다.
                     </div>
                 )}
             </Accordion>
             <Accordion
-                title="내가 참여한 여정"
+                title={'참여한 여정'}
                 isOpen={participatingAccordion.isOpen}
                 toggleAccordion={participatingAccordion.toggleAccordion}
                 icon={<FaCalendarCheck />}
