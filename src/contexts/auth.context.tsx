@@ -78,9 +78,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
             try {
                 const payload = { email, password };
                 const buddy = await logInMutation(payload);
-                queryClient.invalidateQueries({
-                    queryKey: [QUERY_KEY_BUDDY],
-                });
+                // queryClient.invalidateQueries({
+                //     queryKey: [QUERY_KEY_BUDDY],
+                // });
 
                 if (!buddy)
                     return showAlert('caution', '알 수 없는 오류가 발생했어요');
@@ -100,7 +100,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
                 return showAlert('caution', errorMessage);
             }
         },
-        [buddy, logInMutation, router, queryClient],
+        [buddy, logInMutation, router],
     );
 
     const logOut: AuthContextValue['logOut'] = useCallback(async () => {
@@ -155,9 +155,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
             async provider => {
                 try {
                     const data = await getLogInWithProvider(provider);
-                    queryClient.invalidateQueries({
-                        queryKey: [QUERY_KEY_BUDDY],
-                    });
+                    // queryClient.invalidateQueries({
+                    //     queryKey: [QUERY_KEY_BUDDY],
+                    // });
 
                     if (!data.url) {
                         return showAlert(
@@ -178,7 +178,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
                     });
                 }
             },
-            [router, queryClient],
+            [router],
         );
 
     const sendingResetEmail: AuthContextValue['sendingResetEmail'] =
