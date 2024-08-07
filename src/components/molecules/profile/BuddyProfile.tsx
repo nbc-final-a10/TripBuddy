@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import BuddyProfileSkeleton from './BuddyProfileSkeleton';
+import FollowButton from '@/components/atoms/profile/FollowButton';
 
 type BuddyProfileProps = {
     clickedBuddy: Buddy | null;
@@ -38,12 +39,14 @@ export default function BuddyProfile({
                         className="rounded-full w-[100px] h-[100px]"
                     />
                     {buddy?.buddy_id === urlId &&
-                        // url에 'profile'이 포함되어 있으면 편집 버튼 보여주기
-                        window.location.pathname.includes('profile') && (
-                            <Link href={`/onboarding?funnel=0&mode=edit`}>
-                                <EditProfileButton />
-                            </Link>
-                        )}
+                    // url에 'profile'이 포함되어 있으면 편집 버튼 보여주기
+                    window.location.pathname.includes('profile') ? (
+                        <Link href={`/onboarding?funnel=0&mode=edit`}>
+                            <EditProfileButton />
+                        </Link>
+                    ) : (
+                        <FollowButton />
+                    )}
                 </div>
                 <div className="ml-4">
                     <div className="flex flex-col ">
