@@ -89,6 +89,20 @@ export async function updateSession(request: NextRequest) {
             return NextResponse.redirect(url);
         }
     }
+    // 튜토리얼 페이지 체크를 위한 쿠키 확인
+    const hasVisitedTutorial = request.cookies.get('hasVisitedTutorial');
+
+    // console.log('hasVisitedTutorial =====>', hasVisitedTutorial);
+    // 튜토리얼 페이지로 리디렉션
+    if (
+        !hasVisitedTutorial &&
+        !request.nextUrl.pathname.startsWith('/tutorial') &&
+        !request.nextUrl.pathname.startsWith('/api')
+    ) {
+        const url = request.nextUrl.clone();
+        url.pathname = '/tutorial';
+        return NextResponse.redirect(url);
+    }
 
     return supabaseResponse;
 }

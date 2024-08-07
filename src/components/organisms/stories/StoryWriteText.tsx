@@ -6,28 +6,37 @@ import Image from 'next/image';
 import useLockBodyScroll from '@/hooks/common/useLockBodyScroll';
 import clsx from 'clsx';
 import useStoryMutation from '@/hooks/queries/useStoryMutation';
-import { StoryData } from '@/types/Story.types';
+import { StoryData, StoryFilter, StoryOverlay } from '@/types/Story.types';
+import { showAlert } from '@/utils/ui/openCustomAlert';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/auth';
+import DefaultLoader from '@/components/atoms/common/defaultLoader';
 
 type StoryWriteTextProps = {
     imageFile: File;
     selectedMedia: string;
+    texts: StoryOverlay[];
+    setTexts: (texts: StoryOverlay[]) => void;
+    selectedFilter: StoryFilter;
 };
 
 const StoryWriteText: React.FC<StoryWriteTextProps> = ({
     imageFile,
     selectedMedia,
+    texts,
+    setTexts,
+    selectedFilter,
 }) => {
+    const router = useRouter();
+    const { buddy } = useAuth();
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
-    const [texts, setTexts] = useState<
-        { text: string; position: { x: number; y: number } }[]
-    >([]);
-    const { isLocked } = useLockBodyScroll(true);
 
-    const { mutate, isPending, error } = useStoryMutation();
+    const { mutateAsync, isPending, error } = useStoryMutation();
 
     const handleSaveButtonClick = async () => {
-        console.log('save');
+        console.log('save', texts);
 
+        if (!buddy) router.push('/login');
         if (!imageFile) return;
         if (!texts.length) return;
 
@@ -36,25 +45,21 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
         formData.append('texts', JSON.stringify(texts));
 
         const payload: StoryData = formData;
-        mutate(payload);
+        const data = await mutateAsync(payload);
+
+        console.log(data);
+        showAlert('success', '스토리 생성이 완료되었습니다.', {
+            onConfirm: () => {
+                router.push(
+                    `/stories/${buddy?.buddy_nickname}?id=${data?.story_id}`,
+                );
+            },
+        });
     };
 
-    // 이미지 스토리지에 쓰기
-    // 데이터 테이블에 쓰기
-    // 스토리 생성 완료 후 리다이렉트
-
     return (
-        <section
-            className={clsx(
-                'relative flex flex-col gap-4 w-full h-dvh max-h-dvh overflow-hidden aspect-auto bg-gray-600',
-                !isLocked && 'hidden',
-            )}
-        >
-            {isPending && (
-                <div className="z-10 text-white font-bold">
-                    스토리 생성중...
-                </div>
-            )}
+        <section className="relative flex flex-col gap-4 w-full h-[calc(100dvh-57px-56px)] max-h-dvh overflow-hidden aspect-auto bg-gray-600">
+            {isPending && <DefaultLoader />}
             {error && (
                 <div className="z-10 text-white font-bold">
                     스토리 생성중 오류가 발생했습니다.
@@ -72,9 +77,14 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
                 className={clsx(
                     'object-contain',
                     isLoaded ? 'opacity-100' : 'opacity-0',
+                    selectedFilter.className,
                 )}
             />
-            <DraggableInput texts={texts} setTexts={setTexts} />
+            <DraggableInput
+                texts={texts}
+                setTexts={setTexts}
+                selectedFilter={selectedFilter}
+            />
             <button
                 className="absolute bg-main-color text-white px-2 pt-0.5 pb-1.5 rounded-md top-0 right-0 z-10 leading-none"
                 onClick={handleSaveButtonClick}

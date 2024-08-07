@@ -5,7 +5,7 @@ interface CustomAlertProps {
     description: string;
     isConfirm?: boolean;
     onClose?: () => void;
-    onJustClose?: () => void;
+    onCancel?: () => void;
 }
 
 function CustomAlert({
@@ -13,7 +13,7 @@ function CustomAlert({
     description = '성공했습니다!',
     isConfirm = false,
     onClose = () => {},
-    onJustClose,
+    onCancel = () => {},
 }: CustomAlertProps) {
     return (
         <div className="bg-black/50 fixed top-0 left-0 w-full h-full flex justify-center items-center z-50">
@@ -37,7 +37,7 @@ function CustomAlert({
                         {isConfirm && (
                             <button
                                 className="bg-gray-200 text-gray-500 px-4 py-2 rounded-md focus-visible:outline-none"
-                                onClick={onJustClose}
+                                onClick={onCancel}
                             >
                                 취소
                             </button>

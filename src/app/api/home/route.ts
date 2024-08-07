@@ -1,6 +1,6 @@
 import { Buddy } from '@/types/Auth.types';
 import { StoryWithBuddies } from '@/types/Story.types';
-import { Trip } from '@/types/Trips.types';
+import { TripWithContract } from '@/types/Trips.types';
 import { createClient } from '@/utils/supabase/server';
 import { PostgrestError } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
@@ -65,11 +65,13 @@ export async function GET() {
             data: trips,
             error: tripsError,
         }: {
-            data: Trip[] | null;
+            data: TripWithContract[] | null;
             error: PostgrestError | null;
         } = await supabase
             .from('trips')
-            .select('*')
+            .select(
+                '*, contract:contract!contract_contract_trip_id_foreign (*)',
+            )
             .order('trip_created_at', { ascending: false });
 
         if (tripsError) {

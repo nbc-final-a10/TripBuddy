@@ -17,4 +17,10 @@ export type StoryOverlay = {
         x: number;
         y: number;
     };
+    filter?: StoryFilter;
+};
+
+export type StoryFilter = {
+    name: string;
+    className: string;
 };

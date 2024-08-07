@@ -18,6 +18,7 @@ import {
     filterAndSortTrips,
     filterAndSortTripsBuddies,
 } from '@/utils/search/filterAndSortTrips';
+import { TripWithContract } from '@/types/Trips.types';
 import supabase from '@/utils/supabase/client';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -42,8 +43,8 @@ const updateQueryParams = (params: Record<string, string | number | null>) => {
 
 export default function SearchPage() {
     const [showResult, setShowResult] = useState(false);
-    const [resultItems, setResultItems] = useState<Trip[]>([]);
-    const [allItems, setAllItems] = useState<Trip[]>([]);
+    const [resultItems, setResultItems] = useState<TripWithContract[]>([]);
+    const [allItems, setAllItems] = useState<TripWithContract[]>([]);
     const [visibleFirstItems, setVisibleFirstItems] = useState(8);
     const [visibleSecondItems, setVisibleSecondItems] = useState(6);
     const resultRef = useRef<HTMLDivElement>(null);
@@ -160,7 +161,11 @@ export default function SearchPage() {
 
     const handleShowResult = async () => {
         // 데이터 가져와서 상태 업데이트
-        const { data, error } = await supabase.from('trips').select('*');
+        const { data, error } = await supabase
+            .from(
+                'trips, contract:contract!contract_contract_trip_id_foreign (*)',
+            )
+            .select('*');
         if (error) {
             console.error('Error fetching trips:', error.message);
             return;
@@ -237,7 +242,11 @@ export default function SearchPage() {
             );
         }
 
-        setResultItems(filteredItems);
+        // setResultItems(
+        //     filteredItems.length > 0 ? filteredItems : (data as Trip[]),
+        // );
+        // setShowResult(true);
+        setResultItems(filteredItems as TripWithContract[]);
 
         // 아무런 필터 조건이 걸려있지 않을 때
         if (
@@ -255,7 +264,7 @@ export default function SearchPage() {
             setVisibleFirstItems(data.length);
         }
 
-        setAllItems(data as Trip[]);
+        setAllItems(data as TripWithContract[]);
         setShowResult(true);
 
         // 속도 지연
@@ -459,23 +468,25 @@ export default function SearchPage() {
                 />
             </div>
 
-            <button
-                className="flex justify-center items-center mx-auto w-full px-28 h-12 rounded-2xl bg-main-color font-semibold text-white text-xl m-3 mb-5 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:w-[348px] xl:mt-8 whitespace-nowrap"
-                onClick={handleFiltersReset}
-            >
-                검색 옵션 리셋하기
-            </button>
+            <div className="xl:flex xl:flex-row justify-center items-center xl:space-x-2">
+                <button
+                    id="result-section"
+                    className="flex justify-center items-center w-full xl:max-w-[348px] px-28 h-12 rounded-2xl bg-main-color font-semibold text-white text-xl mb-5 xl:mb-8 transition-colors duration-200 ease-in-out active:bg-gray-300 whitespace-nowrap"
+                    onClick={handleFiltersReset}
+                >
+                    검색 옵션 리셋하기
+                </button>
 
-            <button
-                id="result-section"
-                className="flex justify-center items-center mx-auto w-full px-28 h-12 rounded-2xl bg-main-color font-semibold text-white text-xl m-3 mb-10 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:w-[348px] xl:mt-8 whitespace-nowrap"
-                onClick={() => {
-                    handleShowResult();
-                    handleThemesButtonClick();
-                }}
-            >
-                검색 결과 보기
-            </button>
+                <button
+                    className="flex justify-center items-center w-full xl:max-w-[348px] px-28 h-12 rounded-2xl bg-main-color font-semibold text-white text-xl mb-5 xl:mb-8 transition-colors duration-200 ease-in-out active:bg-gray-300 whitespace-nowrap"
+                    onClick={() => {
+                        handleShowResult();
+                        handleThemesButtonClick();
+                    }}
+                >
+                    검색 결과 보기
+                </button>
+            </div>
 
             {showResult && (
                 <div ref={resultRef}>
