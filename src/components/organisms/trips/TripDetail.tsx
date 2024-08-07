@@ -69,7 +69,7 @@ const TripDetail: React.FC<TripDetailProps> = ({ id }) => {
             </div>
 
             {/** 추천인기 버디즈 */}
-            <div className="flex flex-col bg-white gap-2 h-[217px] p-4">
+            <div className="flex flex-col bg-white gap-2 h-[350px] p-4 overflow-y-scroll">
                 <h3 className="text-gray-950 text-xl font-bold">
                     추천인기 버디즈
                 </h3>
