@@ -13,23 +13,23 @@ const filterImage = [
     },
     {
         name: 'sepia',
-        className: 'sepia',
+        className: 'sepia relative',
     },
     {
         name: 'saturate',
-        className: 'saturate-200',
+        className: 'saturate-200 relative',
     },
     {
         name: 'invert',
-        className: 'invert',
+        className: 'invert relative',
     },
     {
         name: 'grayscale',
-        className: 'grayscale',
+        className: 'grayscale relative',
     },
     {
         name: 'contrast',
-        className: 'contrast-200',
+        className: 'contrast-200 relative',
     },
 ];
 
