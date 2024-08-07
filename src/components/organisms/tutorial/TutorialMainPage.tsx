@@ -51,7 +51,7 @@ const TutorialMainPage: React.FC = () => {
                     건너뛰기
                 </button>
             ) : (
-                <button className="relative w-full text-right text-base p-4 rounded mb-4"></button>
+                <button className="relative w-full text-right text-base p-4 rounded mb-4 xl:h-[32px] xl:p-0 xl:mb-0"></button>
             )}
 
             <section className="flex flex-col items-center justify-center w-full xl:h-[100%-64px]">

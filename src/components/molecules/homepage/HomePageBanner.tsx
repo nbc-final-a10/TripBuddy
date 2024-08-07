@@ -77,7 +77,7 @@ const HomePageBanner = () => {
                             setDaysLeft(daysDiff);
                         }
                     } else {
-                        console.log('No contracts found for the buddy');
+                        // console.log('No contracts found for the buddy');
                     }
                 } catch (error: unknown) {
                     if (error instanceof Error) {

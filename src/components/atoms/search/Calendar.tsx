@@ -9,7 +9,7 @@ const Calendar = () => {
         start: today(getLocalTimeZone()),
         end: today(getLocalTimeZone()).add({ weeks: 1 }),
     });
-    console.log(value);
+    // console.log(value);
 
     return (
         <div className="w-full flex justify-center mb-16 mt-12">
