@@ -1,28 +1,42 @@
+'use client';
+
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useAuth } from '@/hooks/auth';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function FollowButton() {
     const { buddy } = useAuth();
-    const followingId = window.location.pathname.split('/').pop(); // URL에서 [id]를 가져옴
+    const followingId = window.location.pathname.split('/').pop();
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        const checkFollowStatus = async () => {
+            try {
+                const checkResponse = await fetch(
+                    `/api/buddyProfile/follow?followingId=${followingId}&followerId=${buddy?.buddy_id}`,
+                    {
+                        method: 'GET',
+                    },
+                );
+
+                if (checkResponse.status === 200) {
+                    setIsFollowing(true);
+                } else {
+                    setIsFollowing(false);
+                }
+            } catch (error) {
+                console.error('Error checking follow status:', error);
+            }
+        };
+
+        checkFollowStatus();
+    }, [buddy, followingId]);
 
     const handleFollow = async () => {
+        if (isLoading) return;
+        setIsLoading(true);
         try {
-            // 팔로우 중복 여부 확인
-            const checkResponse = await fetch(
-                `/api/buddyProfile/follow?followingId=${followingId}&followerId=${buddy?.buddy_id}`,
-                {
-                    method: 'GET',
-                },
-            );
-
-            if (checkResponse.status === 200) {
-                // 이미 팔로우 중인 경우 경고 표시
-                showAlert('error', '이미 팔로우 하셨습니다.');
-                return;
-            }
-
-            // 팔로우 중이 아닌 경우 POST 요청
             const response = await fetch('/api/buddyProfile/follow', {
                 method: 'POST',
                 headers: {
@@ -45,18 +59,47 @@ export default function FollowButton() {
             console.log('follow data', data);
 
             showAlert('success', '팔로우 성공했습니다.');
-        } catch (error) {
-            console.error('Fetch error:', error);
-            showAlert('error', '팔로우 중 오류가 발생했습니다.');
+            setIsFollowing(true);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleUnfollow = async () => {
+        if (isLoading) return;
+        setIsLoading(true);
+        try {
+            const response = await fetch(
+                `/api/buddyProfile/follow?followingId=${followingId}&followerId=${buddy?.buddy_id}`,
+                {
+                    method: 'DELETE',
+                },
+            );
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Error:', errorData);
+                showAlert('error', '팔로우 취소 중 오류가 발생했습니다.');
+                return;
+            }
+
+            const data = await response.json();
+            console.log('unfollow data', data);
+
+            showAlert('success', '팔로우가 취소되었습니다.');
+            setIsFollowing(false);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
         <button
-            className="text-sm text-gray-500 bg-gray-200 rounded-full px-4 py-1 mt-10"
-            onClick={handleFollow}
+            className={`text-sm text-gray-500 bg-gray-200 rounded-full px-4 py-1 mt-10 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`} // 비활성화 스타일 추가
+            onClick={isFollowing ? handleUnfollow : handleFollow}
+            disabled={isLoading}
         >
-            팔로우 하기
+            {isFollowing ? '팔로우 취소' : '팔로우 하기'}
         </button>
     );
 }
