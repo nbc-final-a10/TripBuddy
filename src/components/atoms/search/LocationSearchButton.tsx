@@ -28,7 +28,7 @@ const LocationSearchButton: React.FC<LocationSearchMainPageProps> = ({
                         height={20}
                     />
                 </div>
-                지역, 국가를 찾아보세요
+                <span>지역, 국가를 찾아보세요</span>
             </button>
         </div>
     );

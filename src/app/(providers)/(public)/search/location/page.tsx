@@ -6,27 +6,18 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function LocationSearchPage() {
-    const { SelectRegion, thirdLevelLocation, setThirdLevelLocation } =
-        useSelectRegion();
+    const { SelectRegion, thirdLevelLocation } = useSelectRegion();
     const router = useRouter();
 
     const handleSelectClick = () => {
         if (thirdLevelLocation) {
             const query = new URLSearchParams(window.location.search);
             query.set('location', thirdLevelLocation);
-            router.push('/search');
+            router.push('/search?${query.toString()}');
+
+            console.log(thirdLevelLocation);
         }
     };
-
-    useEffect(() => {
-        if (thirdLevelLocation) {
-            // 현재 쿼리 파라미터 복사
-            const query = new URLSearchParams(window.location.search);
-            // location 쿼리 파라미터 업데이트
-            query.set('location', thirdLevelLocation);
-            router.push(`?${query.toString()}`);
-        }
-    }, [thirdLevelLocation, router]);
 
     return (
         <div className="p-5">

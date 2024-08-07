@@ -20,12 +20,12 @@ import {
 } from '@/utils/search/filterAndSortTrips';
 import supabase from '@/utils/supabase/client';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 
 type Trip = Tables<'trips'>;
 
-const SearchPage: React.FC = () => {
+export default function SearchPage() {
     const [showResult, setShowResult] = useState(false);
     const [resultItems, setResultItems] = useState<Trip[]>([]);
     const [allItems, setAllItems] = useState<Trip[]>([]);
@@ -68,6 +68,26 @@ const SearchPage: React.FC = () => {
     const [PreferTripTheme] = usePreferTheme({ mode: 'trip' });
     const [PreferBuddyTheme] = usePreferTheme({ mode: 'buddy' });
 
+    const router = useRouter();
+    const [searchParams, setSearchParams] = useState(new URLSearchParams());
+
+    // 쿼리 파라미터로 location 가져오기
+    useEffect(() => {
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        setSearchParams(urlSearchParams);
+        // console.log('여기: ', urlSearchParams);
+    }, []);
+
+    useEffect(() => {
+        const location = searchParams.get('location');
+        if (location) {
+            setThirdLevelLocation(location);
+            console.log('위치 선택 데이터 왔나: ', location);
+        } else {
+            console.log('파라미터 없음');
+        }
+    }, [searchParams, setThirdLevelLocation]);
+
     useEffect(() => {
         const handleResize = () => {
             setIsXL(window.matchMedia('(min-width: 1280px').matches);
@@ -81,23 +101,13 @@ const SearchPage: React.FC = () => {
         };
     }, []);
 
-    const router = useRouter();
-    const [location, setLocation] = useState<string | undefined>(undefined);
-
-    // useEffect(() => {
-    //     const { location } = router.query;
-    //     if (typeof location === 'string') {
-    //         setLocation(location);
-    //     }
-    // }, [router.query]);
-
     useEffect(() => {
-        console.log('updated selectedThemes: ', selectedThemes);
+        // console.log('updated selectedThemes: ', selectedThemes);
         setLocalSelectedThemes(selectedThemes);
     }, [selectedThemes]);
 
     useEffect(() => {
-        console.log('updated selectedBuddyThemes: ', selectedBuddyThemes);
+        // console.log('updated selectedBuddyThemes: ', selectedBuddyThemes);
         setLocalSelectedBuddyThemes(selectedBuddyThemes);
     }, [selectedBuddyThemes]);
 
@@ -107,7 +117,7 @@ const SearchPage: React.FC = () => {
     };
 
     const handleShowResult = async () => {
-        console.log('가져오기 전: ', selectedThemes);
+        // console.log('가져오기 전: ', selectedThemes);
 
         // 데이터 가져와서 상태 업데이트
         const { data, error } = await supabase.from('trips').select('*');
@@ -188,8 +198,9 @@ const SearchPage: React.FC = () => {
         }
 
         setResultItems(filteredItems);
-        console.log('패칭 후에 selectedThemes: ', selectedThemes);
+        // console.log('패칭 후에 selectedThemes: ', selectedThemes);
 
+        // 아무런 필터 조건이 걸려있지 않을 때
         if (
             !searchInput &&
             !selectedGender &&
@@ -209,7 +220,7 @@ const SearchPage: React.FC = () => {
         setShowResult(true);
 
         // 속도 지연
-        // 위에서 offset만큼 떨어진 위치로
+        // 위에서 offset만큼 떨어진 위치로 스크롤 이동
         setTimeout(() => {
             const offset = 40;
             if (resultRef.current) {
@@ -376,6 +387,4 @@ const SearchPage: React.FC = () => {
             <TopButton />
         </main>
     );
-};
-
-export default SearchPage;
+}

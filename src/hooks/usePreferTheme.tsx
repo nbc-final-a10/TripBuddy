@@ -48,11 +48,19 @@ const usePreferTheme = ({
         handleChipClick(target, mutableThemes, selectedTheme, setSelectedTheme);
     };
 
-    useEffect(() => {
-        console.log('selected Theme: ', selectedTheme);
-    }, [selectedTheme]);
+    const PreferThemeToRender = ({
+        className,
+        setSelectedTheme: externalSetSelectedTheme,
+    }: {
+        className?: string;
+        setSelectedTheme?: React.Dispatch<React.SetStateAction<string[]>>;
+    }) => {
+        useEffect(() => {
+            if (externalSetSelectedTheme) {
+                externalSetSelectedTheme(selectedTheme);
+            }
+        }, [externalSetSelectedTheme]);
 
-    const PreferThemeToRender = ({ className }: { className?: string }) => {
         return (
             <PreferTheme
                 selectedTheme={selectedTheme}

@@ -19,10 +19,12 @@ export const filterAndSortTrips = (
             ).length;
             return { trip, matchingCount };
         })
+        .filter(({ matchingCount }) => matchingCount > 0)
         .sort((a, b) => b.matchingCount - a.matchingCount)
         .map(({ trip }) => trip);
 };
-// 일치하는 수 순서대로 정렬
+// 일치하는 항목만 필터링
+// 일치하는 수에 따라 정렬
 // trip 객체만 반환
 
 export const filterAndSortTripsBuddies = (
@@ -36,11 +38,12 @@ export const filterAndSortTripsBuddies = (
                 trip.trip_wanted_buddies2,
                 trip.trip_wanted_buddies3,
             ];
-            const matchingCount = buddyThemes.filter(theme =>
+            const matchingCount = selectedBuddyThemes.filter(theme =>
                 buddyThemes.includes(theme),
             ).length;
             return { trip, matchingCount };
         })
+        .filter(({ matchingCount }) => matchingCount > 0)
         .sort((a, b) => b.matchingCount - a.matchingCount)
         .map(({ trip }) => trip);
 };
