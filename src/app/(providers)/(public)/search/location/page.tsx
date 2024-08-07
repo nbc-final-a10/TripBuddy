@@ -13,7 +13,10 @@ export default function LocationSearchPage() {
         if (thirdLevelLocation) {
             const query = new URLSearchParams(window.location.search);
             query.set('location', thirdLevelLocation);
-            router.push('/search?${query.toString()}');
+
+            // 문자열로 변환 후 url에 포함시킴
+            const newURL = `/search?${query.toString()}`;
+            router.push(newURL);
 
             console.log(thirdLevelLocation);
         }

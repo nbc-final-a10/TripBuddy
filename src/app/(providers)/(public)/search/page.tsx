@@ -74,8 +74,15 @@ export default function SearchPage() {
     // 쿼리 파라미터로 location 가져오기
     useEffect(() => {
         const urlSearchParams = new URLSearchParams(window.location.search);
+
+        console.log('Raw URL:', window.location.search);
+        // console.log('searchParams:', urlSearchParams.toString());
+
+        urlSearchParams.forEach((value, key) => {
+            console.log(`${key}: ${value}`);
+        });
+
         setSearchParams(urlSearchParams);
-        // console.log('여기: ', urlSearchParams);
     }, []);
 
     useEffect(() => {
@@ -276,7 +283,10 @@ export default function SearchPage() {
                     onChange={e => setSearchInput(e.target.value)}
                 />
 
-                <LocationSearchButton onClick={() => {}} />
+                <LocationSearchButton
+                    onClick={() => {}}
+                    location={thirdLevelLocation}
+                />
 
                 <DateSearchButton
                     startDate={formattedStartDate}

@@ -6,10 +6,12 @@ import React from 'react';
 
 type LocationSearchMainPageProps = {
     onClick: () => void;
+    location?: string;
 };
 
 const LocationSearchButton: React.FC<LocationSearchMainPageProps> = ({
     onClick,
+    location,
 }) => {
     const router = useRouter();
 
@@ -28,7 +30,11 @@ const LocationSearchButton: React.FC<LocationSearchMainPageProps> = ({
                         height={20}
                     />
                 </div>
-                <span>지역, 국가를 찾아보세요</span>
+                <span>
+                    {location
+                        ? `현재 선택된 장소: ${location}`
+                        : '지역, 국가를 찾아보세요'}
+                </span>
             </button>
         </div>
     );
