@@ -2,7 +2,7 @@ import { Buddy, PartialBuddy } from '@/types/Auth.types';
 import convertToWebP from '@/utils/common/convertToWebp';
 import { createClient } from '@/utils/supabase/server';
 import { PostgrestError } from '@supabase/supabase-js';
-import { revalidateTag } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 // 클라이언트에서 요청할 때
@@ -49,6 +49,7 @@ export async function GET() {
     }
 
     revalidateTag('buddy');
+    revalidatePath('/', 'layout');
 
     return NextResponse.json(buddy, { status: 200 });
 }
@@ -72,6 +73,7 @@ export async function POST(req: NextRequest) {
     }
 
     revalidateTag('buddy');
+    revalidatePath('/', 'layout');
 
     return NextResponse.json(buddy, { status: 200 });
 }
@@ -190,6 +192,7 @@ export const PATCH = async (req: NextRequest) => {
         return NextResponse.json({ error: 'Buddy not found' }, { status: 404 });
 
     revalidateTag('buddy');
+    revalidatePath('/', 'layout');
 
     return NextResponse.json(finalBuddy, { status: 200 });
 };

@@ -110,10 +110,14 @@ const Tuto: React.FC<TutoProps> = ({ step }) => {
     const [isImageLoaded, setIsImageLoaded] = useState(false);
 
     useEffect(() => {
+        setIsImageLoaded(false);
         const img = new Image();
         img.src = content[step].src;
         img.onload = () => {
             setIsImageLoaded(true);
+        };
+        img.onerror = () => {
+            setIsImageLoaded(false);
         };
     }, [step]);
 
