@@ -5,7 +5,7 @@ import { StoryOverlay, StoryWithBuddies } from '@/types/Story.types';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { MouseEvent, useState } from 'react';
 
 type StoryDetailProps = {
     nickname: string;
@@ -17,13 +17,29 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
     const router = useRouter();
     // const [selectedId, setSelectedId] = useState<string>(id);
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
-
+    const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [selectedStory, setSelectedStory] = useState<StoryWithBuddies>(
         stories[0],
     );
 
-    const handleSelectStory = (story: StoryWithBuddies) => {
+    const handleNextBefore = (e: MouseEvent<HTMLDivElement>) => {
+        const next = e.currentTarget.dataset.next;
+        if (next === 'before') {
+            if (selectedIndex > 0) {
+                setSelectedIndex(selectedIndex - 1);
+                setSelectedStory(stories[selectedIndex - 1]);
+            }
+        } else {
+            if (selectedIndex < stories.length - 1) {
+                setSelectedIndex(selectedIndex + 1);
+                setSelectedStory(stories[selectedIndex + 1]);
+            }
+        }
+    };
+
+    const handleSelectStory = (story: StoryWithBuddies, index: number) => {
         setSelectedStory(story);
+        setSelectedIndex(index);
         router.push(`/stories/${nickname}?id=${story.story_id}`);
     };
     // const {
@@ -41,12 +57,25 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
         <>
             {!isLoaded && <DefaultLoader />}
             <section className="relative w-full h-[calc(100dvh-57px-56px)] bg-gray-800 aspect-auto">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-row gap-2 z-30">
-                    {stories.map(story => (
+                <div className="absolute top-0 left-0 w-full h-full z-20 flex flex-row">
+                    <div
+                        data-next="before"
+                        className="relative w-1/2 h-full cursor-pointer"
+                        onClick={handleNextBefore}
+                    ></div>
+                    <div
+                        data-next="next"
+                        className="relative w-1/2 h-full cursor-pointer"
+                        onClick={handleNextBefore}
+                    ></div>
+                </div>
+
+                <div className="absolute top-1 left-1/2 -translate-x-1/2 flex flex-row gap-2 z-30">
+                    {stories.map((story, idx) => (
                         <button
-                            className="w-10 h-2 bg-gray-500 cursor-pointer"
+                            className="w-10 h-2 bg-gray-200 cursor-pointer"
                             key={story.story_id}
-                            onClick={() => handleSelectStory(story)}
+                            onClick={() => handleSelectStory(story, idx)}
                         ></button>
                     ))}
                 </div>
