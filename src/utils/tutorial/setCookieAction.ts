@@ -1,6 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 export async function setCookieAction() {
     const cookieStore = cookies();
@@ -11,5 +12,5 @@ export async function setCookieAction() {
         sameSite: 'lax',
     });
 
-    return true;
+    redirect('/');
 }

@@ -9,13 +9,13 @@ export default function Header() {
     return (
         <header className="hidden xl:flex relative w-[1080px] h-[100px] items-center bg-white justify-between z-50">
             <div className="flex gap-12 items-center justify-start font-bold w-[80%]">
-                <Link href="/" className="w-[170px]">
+                <Link href="/" className="relative w-[170px] h-[64px]">
                     <Image
                         src="/images/logo.png"
                         alt="logo"
-                        width={170}
-                        height={64}
+                        fill
                         className="w-auto h-auto"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         priority
                     />
                 </Link>

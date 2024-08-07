@@ -90,6 +90,10 @@ const OnBoarding: React.FC = () => {
         // step 번호에 따라 유효성 검사 진행
         // 유효성 검사 진행 후 fetch 날리고 다음 단계로 이동
         if (step === 0) {
+            console.log(
+                'nicknameRef.current?.value',
+                nicknameRef.current?.value,
+            );
             const result = onBoardingValidation(
                 nicknameRef.current?.value,
                 step,

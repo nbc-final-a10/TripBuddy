@@ -44,8 +44,8 @@ const SearchResult: React.FC<SearchResultProps> = ({
             );
         });
 
-    console.log('filteredItems: ', filteredItems);
-    console.log('sortItems: ', sortItems);
+    // console.log('filteredItems: ', filteredItems);
+    // console.log('sortItems: ', sortItems);
 
     return (
         <>

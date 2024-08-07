@@ -136,9 +136,9 @@ const WritePage: React.FC = () => {
             });
             if (response.ok) {
                 const data = await response.json();
-                console.log('게시글 업데이트 성공');
+                // console.log('게시글 업데이트 성공');
                 setTripId(data.trip.trip_id);
-                console.log('데이터', data);
+                // console.log('데이터', data);
                 setIsLoading(false);
                 setIsSuccess(true);
                 // showAlert('success', '여정을 작성하였습니다.');

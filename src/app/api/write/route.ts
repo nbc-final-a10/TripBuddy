@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
 
         tripData.trip_thumbnail = publicUrl.publicUrl;
 
-        console.log('서버에서 tripData', tripData);
+        // console.log('서버에서 tripData', tripData);
 
         // 'trips' 테이블에 여행 데이터를 삽입
         const { data: trip, error: tripError } = await supabase

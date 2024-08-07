@@ -18,47 +18,41 @@ const TutorialMainPage: React.FC = () => {
     }, [searchParams]);
 
     useEffect(() => {
-        if (step <= 4) {
-            router.push(`/tutorial?funnel=${step}`, { scroll: false });
-        } else {
-            router.push('/');
+        if (step < 4) {
+            router.push(`/tutorial?funnel=${step}`);
         }
     }, [step, router]);
 
-    const handleNext = () => {
-        if (step === 1) {
-            setCookieAction();
-        }
+    const handleNext = async () => {
         if (step < 4) {
-            setStep(step + 1);
+            setStep(prev => prev + 1);
         } else {
-            router.push('/');
+            await setCookieAction();
         }
     };
 
     const handleSkip = async () => {
         await setCookieAction();
-        router.push('/');
     };
 
     return (
-        <div className="relative flex flex-col items-center h-dvh overflow-hidden bg-white">
+        <div className="relative flex flex-col items-center h-dvh overflow-hidden bg-white xl:h-[calc(100dvh-100px)]">
             {step < 4 ? (
                 <button
                     onClick={handleSkip}
-                    className="relative w-full text-right text-base py-1 px-1 rounded mb-4"
+                    className="relative w-full text-right text-base py-1 px-1 rounded mb-4 xl:mb-0"
                 >
                     건너뛰기
                 </button>
             ) : (
-                <button className="relative w-full text-right text-base p-2 rounded mb-4"></button>
+                <button className="relative w-full text-right text-base p-4 rounded mb-4 xl:h-[32px] xl:p-0 xl:mb-0"></button>
             )}
 
-            <section className="flex flex-col items-center justify-center w-full">
-                <Tuto step={step + 1} />
+            <section className="flex flex-col items-center justify-center w-full xl:h-[100%-64px]">
+                <Tuto step={step} />
             </section>
 
-            <div className="mb-5 xl:mb-12">
+            <div className="mb-5 xl:mb-5">
                 <ProgressIndicator className="pt-5" step={step} counts={5} />
             </div>
             <div className="w-full flex justify-center">
