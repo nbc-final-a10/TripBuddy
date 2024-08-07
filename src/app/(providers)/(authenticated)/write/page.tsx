@@ -25,6 +25,7 @@ import { useRouter } from 'next/navigation';
 import { validateStep } from '@/utils/write/validateStep';
 import FailPage from '@/components/organisms/write/FailPage';
 import SuccessNotificationPage from '@/components/organisms/write/SuccessNotificationPage';
+import { twMerge } from 'tailwind-merge';
 
 // 버튼 라벨 배열
 const buttonText = [
@@ -42,6 +43,7 @@ const WritePage: React.FC = () => {
     const [tripId, setTripId] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
+    const [isMini, setIsMini] = useState<boolean>(false);
 
     const { buddy } = useAuth();
     const router = useRouter();
@@ -164,6 +166,11 @@ const WritePage: React.FC = () => {
     useEffect(() => {
         setStepToDisplay(step);
     }, [step]);
+
+    useEffect(() => {
+        const isMini = window.innerHeight < 629;
+        setIsMini(isMini);
+    }, []);
     // console.log(buttonText[stepToDisplay]);
 
     const handlePush = (path: string) => {
@@ -171,17 +178,25 @@ const WritePage: React.FC = () => {
     };
 
     return (
-        <>
-            <ProgressIndicator step={step} counts={7} />
+        <div
+            className={twMerge(
+                'relative h-[calc(100dvh-56px-57px)]',
+                step === 5 && 'h-auto',
+            )}
+        >
+            <ProgressIndicator className="pt-2" step={step} counts={7} />
             <section className="h-auto flex flex-col">
-                <div className="flex flex-col">
+                <div className={twMerge('flex flex-col', step === 0 && 'mb-2')}>
                     {step === 0 && (
-                        <WelcomePage SelectBuddyCounts={SelectBuddyCounts} />
+                        <WelcomePage
+                            SelectBuddyCounts={SelectBuddyCounts}
+                            isMini={isMini}
+                        />
                     )}
                     {step === 1 && (
                         <SelectRegionPage
                             SelectRegion={SelectRegion}
-                            pxHeight={60}
+                            isMini={isMini}
                         />
                     )}
                     {step === 2 && (
@@ -224,7 +239,10 @@ const WritePage: React.FC = () => {
                 </div>
                 <div className="flex justify-center">
                     <NextButton
-                        className="text-xl text-white bg-main-color font-bold py-2 px-4 mt-4 mx-2 mb-20 rounded-xl w-full hover:bg-main-color/80"
+                        className={twMerge(
+                            'text-xl text-white bg-main-color font-bold py-2 px-4 mt-4 mx-2 mb-20 rounded-xl w-full hover:bg-main-color/80',
+                            isMini && 'mt-0.5 mb-10',
+                        )}
                         onClick={async () => {
                             const isValid = await validateStep(step, {
                                 secondLevelLocation,
@@ -252,7 +270,7 @@ const WritePage: React.FC = () => {
                     />
                 </div>
             </section>
-        </>
+        </div>
     );
 };
 

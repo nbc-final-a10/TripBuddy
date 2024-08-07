@@ -1,11 +1,13 @@
 import Image from 'next/image';
 import React from 'react';
+import { twMerge } from 'tailwind-merge';
 
 type MascotImageProps = {
     intent: 'main' | 'happy' | 'blue';
+    className?: string;
 };
 
-const MascotImage: React.FC<MascotImageProps> = ({ intent }) => {
+const MascotImage: React.FC<MascotImageProps> = ({ intent, className }) => {
     let src = '';
     if (intent === 'main') {
         src = '/images/mascot_main.webp';
@@ -16,7 +18,12 @@ const MascotImage: React.FC<MascotImageProps> = ({ intent }) => {
     }
     return (
         <div className="relative w-full h-full flex items-center justify-center">
-            <div className="relative w-[80%] h-1/2 aspect-auto">
+            <div
+                className={twMerge(
+                    'relative w-[80%] h-1/2 aspect-auto',
+                    className,
+                )}
+            >
                 <Image
                     src={src}
                     alt="mascot"

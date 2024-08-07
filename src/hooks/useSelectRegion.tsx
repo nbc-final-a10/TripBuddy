@@ -9,6 +9,7 @@ import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
 import useTapScroll from './useTapScroll';
 import ThirdLevelSection from '@/components/molecules/onboarding/ThirdLevelSection';
+import { twMerge } from 'tailwind-merge';
 
 type Location = {
     name: string;
@@ -74,7 +75,7 @@ export default function useSelectRegion() {
         return (
             <>
                 {/* 국내/해외 스위치 버튼 */}
-                <section className="mb-2">
+                <section className="relative h-[10%]">
                     <LocationToggleButton
                         firstLabel="국내"
                         secondLabel="해외"
@@ -86,13 +87,17 @@ export default function useSelectRegion() {
 
                 {/* 도시/대륙 선택 */}
                 <section
-                    className="py-3 overflow-x-scroll scrollbar-hidden flex gap-[10px] h-[10%]"
+                    className={twMerge(
+                        'overflow-x-scroll scrollbar-hidden flex gap-[10px] xl:h-[10%]',
+                        window.innerHeight < 629 && 'h-[42px]',
+                    )}
                     ref={buddiesRef}
                 >
                     <LocationList
                         locations={secondLevelLocations}
                         selectedLocationName={secondLevelLocation || ''}
                         onChipClick={handleChipClick}
+                        isMini={window.innerHeight < 629}
                     />
                 </section>
 
@@ -109,12 +114,13 @@ export default function useSelectRegion() {
                     />
                 )}
 
-                <section>
+                <section className="relative h-[10%] flex items-center justify-center">
                     {thirdLevelLocation && (
                         <SelectedResultRealtimeText
                             selectedData={thirdLevelLocation}
                             firstLabel="선택한 지역은"
                             secondLabel="입니다."
+                            isMini={window.innerHeight < 629}
                         />
                     )}
                 </section>

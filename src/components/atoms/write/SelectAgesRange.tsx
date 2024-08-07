@@ -28,23 +28,23 @@ const SelectAgesRange: React.FC<SelectAgesRangeProps> = ({
     };
 
     return (
-        <div className="flex flex-col justify-center items-center mt-4 w-full">
+        <div className="flex flex-col justify-center items-center mt-1 w-[95%] mx-auto">
             <div className="relative flex justify-between w-full px-4 mt-2">
                 <input
                     type="number"
                     value={startAge}
                     onChange={e => handleStartAge(Number(e.target.value))}
-                    className="bg-gray-200 w-full px-4 py-1 xl:py-2 rounded-full hover:bg-gray-200 text-right pr-5"
+                    className="bg-gray-200 w-full px-4 py-1 xl:py-2 rounded-full text-right pr-5"
                 />
                 <span className="text-lg mx-2"> ~ </span>
                 <input
                     type="number"
                     value={endAge}
                     onChange={e => handleEndAge(Number(e.target.value))}
-                    className="bg-gray-200 w-full px-4 py-1 xl:py-2 rounded-full hover:bg-gray-200 text-right pr-5"
+                    className="bg-gray-200 w-full px-4 py-1 xl:py-2 rounded-full text-right pr-5"
                 />
             </div>
-            <div className="relative w-full my-3 mt-5 px-2">
+            <div className="relative w-[94%] mx-auto my-3 mt-5 px-2">
                 <Range
                     values={values}
                     step={STEP}
