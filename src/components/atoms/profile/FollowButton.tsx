@@ -8,6 +8,21 @@ export default function FollowButton() {
 
     const handleFollow = async () => {
         try {
+            // 팔로우 중복 여부 확인
+            const checkResponse = await fetch(
+                `/api/buddyProfile/follow?followingId=${followingId}&followerId=${buddy?.buddy_id}`,
+                {
+                    method: 'GET',
+                },
+            );
+
+            if (checkResponse.status === 200) {
+                // 이미 팔로우 중인 경우 경고 표시
+                showAlert('error', '이미 팔로우 하셨습니다.');
+                return;
+            }
+
+            // 팔로우 중이 아닌 경우 POST 요청
             const response = await fetch('/api/buddyProfile/follow', {
                 method: 'POST',
                 headers: {
@@ -15,13 +30,14 @@ export default function FollowButton() {
                 },
                 body: JSON.stringify({
                     followingId,
-                    followerId: buddy?.buddy_id, // followerId를 본문에 포함
+                    followerId: buddy?.buddy_id,
                 }),
             });
 
             if (!response.ok) {
                 const errorData = await response.json();
                 console.error('Error:', errorData);
+                showAlert('error', '팔로우 중 오류가 발생했습니다.');
                 return;
             }
 
