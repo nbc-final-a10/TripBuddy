@@ -25,6 +25,21 @@ import React, { useEffect, useRef, useState } from 'react';
 
 type Trip = Tables<'trips'>;
 
+// 쿼리 파라미터 업데이트
+const updateQueryParams = (params: Record<string, string | number | null>) => {
+    const url = new URL(window.location.href);
+    Object.keys(params).forEach(key => {
+        if (params[key] === null) {
+            // url 쿼리 파라미터에서 해당 키 삭제
+            url.searchParams.delete(key);
+        } else {
+            url.searchParams.set(key, params[key].toString());
+        }
+    });
+    // 브라우저 히스토리에 새로운 url 추가
+    window.history.pushState({}, ', url.toString()');
+};
+
 export default function SearchPage() {
     const [showResult, setShowResult] = useState(false);
     const [resultItems, setResultItems] = useState<Trip[]>([]);
@@ -70,17 +85,11 @@ export default function SearchPage() {
 
     const router = useRouter();
     const [searchParams, setSearchParams] = useState(new URLSearchParams());
+    // const searchParams = useSearchParams();
 
     // 쿼리 파라미터로 location 가져오기
     useEffect(() => {
         const urlSearchParams = new URLSearchParams(window.location.search);
-
-        console.log('Raw URL:', window.location.search);
-        // console.log('searchParams:', urlSearchParams.toString());
-
-        urlSearchParams.forEach((value, key) => {
-            console.log(`${key}: ${value}`);
-        });
 
         setSearchParams(urlSearchParams);
     }, []);
@@ -91,9 +100,19 @@ export default function SearchPage() {
             setThirdLevelLocation(location);
             console.log('위치 선택 데이터 왔나: ', location);
         } else {
-            console.log('파라미터 없음');
+            console.log('데이터 안옴');
         }
     }, [searchParams, setThirdLevelLocation]);
+
+    // 쿼리 파라미터로 date 가져오기
+    useEffect(() => {
+        const startDate = searchParams.get('startDate');
+        const endDate = searchParams.get('endDate');
+        if (startDate && endDate) {
+            setStartDateTimestamp(startDate);
+            setEndDateTimestamp(endDate);
+        }
+    }, [searchParams]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -109,23 +128,37 @@ export default function SearchPage() {
     }, []);
 
     useEffect(() => {
-        // console.log('updated selectedThemes: ', selectedThemes);
         setLocalSelectedThemes(selectedThemes);
     }, [selectedThemes]);
 
     useEffect(() => {
-        // console.log('updated selectedBuddyThemes: ', selectedBuddyThemes);
         setLocalSelectedBuddyThemes(selectedBuddyThemes);
     }, [selectedBuddyThemes]);
 
-    const handleDateChange = (start: string, end: string) => {
-        setStartDateTimestamp(start);
-        setEndDateTimestamp(end);
+    // const handleDateChange = (start: string, end: string) => {
+    //     setStartDateTimestamp(start);
+    //     setEndDateTimestamp(end);
+    // };
+
+    const formatDate = (date: Date) => {
+        const week = ['일', '월', '화', '수', '목', '금', '토'];
+        const dayOfWeek = week[date.getDay()];
+        return `${date.getFullYear().toString().slice(-2)}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getDate().toString().padStart(2, '0')}(${dayOfWeek})`;
     };
 
-    const handleShowResult = async () => {
-        // console.log('가져오기 전: ', selectedThemes);
+    const getTodayDate = () => {
+        const today = new Date();
+        return formatDate(today);
+    };
 
+    const formattedStartDate = startDateTimestamp
+        ? formatDate(new Date(startDateTimestamp))
+        : getTodayDate();
+    const formattedEndDate = endDateTimestamp
+        ? formatDate(new Date(endDateTimestamp))
+        : getTodayDate();
+
+    const handleShowResult = async () => {
         // 데이터 가져와서 상태 업데이트
         const { data, error } = await supabase.from('trips').select('*');
         if (error) {
@@ -205,7 +238,6 @@ export default function SearchPage() {
         }
 
         setResultItems(filteredItems);
-        // console.log('패칭 후에 selectedThemes: ', selectedThemes);
 
         // 아무런 필터 조건이 걸려있지 않을 때
         if (
@@ -261,19 +293,73 @@ export default function SearchPage() {
         setVisibleSecondItems(prev => prev + 6);
     };
 
-    // 현재 날짜, 다음날 가져오기
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
+    // url 파라미터 초기 상태 설정
+    useEffect(() => {
+        const params = searchParams;
+        setSearchInput(params.get('searchInput') || '');
+        setSelectedGender(params.get('gender') || null);
+        setStartAge(Number(params.get('startAge')) || 18);
+        setEndAge(Number(params.get('endAge')) || 150);
+        setSelectedMeetingPlace(params.get('meetingPlace') || null);
+        setThirdLevelLocation(params.get('location') || '');
+        setStartDateTimestamp(params.get('startDate') || '');
+        setEndDateTimestamp(params.get('endDate') || '');
+        setSelectedThemes(params.getAll('themes') || []);
+        setSelectedBuddyThemes(params.getAll('buddyThemes') || []);
+    }, [searchParams, setThirdLevelLocation]);
 
-    const formatDate = (date: Date) => {
-        const week = ['일', '월', '화', '수', '목', '금', '토'];
-        const dayOfWeek = week[today.getDay()];
-        return `${today.getFullYear().toString().slice(-2)}.${(today.getMonth() + 1).toString().padStart(2, '0')}.${today.getDate().toString().padStart(2, '0')}(${dayOfWeek})`;
+    // 상태가 변경될 때 URL 업데이트
+    useEffect(() => {
+        updateQueryParams({
+            searchInput,
+            gender: selectedGender,
+            startAge,
+            endAge,
+            meetingPlace: selectedMeetingPlace,
+            location: thirdLevelLocation,
+            startDate: startDateTimestamp,
+            endDate: endDateTimestamp,
+            themes: selectedThemes.join(','),
+            buddyThemes: selectedBuddyThemes.join(','),
+        });
+    }, [
+        searchInput,
+        selectedGender,
+        startAge,
+        endAge,
+        selectedMeetingPlace,
+        thirdLevelLocation,
+        startDateTimestamp,
+        endDateTimestamp,
+        selectedThemes,
+        selectedBuddyThemes,
+    ]);
+
+    // 필터 리셋 핸들러
+    const handleFiltersReset = () => {
+        setSearchInput('');
+        setSelectedGender(null);
+        setStartAge(18);
+        setEndAge(150);
+        setSelectedMeetingPlace(null);
+        setThirdLevelLocation('');
+        setStartDateTimestamp('');
+        setEndDateTimestamp('');
+        setSelectedThemes([]);
+        setSelectedBuddyThemes([]);
+        updateQueryParams({
+            searchInput: '',
+            gender: null,
+            startAge: 18,
+            endAge: 150,
+            meetingPlace: null,
+            location: null,
+            startDate: '',
+            endDate: '',
+            themes: '',
+            buddyThemes: '',
+        });
     };
-
-    const formattedStartDate = formatDate(today);
-    const formattedEndDate = formatDate(tomorrow);
 
     return (
         <main className="p-5 xl:p-0 xl:py-5">
@@ -289,8 +375,8 @@ export default function SearchPage() {
                 />
 
                 <DateSearchButton
-                    startDate={formattedStartDate}
-                    endDate={formattedEndDate}
+                    defaultStartDate={formattedStartDate}
+                    defaultEndDate={formattedEndDate}
                 />
 
                 <button
@@ -368,6 +454,13 @@ export default function SearchPage() {
                     setSelectedTheme={setSelectedBuddyThemes}
                 />
             </div>
+
+            <button
+                className="flex justify-center items-center mx-auto w-full px-28 h-12 rounded-2xl bg-main-color font-semibold text-white text-sm m-3 mb-5 transition-colors duration-200 ease-in-out active:bg-gray-300 xl:w-[348px] xl:mt-8"
+                onClick={handleFiltersReset}
+            >
+                검색 옵션 리셋하기
+            </button>
 
             <button
                 id="result-section"

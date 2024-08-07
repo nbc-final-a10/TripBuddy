@@ -1,21 +1,31 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import React from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 
 type DateSearchMainPageProps = {
-    startDate: string;
-    endDate: string;
-    onClick?: () => void;
+    defaultStartDate: string;
+    defaultEndDate: string;
 };
 
 const DateSearchButton: React.FC<DateSearchMainPageProps> = ({
-    startDate,
-    endDate,
-    onClick,
+    defaultStartDate,
+    defaultEndDate,
 }) => {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const [startDate, setStartDate] = useState(defaultStartDate);
+    const [endDate, setEndDate] = useState(defaultEndDate);
+
+    useEffect(() => {
+        const startDateParam = searchParams.get('startDate');
+        const endDateParam = searchParams.get('endDate');
+        if (startDateParam && endDateParam) {
+            setStartDate(startDateParam);
+            setEndDate(endDateParam);
+        }
+    }, [searchParams]);
 
     const handleClick = () => {
         router.push('/search/date');
@@ -32,7 +42,9 @@ const DateSearchButton: React.FC<DateSearchMainPageProps> = ({
                         height={20}
                     />
                 </div>
-                {startDate} ~ {endDate}
+                <span>
+                    {startDate} ~ {endDate}
+                </span>
             </button>
         </div>
     );
