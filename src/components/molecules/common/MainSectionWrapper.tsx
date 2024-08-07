@@ -18,7 +18,8 @@ const MainSectionWrapper = ({ children }: MainSectionWrapperProps) => {
         pathname === '/login' ||
         pathname === '/signup' ||
         pathname === '/recover' ||
-        pathname === '/onboarding';
+        pathname === '/onboarding' ||
+        pathname === '/tutorial';
 
     return (
         <section

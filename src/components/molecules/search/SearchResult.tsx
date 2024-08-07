@@ -41,7 +41,11 @@ const SearchResult: React.FC<SearchResultProps> = ({
             );
         });
 
+<<<<<<< HEAD
     console.log('filteredItems: ', filteredItems);
+=======
+    // console.log('filteredItems: ', filteredItems);
+>>>>>>> 15f4d206d294e2e6f9e435eb75279aeee03961d7
     // console.log('sortItems: ', sortItems);
 
     return (

@@ -7,7 +7,6 @@ import {
 } from '@/types/Auth.types';
 import fetchWrapper from '@/utils/api/fetchWrapper';
 import { OAuthResponse } from '@supabase/supabase-js';
-import { cookies } from 'next/headers';
 
 // 서버쪽 fetch 함수들은 분리할 것
 
@@ -17,6 +16,7 @@ export async function postLogIn(payload: LogInData): Promise<Buddy> {
         const data = await fetchWrapper<Buddy>(url, {
             method: 'POST',
             body: JSON.stringify(payload),
+            next: { tags: ['buddy'] },
         });
         return data;
     } catch (error: any) {
@@ -29,6 +29,7 @@ export async function deleteLogOut(): Promise<void> {
     try {
         await fetchWrapper<void>(url, {
             method: 'DELETE',
+            next: { tags: ['buddy'] },
         });
     } catch (error: any) {
         throw error;
@@ -41,6 +42,7 @@ export async function postSignUp(payload: LogInData): Promise<Buddy> {
         const data = await fetchWrapper<Buddy>(url, {
             method: 'POST',
             body: JSON.stringify(payload),
+            next: { tags: ['buddy'] },
         });
         return data;
     } catch (error: any) {
@@ -55,6 +57,7 @@ export async function getLogInWithProvider(
     try {
         const data = await fetchWrapper<OAuthResponse['data']>(url, {
             method: 'GET',
+            next: { tags: ['buddy'] },
         });
         return data;
     } catch (error: any) {
@@ -154,6 +157,7 @@ export async function postNaverLogIn(): Promise<Buddy | null> {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ accessToken }),
+            next: { tags: ['buddy'] },
         });
         return data;
     } catch (error: any) {

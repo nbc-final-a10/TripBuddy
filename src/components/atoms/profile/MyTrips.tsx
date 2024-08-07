@@ -93,7 +93,7 @@ export default function MyTrips({ id }: MyTripsProps) {
                             contractWithTrips.trips.contract =
                                 trips.participated;
 
-                            console.log(contractWithTrips);
+                            // console.log(contractWithTrips);
                             return (
                                 <TripCard
                                     key={contract.trips.trip_id}

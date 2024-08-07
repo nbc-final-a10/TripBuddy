@@ -78,12 +78,18 @@ export function AuthProvider({ children }: PropsWithChildren) {
             try {
                 const payload = { email, password };
                 const buddy = await logInMutation(payload);
+                // queryClient.invalidateQueries({
+                //     queryKey: [QUERY_KEY_BUDDY],
+                // });
 
                 if (!buddy)
                     return showAlert('caution', '알 수 없는 오류가 발생했어요');
 
                 showAlert('success', `${buddy.buddy_nickname}님 환영합니다!`, {
-                    onConfirm: () => router.replace('/'),
+                    onConfirm: () => {
+                        router.replace('/');
+                        router.refresh();
+                    },
                 });
             } catch (error: unknown) {
                 const errorMessage =
@@ -152,6 +158,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
             async provider => {
                 try {
                     const data = await getLogInWithProvider(provider);
+                    // queryClient.invalidateQueries({
+                    //     queryKey: [QUERY_KEY_BUDDY],
+                    // });
+
                     if (!data.url) {
                         return showAlert(
                             'caution',
@@ -161,7 +171,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
                     showAlert('success', '소셜 로그인을 진행합니다', {
                         onConfirm: () => router.replace(data.url),
                     });
-                    // queryClient.invalidateQueries({ queryKey: [QUERY_KEY_USER] });
                 } catch (error) {
                     const errorMessage =
                         error instanceof Error
@@ -248,9 +257,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
         }
     }, [naverLogInMutation, router]);
 
-    useEffect(() => {
-        console.log('isPending ====>', isPending);
-    }, [isPending]);
+    // useEffect(() => {
+    //     console.log('isPending ====>', isPending);
+    // }, [isPending]);
 
     useEffect(() => {
         setIsPending(
@@ -261,9 +270,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
         );
     }, [isBuddyPending, isLogInPending, isSignUpPending, isNaverLogInPending]);
 
-    useEffect(() => {
-        console.log('buddy ====>', buddy);
-    }, [buddy]);
+    // useEffect(() => {
+    //     console.log('buddy ====>', buddy);
+    // }, [buddy]);
 
     useEffect(() => {
         if (error) showAlert('error', error.message);

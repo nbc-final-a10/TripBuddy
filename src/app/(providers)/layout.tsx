@@ -23,7 +23,7 @@ export const metadata: Metadata = defaultMetaData;
 const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
     const userId = getUserFromHeader();
 
-    console.log('헤더에서 user =====>', userId);
+    // console.log('헤더에서 user =====>', userId);
 
     const queryClient = new QueryClient();
     await queryClient.prefetchQuery({
