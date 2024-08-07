@@ -38,7 +38,7 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
         <section className="relative">
             <div className="border-y-[1px] border-gray-200 px-6 py-2 mb-4">
                 <div className="flex items-center">
-                    <div className="w-[40px] h-[40px] overflow-hidden flex justify-center items-centerr">
+                    <div className="w-[40px] h-[40px] overflow-hidden flex justify-center">
                         {tripData?.trip_thumbnail ? (
                             <Image
                                 src={tripData.trip_thumbnail}
@@ -48,14 +48,14 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
                                 className="object-cover"
                             />
                         ) : (
-                            <div className="w-[40px] h-[40px] bg-gray-200 "></div>
+                            <div className="w-[40px] h-[40px] bg-gray-200"></div>
                         )}
                     </div>
                     <div className="h-[40px] px-3 flex flex-col justify-between">
-                        <p className="text-sm font-bold">
+                        <p className="text-[16px] font-semibold text-grayscale-color-700">
                             {tripData?.trip_title}
                         </p>
-                        <div className="text-xs flex gap-6">
+                        <div className=" text-[14px] font-medium text-grayscale-color-600 flex gap-6">
                             <span>{tripData?.trip_final_destination}</span>
                             <span>
                                 {tripData?.trip_start_date
@@ -64,7 +64,7 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
                                       )
                                     : null}
                             </span>
-                            <span>{`n/${tripData?.trip_max_buddies_counts}명`}</span>
+                            <span className="text-grayscale-color-500">{`n/${tripData?.trip_max_buddies_counts}명`}</span>
                         </div>
                     </div>
                 </div>
