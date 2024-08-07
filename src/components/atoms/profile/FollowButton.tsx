@@ -24,7 +24,10 @@ export default function FollowButton() {
                     },
                 );
 
-                if (checkResponse.status === 200) {
+                const data = await checkResponse.json(); // 응답 데이터를 JSON으로 파싱
+
+                // 수정된 부분: originFollow 대신 data.followingStatus 사용
+                if (data.originFollow) {
                     setIsFollowing(true);
                 } else {
                     setIsFollowing(false);
