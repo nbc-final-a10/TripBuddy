@@ -119,11 +119,7 @@ const Tuto: React.FC<TutoProps> = ({ step }) => {
             <p className="text-center text-lg md:text-xl text-gray-600 mb-4 xl:mb-8">
                 {description}
             </p>
-            <div
-                className={clsx(
-                    'relative w-full h-[300px] max-h-[60vh] min-h-[300px] aspect-[3/4] xl:h-[350px] xl:max-h-[80vh] xl:min-h-[350px] xl:aspect-[3/4] transition-opacity duration-500',
-                )}
-            >
+            <div className="relative w-full h-[300px] max-h-[60vh] min-h-[300px] aspect-[3/4] xl:h-[350px] xl:max-h-[80vh] xl:min-h-[350px] xl:aspect-[3/4] transition-opacity duration-500">
                 <Image
                     src={src}
                     alt={alt}
