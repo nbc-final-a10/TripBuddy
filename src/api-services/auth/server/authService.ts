@@ -5,12 +5,12 @@ import { cookies } from 'next/headers';
 export async function getBuddyServer(
     userId: string | null,
 ): Promise<Buddy | null> {
-    const cookieStore = cookies();
-    const cookiesArray = cookieStore.getAll();
+    // const cookieStore = cookies();
+    // const cookiesArray = cookieStore.getAll();
 
-    if (cookiesArray.length === 0) {
-        return null;
-    }
+    // if (cookiesArray.length === 0) {
+    //     return null;
+    // }
 
     const url = `/api/auth/buddy`;
     try {
@@ -20,11 +20,11 @@ export async function getBuddyServer(
             method: 'POST',
             body: JSON.stringify({ userId }),
             cache: 'no-store',
-            headers: {
-                Cookie: cookiesArray
-                    .map(cookie => `${cookie.name}=${cookie.value}`)
-                    .join(';'),
-            },
+            // headers: {
+            //     Cookie: cookiesArray
+            //         .map(cookie => `${cookie.name}=${cookie.value}`)
+            //         .join(';'),
+            // },
             next: { tags: ['buddy'] },
         });
         return data;
