@@ -26,7 +26,7 @@ const OnBoardingInnerWrapper = ({
             onSubmit={onSubmit}
             className={twMerge(
                 clsx(
-                    'flex flex-col gap-4 w-full h-full items-center xl:h-[90%]',
+                    'flex flex-col gap-4 w-full h-[90%] items-center xl:h-[90%]',
                     {
                         'justify-start': align === 'start',
                         'justify-end': align === 'end',

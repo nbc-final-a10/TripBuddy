@@ -23,8 +23,9 @@ const useNextButton = ({
         if (disabled) return;
         if (validateStep) {
             const isValid = await validateStep();
-            if (!isValid) return; // 유효성 검사 실패 시 스텝 증가 안 함
+            if (!isValid) return false; // 유효성 검사 실패 시 스텝 증가 안 함
         }
+        return true;
     }, [validateStep, disabled]);
 
     const NextButton = ({
@@ -40,11 +41,10 @@ const useNextButton = ({
         <button
             onClick={async e => {
                 e.preventDefault();
-                await handleNext();
+                const isValid = await handleNext();
+                if (!isValid) return;
+                if (step < limit) setStep(prevStep => prevStep + 1);
                 if (onClick) onClick();
-                if (step < limit) {
-                    setStep(prevStep => prevStep + 1);
-                }
             }}
             className={className}
             disabled={disabled}

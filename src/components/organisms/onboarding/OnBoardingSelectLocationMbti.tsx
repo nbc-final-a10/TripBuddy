@@ -43,7 +43,7 @@ const OnBoardingSelectLocationMbti = ({
                     </section>
                 )}
                 {mode === 'location' && SelectRegion && (
-                    <section className="relative w-[90%] h-full xl:h-[90%]">
+                    <section className="relative w-[90%] h-full xl:h-[80%]">
                         <SelectRegion />
                     </section>
                 )}
