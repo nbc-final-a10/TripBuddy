@@ -90,17 +90,13 @@ export async function updateSession(request: NextRequest) {
     // 튜토리얼 페이지 체크를 위한 쿠키 확인
     const hasVisitedTutorial = request.cookies.get('hasVisitedTutorial');
 
+    console.log('hasVisitedTutorial =====>', hasVisitedTutorial);
     // 튜토리얼 페이지로 리디렉션
     if (
         !hasVisitedTutorial &&
         !request.nextUrl.pathname.startsWith('/tutorial') &&
         !request.nextUrl.pathname.startsWith('/api')
     ) {
-        supabaseResponse.cookies.set('hasVisitedTutorial', 'true', {
-            path: '/',
-            sameSite: 'lax',
-            maxAge: 60 * 60 * 24 * 365,
-        });
         const url = request.nextUrl.clone();
         url.pathname = '/tutorial';
         return NextResponse.redirect(url);
