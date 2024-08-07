@@ -15,7 +15,7 @@ function useTapScroll({ refs }: UseTapScrollProps) {
         const handleWheel = (container: HTMLElement) => (event: WheelEvent) => {
             if (!isScrolling) {
                 setIsScrolling(true);
-                console.log('Scrolling started');
+                // console.log('Scrolling started');
             }
             if (scrollTimeout.current) {
                 clearTimeout(scrollTimeout.current);
@@ -27,7 +27,7 @@ function useTapScroll({ refs }: UseTapScrollProps) {
             scrollTimeout.current = window.setTimeout(() => {
                 setIsScrolling(false);
                 setLock(false);
-                console.log('Scrolling ended');
+                // console.log('Scrolling ended');
             }, 200); // Adjust timeout duration as needed
         };
 
@@ -38,7 +38,7 @@ function useTapScroll({ refs }: UseTapScrollProps) {
 
         const handleMouseLeave = (event: MouseEvent) => {
             event.preventDefault();
-            console.log('handleMouseLeave');
+            // console.log('handleMouseLeave');
         };
 
         const containers = refs;

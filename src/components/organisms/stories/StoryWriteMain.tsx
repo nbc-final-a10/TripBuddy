@@ -9,8 +9,8 @@ import useLockBodyScroll from '@/hooks/common/useLockBodyScroll';
 
 const filterImage = [
     {
-        name: 'none',
-        className: '',
+        name: 'basic',
+        className: 'relative',
     },
     {
         name: 'sepia',

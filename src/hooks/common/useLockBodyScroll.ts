@@ -1,3 +1,4 @@
+'use client';
 import { useLayoutEffect, useState, useCallback, useRef } from 'react';
 
 const useLockBodyScroll = (initialState: boolean = false) => {
@@ -5,7 +6,7 @@ const useLockBodyScroll = (initialState: boolean = false) => {
     const [scrollY, setScrollY] = useState(0);
     const originalStyleRef = useRef<string>('');
 
-    const lockScroll = useCallback(() => {
+    const lockScroll = () => {
         if (!isLocked) {
             // Store original styles
             // originalStyleRef.current = window.getComputedStyle(
@@ -20,7 +21,7 @@ const useLockBodyScroll = (initialState: boolean = false) => {
             document.body.style.width = '100%';
             setIsLocked(true);
         }
-    }, [isLocked]);
+    };
 
     const unlockScroll = useCallback(() => {
         if (isLocked) {
@@ -43,16 +44,14 @@ const useLockBodyScroll = (initialState: boolean = false) => {
         };
     }, [isLocked, unlockScroll]);
 
-    const setLock = useCallback(
-        (lock: boolean) => {
-            if (lock) {
-                lockScroll();
-            } else {
-                unlockScroll();
-            }
-        },
-        [lockScroll, unlockScroll],
-    );
+    const setLock = (lock: boolean) => {
+        if (lock) {
+            lockScroll();
+        }
+        if (!lock) {
+            unlockScroll();
+        }
+    };
 
     return { isLocked, setLock };
 };

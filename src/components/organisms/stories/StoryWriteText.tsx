@@ -27,7 +27,6 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
     const router = useRouter();
     const { buddy } = useAuth();
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
-    const { isLocked, setLock } = useLockBodyScroll(true);
 
     const { mutateAsync, isPending, error } = useStoryMutation();
 
@@ -55,21 +54,12 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
         });
     };
 
-    useEffect(() => {
-        setLock(true);
-    }, [setLock]);
-
     // 이미지 스토리지에 쓰기
     // 데이터 테이블에 쓰기
     // 스토리 생성 완료 후 리다이렉트
 
     return (
-        <section
-            className={clsx(
-                'relative flex flex-col gap-4 w-full h-[calc(100dvh-57px)] max-h-dvh overflow-hidden aspect-auto bg-gray-600',
-                !isLocked && 'hidden',
-            )}
-        >
+        <section className="relative flex flex-col gap-4 w-full h-[calc(100dvh-57px-56px)] max-h-dvh overflow-hidden aspect-auto bg-gray-600">
             {isPending && (
                 <div className="z-10 text-white font-bold">
                     스토리 생성중...

@@ -4,6 +4,7 @@ import { StoryFilter } from '@/types/Story.types';
 import clsx from 'clsx';
 import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 interface StoryFilterImageProps {
     handleStep: (step: number) => void;
@@ -21,22 +22,12 @@ const StoryFilterImage: React.FC<StoryFilterImageProps> = ({
     handleFilter,
 }) => {
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
-    const { isLocked, setLock } = useLockBodyScroll();
     const filterRef = useRef<HTMLDivElement>(null);
 
     useTapScroll({ refs: [filterRef] });
 
-    useEffect(() => {
-        setLock(true);
-    }, [setLock]);
-
     return (
-        <section
-            className={clsx(
-                'relative flex flex-col gap-4 w-full h-[calc(100dvh-57px)] max-h-dvh overflow-hidden aspect-auto bg-gray-600',
-                !isLocked && 'hidden',
-            )}
-        >
+        <section className="relative flex flex-col w-full h-[calc(100dvh-57px-56px)] max-h-dvh overflow-hidden aspect-auto bg-gradient-to-b from-transparent to-black/20">
             <div className="absolute flex justify-end w-full top-0 right-0 z-10 gap-2">
                 <button
                     className=" bg-main-color text-white px-2 pt-0.5 pb-1.5 rounded-md leading-none"
@@ -73,23 +64,33 @@ const StoryFilterImage: React.FC<StoryFilterImageProps> = ({
             </div>
 
             <div
-                className="relative flex flex-row bottom-0 overflow-x-scroll scrollbar-hidden gap-2 px-3"
+                className="relative flex flex-row bottom-0 overflow-x-scroll scrollbar-hidden gap-2 p-2 h-[20%]"
                 ref={filterRef}
             >
                 {filterImage.map(filter => (
-                    <button
+                    <div
+                        className="flex flex-col justify-center items-center relative min-w-[90px] h-full gap-1"
                         key={filter.name}
-                        className={`relative min-w-[90px] h-[120px] aspect-auto ${filter.className}`}
-                        onClick={() => handleFilter(filter)}
                     >
-                        <Image
-                            src={selectedMedia}
-                            alt={filter.name}
-                            fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            className="relative object-contain w-full h-full"
-                        />
-                    </button>
+                        <p className="text-sm text-black h-[10%] leading-none">
+                            {filter.name}
+                        </p>
+                        <button
+                            className={twMerge(
+                                'w-[100%] h-[90%] aspect-auto',
+                                filter.className && filter.className,
+                            )}
+                            onClick={() => handleFilter(filter)}
+                        >
+                            <Image
+                                src={selectedMedia}
+                                alt={filter.name}
+                                fill
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                className="relative object-contain w-full h-full"
+                            />
+                        </button>
+                    </div>
                 ))}
             </div>
         </section>
