@@ -31,23 +31,23 @@ function useTapScroll({ refs }: UseTapScrollProps) {
             }, 200); // Adjust timeout duration as needed
         };
 
-        const handleMouseEnter = (event: MouseEvent) => {
-            event.preventDefault();
-            // setLock(true); // Lock body scroll
-        };
+        // const handleMouseEnter = (event: MouseEvent) => {
+        //     event.preventDefault();
+        //     setLock(true); // Lock body scroll
+        // };
 
-        const handleMouseLeave = (event: MouseEvent) => {
-            event.preventDefault();
-            // console.log('handleMouseLeave');
-        };
+        // const handleMouseLeave = (event: MouseEvent) => {
+        //     event.preventDefault();
+        //     console.log('handleMouseLeave');
+        // };
 
         const containers = refs;
         if (containers) {
             containers.forEach(container => {
                 const current = container.current;
                 if (current) {
-                    current.addEventListener('mouseenter', handleMouseEnter);
-                    current.addEventListener('mouseleave', handleMouseLeave);
+                    // current.addEventListener('mouseenter', handleMouseEnter);
+                    // current.addEventListener('mouseleave', handleMouseLeave);
                     current.addEventListener('wheel', handleWheel(current));
                 }
             });
@@ -58,14 +58,14 @@ function useTapScroll({ refs }: UseTapScrollProps) {
                 containers.forEach(container => {
                     const current = container.current;
                     if (current) {
-                        current.removeEventListener(
-                            'mouseenter',
-                            handleMouseEnter,
-                        );
-                        current.removeEventListener(
-                            'mouseleave',
-                            handleMouseLeave,
-                        );
+                        // current.removeEventListener(
+                        //     'mouseenter',
+                        //     handleMouseEnter,
+                        // );
+                        // current.removeEventListener(
+                        //     'mouseleave',
+                        //     handleMouseLeave,
+                        // );
                         current.removeEventListener(
                             'wheel',
                             handleWheel(current),
