@@ -86,7 +86,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
                     return showAlert('caution', '알 수 없는 오류가 발생했어요');
 
                 showAlert('success', `${buddy.buddy_nickname}님 환영합니다!`, {
-                    onConfirm: () => router.replace('/'),
+                    onConfirm: () => {
+                        router.replace('/');
+                        router.refresh();
+                    },
                 });
             } catch (error: unknown) {
                 const errorMessage =
