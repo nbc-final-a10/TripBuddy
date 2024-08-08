@@ -8,6 +8,9 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { MouseEvent, useRef, useState, useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
+import Close from '../../../../public/svg/Close.svg';
+import { FaRegHeart } from 'react-icons/fa';
+import { useAuth } from '@/hooks/auth';
 
 type StoryDetailProps = {
     nickname: string;
@@ -16,6 +19,8 @@ type StoryDetailProps = {
 };
 
 const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
+    const [isHearted, setIsHearted] = useState<boolean>(false);
+    const { buddy } = useAuth();
     const router = useRouter();
     const scrollRef = useRef<HTMLDivElement>(null);
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
@@ -79,6 +84,18 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
                         onClick={handleNextBefore}
                     ></div>
                 </div>
+
+                <div className="absolute top-4 right-1 w-full flex flex-row justify-end gap-2 z-[99]">
+                    <button className="relative">
+                        <FaRegHeart className="cursor-pointer fill-white" />
+                    </button>
+                    {buddy?.buddy_id === selectedStory.story_created_by ? (
+                        <button className="relative">
+                            <Close className="cursor-pointer fill-white" />
+                        </button>
+                    ) : null}
+                </div>
+
                 <div
                     className="absolute w-full top-1 left-1/2 -translate-x-1/2 flex flex-row gap-1 z-30 overflow-x-auto scrollbar-hidden"
                     ref={scrollRef}
