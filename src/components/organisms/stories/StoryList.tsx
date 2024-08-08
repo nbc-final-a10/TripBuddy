@@ -37,7 +37,8 @@ const StoryList: React.FC = () => {
             {sortedStories.map(story => (
                 <StoryCard
                     key={story.buddyId}
-                    id={story.stories[0].story_id}
+                    // id={story.stories[0].story_id}
+                    id={story.buddyId}
                     buddy={story.stories[0].buddies}
                     name={story.stories[0].buddies.buddy_nickname}
                     created_at={story.stories[0].story_created_at}

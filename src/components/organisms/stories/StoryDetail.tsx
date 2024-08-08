@@ -27,9 +27,7 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
     const router = useRouter();
     const scrollRef = useRef<HTMLDivElement>(null);
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
-    const [selectedStory, setSelectedStory] = useState<StoryWithBuddies>(
-        stories[0],
-    );
+
     const {
         data: queryStories,
         isPending,
@@ -41,6 +39,10 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
         error: deleteStoryError,
     } = useDeleteStoryMutation();
     useTapScroll({ refs: [scrollRef] });
+
+    const [selectedStory, setSelectedStory] = useState<StoryWithBuddies>(
+        stories[0],
+    );
 
     const handleNextBefore = (e: MouseEvent<HTMLDivElement>) => {
         const next = e.currentTarget.dataset.next;
@@ -68,7 +70,7 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
     const handleSelectStory = (story: StoryWithBuddies, index: number) => {
         setSelectedStory(story);
         setSelectedIndex(index);
-        router.push(`/stories/${nickname}?id=${story.story_id}`);
+        router.push(`/stories/${nickname}?id=${story.buddies.buddy_id}`);
     };
 
     const handleDeleteStory = () => {
@@ -102,7 +104,9 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
     useEffect(() => {
         if (queryStories) {
             setSelectedStory(queryStories[0]);
-            router.push(`/stories/${nickname}?id=${queryStories[0].story_id}`);
+            router.push(
+                `/stories/${nickname}?id=${queryStories[0].buddies.buddy_id}`,
+            );
         }
     }, [queryStories, router, nickname]);
 

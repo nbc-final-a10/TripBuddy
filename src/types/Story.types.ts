@@ -25,3 +25,11 @@ export type StoryFilter = {
     name: string;
     className: string;
 };
+
+export type StoryLikes = Tables<'storylikes'>;
+
+export type StoryLikesData = {
+    story_id: string;
+    user_id: string;
+    isLiked: boolean;
+};
