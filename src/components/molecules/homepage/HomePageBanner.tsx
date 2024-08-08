@@ -123,7 +123,7 @@ const HomePageBanner = () => {
                 )}
                 <div className="absolute inset-0 bg-black/30 z-10" />
                 <div className="relative z-20 text-white h-full flex flex-col justify-center gap-3">
-                    {expectedTrip && (
+                    {expectedTrip && buddy && (
                         <>
                             <p>
                                 <span className="font-bold text-3xl">

@@ -6,13 +6,11 @@ import {
     patchResetPassword,
     postSendingResetEmail,
 } from '@/api-services/auth/client';
-import { PUBLIC_URL } from '@/constants/common.constants';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import useBuddyQuery from '@/hooks/queries/useBuddyQuery';
 import useLogInMutation from '@/hooks/queries/useLogInMutation';
 import useNaverLogInMutation from '@/hooks/queries/useNaverLogInMutation';
 import useSignUpMutation from '@/hooks/queries/useSignUpMutation';
-
 import { Buddy } from '@/types/Auth.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { Provider } from '@supabase/supabase-js';

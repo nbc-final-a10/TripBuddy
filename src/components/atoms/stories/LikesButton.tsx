@@ -2,7 +2,6 @@
 
 import { useAuth } from '@/hooks/auth';
 import useStoryLikesMutation from '@/hooks/queries/useStoryLikesMutation';
-import useStoryLikesQuery from '@/hooks/queries/useStoryLikesQuery';
 import { StoryLikes } from '@/types/Story.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useRouter } from 'next/navigation';
@@ -48,11 +47,12 @@ const LikesButton: React.FC<LikesButtonProps> = ({
             showAlert('caution', '로그인이 필요합니다.', {
                 onConfirm: () => router.push('/login'),
             });
+        } else {
+            setIsOptimisticUpdate(prev => !prev);
+            setLikesCount(prev =>
+                isLikedDataSet === 'liked' ? prev - 1 : prev + 1,
+            );
         }
-        setIsOptimisticUpdate(prev => !prev);
-        setLikesCount(prev =>
-            isLikedDataSet === 'liked' ? prev - 1 : prev + 1,
-        );
 
         if (isLiked && buddy) {
             likesMutate({
