@@ -15,6 +15,7 @@ import useDeleteStoryMutation from '@/hooks/queries/useDeleteStoryMutation';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import useSpecificStoriesQuery from '@/hooks/queries/useSpecificStoriesQuery';
 import LikesButton from '@/components/atoms/stories/LikesButton';
+import useStoryLikesQuery from '@/hooks/queries/useStoryLikesQuery';
 
 type StoryDetailProps = {
     nickname: string;
@@ -38,11 +39,17 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
         isPending: isDeleting,
         error: deleteStoryError,
     } = useDeleteStoryMutation();
+
     useTapScroll({ refs: [scrollRef] });
 
     const [selectedStory, setSelectedStory] = useState<StoryWithBuddies>(
         stories[0],
     );
+
+    const { data: likes, isPending: isLikesPending } = useStoryLikesQuery(
+        selectedStory.story_id,
+    );
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleNextBefore = (e: MouseEvent<HTMLDivElement>) => {
         const next = e.currentTarget.dataset.next;
@@ -110,12 +117,20 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
         }
     }, [queryStories, router, nickname]);
 
+    useEffect(() => {
+        if (isLikesPending || isDeleting || isPending) {
+            setIsLoading(true);
+        } else {
+            setIsLoading(false);
+        }
+    }, [isLikesPending, isDeleting, isPending, setIsLoading]);
+
     const storyOverlay = selectedStory?.story_overlay as StoryOverlay[];
+
+    if (isLoading) return <DefaultLoader />;
 
     return (
         <>
-            {isDeleting && <DefaultLoader />}
-            {isPending && <DefaultLoader />}
             <section className="relative w-full h-[calc(100dvh-57px-56px)] bg-gray-800 aspect-auto xl:h-[calc(100dvh-100px)] xl:w-[430px] xl:mx-auto overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-full z-20 flex flex-row">
                     <div
@@ -132,7 +147,12 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
 
                 <div className="absolute top-4 right-1 w-full flex flex-row justify-end gap-2 z-[99]">
                     <button className="relative">
-                        <LikesButton story_id={selectedStory.story_id} />
+                        {likes && (
+                            <LikesButton
+                                story_id={selectedStory.story_id}
+                                likes={likes}
+                            />
+                        )}
                     </button>
                     {buddy?.buddy_id === selectedStory.story_created_by ? (
                         <button

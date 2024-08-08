@@ -3,6 +3,7 @@
 import { useAuth } from '@/hooks/auth';
 import useStoryLikesMutation from '@/hooks/queries/useStoryLikesMutation';
 import useStoryLikesQuery from '@/hooks/queries/useStoryLikesQuery';
+import { StoryLikes } from '@/types/Story.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
@@ -10,12 +11,12 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 type LikesButtonProps = {
     story_id: string;
+    likes: StoryLikes[];
 };
 
-const LikesButton: React.FC<LikesButtonProps> = ({ story_id }) => {
+const LikesButton: React.FC<LikesButtonProps> = ({ story_id, likes }) => {
     const { buddy } = useAuth();
     const router = useRouter();
-    const { data: likes, isLoading } = useStoryLikesQuery(story_id);
     const { mutate: likesMutate, isPending: isPosting } =
         useStoryLikesMutation(story_id);
 
@@ -43,7 +44,6 @@ const LikesButton: React.FC<LikesButtonProps> = ({ story_id }) => {
     };
 
     useEffect(() => {
-        console.log(likes);
         if (likes && buddy) {
             const isLiked = likes.find(
                 like => like.storylikes_buddy_id === buddy.buddy_id,
@@ -51,14 +51,6 @@ const LikesButton: React.FC<LikesButtonProps> = ({ story_id }) => {
             setIsLiked(isLiked ? true : false);
         }
     }, [likes, buddy]);
-
-    if (isLoading || isPosting)
-        return (
-            <div className="flex flex-row items-center gap-1">
-                <FaRegHeart className="cursor-pointer fill-white" />
-                <span className="text-md text-white">{'..'}</span>
-            </div>
-        );
 
     return (
         <div className="flex flex-row items-center gap-1">

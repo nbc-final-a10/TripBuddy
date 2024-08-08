@@ -50,29 +50,79 @@ export async function POST(request: NextRequest) {
     const supabase = createClient();
 
     if (isLiked) {
-        const { error } = await supabase.from('storylikes').insert([
-            {
-                storylikes_story_id: story_id,
-                storylikes_buddy_id: buddy_id,
-            },
-        ]);
+        const {
+            data,
+            error,
+        }: { data: StoryLikes | null; error: PostgrestError | null } =
+            await supabase
+                .from('storylikes')
+                .insert([
+                    {
+                        storylikes_story_id: story_id,
+                        storylikes_buddy_id: buddy_id,
+                    },
+                ])
+                .select()
+                .single();
 
         if (error) {
             return NextResponse.json({ error: error.message }, { status: 401 });
         }
 
-        return NextResponse.json({ message: 'Like added' }, { status: 200 });
-    } else {
-        const { error } = await supabase
+        const {
+            data: likes,
+            error: likesError,
+        }: {
+            data: StoryLikes[] | null;
+            error: PostgrestError | null;
+        } = await supabase
             .from('storylikes')
-            .delete()
-            .eq('storylikes_story_id', story_id)
-            .eq('storylikes_buddy_id', buddy_id);
+            .select('*')
+            .eq('storylikes_story_id', story_id);
+
+        if (likesError) {
+            console.error(likesError);
+            return NextResponse.json(
+                { error: likesError?.message },
+                { status: 401 },
+            );
+        }
+
+        return NextResponse.json(likes, { status: 200 });
+    } else {
+        const {
+            data,
+            error,
+        }: { data: StoryLikes | null; error: PostgrestError | null } =
+            await supabase
+                .from('storylikes')
+                .delete()
+                .eq('storylikes_story_id', story_id)
+                .eq('storylikes_buddy_id', buddy_id)
+                .select()
+                .single();
 
         if (error) {
             return NextResponse.json({ error: error.message }, { status: 401 });
         }
+        const {
+            data: likes,
+            error: likesError,
+        }: {
+            data: StoryLikes[] | null;
+            error: PostgrestError | null;
+        } = await supabase
+            .from('storylikes')
+            .select('*')
+            .eq('storylikes_story_id', story_id);
 
-        return NextResponse.json({ message: 'Like removed' }, { status: 200 });
+        if (likesError) {
+            console.error(likesError);
+            return NextResponse.json(
+                { error: likesError?.message },
+                { status: 401 },
+            );
+        }
+        return NextResponse.json(likes, { status: 200 });
     }
 }

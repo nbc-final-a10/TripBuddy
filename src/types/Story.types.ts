@@ -28,13 +28,10 @@ export type StoryFilter = {
 
 export type StoryLikes = Tables<'storylikes'>;
 
+export type PartialStoryLikes = Partial<StoryLikes>;
+
 export type StoryLikesData = {
     story_id: string;
     buddy_id: string;
     isLiked: boolean;
-};
-
-export type StoryLikesResponse = {
-    message: string;
-    error: string;
 };
