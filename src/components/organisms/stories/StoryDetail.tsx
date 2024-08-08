@@ -146,7 +146,7 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
                 </div>
 
                 <div className="absolute top-4 right-1 w-full flex flex-row justify-end gap-2 z-[99]">
-                    <button className="relative">
+                    <button className="relative focus:outline-none">
                         {likes && (
                             <LikesButton
                                 story_id={selectedStory.story_id}
