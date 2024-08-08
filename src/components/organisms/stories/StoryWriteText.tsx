@@ -16,7 +16,7 @@ type StoryWriteTextProps = {
     imageFile: File;
     selectedMedia: string;
     texts: StoryOverlay[];
-    setTexts: (texts: StoryOverlay[]) => void;
+    setTexts: React.Dispatch<React.SetStateAction<StoryOverlay[]>>;
     selectedFilter: StoryFilter;
 };
 
@@ -86,10 +86,10 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
                 selectedFilter={selectedFilter}
             />
             <button
-                className="absolute bg-main-color text-white px-2 pt-0.5 pb-1.5 rounded-md top-0 right-0 z-10 leading-none"
+                className="absolute bg-main-color text-white px-2 py-1 rounded-md top-0 right-0 z-10"
                 onClick={handleSaveButtonClick}
             >
-                save
+                업로드
             </button>
         </section>
     );

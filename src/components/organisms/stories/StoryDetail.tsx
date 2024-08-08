@@ -6,7 +6,8 @@ import { StoryOverlay, StoryWithBuddies } from '@/types/Story.types';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { MouseEvent, useRef, useState } from 'react';
+import React, { MouseEvent, useRef, useState, useEffect } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 type StoryDetailProps = {
     nickname: string;
@@ -44,21 +45,28 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
         setSelectedIndex(index);
         router.push(`/stories/${nickname}?id=${story.story_id}`);
     };
-    // const {
-    //     data: story,
-    //     isPending: storyPending,
-    //     error: storyError,
-    // } = useStoryQuery(selectedId);
 
-    // if (storyPending) return <div>Loading...</div>;
-    // if (storyError) return <div>Error: {storyError.message}</div>;
+    useEffect(() => {
+        if (scrollRef.current) {
+            const selectedButton = scrollRef.current.children[
+                selectedIndex
+            ] as HTMLElement;
+            if (selectedButton) {
+                selectedButton.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'center',
+                });
+            }
+        }
+    }, [selectedIndex]);
 
     const storyOverlay = selectedStory?.story_overlay as StoryOverlay[];
 
     return (
         <>
             {!isLoaded && <DefaultLoader />}
-            <section className="relative w-full h-[calc(100dvh-57px-56px)] bg-gray-800 aspect-auto xl:h-[calc(100dvh-100px)] xl:w-[430px] xl:mx-auto">
+            <section className="relative w-full h-[calc(100dvh-57px-56px)] bg-gray-800 aspect-auto xl:h-[calc(100dvh-100px)] xl:w-[430px] xl:mx-auto overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-full z-20 flex flex-row">
                     <div
                         data-next="before"
@@ -71,14 +79,18 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
                         onClick={handleNextBefore}
                     ></div>
                 </div>
-
                 <div
-                    className="absolute w-full top-1 left-1/2 -translate-x-1/2 flex flex-row gap-1 z-30 overflow-x-scroll scrollbar-hidden"
+                    className="absolute w-full top-1 left-1/2 -translate-x-1/2 flex flex-row gap-1 z-30 overflow-x-auto scrollbar-hidden"
                     ref={scrollRef}
                 >
                     {stories.map((story, idx) => (
                         <button
-                            className="relative min-w-10 h-2 bg-gray-200 cursor-pointer rounded-lg"
+                            className={twMerge(
+                                'relative min-w-10 h-2 bg-gray-200 cursor-pointer rounded-lg',
+                                idx === selectedIndex
+                                    ? 'bg-primary-color-200'
+                                    : '',
+                            )}
                             key={story.story_id}
                             onClick={() => handleSelectStory(story, idx)}
                         ></button>
@@ -99,11 +111,14 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
                             storyOverlay[0].filter.className,
                     )}
                 />
-                <div className="absolute top-0 left-0 w-full h-full">
+                <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
                     {storyOverlay.map(overlay => (
                         <p
                             key={overlay.text}
-                            className="absolute w-auto h-auto font-bold text-white"
+                            className={twMerge(
+                                'absolute w-auto h-auto font-bold',
+                                overlay.textColor,
+                            )}
                             style={{
                                 top: `${overlay.position.y}px`,
                                 left: `${overlay.position.x}px`,

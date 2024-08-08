@@ -68,6 +68,13 @@ const StoryWriteMain: React.FC = () => {
         handleStep(1);
     }, [imageFile]);
 
+    useEffect(() => {
+        document.documentElement.style.overscrollBehavior = 'none';
+        return () => {
+            document.documentElement.style.overscrollBehavior = 'auto';
+        };
+    }, []);
+
     return (
         <>
             {step === 0 && (

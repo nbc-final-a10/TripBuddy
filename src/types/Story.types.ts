@@ -13,6 +13,7 @@ export type StoryData = FormData;
 
 export type StoryOverlay = {
     text: string;
+    textColor: string;
     position: {
         x: number;
         y: number;
