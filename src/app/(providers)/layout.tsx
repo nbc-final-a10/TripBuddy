@@ -35,23 +35,23 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
     const dehydratedState = dehydrate(queryClient);
 
     return (
-        <main className="bg-slate-50 xl:bg-white min-h-dvh overflow-hidden">
-            <MainSectionWrapper>
-                <Suspense fallback={<Loading />}>
-                    <HydrationBoundary state={dehydratedState}>
+        <main className="bg-slate-50 xl:bg-slate-50 min-h-dvh overflow-hidden">
+            <Suspense fallback={<Loading />}>
+                <HydrationBoundary state={dehydratedState}>
+                    <Header pathname={pathname.pathname} />
+                    <MainSectionWrapper>
                         <ModalProviderDefault>
                             <ModalProviderSetter>
                                 <AuthProvider>
                                     <MobileHeader />
-                                    <Header pathname={pathname.pathname} />
                                     {children}
                                     <TapMenu />
                                 </AuthProvider>
                             </ModalProviderSetter>
                         </ModalProviderDefault>
-                    </HydrationBoundary>
-                </Suspense>
-            </MainSectionWrapper>
+                    </MainSectionWrapper>
+                </HydrationBoundary>
+            </Suspense>
         </main>
     );
 };
