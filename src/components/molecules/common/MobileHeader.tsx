@@ -3,7 +3,7 @@
 import React from 'react';
 import Arrow_Back from '../../../../public/svg/Arrow_back.svg';
 import Close from '../../../../public/svg/Close.svg';
-import Notification from '../../../../public/svg/Notifications_unread.svg';
+import Notification from '../../../../public/svg/Alarm.svg';
 import Search from '../../../../public/svg/HomeSearch.svg';
 import MobileHeaderSettingsButton from '@/components/atoms/common/MobileHeaderSettingsButton';
 import { usePathname, useRouter } from 'next/navigation';
@@ -24,6 +24,7 @@ const MobileHeader: React.FC = () => {
     const isOnboarding = pathname === '/onboarding';
     const isProfile = pathname.startsWith('/profile/');
     const isStoryWrite = pathname === '/write/story';
+    const isNotification = pathname === '/notifications';
 
     const headerTitle =
         (isTrips && '모집중 여정') ||
@@ -37,7 +38,8 @@ const MobileHeader: React.FC = () => {
         (isStory && '스토리') ||
         (isStoryWrite && '스토리에 추가') ||
         (isChatId && '') ||
-        (isChat && '채팅');
+        (isChat && '채팅') ||
+        (isNotification && '알림');
 
     const isShow =
         isTrips ||
@@ -51,7 +53,8 @@ const MobileHeader: React.FC = () => {
         isStoryWrite ||
         isStory ||
         isChatId ||
-        isChat;
+        isChat ||
+        isNotification;
 
     if (!isShow) return null;
 
@@ -80,7 +83,12 @@ const MobileHeader: React.FC = () => {
                         className="cursor-pointer"
                     />
                 )}
-                {isTrips && <Notification />}
+                {isTrips && (
+                    <Notification
+                        onClick={() => router.push('/notifications')}
+                        className="cursor-pointer"
+                    />
+                )}
                 {isProfile && (
                     <MobileHeaderSettingsButton pathname={pathname} />
                 )}
