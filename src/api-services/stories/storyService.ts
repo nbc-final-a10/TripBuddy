@@ -3,6 +3,7 @@ import {
     StoryData,
     StoryLikes,
     StoryLikesData,
+    StoryLikesResponse,
     StoryWithBuddies,
 } from '@/types/Story.types';
 import fetchWrapper from '@/utils/api/fetchWrapper';
@@ -72,16 +73,31 @@ export async function getSpecificStories(
     }
 }
 
-export async function postStoryLikes(payload: StoryLikesData) {
+export async function postStoryLikes(
+    payload: StoryLikesData,
+): Promise<StoryLikesResponse> {
     const { story_id } = payload;
-    const url = `/api/stories/${story_id}`;
+    const url = `/api/likes/${story_id}`;
     try {
-        const data = await fetchWrapper<StoryLikes>(url, {
+        const data = await fetchWrapper<StoryLikesResponse>(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(payload),
+            cache: 'no-store',
+        });
+        return data;
+    } catch (error: any) {
+        throw error;
+    }
+}
+
+export async function getStoryLikes(story_id: string) {
+    const url = `/api/likes/${story_id}`;
+    try {
+        const data = await fetchWrapper<StoryLikes[]>(url, {
+            method: 'GET',
             cache: 'no-store',
         });
         return data;

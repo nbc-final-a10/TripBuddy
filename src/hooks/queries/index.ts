@@ -12,3 +12,5 @@ export * from './useSpecificBuddyQuery';
 export * from './useRecommendBuddiesQuery';
 export * from './useDeleteStoryMutation';
 export * from './useBuddyProfile';
+export * from './useStoryLikesQuery';
+export * from './useStoryLikesMutation';

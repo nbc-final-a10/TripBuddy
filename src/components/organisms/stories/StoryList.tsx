@@ -1,6 +1,6 @@
 'use client';
 
-import Loading from '@/app/(providers)/loading';
+import DefaultLoader from '@/components/atoms/common/defaultLoader';
 import StoryCard from '@/components/molecules/stories/StoryCard';
 import { useAuth } from '@/hooks/auth';
 import useStoriesQuery from '@/hooks/queries/useStoriesQuery';
@@ -29,7 +29,7 @@ const StoryList: React.FC = () => {
 
     // 추후 변경 요망
     if (storyError) return <div>Error</div>;
-    if (isPending) return <Loading />;
+    if (isPending) return <DefaultLoader />;
     if (!stories) return <div>No stories</div>;
 
     return (

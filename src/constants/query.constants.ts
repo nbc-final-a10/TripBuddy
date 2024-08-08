@@ -10,8 +10,9 @@ export const QUERY_KEY_TRIP = 'trip';
 
 // contract 테이블 관련
 
-// stories / storylikes 테이블 관련
+// stories / storylikes 테이블
 export const QUERY_KEY_STORY = 'story';
+export const QUERY_KEY_STORY_LIKES = 'storyLikes';
 
 // notification 테이블 관련
 

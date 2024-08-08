@@ -36,3 +36,43 @@ export async function GET(
 
     return NextResponse.json(likes, { status: 200 });
 }
+
+export async function POST(request: NextRequest) {
+    const { story_id, isLiked, buddy_id } = await request.json();
+
+    if (!story_id) {
+        return NextResponse.json(
+            { error: 'story_id is required' },
+            { status: 400 },
+        );
+    }
+
+    const supabase = createClient();
+
+    if (isLiked) {
+        const { error } = await supabase.from('storylikes').insert([
+            {
+                storylikes_story_id: story_id,
+                storylikes_buddy_id: buddy_id,
+            },
+        ]);
+
+        if (error) {
+            return NextResponse.json({ error: error.message }, { status: 401 });
+        }
+
+        return NextResponse.json({ message: 'Like added' }, { status: 200 });
+    } else {
+        const { error } = await supabase
+            .from('storylikes')
+            .delete()
+            .eq('storylikes_story_id', story_id)
+            .eq('storylikes_buddy_id', buddy_id);
+
+        if (error) {
+            return NextResponse.json({ error: error.message }, { status: 401 });
+        }
+
+        return NextResponse.json({ message: 'Like removed' }, { status: 200 });
+    }
+}

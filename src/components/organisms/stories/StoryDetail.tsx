@@ -14,6 +14,7 @@ import { useAuth } from '@/hooks/auth';
 import useDeleteStoryMutation from '@/hooks/queries/useDeleteStoryMutation';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import useSpecificStoriesQuery from '@/hooks/queries/useSpecificStoriesQuery';
+import LikesButton from '@/components/atoms/stories/LikesButton';
 
 type StoryDetailProps = {
     nickname: string;
@@ -22,7 +23,6 @@ type StoryDetailProps = {
 };
 
 const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
-    const [isHearted, setIsHearted] = useState<boolean>(false);
     const { buddy } = useAuth();
     const router = useRouter();
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -32,7 +32,7 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
         data: queryStories,
         isPending,
         error: selectedStoriesError,
-    } = useSpecificStoriesQuery(stories[0].story_created_by);
+    } = useSpecificStoriesQuery(id);
     const {
         mutate: deleteStory,
         isPending: isDeleting,
@@ -132,7 +132,7 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
 
                 <div className="absolute top-4 right-1 w-full flex flex-row justify-end gap-2 z-[99]">
                     <button className="relative">
-                        <FaRegHeart className="cursor-pointer fill-white" />
+                        <LikesButton story_id={selectedStory.story_id} />
                     </button>
                     {buddy?.buddy_id === selectedStory.story_created_by ? (
                         <button
