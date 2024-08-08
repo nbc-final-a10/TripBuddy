@@ -9,7 +9,6 @@ import { useRouter } from 'next/navigation';
 import React, { MouseEvent, useRef, useState, useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Close from '../../../../public/svg/Close.svg';
-import { FaRegHeart } from 'react-icons/fa';
 import { useAuth } from '@/hooks/auth';
 import useDeleteStoryMutation from '@/hooks/queries/useDeleteStoryMutation';
 import { showAlert } from '@/utils/ui/openCustomAlert';

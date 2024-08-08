@@ -8,13 +8,19 @@ import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useRouter } from 'next/navigation';
 import React, { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { twMerge } from 'tailwind-merge';
 
 type LikesButtonProps = {
     story_id: string;
     likes: StoryLikes[];
+    mode?: 'card' | 'detail';
 };
 
-const LikesButton: React.FC<LikesButtonProps> = ({ story_id, likes }) => {
+const LikesButton: React.FC<LikesButtonProps> = ({
+    story_id,
+    likes,
+    mode = 'detail',
+}) => {
     const { buddy } = useAuth();
     const router = useRouter();
     const {
@@ -78,7 +84,12 @@ const LikesButton: React.FC<LikesButtonProps> = ({ story_id, likes }) => {
     // }, [isSuccess]);
 
     return (
-        <div className="flex flex-row items-center gap-1">
+        <div
+            className={twMerge(
+                'flex flex-row items-center gap-1',
+                mode === 'card' ? 'text-xs' : 'text-md',
+            )}
+        >
             {isOptimisticUpdate ? (
                 <FaHeart
                     data-isliked="liked"
@@ -92,9 +103,7 @@ const LikesButton: React.FC<LikesButtonProps> = ({ story_id, likes }) => {
                     onClick={handleClick}
                 />
             )}
-            <span className="text-md text-white">
-                {likesCount.toLocaleString()}
-            </span>
+            <span className="text-white">{likesCount.toLocaleString()}</span>
         </div>
     );
 };

@@ -52,6 +52,7 @@ const StoryList: React.FC = () => {
                             ? 'my'
                             : 'story'
                     }
+                    storyId={story.stories[0].story_id}
                 />
             ))}
         </section>
