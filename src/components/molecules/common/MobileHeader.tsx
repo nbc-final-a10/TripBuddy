@@ -3,7 +3,7 @@
 import React from 'react';
 import Arrow_Back from '../../../../public/svg/Arrow_back.svg';
 import Close from '../../../../public/svg/Close.svg';
-import Notification from '../../../../public/svg/Notifications_unread.svg';
+import Notification from '../../../../public/svg/Alarm.svg';
 import Search from '../../../../public/svg/HomeSearch.svg';
 import MobileHeaderSettingsButton from '@/components/atoms/common/MobileHeaderSettingsButton';
 import { usePathname, useRouter } from 'next/navigation';
@@ -83,7 +83,12 @@ const MobileHeader: React.FC = () => {
                         className="cursor-pointer"
                     />
                 )}
-                {isTrips && <Notification />}
+                {isTrips && (
+                    <Notification
+                        onClick={() => router.push('/notifications')}
+                        className="cursor-pointer"
+                    />
+                )}
                 {isProfile && (
                     <MobileHeaderSettingsButton pathname={pathname} />
                 )}

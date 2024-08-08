@@ -2,9 +2,9 @@ import NotificationsList from '@/components/organisms/notifications/Notification
 
 const NotificationsPage = () => {
     return (
-        <>
+        <div className="bg-white h-full">
             <NotificationsList />
-        </>
+        </div>
     );
 };
 
