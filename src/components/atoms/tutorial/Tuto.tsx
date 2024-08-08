@@ -4,13 +4,6 @@ import React, { useState, useEffect } from 'react';
 import NextImage from 'next/image';
 import DefaultLoader from '../common/defaultLoader';
 
-type Content = {
-    src: string;
-    alt: string;
-    title: React.ReactNode;
-    description: React.ReactNode;
-};
-
 type TutoProps = {
     step: number;
 };

@@ -17,11 +17,13 @@ import { Metadata } from 'next';
 import { defaultMetaData } from '@/data/defaultMetaData';
 import { ModalProviderSetter } from '@/providers/ModalProvider';
 import { ModalProviderDefault } from '@/contexts/modal.context';
+import { getPathnameServer } from '@/utils/common/getPathnameServer';
 
 export const metadata: Metadata = defaultMetaData;
 
 const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
     const userId = getUserFromHeader();
+    const pathname = getPathnameServer();
 
     // console.log('헤더에서 user =====>', userId);
 
@@ -41,7 +43,7 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
                             <ModalProviderSetter>
                                 <AuthProvider>
                                     <MobileHeader />
-                                    <Header />
+                                    <Header pathname={pathname.pathname} />
                                     {children}
                                     <TapMenu />
                                 </AuthProvider>

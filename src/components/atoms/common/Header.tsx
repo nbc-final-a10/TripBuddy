@@ -1,13 +1,20 @@
-'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import HeaderMyPageLink from './HeaderMyPageLink';
-import { usePathname } from 'next/navigation';
+import { twMerge } from 'tailwind-merge';
 
-export default function Header() {
-    const pathname = usePathname();
+type HeaderProps = {
+    pathname: string | null;
+};
+
+export default function Header({ pathname }: HeaderProps) {
     return (
-        <header className="hidden xl:flex relative w-[1080px] h-[100px] items-center bg-white justify-between z-50">
+        <header
+            className={twMerge(
+                'hidden xl:flex relative w-[1080px] h-[100px] items-center bg-white justify-between z-50',
+                pathname === '/tutorial' && 'xl:hidden',
+            )}
+        >
             <div className="flex gap-12 items-center justify-start font-bold w-[80%]">
                 <Link href="/" className="relative w-[170px] h-[64px]">
                     <Image
