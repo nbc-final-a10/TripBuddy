@@ -11,6 +11,9 @@ import { twMerge } from 'tailwind-merge';
 import Close from '../../../../public/svg/Close.svg';
 import { FaRegHeart } from 'react-icons/fa';
 import { useAuth } from '@/hooks/auth';
+import useDeleteStoryMutation from '@/hooks/queries/useDeleteStoryMutation';
+import { showAlert } from '@/utils/ui/openCustomAlert';
+import useSpecificStoriesQuery from '@/hooks/queries/useSpecificStoriesQuery';
 
 type StoryDetailProps = {
     nickname: string;
@@ -23,11 +26,20 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
     const { buddy } = useAuth();
     const router = useRouter();
     const scrollRef = useRef<HTMLDivElement>(null);
-    const [isLoaded, setIsLoaded] = useState<boolean>(false);
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [selectedStory, setSelectedStory] = useState<StoryWithBuddies>(
         stories[0],
     );
+    const {
+        data: queryStories,
+        isPending,
+        error: selectedStoriesError,
+    } = useSpecificStoriesQuery(stories[0].story_created_by);
+    const {
+        mutate: deleteStory,
+        isPending: isDeleting,
+        error: deleteStoryError,
+    } = useDeleteStoryMutation();
     useTapScroll({ refs: [scrollRef] });
 
     const handleNextBefore = (e: MouseEvent<HTMLDivElement>) => {
@@ -35,12 +47,20 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
         if (next === 'before') {
             if (selectedIndex > 0) {
                 setSelectedIndex(selectedIndex - 1);
-                setSelectedStory(stories[selectedIndex - 1]);
+                setSelectedStory(
+                    !queryStories
+                        ? stories[selectedIndex - 1]
+                        : queryStories[selectedIndex - 1],
+                );
             }
         } else {
             if (selectedIndex < stories.length - 1) {
                 setSelectedIndex(selectedIndex + 1);
-                setSelectedStory(stories[selectedIndex + 1]);
+                setSelectedStory(
+                    !queryStories
+                        ? stories[selectedIndex + 1]
+                        : queryStories[selectedIndex + 1],
+                );
             }
         }
     };
@@ -49,6 +69,13 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
         setSelectedStory(story);
         setSelectedIndex(index);
         router.push(`/stories/${nickname}?id=${story.story_id}`);
+    };
+
+    const handleDeleteStory = () => {
+        deleteStory(selectedStory.story_id);
+        if (!isDeleting && !isPending) {
+            showAlert('success', '스토리가 삭제되었습니다.');
+        }
     };
 
     useEffect(() => {
@@ -66,11 +93,25 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
         }
     }, [selectedIndex]);
 
+    useEffect(() => {
+        if (selectedStoriesError || deleteStoryError) {
+            showAlert('error', '스토리를 불러오는데 실패했습니다.');
+        }
+    }, [selectedStoriesError, deleteStoryError]);
+
+    useEffect(() => {
+        if (queryStories) {
+            setSelectedStory(queryStories[0]);
+            router.push(`/stories/${nickname}?id=${queryStories[0].story_id}`);
+        }
+    }, [queryStories, router, nickname]);
+
     const storyOverlay = selectedStory?.story_overlay as StoryOverlay[];
 
     return (
         <>
-            {!isLoaded && <DefaultLoader />}
+            {isDeleting && <DefaultLoader />}
+            {isPending && <DefaultLoader />}
             <section className="relative w-full h-[calc(100dvh-57px-56px)] bg-gray-800 aspect-auto xl:h-[calc(100dvh-100px)] xl:w-[430px] xl:mx-auto overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-full z-20 flex flex-row">
                     <div
@@ -90,28 +131,33 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
                         <FaRegHeart className="cursor-pointer fill-white" />
                     </button>
                     {buddy?.buddy_id === selectedStory.story_created_by ? (
-                        <button className="relative">
+                        <button
+                            className="relative"
+                            onClick={handleDeleteStory}
+                        >
                             <Close className="cursor-pointer fill-white" />
                         </button>
                     ) : null}
                 </div>
 
                 <div
-                    className="absolute w-full top-1 left-1/2 -translate-x-1/2 flex flex-row gap-1 z-30 overflow-x-auto scrollbar-hidden"
+                    className="absolute w-full top-1 left-1/2 -translate-x-1/2 flex flex-row justify-center gap-1 z-30 overflow-x-auto scrollbar-hidden"
                     ref={scrollRef}
                 >
-                    {stories.map((story, idx) => (
-                        <button
-                            className={twMerge(
-                                'relative min-w-10 h-2 bg-gray-200 cursor-pointer rounded-lg',
-                                idx === selectedIndex
-                                    ? 'bg-primary-color-200'
-                                    : '',
-                            )}
-                            key={story.story_id}
-                            onClick={() => handleSelectStory(story, idx)}
-                        ></button>
-                    ))}
+                    {(queryStories ? queryStories : stories).map(
+                        (story, idx) => (
+                            <button
+                                className={twMerge(
+                                    'relative min-w-10 h-2 bg-gray-200 cursor-pointer rounded-lg',
+                                    idx === selectedIndex
+                                        ? 'bg-primary-color-200'
+                                        : '',
+                                )}
+                                key={story.story_id}
+                                onClick={() => handleSelectStory(story, idx)}
+                            ></button>
+                        ),
+                    )}
                 </div>
 
                 <Image
@@ -120,10 +166,8 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     priority
-                    onLoad={() => setIsLoaded(true)}
                     className={clsx(
                         'object-contain',
-                        isLoaded ? 'opacity-100' : 'opacity-0',
                         storyOverlay[0].filter &&
                             storyOverlay[0].filter.className,
                     )}

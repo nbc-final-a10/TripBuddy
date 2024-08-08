@@ -10,3 +10,5 @@ export * from './useTripsQuery';
 export * from './useTripQuery';
 export * from './useSpecificBuddyQuery';
 export * from './useRecommendBuddiesQuery';
+export * from './useDeleteStoryMutation';
+export * from './useBuddyProfile';

@@ -39,3 +39,29 @@ export async function getStory(id: string): Promise<StoryWithBuddies> {
         throw error;
     }
 }
+
+export async function deleteStory(id: string): Promise<void> {
+    const url = `/api/stories/${id}`;
+    try {
+        await fetchWrapper<void>(url, {
+            method: 'DELETE',
+        });
+    } catch (error: any) {
+        throw error;
+    }
+}
+
+export async function getSpecificStories(
+    id: string,
+): Promise<StoryWithBuddies[]> {
+    const url = `/api/stories/${id}`;
+    try {
+        const data = await fetchWrapper<StoryWithBuddies[]>(url, {
+            method: 'GET',
+            cache: 'no-store',
+        });
+        return data;
+    } catch (error: any) {
+        throw error;
+    }
+}
