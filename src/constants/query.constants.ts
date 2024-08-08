@@ -5,6 +5,7 @@ export const QUERY_KEY_BUDDY_PROFILE = 'buddyProfile';
 
 // trips / tripbookmarks 테이블 관련
 export const QUERY_KEY_TRIP = 'trip';
+export const QUERY_KEY_TRIP_INFINITE = 'tripInfinite';
 
 // messages 테이블 관련
 
