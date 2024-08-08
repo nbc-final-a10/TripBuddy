@@ -8,3 +8,10 @@ export type PartialTrip = Partial<Trip>;
 export type TripWithContract = Trip & {
     contract: Contract | Contract[];
 };
+
+export type TripInfiniteQueryResponse = {
+    trips: TripWithContract[];
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+};

@@ -8,7 +8,7 @@ import {
 } from '@tanstack/react-query';
 import React, { Suspense } from 'react';
 import Loading from '../loading';
-import { TripWithContract } from '@/types/Trips.types';
+import { TripInfiniteQueryResponse } from '@/types/Trips.types';
 
 const TripsPage: React.FC = async () => {
     const queryClient = new QueryClient();
@@ -16,10 +16,10 @@ const TripsPage: React.FC = async () => {
         queryKey: [QUERY_KEY_TRIP_INFINITE],
         initialPageParam: 0,
         getNextPageParam: (
-            lastPage: TripWithContract[],
-            allPages: TripWithContract[][],
+            lastPage: TripInfiniteQueryResponse,
+            allPages: TripInfiniteQueryResponse[],
         ) => {
-            if (lastPage.length === 0) return null;
+            if (lastPage.trips.length === 0) return null;
             return allPages.length;
         },
         queryFn: getTrips,

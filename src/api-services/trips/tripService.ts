@@ -1,14 +1,17 @@
-import { TripWithContract } from '@/types/Trips.types';
+import {
+    TripInfiniteQueryResponse,
+    TripWithContract,
+} from '@/types/Trips.types';
 import fetchWrapper from '@/utils/api/fetchWrapper';
 
 export async function getTrips({
     pageParam = 0,
 }: {
     pageParam: number;
-}): Promise<TripWithContract[]> {
+}): Promise<TripInfiniteQueryResponse> {
     const url = `/api/trips?page=${pageParam}`;
     try {
-        const data = await fetchWrapper<TripWithContract[]>(url, {
+        const data = await fetchWrapper<TripInfiniteQueryResponse>(url, {
             method: 'GET',
             cache: 'no-store',
         });
