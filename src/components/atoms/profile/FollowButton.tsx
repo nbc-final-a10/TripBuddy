@@ -20,8 +20,6 @@ export default function FollowButton() {
                 const followingId = window.location.pathname.split('/').pop();
                 setFollowingId(followingId);
                 const followerId = buddy?.buddy_id;
-                console.log('followerId', followerId);
-                console.log('followingId', followingId);
                 const checkResponse = await fetch(
                     `/api/buddyProfile/follow?followingId=${followingId}&followerId=${followerId}`,
                     {
