@@ -20,6 +20,7 @@ const HomePage: React.FC = async () => {
     await queryClient.prefetchQuery({
         queryKey: [QUERY_KEY_BUDDY, QUERY_KEY_TRIP, QUERY_KEY_STORY],
         queryFn: () => getBuddyTripStory(),
+        staleTime: 1000 * 60 * 5,
     });
     const dehydratedState = dehydrate(queryClient);
     return (
