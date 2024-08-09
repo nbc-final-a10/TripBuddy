@@ -1,6 +1,7 @@
 'use client';
 
-import Loading from '@/app/(providers)/loading';
+import LoaderOnly from '@/components/atoms/common/LoaderOnly';
+import InfiniteScroll from '@/components/molecules/common/InfiniteScroll';
 import TripCard from '@/components/molecules/trips/TripCard';
 import useTripInfiniteQuery from '@/hooks/queries/useTripInfiniteQuery';
 import React from 'react';
@@ -13,10 +14,7 @@ const TripListMobile: React.FC = () => {
         hasNextPage,
     } = useTripInfiniteQuery();
 
-    console.log(tripsInfinite);
-
     // 추후수정요망
-    if (isFetching) return <Loading />;
     if (!tripsInfinite) return <div>No trips</div>;
 
     return (
@@ -31,9 +29,19 @@ const TripListMobile: React.FC = () => {
             </div> */}
 
             <div className="grid w-full mx-auto place-items-center grid-cols-1 xl:grid-cols-4 gap-3 pb-28">
-                {tripsInfinite.trips.map(item => (
-                    <TripCard key={item.trip_id} trip={item} mode="list" />
-                ))}
+                <InfiniteScroll
+                    fetchNextPage={fetchNextPage}
+                    hasNextPage={hasNextPage}
+                >
+                    {tripsInfinite.map(item => (
+                        <TripCard key={item.trip_id} trip={item} mode="list" />
+                    ))}
+                    {isFetching && (
+                        <div className="w-full h-20 flex justify-center items-center">
+                            <LoaderOnly />
+                        </div>
+                    )}
+                </InfiniteScroll>
             </div>
         </section>
     );

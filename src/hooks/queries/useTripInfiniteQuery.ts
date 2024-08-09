@@ -15,6 +15,6 @@ export default function useTripInfiniteQuery() {
             return allPages.length;
         },
         queryFn: getInfiniteTrips,
-        select: data => data.pages.flat()[0],
+        select: data => data.pages.flatMap(page => page.trips),
     });
 }
