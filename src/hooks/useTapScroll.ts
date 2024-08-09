@@ -72,26 +72,32 @@ function useTapScroll({ refs }: UseTapScrollProps) {
         };
     }, [refs, setLock, isDesktop]);
 
-    // Handlers for arrow buttons on desktop
-    const scrollLeft = useCallback(() => {
-        if (!isDesktop) return;
-        refs.forEach(container => {
-            if (container.current) {
-                container.current.scrollBy({ left: -200, behavior: 'smooth' });
-            }
-        });
-    }, [refs, isDesktop]);
+    // Handlers for arrow buttons on desktop, with specific ref
+    const createScrollHandler = useCallback(
+        (ref: React.RefObject<HTMLElement>, direction: 'left' | 'right') => {
+            if (!isDesktop) return () => {};
 
-    const scrollRight = useCallback(() => {
-        if (!isDesktop) return;
-        refs.forEach(container => {
-            if (container.current) {
-                container.current.scrollBy({ left: 200, behavior: 'smooth' });
-            }
-        });
-    }, [refs, isDesktop]);
+            return () => {
+                if (ref.current) {
+                    const scrollAmount = direction === 'left' ? -500 : 500;
+                    ref.current.scrollBy({
+                        left: scrollAmount,
+                        behavior: 'smooth',
+                    });
+                }
+            };
+        },
+        [isDesktop],
+    );
 
-    return { scrollLeft, scrollRight };
+    return isDesktop
+        ? {
+              createScrollLeft: (ref: React.RefObject<HTMLElement>) =>
+                  createScrollHandler(ref, 'left'),
+              createScrollRight: (ref: React.RefObject<HTMLElement>) =>
+                  createScrollHandler(ref, 'right'),
+          }
+        : null;
 }
 
 export default useTapScroll;
