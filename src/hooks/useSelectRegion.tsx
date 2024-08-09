@@ -89,7 +89,7 @@ export default function useSelectRegion() {
                 <section
                     className={twMerge(
                         'overflow-x-scroll scrollbar-hidden flex gap-[10px] xl:h-[10%]',
-                        window.innerHeight < 629 && 'h-[42px]',
+                        window.innerHeight < 659 && 'h-[42px]',
                     )}
                     ref={buddiesRef}
                 >
@@ -97,7 +97,7 @@ export default function useSelectRegion() {
                         locations={secondLevelLocations}
                         selectedLocationName={secondLevelLocation || ''}
                         onChipClick={handleChipClick}
-                        isMini={window.innerHeight < 629}
+                        isMini={window.innerHeight < 659}
                     />
                 </section>
 
@@ -120,7 +120,7 @@ export default function useSelectRegion() {
                             selectedData={thirdLevelLocation}
                             firstLabel="선택한 지역은"
                             secondLabel="입니다."
-                            isMini={window.innerHeight < 629}
+                            isMini={window.innerHeight < 659}
                         />
                     )}
                 </section>

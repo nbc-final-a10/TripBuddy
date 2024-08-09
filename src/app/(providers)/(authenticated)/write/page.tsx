@@ -168,7 +168,7 @@ const WritePage: React.FC = () => {
     }, [step]);
 
     useEffect(() => {
-        const isMini = window.innerHeight < 629;
+        const isMini = window.innerHeight < 659;
         setIsMini(isMini);
     }, []);
     // console.log(buttonText[stepToDisplay]);

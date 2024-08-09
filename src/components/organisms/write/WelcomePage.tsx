@@ -2,6 +2,7 @@ import MascotImage from '@/components/atoms/common/MascotImage';
 import WelcomeMessage from '@/components/molecules/write/WelcomeMessage';
 import clsx from 'clsx';
 import React from 'react';
+import { twMerge } from 'tailwind-merge';
 
 type WelcomePageProps = {
     SelectBuddyCounts: React.FC;
@@ -17,7 +18,7 @@ const WelcomePage: React.FC<WelcomePageProps> = ({
             <WelcomeMessage />
             <div className="mt-4" />
             <div
-                className={clsx(
+                className={twMerge(
                     'flex justify-center h-[230px] w-[300px] xl:h-[400px] xl:w-[400px]',
                     isMini && 'h-[180px] w-[200px]',
                 )}

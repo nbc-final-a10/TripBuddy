@@ -26,15 +26,17 @@ const TapMenu: React.FC = () => {
                 hidden && 'hidden',
             )} // 변경 필요
         >
-            <TapMenuButton iconName="Home" href="/" />
-            <TapMenuButton iconName="Trip" href="/trips" />
+            <TapMenuButton iconName="Home" href="/" title="홈" />
+            <TapMenuButton iconName="Trip" href="/trips" title="여정" />
             <TapMenuButton
                 iconName="Chat"
                 href={buddy_id ? `/chat` : '/login'}
+                title="채팅"
             />
             <TapMenuButton
                 iconName="Mypage"
                 href={buddy_id ? `/profile/${buddy_id}` : '/login'}
+                title="마이페이지"
             />
         </div>
     );
