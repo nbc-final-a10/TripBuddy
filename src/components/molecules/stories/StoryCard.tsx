@@ -39,11 +39,11 @@ const StoryCard: React.FC<StoryCardProps> = ({
 
     if (isLikesPending)
         return (
-            <div className="relative min-w-[139px] w-[139px] h-[190px] bg-gray-300 rounded-lg"></div>
+            <div className="relative min-w-[139px] w-[139px] h-[190px] bg-gray-300 rounded-lg xl:min-w-[254px]"></div>
         );
 
     return (
-        <div className="relative flex flex-col justify-center items-center min-w-[139px] w-[139px] h-[190px] bg-gray-300 rounded-lg gap-2 aspect-auto">
+        <div className="relative flex flex-col justify-center items-center min-w-[139px] w-[139px] h-[190px] bg-gray-300 rounded-lg gap-2 aspect-auto xl:min-w-[254px]">
             <div className="absolute top-0.5 right-1 w-full flex flex-row justify-end z-[99]">
                 <button className="relative focus:outline-none">
                     {likes && (
