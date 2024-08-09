@@ -51,6 +51,7 @@ export async function updateSession(request: NextRequest) {
     // console.log(user);
 
     // 아래 방식 아니면 동작안함
+    // 아래 목록은 튕기지 않는 목록임
     if (
         !user &&
         request.nextUrl.pathname !== '/' &&

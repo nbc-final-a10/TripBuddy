@@ -38,18 +38,18 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
         <main className="bg-slate-50 xl:bg-slate-50 min-h-dvh overflow-hidden">
             <Suspense fallback={<Loading />}>
                 <HydrationBoundary state={dehydratedState}>
-                    <Header pathname={pathname.pathname} />
-                    <MainSectionWrapper>
-                        <ModalProviderDefault>
-                            <ModalProviderSetter>
-                                <AuthProvider>
+                    <ModalProviderDefault>
+                        <AuthProvider>
+                            <Header pathname={pathname.pathname} />
+                            <MainSectionWrapper>
+                                <ModalProviderSetter>
                                     <MobileHeader />
                                     {children}
                                     <TapMenu />
-                                </AuthProvider>
-                            </ModalProviderSetter>
-                        </ModalProviderDefault>
-                    </MainSectionWrapper>
+                                </ModalProviderSetter>
+                            </MainSectionWrapper>
+                        </AuthProvider>
+                    </ModalProviderDefault>
                 </HydrationBoundary>
             </Suspense>
         </main>
