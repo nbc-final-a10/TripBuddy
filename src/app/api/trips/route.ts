@@ -1,5 +1,6 @@
 import { TRIPS_ITEMS_PER_PAGE } from '@/constants/common.constants';
 import { TripWithContract } from '@/types/Trips.types';
+import { sliceArrayByLimit } from '@/utils/common/sliceArrayByLimits';
 import { createClient } from '@/utils/supabase/server';
 import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
@@ -29,7 +30,7 @@ export async function GET(req: NextRequest) {
         );
     }
 
-    if (pageString) {
+    if (pageString !== 'null') {
         const page = Number(pageString);
         const start = page * TRIPS_ITEMS_PER_PAGE;
         const end = start + TRIPS_ITEMS_PER_PAGE - 1;
@@ -100,12 +101,15 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: 'Trips not found' }, { status: 404 });
     }
 
+    const { slicedDataArray } = sliceArrayByLimit(trips, 8);
+
     // 총 페이지 수를 계산합니다.
     const totalPages = Math.ceil(totalItems / TRIPS_ITEMS_PER_PAGE);
 
     return NextResponse.json(
         {
             trips,
+            allTrips: slicedDataArray,
             totalItems,
             totalPages,
             currentPage: 1, // 페이지 파라미터가 없으므로 첫 번째 페이지로 간주

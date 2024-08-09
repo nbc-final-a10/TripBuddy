@@ -11,6 +11,7 @@ export type TripWithContract = Trip & {
 
 export type TripInfiniteQueryResponse = {
     trips: TripWithContract[];
+    allTrips?: TripWithContract[][];
     totalItems: number;
     totalPages: number;
     currentPage: number;
