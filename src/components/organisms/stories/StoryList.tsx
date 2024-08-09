@@ -4,6 +4,7 @@ import DefaultLoader from '@/components/atoms/common/defaultLoader';
 import StoryCard from '@/components/molecules/stories/StoryCard';
 import { useAuth } from '@/hooks/auth';
 import useStoriesQuery from '@/hooks/queries/useStoriesQuery';
+import { StoryOverlay } from '@/types/Story.types';
 import groupStoriesByBuddyId from '@/utils/stories/groupStoriesByBuddyId';
 import React, { useMemo } from 'react';
 
@@ -53,6 +54,7 @@ const StoryList: React.FC = () => {
                             : 'story'
                     }
                     storyId={story.stories[0].story_id}
+                    overlay={story.stories[0].story_overlay as StoryOverlay[]}
                 />
             ))}
         </section>

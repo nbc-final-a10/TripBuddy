@@ -51,14 +51,14 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
         showAlert('success', '스토리 생성이 완료되었습니다.', {
             onConfirm: () => {
                 router.push(
-                    `/stories/${buddy?.buddy_nickname}?id=${data?.story_id}`,
+                    `/stories/${buddy?.buddy_nickname}?id=${buddy?.buddy_id}`,
                 );
             },
         });
     };
 
     return (
-        <section className="relative flex flex-col gap-4 w-full h-[calc(100dvh-57px-56px)] max-h-dvh overflow-hidden aspect-auto bg-gray-600">
+        <section className="relative flex flex-col gap-4 w-full h-[calc(100dvh-57px-56px)] max-h-dvh overflow-hidden aspect-auto xl:min-w-[320px] xl:max-w-[430px] xl:mx-auto bg-gray-600">
             {isPending && <DefaultLoader />}
             {error && (
                 <div className="z-10 text-white font-bold">

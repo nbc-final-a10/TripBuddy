@@ -4,10 +4,12 @@ import AddButtonSmall from '@/components/atoms/stories/AddButtonSmall';
 import LikesButton from '@/components/atoms/stories/LikesButton';
 import useStoryLikesQuery from '@/hooks/queries/useStoryLikesQuery';
 import { Buddy } from '@/types/Auth.types';
+import { StoryOverlay } from '@/types/Story.types';
 import { getTimeSinceUpload } from '@/utils/common/getTimeSinceUpload';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import { twMerge } from 'tailwind-merge';
 
 type StoryCardProps = {
     name: string;
@@ -18,6 +20,7 @@ type StoryCardProps = {
     id: string;
     buddy: Buddy;
     storyId: string;
+    overlay: StoryOverlay[];
 };
 
 const StoryCard: React.FC<StoryCardProps> = ({
@@ -29,6 +32,7 @@ const StoryCard: React.FC<StoryCardProps> = ({
     id,
     buddy,
     storyId,
+    overlay,
 }) => {
     const { data: likes, isPending: isLikesPending } =
         useStoryLikesQuery(storyId);
@@ -63,7 +67,10 @@ const StoryCard: React.FC<StoryCardProps> = ({
                     fill
                     priority
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover rounded-lg"
+                    className={twMerge(
+                        'object-cover rounded-lg',
+                        overlay[0].filter && overlay[0].filter.className,
+                    )}
                 />
             </Link>
 

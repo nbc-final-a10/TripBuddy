@@ -1,6 +1,6 @@
 'use client';
 import StoryCard from '../stories/StoryCard';
-import { StoryWithBuddies } from '@/types/Story.types';
+import { StoryOverlay, StoryWithBuddies } from '@/types/Story.types';
 import { Buddy } from '@/types/Auth.types';
 import React, { useMemo } from 'react';
 import groupStoriesByBuddyId from '@/utils/stories/groupStoriesByBuddyId';
@@ -51,6 +51,7 @@ const HomePageStories: React.FC<HomePageStoriesProps> = ({
                             : 'story'
                     }
                     storyId={story.stories[0].story_id}
+                    overlay={story.stories[0].story_overlay as StoryOverlay[]}
                 />
             ))}
         </>

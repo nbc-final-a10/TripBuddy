@@ -189,7 +189,7 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     priority
-                    className={clsx(
+                    className={twMerge(
                         'object-contain',
                         storyOverlay[0].filter &&
                             storyOverlay[0].filter.className,
