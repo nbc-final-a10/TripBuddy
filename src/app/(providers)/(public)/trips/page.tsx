@@ -1,4 +1,4 @@
-import { getTrips } from '@/api-services/trips';
+import { getInfiniteTrips, getTrips } from '@/api-services/trips';
 import TripList from '@/components/organisms/trips/TripList';
 import {
     QUERY_KEY_TRIP,
@@ -15,19 +15,19 @@ import { TripInfiniteQueryResponse } from '@/types/Trips.types';
 
 const TripsPage: React.FC = async () => {
     const queryClient = new QueryClient();
-    // await queryClient.prefetchInfiniteQuery({
-    //     queryKey: [QUERY_KEY_TRIP_INFINITE],
-    //     initialPageParam: 0,
-    //     getNextPageParam: (
-    //         lastPage: TripInfiniteQueryResponse,
-    //         allPages: TripInfiniteQueryResponse[],
-    //     ) => {
-    //         if (lastPage.trips.length === 0) return null;
-    //         return allPages.length;
-    //     },
-    //     queryFn: getInfiniteTrips,
-    //     pages: 1,
-    // });
+    await queryClient.prefetchInfiniteQuery({
+        queryKey: [QUERY_KEY_TRIP_INFINITE],
+        initialPageParam: 0,
+        getNextPageParam: (
+            lastPage: TripInfiniteQueryResponse,
+            allPages: TripInfiniteQueryResponse[],
+        ) => {
+            if (lastPage.trips.length === 0) return null;
+            return allPages.length;
+        },
+        queryFn: getInfiniteTrips,
+        pages: 1,
+    });
     await queryClient.prefetchQuery({
         queryKey: [QUERY_KEY_TRIP],
         queryFn: () => getTrips(),
