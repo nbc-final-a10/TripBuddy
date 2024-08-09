@@ -1,9 +1,15 @@
+'use client';
+
 import AddButtonSmall from '@/components/atoms/stories/AddButtonSmall';
+import LikesButton from '@/components/atoms/stories/LikesButton';
+import useStoryLikesQuery from '@/hooks/queries/useStoryLikesQuery';
 import { Buddy } from '@/types/Auth.types';
+import { StoryOverlay } from '@/types/Story.types';
 import { getTimeSinceUpload } from '@/utils/common/getTimeSinceUpload';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import { twMerge } from 'tailwind-merge';
 
 type StoryCardProps = {
     name: string;
@@ -13,6 +19,8 @@ type StoryCardProps = {
     mode: 'my' | 'story';
     id: string;
     buddy: Buddy;
+    storyId: string;
+    overlay: StoryOverlay[];
 };
 
 const StoryCard: React.FC<StoryCardProps> = ({
@@ -23,9 +31,30 @@ const StoryCard: React.FC<StoryCardProps> = ({
     mode,
     id,
     buddy,
+    storyId,
+    overlay,
 }) => {
+    const { data: likes, isPending: isLikesPending } =
+        useStoryLikesQuery(storyId);
+
+    if (isLikesPending)
+        return (
+            <div className="relative min-w-[139px] w-[139px] h-[190px] bg-gray-300 rounded-lg xl:min-w-[254px]"></div>
+        );
+
     return (
-        <div className="relative flex flex-col justify-center items-center min-w-[139px] w-[139px] h-[190px] bg-gray-300 rounded-lg gap-2 aspect-auto">
+        <div className="relative flex flex-col justify-center items-center min-w-[139px] w-[139px] h-[190px] bg-gray-300 rounded-lg gap-2 aspect-auto xl:min-w-[254px]">
+            <div className="absolute top-0.5 right-1 w-full flex flex-row justify-end z-[99]">
+                <button className="relative focus:outline-none">
+                    {likes && (
+                        <LikesButton
+                            story_id={storyId}
+                            likes={likes}
+                            mode="card"
+                        />
+                    )}
+                </button>
+            </div>
             <Link
                 className="w-full h-full absolute aspect-auto flex justify-center items-center"
                 href={`/stories/${name}?id=${id}`}
@@ -38,7 +67,10 @@ const StoryCard: React.FC<StoryCardProps> = ({
                     fill
                     priority
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover rounded-lg"
+                    className={twMerge(
+                        'object-cover rounded-lg',
+                        overlay[0].filter && overlay[0].filter.className,
+                    )}
                 />
             </Link>
 

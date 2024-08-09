@@ -47,8 +47,9 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
             className={clsx(
                 'bg-white box-border h-fit shadow-xl',
                 mode === 'detail' && 'p-4',
-                mode === 'list' && 'w-[90%] rounded-lg',
-                mode === 'card' && 'h-[215px] rounded-lg min-w-[250px]',
+                mode === 'list' && 'w-[90%] rounded-lg xl:w-full',
+                mode === 'card' &&
+                    'h-[215px] rounded-lg min-w-[250px] xl:min-w-[254px]',
             )}
         >
             <div

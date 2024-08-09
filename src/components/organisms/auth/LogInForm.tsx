@@ -54,7 +54,7 @@ function LogInForm() {
         if (isRecoverPassword) {
             router.push('/login?mode=recover');
         } else {
-            router.push('/login?mode=login');
+            router.replace('/login?mode=login');
         }
     }, [isRecoverPassword, router]);
 

@@ -1,9 +1,10 @@
 'use client';
 
-import Loading from '@/app/(providers)/loading';
+import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import StoryCard from '@/components/molecules/stories/StoryCard';
 import { useAuth } from '@/hooks/auth';
 import useStoriesQuery from '@/hooks/queries/useStoriesQuery';
+import { StoryOverlay } from '@/types/Story.types';
 import groupStoriesByBuddyId from '@/utils/stories/groupStoriesByBuddyId';
 import React, { useMemo } from 'react';
 
@@ -29,7 +30,7 @@ const StoryList: React.FC = () => {
 
     // 추후 변경 요망
     if (storyError) return <div>Error</div>;
-    if (isPending) return <Loading />;
+    if (isPending) return <DefaultLoader />;
     if (!stories) return <div>No stories</div>;
 
     return (
@@ -37,7 +38,8 @@ const StoryList: React.FC = () => {
             {sortedStories.map(story => (
                 <StoryCard
                     key={story.buddyId}
-                    id={story.stories[0].story_id}
+                    // id={story.stories[0].story_id}
+                    id={story.buddyId}
                     buddy={story.stories[0].buddies}
                     name={story.stories[0].buddies.buddy_nickname}
                     created_at={story.stories[0].story_created_at}
@@ -51,6 +53,8 @@ const StoryList: React.FC = () => {
                             ? 'my'
                             : 'story'
                     }
+                    storyId={story.stories[0].story_id}
+                    overlay={story.stories[0].story_overlay as StoryOverlay[]}
                 />
             ))}
         </section>

@@ -27,7 +27,7 @@ const StoryFilterImage: React.FC<StoryFilterImageProps> = ({
     useTapScroll({ refs: [filterRef] });
 
     return (
-        <section className="relative flex flex-col w-full h-[calc(100dvh-57px-56px)] max-h-dvh overflow-hidden aspect-auto bg-gradient-to-b from-transparent to-black/20">
+        <section className="relative flex flex-col w-full h-[calc(100dvh-57px-56px)] max-h-dvh overflow-hidden aspect-auto bg-gradient-to-b from-transparent to-black/20 xl:h-[calc(100dvh-100px)]">
             <div className="absolute flex justify-end w-full top-0 right-0 z-10 gap-2">
                 <button
                     className=" bg-main-color text-white px-2 py-1 rounded-md leading-none shadow-md"
@@ -64,7 +64,7 @@ const StoryFilterImage: React.FC<StoryFilterImageProps> = ({
             </div>
 
             <div
-                className="relative flex flex-row bottom-0 overflow-x-scroll scrollbar-hidden gap-2 p-2 h-[20%]"
+                className="relative flex flex-row bottom-0 overflow-x-scroll scrollbar-hidden gap-2 p-2 h-[20%] items-center justify-center"
                 ref={filterRef}
             >
                 {filterImage.map(filter => (

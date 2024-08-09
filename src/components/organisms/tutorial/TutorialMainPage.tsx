@@ -36,7 +36,7 @@ const TutorialMainPage: React.FC = () => {
     };
 
     return (
-        <div className="relative flex flex-col items-center h-dvh overflow-hidden bg-white xl:h-[calc(100dvh-100px)]">
+        <div className="relative flex flex-col items-center h-dvh overflow-hidden bg-white xl:h-[calc(100dvh-100px)] xl:mt-14">
             {step < 4 ? (
                 <button
                     onClick={handleSkip}

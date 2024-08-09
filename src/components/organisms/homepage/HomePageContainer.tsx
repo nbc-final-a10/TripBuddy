@@ -10,13 +10,17 @@ import HomePageRecommendBuddiesList from './HomePageRecommendBuddiesList';
 import { useAuth } from '@/hooks/auth';
 import useHomeQuery from '@/hooks/queries/useHomeQuery';
 import Loading from '@/app/(providers)/loading';
+import Navigate from '@/components/atoms/common/Navigate';
 
 const HomePageContainer = () => {
     const buddiesRef = useRef<HTMLDivElement>(null);
     const storiesRef = useRef<HTMLDivElement>(null);
     const tripsRef = useRef<HTMLDivElement>(null);
 
-    useTapScroll({ refs: [buddiesRef, storiesRef, tripsRef] });
+    const { createScrollLeft, createScrollRight } =
+        useTapScroll({
+            refs: [buddiesRef, storiesRef, tripsRef],
+        }) ?? {};
 
     const { buddy } = useAuth();
 
@@ -30,9 +34,9 @@ const HomePageContainer = () => {
     if (isPending) return <Loading />;
 
     return (
-        <div className="rounded-t-[32px] bg-white p-4 z-50 relative">
+        <div className="rounded-t-[32px] bg-white p-4 z-10 relative">
             <HomePageSearchBar />
-            <div className="mt-4 mb-2 relative">
+            <div className="mt-4 mb-2 relative z-10">
                 <HomePageTitle
                     title="추천 인기 버디즈"
                     buttonText="전체보기"
@@ -47,9 +51,23 @@ const HomePageContainer = () => {
                         buddies={buddyTripStory.buddies}
                     />
                 </div>
+                {createScrollLeft && createScrollRight && (
+                    <>
+                        <Navigate
+                            mode="before"
+                            onClick={createScrollLeft(buddiesRef)}
+                            className="top-[73%]"
+                        />
+                        <Navigate
+                            mode="after"
+                            onClick={createScrollRight(buddiesRef)}
+                            className="top-[73%]"
+                        />
+                    </>
+                )}
             </div>
 
-            <div className="mt-4 mb-2">
+            <div className="mt-4 mb-2 relative z-10">
                 <HomePageTitle
                     title="인기 스토리"
                     buttonText="전체보기"
@@ -57,7 +75,7 @@ const HomePageContainer = () => {
                     href="/stories"
                 />
                 <div
-                    className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
+                    className="overflow-x-scroll scrollbar-hidden relative flex gap-[10px] z-10"
                     ref={storiesRef}
                 >
                     <HomePageStories
@@ -65,9 +83,21 @@ const HomePageContainer = () => {
                         buddy={buddy || null}
                     />
                 </div>
+                {createScrollLeft && createScrollRight && (
+                    <>
+                        <Navigate
+                            mode="before"
+                            onClick={createScrollLeft(storiesRef)}
+                        />
+                        <Navigate
+                            mode="after"
+                            onClick={createScrollRight(storiesRef)}
+                        />
+                    </>
+                )}
             </div>
 
-            <div className="mt-4 mb-2">
+            <div className="mt-4 mb-2 relative z-10">
                 <HomePageTitle
                     title="지금 모집중인 여정"
                     buttonText="전체보기"
@@ -80,6 +110,18 @@ const HomePageContainer = () => {
                 >
                     <HomePageTrips trips={buddyTripStory.trips} />
                 </div>
+                {createScrollLeft && createScrollRight && (
+                    <>
+                        <Navigate
+                            mode="before"
+                            onClick={createScrollLeft(tripsRef)}
+                        />
+                        <Navigate
+                            mode="after"
+                            onClick={createScrollRight(tripsRef)}
+                        />
+                    </>
+                )}
             </div>
         </div>
     );

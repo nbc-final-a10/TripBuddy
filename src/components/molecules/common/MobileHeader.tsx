@@ -96,7 +96,7 @@ const MobileHeader: React.FC = () => {
                 {(isSearch || isWrite) && (
                     <Close
                         onClick={() => router.push('/trips')}
-                        className="cursor-pointer"
+                        className="cursor-pointer fill-black"
                     />
                 )}
             </div>

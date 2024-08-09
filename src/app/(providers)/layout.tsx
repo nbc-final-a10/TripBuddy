@@ -17,11 +17,13 @@ import { Metadata } from 'next';
 import { defaultMetaData } from '@/data/defaultMetaData';
 import { ModalProviderSetter } from '@/providers/ModalProvider';
 import { ModalProviderDefault } from '@/contexts/modal.context';
+import { getPathnameServer } from '@/utils/common/getPathnameServer';
 
 export const metadata: Metadata = defaultMetaData;
 
 const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
     const userId = getUserFromHeader();
+    const pathname = getPathnameServer();
 
     // console.log('헤더에서 user =====>', userId);
 
@@ -33,23 +35,23 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
     const dehydratedState = dehydrate(queryClient);
 
     return (
-        <main className="bg-slate-50 xl:bg-white min-h-dvh overflow-hidden">
-            <MainSectionWrapper>
-                <Suspense fallback={<Loading />}>
-                    <HydrationBoundary state={dehydratedState}>
-                        <ModalProviderDefault>
-                            <ModalProviderSetter>
-                                <AuthProvider>
+        <main className="bg-slate-50 xl:bg-slate-50 min-h-dvh overflow-hidden">
+            <Suspense fallback={<Loading />}>
+                <HydrationBoundary state={dehydratedState}>
+                    <ModalProviderDefault>
+                        <AuthProvider>
+                            <Header pathname={pathname.pathname} />
+                            <MainSectionWrapper>
+                                <ModalProviderSetter>
                                     <MobileHeader />
-                                    <Header />
                                     {children}
                                     <TapMenu />
-                                </AuthProvider>
-                            </ModalProviderSetter>
-                        </ModalProviderDefault>
-                    </HydrationBoundary>
-                </Suspense>
-            </MainSectionWrapper>
+                                </ModalProviderSetter>
+                            </MainSectionWrapper>
+                        </AuthProvider>
+                    </ModalProviderDefault>
+                </HydrationBoundary>
+            </Suspense>
         </main>
     );
 };

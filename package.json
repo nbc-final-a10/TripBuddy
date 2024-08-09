@@ -33,6 +33,7 @@
         "react-dom": "^18",
         "react-draggable": "^4.4.6",
         "react-icons": "^5.2.1",
+        "react-intersection-observer": "^9.13.0",
         "react-range": "^1.9.2",
         "sharp": "0.32.6",
         "slate": "^0.103.0",

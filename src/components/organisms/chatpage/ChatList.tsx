@@ -6,7 +6,7 @@ import supabase from '@/utils/supabase/client';
 import { useAuth } from '@/hooks/auth';
 import { ContractData } from '@/types/Chat.types';
 import { useRouter } from 'next/navigation';
-import DefaultLoader from '@/components/atoms/common/defaultLoader';
+import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 
 const ChatList = () => {
     const { buddy: currentBuddy } = useAuth();

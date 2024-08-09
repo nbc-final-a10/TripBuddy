@@ -2,7 +2,6 @@ import Input from '@/components/atoms/common/Input';
 import Title from '@/components/atoms/common/Title';
 import OnBoardingInnerWrapper from '@/components/atoms/onboarding/OnBoardinginnerWrapper';
 import OnBoardingWrapper from '@/components/atoms/onboarding/OnBoardingWrapper';
-import EditProfileButton from '@/components/atoms/profile/EditProfileButton';
 import AddButtonSmall from '@/components/atoms/stories/AddButtonSmall';
 import { Buddy } from '@/types/Auth.types';
 import Image from 'next/image';

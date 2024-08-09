@@ -1,6 +1,6 @@
 'use client';
 import StoryCard from '../stories/StoryCard';
-import { StoryWithBuddies } from '@/types/Story.types';
+import { StoryOverlay, StoryWithBuddies } from '@/types/Story.types';
 import { Buddy } from '@/types/Auth.types';
 import React, { useMemo } from 'react';
 import groupStoriesByBuddyId from '@/utils/stories/groupStoriesByBuddyId';
@@ -30,12 +30,13 @@ const HomePageStories: React.FC<HomePageStoriesProps> = ({
         return sortedArray;
     }, [stories, buddy]);
 
+    // 0번 인덱스만 전달하는 이유는 스토리 최신 것만 앞에 보여주기 위함임
     return (
         <>
             {sortedStories.map(story => (
                 <StoryCard
                     key={story.buddyId}
-                    id={story.stories[0].story_id}
+                    id={story.buddyId}
                     buddy={story.stories[0].buddies}
                     name={story.stories[0].buddies.buddy_nickname}
                     created_at={story.stories[0].story_created_at}
@@ -49,6 +50,8 @@ const HomePageStories: React.FC<HomePageStoriesProps> = ({
                             ? 'my'
                             : 'story'
                     }
+                    storyId={story.stories[0].story_id}
+                    overlay={story.stories[0].story_overlay as StoryOverlay[]}
                 />
             ))}
         </>

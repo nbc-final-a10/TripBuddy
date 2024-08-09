@@ -11,5 +11,6 @@ export default function useHomeQuery() {
     return useQuery<BuddyTripStory, Error>({
         queryKey: [QUERY_KEY_BUDDY, QUERY_KEY_TRIP, QUERY_KEY_STORY],
         queryFn: () => getBuddyTripStory(),
+        staleTime: 1000 * 60 * 5,
     });
 }

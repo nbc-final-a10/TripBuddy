@@ -21,7 +21,7 @@ import { CalendarDate, parseDate } from '@internationalized/date';
 import { getAgeFromBirthDate } from '@/utils/common/getAgeFromBirthDate';
 import useUpdateBuddyMutation from '@/hooks/queries/useUpdateBuddyMutation';
 import OnBoardingProfileImage from './OnBoardingProfileImage';
-import DefaultLoader from '@/components/atoms/common/defaultLoader';
+import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 
 const buttonText = [
     '다음',
