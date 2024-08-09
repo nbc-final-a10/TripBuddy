@@ -12,3 +12,8 @@ export type ContractWithTrips = Contract & {
 export type ContractWithTripsWithContract = Contract & {
     trips: TripWithContract;
 };
+
+export type BannerTripWithContract = {
+    trips: Trip[];
+    contracts: Contract[];
+};
