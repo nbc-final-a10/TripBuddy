@@ -25,6 +25,7 @@ const TripList: React.FC = () => {
     console.log(tripsData);
 
     const [paginationIndex, setPaginationIndex] = useState(0);
+    const [pagination, setPagination] = useState(1);
 
     const slicedPageArray = useMemo(() => {
         const { slicedPageArray } = sliceArrayByLimit(
@@ -34,8 +35,18 @@ const TripList: React.FC = () => {
         return slicedPageArray;
     }, [tripsData]);
 
+    const handlePaginationIndex = (event: React.MouseEvent<SVGElement>) => {
+        const next = event.currentTarget.dataset.next;
+        if (next === 'before') {
+            if (paginationIndex > 0) setPaginationIndex(prev => prev - 1);
+        } else {
+            if (slicedPageArray.length > paginationIndex)
+                setPaginationIndex(prev => prev + 1);
+        }
+    };
+
     const handlePagination = (index: number) => {
-        setPaginationIndex(index);
+        setPagination(index);
     };
 
     useEffect(() => {
@@ -62,20 +73,33 @@ const TripList: React.FC = () => {
             </div>
 
             <div className="hidden xl:grid w-full mx-auto grid-cols-1 xl:grid-cols-4 gap-3">
-                {tripsData.allTrips?.[paginationIndex].map(item => (
+                {tripsData.allTrips?.[pagination - 1].map(item => (
                     <TripCard key={item.trip_id} trip={item} mode="list" />
                 ))}
             </div>
 
             <div className="w-full justify-center items-center hidden xl:flex">
                 <div className="flex justify-center items-center gap-3">
-                    <RxTriangleLeft className="cursor-pointer text-2xl" />
+                    <RxTriangleLeft
+                        className="cursor-pointer text-2xl"
+                        data-next="before"
+                        onClick={handlePaginationIndex}
+                    />
                     <div className="flex justify-center items-center gap-3">
                         {slicedPageArray[paginationIndex].map(page => (
-                            <button key={page}>{page}</button>
+                            <button
+                                key={page}
+                                onClick={() => handlePagination(page)}
+                            >
+                                {page}
+                            </button>
                         ))}
                     </div>
-                    <RxTriangleRight className="cursor-pointer text-2xl" />
+                    <RxTriangleRight
+                        className="cursor-pointer text-2xl"
+                        data-next="after"
+                        onClick={handlePaginationIndex}
+                    />
                 </div>
             </div>
         </section>
