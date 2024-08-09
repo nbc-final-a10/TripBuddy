@@ -1,16 +1,15 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import DraggableInput from './DraggableInput';
 import Image from 'next/image';
-import useLockBodyScroll from '@/hooks/common/useLockBodyScroll';
 import clsx from 'clsx';
 import useStoryMutation from '@/hooks/queries/useStoryMutation';
 import { StoryData, StoryFilter, StoryOverlay } from '@/types/Story.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/auth';
-import DefaultLoader from '@/components/atoms/common/defaultLoader';
+import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 
 type StoryWriteTextProps = {
     imageFile: File;

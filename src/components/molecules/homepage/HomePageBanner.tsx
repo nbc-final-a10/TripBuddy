@@ -5,7 +5,6 @@ import { useAuth } from '@/hooks/auth';
 import Image from 'next/image';
 import useTripsByContractQuery from '@/hooks/queries/useTripsByContractQuery';
 import getDaysLeft from '@/utils/common/getDaysLeft';
-import DefaultLoader from '@/components/atoms/common/defaultLoader';
 
 const HomePageBanner = () => {
     const { buddy } = useAuth();

@@ -1,6 +1,6 @@
 'use client';
 
-import DefaultLoader from '@/components/atoms/common/defaultLoader';
+import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
 import TripCard from '@/components/molecules/trips/TripCard';
 import useTripQuery from '@/hooks/queries/useTripQuery';

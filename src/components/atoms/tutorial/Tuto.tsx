@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import NextImage from 'next/image';
-import DefaultLoader from '../common/defaultLoader';
+import DefaultLoader from '../common/DefaultLoader';
 
 type TutoProps = {
     step: number;

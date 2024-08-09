@@ -1,6 +1,6 @@
 'use client';
 
-import DefaultLoader from '@/components/atoms/common/defaultLoader';
+import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import React, { useState, useEffect } from 'react';
 import TripListMobile from './TripListMobile';
 import TripListDesktop from './TripListDeskTop';

@@ -1,6 +1,6 @@
 'use client';
 
-import DefaultLoader from '@/components/atoms/common/defaultLoader';
+import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import StoryCard from '@/components/molecules/stories/StoryCard';
 import { useAuth } from '@/hooks/auth';
 import useStoriesQuery from '@/hooks/queries/useStoriesQuery';
