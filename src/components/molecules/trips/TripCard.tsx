@@ -14,13 +14,20 @@ import { useAuth } from '@/hooks/auth';
 import { createContract } from '@/utils/contract/createContract';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { Contract } from '@/types/Contract.types';
+import useBuddyQueries from '@/hooks/queries/useBuddyQueries';
+import { twMerge } from 'tailwind-merge';
 
 type TripCardProps = {
     trip: TripWithContract;
     mode?: 'card' | 'detail' | 'list';
+    queries?: ReturnType<typeof useBuddyQueries>;
 };
 
-const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
+const TripCard: React.FC<TripCardProps> = ({
+    trip,
+    mode = 'list',
+    queries,
+}) => {
     const { buddy } = useAuth();
 
     const handleCreateContract = useCallback(async () => {
@@ -176,12 +183,22 @@ const TripCard: React.FC<TripCardProps> = ({ trip, mode = 'list' }) => {
                     )}
 
                     {/** 프로필 이미지 원형 */}
-                    {mode === 'detail' && (
+                    {mode === 'detail' && queries && (
                         <div className="relative flex flex-row h-10">
-                            <div className="absolute w-10 h-10 bg-gray-100 border-2 border-white rounded-full" />
-                            <div className="absolute w-10 h-10 left-[24px] bg-gray-100 border-2 border-white rounded-full" />
-                            <div className="absolute w-10 h-10 left-[48px] bg-gray-100 border-2 border-white rounded-full" />
-                            <div className="absolute w-10 h-10 left-[72px] bg-gray-100 border-2 border-white rounded-full" />
+                            {queries.map((query, index) => (
+                                <div
+                                    key={index}
+                                    className={twMerge(
+                                        'absolute w-10 h-10 bg-gray-100 border-2 border-white rounded-full bg-cover bg-center',
+                                        index === 1 && 'left-[24px]',
+                                        index === 2 && 'left-[48px]',
+                                        index === 3 && 'left-[72px]',
+                                    )}
+                                    style={{
+                                        backgroundImage: `url(${query.data?.buddy_profile_pic})`,
+                                    }}
+                                />
+                            ))}
                         </div>
                     )}
                 </div>

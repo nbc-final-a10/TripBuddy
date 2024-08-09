@@ -3,12 +3,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import HeaderMyPageLink from './HeaderMyPageLink';
 import { twMerge } from 'tailwind-merge';
+import { usePathname } from 'next/navigation';
 
-type HeaderProps = {
-    pathname: string | null;
-};
+export default function Header() {
+    const pathname = usePathname();
 
-export default function Header({ pathname }: HeaderProps) {
     return (
         <header
             className={twMerge(
@@ -43,7 +42,7 @@ export default function Header({ pathname }: HeaderProps) {
                             href="/trips"
                             className={
                                 pathname === '/trips'
-                                    ? 'text-primary-color-4000 underline'
+                                    ? 'text-primary-color-400 underline'
                                     : 'text-black'
                             }
                         >

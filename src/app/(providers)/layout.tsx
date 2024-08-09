@@ -23,7 +23,6 @@ export const metadata: Metadata = defaultMetaData;
 
 const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
     const userId = getUserFromHeader();
-    const pathname = getPathnameServer();
 
     // console.log('헤더에서 user =====>', userId);
 
@@ -40,7 +39,7 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
                 <HydrationBoundary state={dehydratedState}>
                     <ModalProviderDefault>
                         <AuthProvider>
-                            <Header pathname={pathname.pathname} />
+                            <Header />
                             <MainSectionWrapper>
                                 <ModalProviderSetter>
                                     <MobileHeader />
