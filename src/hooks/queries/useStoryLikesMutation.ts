@@ -11,11 +11,6 @@ export default function useStoryLikesMutation(id: string) {
     const queryClient = useQueryClient();
     return useMutation<StoryLikes[], Error, StoryLikesData>({
         mutationFn: (data: StoryLikesData) => postStoryLikes(data),
-        // onSuccess: () => {
-        //     queryClient.invalidateQueries({
-        //         queryKey: [QUERY_KEY_STORY_LIKES, id],
-        //     });
-        // },
         onMutate: async (data: StoryLikesData) => {
             await queryClient.cancelQueries({
                 queryKey: [QUERY_KEY_STORY_LIKES, id],

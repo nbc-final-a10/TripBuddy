@@ -7,6 +7,7 @@ export const QUERY_KEY_BUDDY_PROFILE = 'buddyProfile';
 export const QUERY_KEY_TRIP = 'trip';
 export const QUERY_KEY_TRIP_INFINITE = 'tripInfinite';
 export const QUERY_KEY_TRIP_BY_CONTRACT = 'tripByContract';
+export const QUERY_KEY_TRIP_BY_BOOKMARK = 'tripByBookmark';
 
 // messages 테이블 관련
 

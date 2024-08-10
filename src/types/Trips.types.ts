@@ -17,3 +17,11 @@ export type TripInfiniteQueryResponse = {
     totalPages: number;
     currentPage: number;
 };
+
+export type BookMark = Tables<'tripbookmarks'>;
+
+export type PartialBookMark = Partial<BookMark>;
+
+export type BookMarkRequest = PartialBookMark & {
+    is_bookmarked: boolean;
+};
