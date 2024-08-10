@@ -24,7 +24,15 @@ export async function GET(req: NextRequest) {
         }
 
         isPending = false;
-        return NextResponse.json({ buddies, isPending }, { status: 200 });
+        return NextResponse.json(
+            { buddies, isPending },
+            {
+                status: 200,
+                // headers: {
+                //     'Cache-Control': 'no-store', // 캐싱 안함 (내 프로필에서도 팔로우하기 버튼이 캐싱되는 문제 발견)
+                // },
+            },
+        );
     } catch (error) {
         console.error('버디 통신 오류 발생:', error);
         isPending = false;
