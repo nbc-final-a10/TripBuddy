@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/hooks/auth';
 import Image from 'next/image';
 import getDaysLeft from '@/utils/common/getDaysLeft';
 import useContractQuery from '@/hooks/queries/useContractQuery';
+import filterOldTrips from '@/utils/trips/filterOldTrips';
 
 const HomePageBanner = () => {
     const { buddy } = useAuth();
@@ -32,6 +33,11 @@ const HomePageBanner = () => {
         if (error) console.error(error);
     }, [error]);
 
+    const upcomingTrips = useMemo(() => {
+        if (!data) return [];
+        return filterOldTrips(data.trips);
+    }, [data]);
+
     return (
         <div className="relative h-[200px] z-0">
             <div className="relative text-left font-semibold text-2xl px-4 py-8 h-[230px] flex flex-col justify-end aspect-auto z-0">
@@ -47,7 +53,7 @@ const HomePageBanner = () => {
                 )}
                 <div className="absolute inset-0 bg-black/30 z-10" />
                 <div className="relative z-20 text-white h-full flex flex-col justify-center gap-3">
-                    {data && data.trips && buddy && (
+                    {upcomingTrips.length > 0 && (
                         <>
                             <p>
                                 <span className="font-bold text-3xl">
@@ -56,11 +62,13 @@ const HomePageBanner = () => {
                                 님,
                             </p>
                             <p>
-                                {`예정된 ${data.trips[0].trip_final_destination} 여행이`}
+                                {`예정된 ${upcomingTrips[0].trip_final_destination} 여행이`}
                             </p>
                             <p>
                                 <span className="font-bold text-3xl">
-                                    {getDaysLeft(data.trips[0].trip_start_date)}
+                                    {getDaysLeft(
+                                        upcomingTrips[0].trip_start_date,
+                                    )}
                                 </span>
                                 일 남았어요!
                             </p>

@@ -3,7 +3,7 @@
 import HomePageSearchBar from './HomePageSearchBar';
 import HomePageStories from '@/components/molecules/homepage/HomePageStories';
 import HomePageTrips from '@/components/molecules/homepage/HomePageTrips';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import useTapScroll from '@/hooks/useTapScroll';
 import HomePageTitle from '@/components/molecules/homepage/HomePageTitle';
 import HomePageRecommendBuddiesList from './HomePageRecommendBuddiesList';
@@ -11,6 +11,8 @@ import { useAuth } from '@/hooks/auth';
 import Navigate from '@/components/atoms/common/Navigate';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import useHomeQueries from '@/hooks/queries/useHomeQueries';
+import filterOldTrips from '@/utils/trips/filterOldTrips';
+import { TripWithContract } from '@/types/Trips.types';
 
 const HomePageContainer = () => {
     const buddiesRef = useRef<HTMLDivElement>(null);
@@ -32,6 +34,11 @@ const HomePageContainer = () => {
             if (query.error) showAlert('error', query.error.message);
         });
     }, [queries]);
+
+    const upcomingTrips = useMemo(() => {
+        if (!trips.data) return [];
+        return filterOldTrips(trips.data.trips as TripWithContract[]);
+    }, [trips]);
 
     // if (queries.some(query => query.isPending)) return <DefaultLoader />;
 
@@ -114,8 +121,10 @@ const HomePageContainer = () => {
                     className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
                     ref={tripsRef}
                 >
-                    {trips.data?.trips && (
-                        <HomePageTrips trips={trips.data?.trips} />
+                    {upcomingTrips.length > 0 && (
+                        <HomePageTrips
+                            trips={upcomingTrips as TripWithContract[]}
+                        />
                     )}
                 </div>
                 {createScrollLeft && createScrollRight && (
