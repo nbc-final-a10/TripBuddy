@@ -103,7 +103,7 @@ const HomePageContainer = () => {
                 )}
             </div>
 
-            <div className="mt-4 mb-2 relative z-10">
+            <div className="mt-4 mb-5 relative z-10">
                 <HomePageTitle
                     title="지금 모집중인 여정"
                     buttonText="전체보기"

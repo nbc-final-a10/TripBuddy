@@ -256,7 +256,11 @@ const TripCard: React.FC<TripCardProps> = ({
                                 <span>
                                     {new Date(
                                         trip.trip_start_date,
-                                    ).toLocaleDateString()}
+                                    ).toLocaleDateString('ko-KR', {
+                                        month: 'numeric', // 월 숫자로 표시
+                                        day: 'numeric', // 일 숫자로 표시
+                                        weekday: 'short', // 요일을 짧은 형식으로 표시 (e.g., 'Mon', 'Tue')
+                                    })}
                                 </span>
                             </div>
 
