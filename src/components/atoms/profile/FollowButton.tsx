@@ -3,7 +3,7 @@
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useAuth } from '@/hooks/auth';
 import React, { useEffect, useState } from 'react';
-import { QUERY_KEY_BUDDY_PROFILE } from '@/constants/query.constants';
+import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import { useQueryClient } from '@tanstack/react-query';
 
 export default function FollowButton() {
@@ -67,12 +67,12 @@ export default function FollowButton() {
             }
 
             const data = await response.json();
-            console.log('follow data', data);
+            // console.log('follow data', data);
 
             showAlert('success', '팔로우 성공했습니다.');
             setIsFollowing(true);
             queryClient.invalidateQueries({
-                queryKey: [QUERY_KEY_BUDDY_PROFILE, followingId],
+                queryKey: [QUERY_KEY_BUDDY, followingId],
             });
         } finally {
             setIsLoading(false);
@@ -102,7 +102,7 @@ export default function FollowButton() {
             showAlert('success', '팔로우가 취소었습니다.');
             setIsFollowing(false);
             queryClient.invalidateQueries({
-                queryKey: [QUERY_KEY_BUDDY_PROFILE, followingId],
+                queryKey: [QUERY_KEY_BUDDY, followingId],
             });
         } finally {
             setIsLoading(false);

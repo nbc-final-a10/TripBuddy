@@ -30,7 +30,7 @@ const HomePageStories: React.FC<HomePageStoriesProps> = ({
         return sortedArray;
     }, [stories, buddy]);
 
-    console.log(sortedStories);
+    // console.log(sortedStories);
 
     // 0번 인덱스만 전달하는 이유는 스토리 최신 것만 앞에 보여주기 위함임
     return (

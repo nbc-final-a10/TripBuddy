@@ -17,8 +17,10 @@ export default function useUpdateBuddyMutation() {
             buddyInfo?: PartialBuddy | null;
             imageFile?: File | null;
         }) => patchBuddyInfo({ buddyInfo, imageFile }),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [QUERY_KEY_BUDDY] });
+        onSuccess: (buddyInfo: Buddy) => {
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEY_BUDDY, buddyInfo.buddy_id],
+            });
         },
     });
 }
