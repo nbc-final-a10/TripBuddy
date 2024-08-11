@@ -37,7 +37,8 @@ export async function getInfiniteTrips({
     }
 }
 
-export async function getTrip(id: string): Promise<TripWithContract> {
+export async function getTrip(id: string | null): Promise<TripWithContract> {
+    if (!id) throw new Error('id is required');
     const url = `/api/trips/${id}`;
     try {
         const data = await fetchWrapper<TripWithContract>(url, {

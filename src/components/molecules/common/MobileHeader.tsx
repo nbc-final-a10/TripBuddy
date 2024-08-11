@@ -8,6 +8,7 @@ import Search from '../../../../public/svg/HomeSearch.svg';
 import MobileHeaderSettingsButton from '@/components/atoms/common/MobileHeaderSettingsButton';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/hooks/auth';
+import useTripQuery from '@/hooks/queries/useTripQuery';
 
 const MobileHeader: React.FC = () => {
     const pathname = usePathname();
@@ -15,8 +16,8 @@ const MobileHeader: React.FC = () => {
     const router = useRouter();
     const { buddy } = useAuth();
 
-    console.log(searchParams.get('mode'));
-    const uuid = pathname.split('/profile/')[1];
+    const uuidMatch = pathname.match(/\/([^\/]+)\/([0-9a-fA-F-]{36})$/);
+    const uuid = uuidMatch ? uuidMatch[2] : null;
     const isMyProfile = uuid === buddy?.buddy_id;
 
     const isTrips = pathname === '/trips';
@@ -33,6 +34,8 @@ const MobileHeader: React.FC = () => {
     const isProfile = pathname.startsWith('/profile/');
     const isStoryWrite = pathname === '/write/story';
     const isNotification = pathname === '/notifications';
+
+    const { data: trip } = useTripQuery(isTripDetail && uuid ? uuid : null);
 
     const headerTitle =
         (isTrips && '모집중 여정') ||
@@ -76,6 +79,7 @@ const MobileHeader: React.FC = () => {
             router.back();
         }
     };
+
     if (!isShow) return null;
 
     return (
@@ -102,10 +106,15 @@ const MobileHeader: React.FC = () => {
                         className="cursor-pointer"
                     />
                 )}
-                {isProfile && (
-                    <MobileHeaderSettingsButton pathname={pathname} />
+                {isProfile && uuid && (
+                    <MobileHeaderSettingsButton uuid={uuid} />
                 )}
-                {isTripDetail && <span>수정</span>}
+                {/** 수정페이지 구현하면 수정으로 가게 추후 수정 요망 */}
+                {isTripDetail &&
+                    trip &&
+                    trip.trip_master_id === buddy?.buddy_id && (
+                        <span>수정</span>
+                    )}
                 {(isSearch || isWrite) && (
                     <Close
                         onClick={() => router.push('/trips')}
