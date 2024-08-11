@@ -3,14 +3,17 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/auth';
 import Image from 'next/image';
-import useTripsByContractQuery from '@/hooks/queries/useTripsByContractQuery';
 import getDaysLeft from '@/utils/common/getDaysLeft';
+import useContractQuery from '@/hooks/queries/useContractQuery';
 
 const HomePageBanner = () => {
     const { buddy } = useAuth();
     const [randomImgSrc, setRandomImgSrc] = useState<string>('');
 
-    const { data, isPending, error } = useTripsByContractQuery(buddy?.buddy_id);
+    const { data, isPending, error } = useContractQuery({
+        isBuddy: true,
+        id: buddy?.buddy_id,
+    });
 
     useEffect(() => {
         const bannerImgs = [

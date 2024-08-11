@@ -16,3 +16,4 @@ export * from './useStoryLikesQuery';
 export * from './useStoryLikesMutation';
 export * from './useContractMutation';
 export * from './useBookMarkMutation';
+export * from './useContractQuery';

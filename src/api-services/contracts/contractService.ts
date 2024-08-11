@@ -1,17 +1,20 @@
 import {
-    BannerTripWithContract,
     Contract,
     PartialContract,
+    TripsAndContracts,
 } from '@/types/Contract.types';
 import fetchWrapper from '@/utils/api/fetchWrapper';
 
-export async function getBannerTrips(
-    buddyId: string | undefined,
-): Promise<BannerTripWithContract | null> {
-    if (!buddyId) return null;
-    const url = `/api/contract/${buddyId}`;
+export async function getContract(
+    isBuddy: boolean,
+    id: string | undefined,
+): Promise<TripsAndContracts | null> {
+    if (!id) return null;
+    const url = isBuddy
+        ? `/api/contract/buddy/${id}`
+        : `/api/contract/trip/${id}`;
     try {
-        const data = await fetchWrapper<BannerTripWithContract>(url, {
+        const data = await fetchWrapper<TripsAndContracts>(url, {
             method: 'GET',
             cache: 'no-store',
         });

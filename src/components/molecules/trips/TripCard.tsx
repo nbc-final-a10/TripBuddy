@@ -24,6 +24,7 @@ import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import useBookMarkMutation from '@/hooks/queries/useBookMarkMutation';
 import { useRouter } from 'next/navigation';
 import useBookMarkQuery from '@/hooks/queries/useBookMarkQuery';
+import useContractQuery from '@/hooks/queries/useContractQuery';
 
 type TripCardProps = {
     trip: TripWithContract;
@@ -38,6 +39,17 @@ const TripCard: React.FC<TripCardProps> = ({
 }) => {
     const { buddy } = useAuth();
     const router = useRouter();
+
+    console.log(trip);
+
+    // const {
+    //     data: contract,
+    //     isPending: isContractPending,
+    //     error: contractError,
+    // } = useContractQuery({
+    //     isBuddy: false,
+    //     id: trip.trip_id,
+    // });
 
     const {
         data: bookMark,
@@ -98,14 +110,25 @@ const TripCard: React.FC<TripCardProps> = ({
     };
 
     useEffect(() => {
-        if (contractMutationError || bookMarkError || bookMarkMutationError) {
+        if (
+            contractMutationError ||
+            // contractError ||
+            bookMarkError ||
+            bookMarkMutationError
+        ) {
             const message =
                 contractMutationError?.message ||
+                // contractError?.message ||
                 bookMarkError?.message ||
                 bookMarkMutationError?.message;
             showAlert('error', message || '오류가 발생했습니다.');
         }
-    }, [contractMutationError, bookMarkError, bookMarkMutationError]);
+    }, [
+        contractMutationError,
+        // contractError,
+        bookMarkError,
+        bookMarkMutationError,
+    ]);
 
     useEffect(() => {
         if (isContractMutationSuccess) {
@@ -118,9 +141,10 @@ const TripCard: React.FC<TripCardProps> = ({
 
     return (
         <>
-            {isBookMarkPending && <DefaultLoader />}
+            {/* {isBookMarkPending && <DefaultLoader />} */}
             {isContractMutationPending && <DefaultLoader />}
             {isBookMarkMutationPending && <DefaultLoader />}
+            {/* {isContractPending && <DefaultLoader />} */}
             <div
                 className={clsx(
                     'bg-white box-border h-fit shadow-xl',
@@ -241,7 +265,7 @@ const TripCard: React.FC<TripCardProps> = ({
                             {/** 추후 수정 필요 */}
                             <div className="flex gap-2 items-center">
                                 <Groups />
-                                <span>{`${(trip.contract as Contract[]).length}/${trip.trip_max_buddies_counts}`}</span>
+                                {/* <span>{`${(trip.contract as Contract[]).length}/${trip.trip_max_buddies_counts}`}</span> */}
                             </div>
                         </div>
 
@@ -251,7 +275,7 @@ const TripCard: React.FC<TripCardProps> = ({
                                 <div className="flex flex-row">
                                     <p className="text-sm leading-none">
                                         {`신청`}
-                                        <span className="text-gray-5000">{`${(trip.contract as Contract[]).length}`}</span>
+                                        {/* <span className="text-gray-5000">{`${(trip.contract as Contract[]).length}`}</span> */}
                                         <span className="text-gray-500">{`/${trip.trip_max_buddies_counts}`}</span>
                                     </p>
                                 </div>

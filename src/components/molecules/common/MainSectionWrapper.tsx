@@ -25,7 +25,7 @@ const MainSectionWrapper = ({ children }: MainSectionWrapperProps) => {
     return (
         <main
             className={twMerge(
-                'bg-slate-50 xl:bg-slate-50 min-h-dvh overflow-hidden',
+                'bg-slate-50 xl:bg-slate-50 min-h-dvh overflow-hidden xl:min-h-[calc(100dvh-100px)]',
                 pathname === '/tutorial' && 'bg-white xl:bg-white',
             )}
         >

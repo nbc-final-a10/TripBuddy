@@ -15,17 +15,14 @@ export default function SelectedResultRealtimeText({
     return (
         <div className="text-center">
             <span
-                className={clsx(
-                    'text-sm xl:text-2xl text-gray-500',
-                    isMini && 'text-xs',
-                )}
+                className={clsx('text-sm text-gray-500', isMini && 'text-xs')}
             >
                 {firstLabel}
                 {` `}
             </span>
             <span
                 className={clsx(
-                    'text-md xl:text-3xl font-bold text-main-color',
+                    'text-md font-bold text-main-color',
                     isMini && 'text-sm',
                 )}
             >
@@ -33,10 +30,7 @@ export default function SelectedResultRealtimeText({
                 {` `}
             </span>
             <span
-                className={clsx(
-                    'text-sm xl:text-2xl text-gray-500',
-                    isMini && 'text-xs',
-                )}
+                className={clsx('text-sm text-gray-500', isMini && 'text-xs')}
             >
                 {secondLabel}
             </span>

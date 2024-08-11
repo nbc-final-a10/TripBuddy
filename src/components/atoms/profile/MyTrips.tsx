@@ -49,6 +49,8 @@ export default function MyTrips({ id }: MyTripsProps) {
         fetchTrips();
     }, [id]);
 
+    console.log(trips);
+
     return (
         <div className="p-2 bg-gray-100 rounded-xl">
             <Accordion
@@ -90,14 +92,14 @@ export default function MyTrips({ id }: MyTripsProps) {
                         trips.participated.map((contract, index) => {
                             const contractWithTrips =
                                 contract as ContractWithTripsWithContract;
-                            contractWithTrips.trips.contract =
-                                trips.participated;
+                            // contractWithTrips.trips.contract =
+                            //     trips.participated;
 
-                            // console.log(contractWithTrips);
                             return (
                                 <TripCard
                                     key={contract.trips.trip_id}
-                                    trip={contractWithTrips.trips}
+                                    // trip={contractWithTrips.trips}
+                                    trip={contract.trips as TripWithContract}
                                     mode="card"
                                 />
                             );
