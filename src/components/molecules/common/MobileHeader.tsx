@@ -6,14 +6,16 @@ import Close from '../../../../public/svg/Close.svg';
 import Notification from '../../../../public/svg/Alarm.svg';
 import Search from '../../../../public/svg/HomeSearch.svg';
 import MobileHeaderSettingsButton from '@/components/atoms/common/MobileHeaderSettingsButton';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/hooks/auth';
 
 const MobileHeader: React.FC = () => {
     const pathname = usePathname();
+    const searchParams = useSearchParams();
     const router = useRouter();
     const { buddy } = useAuth();
 
+    console.log(searchParams.get('mode'));
     const uuid = pathname.split('/profile/')[1];
     const isMyProfile = uuid === buddy?.buddy_id;
 
@@ -23,6 +25,7 @@ const MobileHeader: React.FC = () => {
     const isChatId = pathname.startsWith('/chat/');
     const isChat = pathname === '/chat';
     const isLogin = pathname === '/login';
+    const isRecover = searchParams.get('mode') === 'recover';
     const isSignup = pathname === '/signup';
     const isSearch = pathname === '/search';
     const isWrite = pathname === '/write';
@@ -45,7 +48,8 @@ const MobileHeader: React.FC = () => {
         (isStoryWrite && '스토리에 추가') ||
         (isChatId && '') ||
         (isChat && '채팅') ||
-        (isNotification && '알림');
+        (isNotification && '알림') ||
+        (isRecover && '비밀번호 찾기');
 
     const isShow =
         isTrips ||
@@ -60,21 +64,24 @@ const MobileHeader: React.FC = () => {
         isStory ||
         isChatId ||
         isChat ||
-        isNotification;
+        isNotification ||
+        isRecover;
 
+    const handleBack = () => {
+        if (isRecover) {
+            router.push('/login?mode=login');
+        } else if (isLogin || isSignup) {
+            router.push('/');
+        } else {
+            router.back();
+        }
+    };
     if (!isShow) return null;
 
     return (
         <header className="relative h-[57px] w-full flex flex-row items-center px-5 xl:hidden bg-white">
             <div className="w-[calc(100%/3)] flex justify-start items-center">
-                <Arrow_Back
-                    onClick={
-                        isLogin || isSignup
-                            ? () => router.push('/')
-                            : () => router.back()
-                    }
-                    className="cursor-pointer"
-                />
+                <Arrow_Back onClick={handleBack} className="cursor-pointer" />
             </div>
             <div className="w-[calc(100%/3)] flex justify-center items-center">
                 <h1 className="text-center leading-3 text-xl font-semibold">
