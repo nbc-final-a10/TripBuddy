@@ -48,6 +48,7 @@ const StoryList: React.FC = () => {
                     }
                     overlay={story.stories[0].story_overlay as StoryOverlay[]}
                     story={story.stories[0]}
+                    likes={story.stories[0].likes}
                 />
             ))}
         </section>
