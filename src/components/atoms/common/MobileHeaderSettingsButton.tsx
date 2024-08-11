@@ -20,7 +20,10 @@ const MobileHeaderSettingsButton = ({
     if (!isShow) return null;
 
     return (
-        <Settings onClick={() => router.push(`/profile/${buddy?.buddy_id}`)} />
+        <Settings
+            className="cursor-pointer"
+            onClick={() => router.push(`/onboarding`)}
+        />
     );
 };
 

@@ -7,10 +7,15 @@ import Notification from '../../../../public/svg/Alarm.svg';
 import Search from '../../../../public/svg/HomeSearch.svg';
 import MobileHeaderSettingsButton from '@/components/atoms/common/MobileHeaderSettingsButton';
 import { usePathname, useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/auth';
 
 const MobileHeader: React.FC = () => {
     const pathname = usePathname();
     const router = useRouter();
+    const { buddy } = useAuth();
+
+    const uuid = pathname.split('/profile/')[1];
+    const isMyProfile = uuid === buddy?.buddy_id;
 
     const isTrips = pathname === '/trips';
     const isTripDetail = pathname.startsWith('/trips/');
@@ -34,7 +39,8 @@ const MobileHeader: React.FC = () => {
         (isSignup && '') ||
         (isSearch && '검색') ||
         (isOnboarding && '온보딩') ||
-        (isProfile && '프로필') ||
+        (isProfile && isMyProfile && '마이페이지') ||
+        (isProfile && !isMyProfile && '프로필') ||
         (isStory && '스토리') ||
         (isStoryWrite && '스토리에 추가') ||
         (isChatId && '') ||
