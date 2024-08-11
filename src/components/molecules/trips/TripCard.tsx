@@ -40,8 +40,6 @@ const TripCard: React.FC<TripCardProps> = ({
     const { buddy } = useAuth();
     const router = useRouter();
 
-    console.log(trip);
-
     // const {
     //     data: contract,
     //     isPending: isContractPending,
@@ -265,7 +263,7 @@ const TripCard: React.FC<TripCardProps> = ({
                             {/** 추후 수정 필요 */}
                             <div className="flex gap-2 items-center">
                                 <Groups />
-                                {/* <span>{`${(trip.contract as Contract[]).length}/${trip.trip_max_buddies_counts}`}</span> */}
+                                <span>{`${(trip.contract as Contract[]).length}/${trip.trip_max_buddies_counts}`}</span>
                             </div>
                         </div>
 
@@ -275,7 +273,7 @@ const TripCard: React.FC<TripCardProps> = ({
                                 <div className="flex flex-row">
                                     <p className="text-sm leading-none">
                                         {`신청`}
-                                        {/* <span className="text-gray-5000">{`${(trip.contract as Contract[]).length}`}</span> */}
+                                        <span className="text-gray-5000">{`${(trip.contract as Contract[]).length}`}</span>
                                         <span className="text-gray-500">{`/${trip.trip_max_buddies_counts}`}</span>
                                     </p>
                                 </div>

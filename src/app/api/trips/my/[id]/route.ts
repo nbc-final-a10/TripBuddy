@@ -13,8 +13,8 @@ export async function GET(
     const supabase = createClient();
 
     const {
-        data: allTrip,
-        error: allTripError,
+        data: allTrips,
+        error: allTripsError,
     }: {
         data: TripWithContract[] | null;
 
@@ -23,43 +23,19 @@ export async function GET(
         .from('trips')
         .select('*, contract:contract!contract_contract_trip_id_foreign (*)');
 
-    if (allTripError) {
-        console.error(allTripError);
+    if (allTripsError) {
+        console.error(allTripsError);
         return NextResponse.json(
-            { error: allTripError?.message },
+            { error: allTripsError?.message },
             { status: 401 },
         );
     }
 
-    // const {
-    //     data: trip,
-    //     error: tripError,
-    // }: {
-    //     data: TripWithContract[] | null;
-
-    //     error: PostgrestError | null;
-    // } = await supabase
-    //     .from('trips')
-    //     .select('*, contract:contract!contract_contract_trip_id_foreign (*)')
-    //     .eq('trip_master_id', id);
-
-    // if (tripError) {
-    //     console.error(tripError);
-    //     return NextResponse.json(
-    //         { error: tripError?.message },
-    //         { status: 401 },
-    //     );
-    // }
-
-    // if (!trip) {
-    //     return NextResponse.json({ error: 'Trip not found' }, { status: 404 });
-    // }
-
-    if (!allTrip) {
+    if (!allTrips) {
         return NextResponse.json({ error: 'Trip not found' }, { status: 404 });
     }
 
-    const trip = allTrip?.filter(trip => trip.trip_master_id === id);
+    const createdTrips = allTrips?.filter(trip => trip.trip_master_id === id);
 
     // 참여중인 여정 (contract)
     const {
@@ -89,8 +65,37 @@ export async function GET(
         );
     }
 
+    const participatedTrips =
+        contract.map(contract =>
+            allTrips?.find(trip => trip.trip_id === contract.contract_trip_id),
+        ) || [];
+
     return NextResponse.json(
-        { created: trip, participated: contract },
+        { created: createdTrips, participated: participatedTrips },
         { status: 200 },
     );
 }
+
+// const {
+//     data: trip,
+//     error: tripError,
+// }: {
+//     data: TripWithContract[] | null;
+
+//     error: PostgrestError | null;
+// } = await supabase
+//     .from('trips')
+//     .select('*, contract:contract!contract_contract_trip_id_foreign (*)')
+//     .eq('trip_master_id', id);
+
+// if (tripError) {
+//     console.error(tripError);
+//     return NextResponse.json(
+//         { error: tripError?.message },
+//         { status: 401 },
+//     );
+// }
+
+// if (!trip) {
+//     return NextResponse.json({ error: 'Trip not found' }, { status: 404 });
+// }

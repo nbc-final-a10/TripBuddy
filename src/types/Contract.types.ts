@@ -17,3 +17,8 @@ export type TripsAndContracts = {
     trips: Trip[];
     contracts: Contract[];
 };
+
+export type MyTripsAndContracts = {
+    created: TripWithContract[];
+    participated: TripWithContract[];
+};
