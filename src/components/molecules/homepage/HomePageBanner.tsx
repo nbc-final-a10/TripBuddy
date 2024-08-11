@@ -80,9 +80,9 @@ const HomePageBanner = () => {
 
                     {!buddy && (
                         <>
-                            <p className="font-bold text-3xl">트립버디즈와</p>
-                            <p>즐거운 여정을</p>
-                            <p className="font-bold text-3xl">시작해보세요!</p>
+                            <p className="text-2xl">트립버디즈와</p>
+                            <p className="font-bold text-3xl">즐거운 여정을</p>
+                            <p className="text-2xl">시작해보세요!</p>
                         </>
                     )}
                 </div>
