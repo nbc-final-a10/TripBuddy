@@ -1,12 +1,12 @@
 'use client';
 import StoryCard from '../stories/StoryCard';
-import { StoryOverlay, StoryWithBuddies } from '@/types/Story.types';
+import { StoryOverlay, StoryWithBuddiesAndLikes } from '@/types/Story.types';
 import { Buddy } from '@/types/Auth.types';
 import React, { useMemo } from 'react';
 import groupStoriesByBuddyId from '@/utils/stories/groupStoriesByBuddyId';
 
 type HomePageStoriesProps = {
-    stories: StoryWithBuddies[];
+    stories: StoryWithBuddiesAndLikes[];
     buddy: Buddy | null;
 };
 
@@ -30,6 +30,8 @@ const HomePageStories: React.FC<HomePageStoriesProps> = ({
         return sortedArray;
     }, [stories, buddy]);
 
+    console.log(sortedStories);
+
     // 0번 인덱스만 전달하는 이유는 스토리 최신 것만 앞에 보여주기 위함임
     return (
         <>
@@ -37,21 +39,14 @@ const HomePageStories: React.FC<HomePageStoriesProps> = ({
                 <StoryCard
                     key={story.buddyId}
                     id={story.buddyId}
-                    buddy={story.stories[0].buddies}
-                    name={story.stories[0].buddies.buddy_nickname}
-                    created_at={story.stories[0].story_created_at}
-                    profile_image={
-                        story.stories[0].buddies.buddy_profile_pic ||
-                        '/images/test.webp' // 추후변경요망
-                    }
-                    background_image={story.stories[0].story_media}
                     mode={
                         buddy?.buddy_id === story.stories[0].buddies.buddy_id
                             ? 'my'
                             : 'story'
                     }
-                    storyId={story.stories[0].story_id}
                     overlay={story.stories[0].story_overlay as StoryOverlay[]}
+                    story={story.stories[0]}
+                    likes={story.stories[0].likes}
                 />
             ))}
         </>

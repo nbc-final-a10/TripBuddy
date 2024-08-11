@@ -3,14 +3,14 @@
 import HomePageSearchBar from './HomePageSearchBar';
 import HomePageStories from '@/components/molecules/homepage/HomePageStories';
 import HomePageTrips from '@/components/molecules/homepage/HomePageTrips';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import useTapScroll from '@/hooks/useTapScroll';
 import HomePageTitle from '@/components/molecules/homepage/HomePageTitle';
 import HomePageRecommendBuddiesList from './HomePageRecommendBuddiesList';
 import { useAuth } from '@/hooks/auth';
-import useHomeQuery from '@/hooks/queries/useHomeQuery';
-import Loading from '@/app/(providers)/loading';
 import Navigate from '@/components/atoms/common/Navigate';
+import { showAlert } from '@/utils/ui/openCustomAlert';
+import useHomeQueries from '@/hooks/queries/useHomeQueries';
 
 const HomePageContainer = () => {
     const buddiesRef = useRef<HTMLDivElement>(null);
@@ -23,15 +23,17 @@ const HomePageContainer = () => {
         }) ?? {};
 
     const { buddy } = useAuth();
+    const queries = useHomeQueries();
 
-    const {
-        data: buddyTripStory,
-        isPending,
-        error: storyError,
-    } = useHomeQuery();
+    const [buddies, trips, stories] = queries;
 
-    if (storyError) return <div>Error</div>;
-    if (isPending) return <Loading />;
+    useEffect(() => {
+        queries.forEach(query => {
+            if (query.error) showAlert('error', query.error.message);
+        });
+    }, [queries]);
+
+    // if (queries.some(query => query.isPending)) return <DefaultLoader />;
 
     return (
         <div className="rounded-t-[32px] bg-white p-4 z-10 relative">
@@ -47,9 +49,11 @@ const HomePageContainer = () => {
                     className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
                     ref={buddiesRef}
                 >
-                    <HomePageRecommendBuddiesList
-                        buddies={buddyTripStory.buddies}
-                    />
+                    {buddies.data?.buddies && (
+                        <HomePageRecommendBuddiesList
+                            buddies={buddies.data?.buddies}
+                        />
+                    )}
                 </div>
                 {createScrollLeft && createScrollRight && (
                     <>
@@ -78,10 +82,12 @@ const HomePageContainer = () => {
                     className="overflow-x-scroll scrollbar-hidden relative flex gap-[10px] z-10"
                     ref={storiesRef}
                 >
-                    <HomePageStories
-                        stories={buddyTripStory.stories}
-                        buddy={buddy || null}
-                    />
+                    {stories.data?.stories && (
+                        <HomePageStories
+                            stories={stories.data?.stories}
+                            buddy={buddy || null}
+                        />
+                    )}
                 </div>
                 {createScrollLeft && createScrollRight && (
                     <>
@@ -108,7 +114,9 @@ const HomePageContainer = () => {
                     className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
                     ref={tripsRef}
                 >
-                    <HomePageTrips trips={buddyTripStory.trips} />
+                    {trips.data?.trips && (
+                        <HomePageTrips trips={trips.data?.trips} />
+                    )}
                 </div>
                 {createScrollLeft && createScrollRight && (
                     <>

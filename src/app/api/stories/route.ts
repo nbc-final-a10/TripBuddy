@@ -1,4 +1,4 @@
-import { StoryWithBuddies } from '@/types/Story.types';
+import { StoryWithBuddiesAndLikes } from '@/types/Story.types';
 import convertToWebP from '@/utils/common/convertToWebp';
 import { createClient } from '@/utils/supabase/server';
 import { PostgrestError } from '@supabase/supabase-js';
@@ -11,11 +11,13 @@ export async function GET() {
         data: stories,
         error: storyError,
     }: {
-        data: StoryWithBuddies[] | null;
+        data: StoryWithBuddiesAndLikes[] | null;
         error: PostgrestError | null;
     } = await supabase
         .from('stories')
-        .select('*, buddies:story_created_by (*)')
+        .select(
+            '*, buddies:story_created_by (*), likes:storylikes!storylikes_storylikes_story_id_foreign (*)',
+        )
         .order('story_created_at', { ascending: false });
 
     if (storyError) {

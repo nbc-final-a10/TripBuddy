@@ -3,7 +3,6 @@
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import useTapScroll from '@/hooks/useTapScroll';
 import { StoryOverlay, StoryWithBuddies } from '@/types/Story.types';
-import clsx from 'clsx';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { MouseEvent, useRef, useState, useEffect } from 'react';
@@ -45,9 +44,9 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
         stories[0],
     );
 
-    const { data: likes, isPending: isLikesPending } = useStoryLikesQuery(
-        selectedStory.story_id,
-    );
+    const { data: likes, isPending: isLikesPending } = useStoryLikesQuery({
+        id: selectedStory.story_id,
+    });
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleNextBefore = (e: MouseEvent<HTMLDivElement>) => {
@@ -148,7 +147,8 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
                     <button className="relative focus:outline-none">
                         {likes && (
                             <LikesButton
-                                story_id={selectedStory.story_id}
+                                storyId={selectedStory.story_id}
+                                likesCount={likes.length}
                                 likes={likes}
                             />
                         )}

@@ -1,70 +1,77 @@
 'use client';
 
+import { QUERY_KEY_STORIES } from '@/constants/query.constants';
 import { useAuth } from '@/hooks/auth';
 import useStoryLikesMutation from '@/hooks/queries/useStoryLikesMutation';
+import useStoryLikesQuery from '@/hooks/queries/useStoryLikesQuery';
 import { StoryLikes } from '@/types/Story.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import React, { MouseEventHandler, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { twMerge } from 'tailwind-merge';
 
 type LikesButtonProps = {
-    story_id: string;
-    likes: StoryLikes[];
+    storyId: string;
+    likesCount: number;
     mode?: 'card' | 'detail';
+    likes: StoryLikes[];
 };
 
 const LikesButton: React.FC<LikesButtonProps> = ({
-    story_id,
-    likes,
+    storyId,
+    likesCount,
     mode = 'detail',
+    likes,
 }) => {
     const { buddy } = useAuth();
     const router = useRouter();
-    const {
-        mutate: likesMutate,
-        isPending: isPosting,
-        isSuccess,
-    } = useStoryLikesMutation(story_id);
+    const queryClient = useQueryClient();
+    const { mutate: likesMutate, isPending: isPosting } =
+        useStoryLikesMutation(storyId);
+
+    // const { data: likes, isPending: isLikesPending } = useStoryLikesQuery({
+    //     id: storyId,
+    // });
 
     const [isLiked, setIsLiked] = useState<boolean>(
-        likes.find(like => like.storylikes_buddy_id === buddy?.buddy_id)
-            ? true
-            : false,
-    );
-    const [isOptimisticUpdate, setIsOptimisticUpdate] = useState<boolean>(
-        likes.find(like => like.storylikes_buddy_id === buddy?.buddy_id)
+        likes?.find(like => like.storylikes_buddy_id === buddy?.buddy_id)
             ? true
             : false,
     );
 
-    const [likesCount, setLikesCount] = useState<number>(likes.length);
+    const isOptimisticUpdate = useMemo(
+        () =>
+            likes?.find(like => like.storylikes_buddy_id === buddy?.buddy_id)
+                ? true
+                : false,
+        [likes, buddy],
+    );
 
     const handleClick = (e: React.MouseEvent<SVGElement>) => {
-        const isLikedDataSet = e.currentTarget.dataset.isliked;
+        // const isLikedDataSet = e.currentTarget.dataset.isliked;
         if (!buddy) {
             showAlert('caution', '로그인이 필요합니다.', {
                 onConfirm: () => router.push('/login'),
             });
         } else {
-            setIsOptimisticUpdate(prev => !prev);
-            setLikesCount(prev =>
-                isLikedDataSet === 'liked' ? prev - 1 : prev + 1,
-            );
+            // setLikesCount(prev =>
+            //     isLikedDataSet === 'liked' ? prev - 1 : prev + 1,
+            // );
         }
 
         if (isLiked && buddy) {
             likesMutate({
                 buddy_id: buddy.buddy_id,
                 isLiked: false,
-                story_id: story_id,
+                story_id: storyId,
             });
         } else if (buddy) {
             likesMutate({
                 buddy_id: buddy.buddy_id,
                 isLiked: true,
-                story_id: story_id,
+                story_id: storyId,
             });
         }
     };
@@ -75,13 +82,18 @@ const LikesButton: React.FC<LikesButtonProps> = ({
                 like => like.storylikes_buddy_id === buddy.buddy_id,
             );
             setIsLiked(isLiked ? true : false);
-            setLikesCount(likes.length);
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEY_STORIES],
+            });
+            // setLikesCount(likes.length);
         }
-    }, [likes, buddy]);
+    }, [likes, buddy, queryClient]);
 
     // useEffect(() => {
     //     if (isSuccess) console.log('isSuccess');
     // }, [isSuccess]);
+
+    // if (isLikesPending) return null;
 
     return (
         <div

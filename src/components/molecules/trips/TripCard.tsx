@@ -53,7 +53,7 @@ const TripCard: React.FC<TripCardProps> = ({
         data: bookMark,
         isPending: isBookMarkPending,
         error: bookMarkError,
-    } = useBookMarkQuery({
+    } = useBookMarkQuery(mode, {
         bookmark_trip_id: trip.trip_id,
         bookmark_buddy_id: buddy?.buddy_id || '',
     });

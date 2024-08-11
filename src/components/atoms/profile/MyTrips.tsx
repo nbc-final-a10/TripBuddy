@@ -49,7 +49,7 @@ export default function MyTrips({ id }: MyTripsProps) {
         fetchTrips();
     }, [id]);
 
-    console.log(trips);
+    // console.log(trips);
 
     return (
         <div className="p-2 bg-gray-100 rounded-xl">

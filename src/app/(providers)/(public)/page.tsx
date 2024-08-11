@@ -1,9 +1,9 @@
 import HomePageBanner from '@/components/molecules/homepage/HomePageBanner';
 import HomePageContainer from '@/components/organisms/homepage/HomePageContainer';
 import {
-    QUERY_KEY_BUDDY,
-    QUERY_KEY_STORY,
-    QUERY_KEY_TRIP,
+    QUERY_KEY_BUDDIES,
+    QUERY_KEY_STORIES,
+    QUERY_KEY_TRIPS,
 } from '@/constants/query.constants';
 import {
     dehydrate,
@@ -18,8 +18,18 @@ import FloatingButton from '@/components/atoms/home/FloatingButton';
 const HomePage: React.FC = async () => {
     const queryClient = new QueryClient();
     await queryClient.prefetchQuery({
-        queryKey: [QUERY_KEY_BUDDY, QUERY_KEY_TRIP, QUERY_KEY_STORY],
-        queryFn: () => getBuddyTripStory(),
+        queryKey: [QUERY_KEY_BUDDIES],
+        queryFn: () => getBuddyTripStory(QUERY_KEY_BUDDIES),
+        staleTime: 1000 * 60 * 5,
+    });
+    await queryClient.prefetchQuery({
+        queryKey: [QUERY_KEY_TRIPS],
+        queryFn: () => getBuddyTripStory(QUERY_KEY_TRIPS),
+        staleTime: 1000 * 60 * 5,
+    });
+    await queryClient.prefetchQuery({
+        queryKey: [QUERY_KEY_STORIES],
+        queryFn: () => getBuddyTripStory(QUERY_KEY_STORIES),
         staleTime: 1000 * 60 * 5,
     });
     const dehydratedState = dehydrate(queryClient);
