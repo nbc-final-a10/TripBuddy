@@ -10,7 +10,7 @@ export default function SelectedResultRealtimeText({
     firstLabel?: string;
     secondLabel?: string;
     selectedData?: string;
-    isMini?: boolean;
+    isMini?: boolean | null | 0;
 }) {
     return (
         <div className="text-center">
@@ -18,7 +18,6 @@ export default function SelectedResultRealtimeText({
                 className={clsx('text-sm text-gray-500', isMini && 'text-xs')}
             >
                 {firstLabel}
-                {` `}
             </span>
             <span
                 className={clsx(
@@ -27,7 +26,6 @@ export default function SelectedResultRealtimeText({
                 )}
             >
                 {selectedData}
-                {` `}
             </span>
             <span
                 className={clsx('text-sm text-gray-500', isMini && 'text-xs')}

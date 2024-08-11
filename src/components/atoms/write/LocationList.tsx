@@ -13,7 +13,7 @@ function LocationList({
     locations: SecondLevel[];
     selectedLocationName: string;
     onChipClick: (name: string) => void;
-    isMini?: boolean;
+    isMini?: boolean | null | 0;
 }) {
     const scrollRef = React.useRef<HTMLDivElement>(null);
     const [isScrollable, setIsScrollable] = React.useState(false);

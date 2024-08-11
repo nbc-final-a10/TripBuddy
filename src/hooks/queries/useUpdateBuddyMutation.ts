@@ -21,6 +21,9 @@ export default function useUpdateBuddyMutation() {
             queryClient.invalidateQueries({
                 queryKey: [QUERY_KEY_BUDDY, buddyInfo.buddy_id],
             });
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEY_BUDDY],
+            });
         },
     });
 }

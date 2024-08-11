@@ -65,8 +65,7 @@ const OnBoarding: React.FC = () => {
     const [PreferTripTheme, selectedTripTheme] = usePreferTheme({
         mode: 'trip',
     });
-    const { SelectRegion, secondLevelLocation, thirdLevelLocation } =
-        useSelectRegion();
+    const { states, actions } = useSelectRegion();
 
     const { NextButton, step, setStep } = useNextButton({
         buttonText: buttonText[stepToDisplay],
@@ -130,13 +129,13 @@ const OnBoarding: React.FC = () => {
         }
         if (step === 4) {
             const result = onBoardingValidation(
-                [secondLevelLocation, thirdLevelLocation],
+                [states.secondLevelLocation, states.thirdLevelLocation],
                 step,
             );
             if (!result) return setStep(4);
             buddyInfoRef.current.buddy_region = [
-                secondLevelLocation,
-                thirdLevelLocation,
+                states.secondLevelLocation,
+                states.thirdLevelLocation,
             ].join(' ');
             if (isEdit) mutate({ buddyInfo: buddyInfoRef.current });
         }
@@ -246,7 +245,7 @@ const OnBoarding: React.FC = () => {
     }, [searchParams, setStep]);
 
     return (
-        <section className="w-full flex flex-col h-[calc(100dvh-57px-58px)] xl:w-[720px] xl:mx-auto xl:h-[calc(100dvh-100px)]">
+        <section className="w-full flex flex-col h-[calc(100dvh-57px-76px)] xl:w-[720px] xl:mx-auto xl:h-[calc(100dvh-100px)]">
             <div className="relative w-full h-full flex flex-col justify-center xl:justify-start">
                 <ProgressIndicator
                     step={step}
@@ -287,8 +286,9 @@ const OnBoarding: React.FC = () => {
                     {step === 4 && (
                         <OnBoardingSelectLocationMbti
                             mode="location"
-                            selected={thirdLevelLocation}
-                            SelectRegion={SelectRegion}
+                            selected={states.thirdLevelLocation}
+                            states={states}
+                            actions={actions}
                         />
                     )}
                     {step === 5 && (
