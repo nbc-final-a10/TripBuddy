@@ -1,3 +1,4 @@
+'use client';
 import { useTapScroll } from '@/hooks';
 import { StoryFilter } from '@/types/Story.types';
 import clsx from 'clsx';

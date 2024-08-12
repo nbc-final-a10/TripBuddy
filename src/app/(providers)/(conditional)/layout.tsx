@@ -1,5 +1,4 @@
 import { defaultMetaData } from '@/data/defaultMetaData';
-import { getPathnameServer } from '@/utils/common/getPathnameServer';
 import { Metadata } from 'next';
 import React from 'react';
 
