@@ -87,7 +87,12 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
                 </div>
                 {/** 여행 정보 영역 */}
                 {queries.length > 0 && (
-                    <TripCard trip={trip} mode="detail" queries={queries} />
+                    <TripCard
+                        trip={trip}
+                        mode="detail"
+                        queries={queries}
+                        isEdit={mode === 'edit'}
+                    />
                 )}
             </div>
 

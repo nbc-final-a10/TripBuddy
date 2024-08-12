@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Calendar_month from '../../../../public/svg/Calendar_month.svg';
 import Distance from '../../../../public/svg/Distance.svg';
 import Groups from '../../../../public/svg/Groups.svg';
@@ -31,12 +31,14 @@ type TripCardProps = {
     trip: TripWithContract;
     mode?: 'card' | 'detail' | 'list';
     queries?: ReturnType<typeof useBuddyQueries>;
+    isEdit?: boolean;
 };
 
 const TripCard: React.FC<TripCardProps> = ({
     trip,
     mode = 'list',
     queries,
+    isEdit = false,
 }) => {
     const { buddy } = useAuth();
     const router = useRouter();
@@ -72,7 +74,10 @@ const TripCard: React.FC<TripCardProps> = ({
         error: bookMarkMutationError,
     } = useBookMarkMutation();
 
-    const handleCreateContract = async () => {
+    const handleCreateContract = async (
+        e: React.MouseEvent<HTMLButtonElement>,
+    ) => {
+        const mode = e.currentTarget.dataset.mode;
         if (!buddy) {
             return showAlert('caution', '먼저 로그인 해주세요.', {
                 onConfirm: () => {
@@ -81,15 +86,28 @@ const TripCard: React.FC<TripCardProps> = ({
             });
         }
 
-        const newContract: PartialContract = {
-            contract_trip_id: trip.trip_id,
-            contract_buddy_id: buddy.buddy_id,
-        };
+        if (mode === '참여하기') {
+            const newContract: PartialContract = {
+                contract_trip_id: trip.trip_id,
+                contract_buddy_id: buddy.buddy_id,
+            };
 
-        createContract(newContract);
+            createContract(newContract);
+        }
+
+        if (mode === '수정하기') {
+            return router.push(`/edit/trips/${trip.trip_id}/`);
+        }
+
+        if (mode === '수정완료') {
+            return showAlert('success', '수정이 완료되었습니다.');
+        }
     };
 
-    const handleCreateBookMark = async () => {
+    const handleCreateBookMark = async (
+        e: React.MouseEvent<HTMLButtonElement>,
+    ) => {
+        const mode = e.currentTarget.dataset.mode;
         if (!buddy) {
             return showAlert('caution', '먼저 로그인 해주세요.', {
                 onConfirm: () => {
@@ -97,16 +115,38 @@ const TripCard: React.FC<TripCardProps> = ({
                 },
             });
         }
+        if (mode === '찜하기' || mode === '찜하기취소') {
+            const newBookMark: BookMarkRequest = {
+                bookmark_trip_id: trip.trip_id,
+                bookmark_buddy_id: buddy.buddy_id,
+                is_bookmarked: bookMark ? false : true,
+            };
 
-        const newBookMark: BookMarkRequest = {
-            bookmark_trip_id: trip.trip_id,
-            bookmark_buddy_id: buddy.buddy_id,
-            is_bookmarked: bookMark ? false : true,
-        };
-
-        createBookMark(newBookMark);
-        return showAlert('success', '찜하기가 완료되었습니다.');
+            createBookMark(newBookMark);
+            return showAlert('success', '찜하기가 완료되었습니다.');
+        }
+        if (mode === '삭제하기') {
+            return showAlert('success', '삭제가 완료되었습니다.');
+        }
     };
+
+    const bookmarkButtonText = useMemo(() => {
+        if (trip.trip_master_id === buddy?.buddy_id) {
+            return '삭제하기';
+        }
+        return bookMark ? '찜하기취소' : '찜하기';
+    }, [bookMark, trip, buddy]);
+
+    const participantButtonText = useMemo(() => {
+        if (trip.trip_master_id === buddy?.buddy_id) {
+            if (!isEdit) {
+                return '수정하기';
+            } else {
+                return '수정완료';
+            }
+        }
+        return '참여하기';
+    }, [trip, buddy, isEdit]);
 
     useEffect(() => {
         if (
@@ -331,8 +371,9 @@ const TripCard: React.FC<TripCardProps> = ({
                         )}
                         onClick={handleCreateBookMark}
                         disabled={isBookMarkMutationPending}
+                        data-mode={bookmarkButtonText}
                     >
-                        {bookMark ? '찜하기취소' : '찜하기'}
+                        {bookmarkButtonText}
                     </button>
 
                     <Link
@@ -360,8 +401,9 @@ const TripCard: React.FC<TripCardProps> = ({
                             className="flex justify-center items-center h-full bg-main-color text-white rounded-xl border border-main-color w-[48%] py-2.5"
                             onClick={handleCreateContract}
                             disabled={isContractMutationPending}
+                            data-mode={participantButtonText}
                         >
-                            참여하기
+                            {participantButtonText}
                         </button>
                     )}
                 </div>
