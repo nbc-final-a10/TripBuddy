@@ -7,7 +7,8 @@ import MyPageIcon from '../../../../public/svg/mypageicon.svg';
 
 const HeaderMyPageLink: React.FC = () => {
     const { buddy, logOut } = useAuth();
-    const buddy_id = buddy ? buddy.buddy_id : '';
+
+    const buddy_id = buddy ? buddy.buddy_id : null;
 
     return (
         <div className="flex gap-8 items-center font-bold">

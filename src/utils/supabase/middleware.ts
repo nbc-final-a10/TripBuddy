@@ -50,6 +50,8 @@ export async function updateSession(request: NextRequest) {
 
     // console.log(user);
 
+    // 아래 방식 아니면 동작안함
+    // 아래 목록은 튕기지 않는 목록임
     if (
         !user &&
         request.nextUrl.pathname !== '/' &&
@@ -57,11 +59,12 @@ export async function updateSession(request: NextRequest) {
         request.nextUrl.pathname !== '/signup' &&
         request.nextUrl.pathname !== '/recover' &&
         request.nextUrl.pathname !== '/search' &&
-        request.nextUrl.pathname !== '/stories' &&
-        request.nextUrl.pathname !== '/trips' &&
         request.nextUrl.pathname !== '/loading' &&
         request.nextUrl.pathname !== '/tutorial' &&
-        !request.nextUrl.pathname.startsWith('/api')
+        !request.nextUrl.pathname.startsWith('/api') &&
+        !request.nextUrl.pathname.startsWith('/stories') &&
+        !request.nextUrl.pathname.startsWith('/trips') &&
+        !request.nextUrl.pathname.startsWith('/profile')
     ) {
         const url = request.nextUrl.clone();
         url.pathname = '/login';

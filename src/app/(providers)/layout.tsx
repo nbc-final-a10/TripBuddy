@@ -17,6 +17,7 @@ import { Metadata } from 'next';
 import { defaultMetaData } from '@/data/defaultMetaData';
 import { ModalProviderSetter } from '@/providers/ModalProvider';
 import { ModalProviderDefault } from '@/contexts/modal.context';
+import { getPathnameServer } from '@/utils/common/getPathnameServer';
 
 export const metadata: Metadata = defaultMetaData;
 
@@ -33,24 +34,22 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
     const dehydratedState = dehydrate(queryClient);
 
     return (
-        <main className="bg-slate-50 xl:bg-white min-h-dvh overflow-hidden">
-            <MainSectionWrapper>
-                <Suspense fallback={<Loading />}>
-                    <HydrationBoundary state={dehydratedState}>
-                        <ModalProviderDefault>
+        <Suspense fallback={<Loading />}>
+            <HydrationBoundary state={dehydratedState}>
+                <ModalProviderDefault>
+                    <AuthProvider>
+                        <Header />
+                        <MainSectionWrapper>
                             <ModalProviderSetter>
-                                <AuthProvider>
-                                    <MobileHeader />
-                                    <Header />
-                                    {children}
-                                    <TapMenu />
-                                </AuthProvider>
+                                <MobileHeader />
+                                {children}
+                                <TapMenu />
                             </ModalProviderSetter>
-                        </ModalProviderDefault>
-                    </HydrationBoundary>
-                </Suspense>
-            </MainSectionWrapper>
-        </main>
+                        </MainSectionWrapper>
+                    </AuthProvider>
+                </ModalProviderDefault>
+            </HydrationBoundary>
+        </Suspense>
     );
 };
 

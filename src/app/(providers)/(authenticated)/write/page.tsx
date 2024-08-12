@@ -23,7 +23,6 @@ import useSelectAges from '@/hooks/useSelectAges';
 import useSelectMeetPlace from '@/hooks/useSelectMeetPlace';
 import { useRouter } from 'next/navigation';
 import { validateStep } from '@/utils/write/validateStep';
-import FailPage from '@/components/organisms/write/FailPage';
 import SuccessNotificationPage from '@/components/organisms/write/SuccessNotificationPage';
 import { twMerge } from 'tailwind-merge';
 
@@ -50,8 +49,7 @@ const WritePage: React.FC = () => {
     const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
     const { SelectCalendar, startDateTimestamp, endDateTimestamp } =
         useCalendar();
-    const { SelectRegion, secondLevelLocation, thirdLevelLocation } =
-        useSelectRegion();
+    const { actions, states } = useSelectRegion();
     const [PreferTripThemesToRender, selectedTripThemes] = usePreferTheme({
         mode: 'trip',
     });
@@ -78,8 +76,8 @@ const WritePage: React.FC = () => {
         limit: 6,
         validateStep: () =>
             validateStep(step, {
-                secondLevelLocation,
-                thirdLevelLocation,
+                secondLevelLocation: states.secondLevelLocation,
+                thirdLevelLocation: states.thirdLevelLocation,
                 startDateTimestamp,
                 endDateTimestamp,
                 selectedTripThemes,
@@ -111,7 +109,7 @@ const WritePage: React.FC = () => {
             trip_max_buddies_counts: buddyCounts,
             trip_start_date: startDateTimestamp,
             trip_end_date: endDateTimestamp,
-            trip_final_destination: `${secondLevelLocation} ${thirdLevelLocation}`,
+            trip_final_destination: `${states.secondLevelLocation} ${states.thirdLevelLocation}`,
             trip_meet_location: meetPlace,
             trip_theme1: selectedTripThemes[0],
             trip_theme2: selectedTripThemes[1],
@@ -171,7 +169,6 @@ const WritePage: React.FC = () => {
         const isMini = window.innerHeight < 659;
         setIsMini(isMini);
     }, []);
-    // console.log(buttonText[stepToDisplay]);
 
     const handlePush = (path: string) => {
         router.push(path);
@@ -195,8 +192,9 @@ const WritePage: React.FC = () => {
                     )}
                     {step === 1 && (
                         <SelectRegionPage
-                            SelectRegion={SelectRegion}
                             isMini={isMini}
+                            states={states}
+                            actions={actions}
                         />
                     )}
                     {step === 2 && (
@@ -245,8 +243,8 @@ const WritePage: React.FC = () => {
                         )}
                         onClick={async () => {
                             const isValid = await validateStep(step, {
-                                secondLevelLocation,
-                                thirdLevelLocation,
+                                secondLevelLocation: states.secondLevelLocation,
+                                thirdLevelLocation: states.thirdLevelLocation,
                                 startDateTimestamp,
                                 endDateTimestamp,
                                 selectedTripThemes,

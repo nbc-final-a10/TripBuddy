@@ -2,6 +2,7 @@
 
 import TopButton from '@/components/atoms/search/TopButton';
 import SelectAgesRange from '@/components/atoms/write/SelectAgesRange';
+import SelectRegions from '@/components/molecules/common/SelectRegion';
 import GenderChipGroup from '@/components/molecules/search/GenderChipGroup';
 import MeetingPlaceChipGroup from '@/components/molecules/search/MeetingPlaceChipGroup';
 import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
@@ -40,8 +41,7 @@ const SearchPage: React.FC = () => {
         string | null
     >(null);
 
-    const { SelectRegion, thirdLevelLocation, setThirdLevelLocation } =
-        useSelectRegion();
+    const { actions, states } = useSelectRegion();
 
     const [startDateTimestamp, setStartDateTimestamp] = useState<string>('');
     const [endDateTimestamp, setEndDateTimestamp] = useState<string>('');
@@ -128,10 +128,10 @@ const SearchPage: React.FC = () => {
         //     );
         // }
 
-        if (thirdLevelLocation !== null) {
+        if (states.thirdLevelLocation !== null) {
             filteredItems = filteredItems.filter((item: Trip) =>
                 item.trip_final_destination.includes(
-                    thirdLevelLocation as string,
+                    states.thirdLevelLocation as string,
                 ),
             );
         }
@@ -184,7 +184,7 @@ const SearchPage: React.FC = () => {
             !selectedMeetingPlace &&
             startAge === 18 &&
             endAge === 150 &&
-            !thirdLevelLocation &&
+            !states.thirdLevelLocation &&
             !startDateTimestamp &&
             !endDateTimestamp &&
             selectedThemes.length === 0 &&
@@ -285,7 +285,7 @@ const SearchPage: React.FC = () => {
                     title="여행지를 선택해주세요."
                     description="지역, 국가, 도시를 1개 선택해주세요."
                 />
-                <SelectRegion />
+                <SelectRegions states={states} actions={actions} />
             </div>
             <div className="my-10" id="date-section">
                 <SearchPageTitle

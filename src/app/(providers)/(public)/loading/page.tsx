@@ -1,6 +1,6 @@
 'use client';
 
-import DefaultLoader from '@/components/atoms/common/defaultLoader';
+import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import { useAuth } from '@/hooks/auth';
 import React, { useEffect } from 'react';
 

@@ -8,12 +8,10 @@ import { useAuth } from '@/hooks/auth';
 import { ProfilePageProps } from '@/types/ProfileParams.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import React from 'react';
-import { useRouter } from 'next/navigation';
 import useBuddyProfile from '@/hooks/queries/useBuddyProfile';
 
 function ProfilePage({ params }: ProfilePageProps) {
     const { buddy, logOut } = useAuth();
-    const router = useRouter();
 
     const { data, isLoading, error } = useBuddyProfile(params.id);
 

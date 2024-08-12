@@ -13,28 +13,29 @@ export async function GET(
     const supabase = createClient();
 
     const {
-        data: trip,
-        error: tripError,
+        data: allTrips,
+        error: allTripsError,
     }: {
         data: TripWithContract[] | null;
 
         error: PostgrestError | null;
     } = await supabase
         .from('trips')
-        .select('*, contract:contract!contract_contract_trip_id_foreign (*)')
-        .eq('trip_master_id', id);
+        .select('*, contract:contract!contract_contract_trip_id_foreign (*)');
 
-    if (tripError) {
-        console.error(tripError);
+    if (allTripsError) {
+        console.error(allTripsError);
         return NextResponse.json(
-            { error: tripError?.message },
+            { error: allTripsError?.message },
             { status: 401 },
         );
     }
 
-    if (!trip) {
+    if (!allTrips) {
         return NextResponse.json({ error: 'Trip not found' }, { status: 404 });
     }
+
+    const createdTrips = allTrips?.filter(trip => trip.trip_master_id === id);
 
     // 참여중인 여정 (contract)
     const {
@@ -42,7 +43,6 @@ export async function GET(
         error: contractError,
     }: {
         data: ContractWithTrips[] | null;
-
         error: PostgrestError | null;
     } = await supabase
         .from('contract')
@@ -65,8 +65,37 @@ export async function GET(
         );
     }
 
+    const participatedTrips =
+        contract.map(contract =>
+            allTrips?.find(trip => trip.trip_id === contract.contract_trip_id),
+        ) || [];
+
     return NextResponse.json(
-        { created: trip, participated: contract },
+        { created: createdTrips, participated: participatedTrips },
         { status: 200 },
     );
 }
+
+// const {
+//     data: trip,
+//     error: tripError,
+// }: {
+//     data: TripWithContract[] | null;
+
+//     error: PostgrestError | null;
+// } = await supabase
+//     .from('trips')
+//     .select('*, contract:contract!contract_contract_trip_id_foreign (*)')
+//     .eq('trip_master_id', id);
+
+// if (tripError) {
+//     console.error(tripError);
+//     return NextResponse.json(
+//         { error: tripError?.message },
+//         { status: 401 },
+//     );
+// }
+
+// if (!trip) {
+//     return NextResponse.json({ error: 'Trip not found' }, { status: 404 });
+// }

@@ -3,30 +3,34 @@
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useAuth } from '@/hooks/auth';
 import React, { useEffect, useState } from 'react';
-import { QUERY_KEY_BUDDY_PROFILE } from '@/constants/query.constants';
+import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import { useQueryClient } from '@tanstack/react-query';
 
 export default function FollowButton() {
     const { buddy } = useAuth();
-    const followingId = window.location.pathname.split('/').pop();
-    const [isFollowing, setIsFollowing] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [followingId, setFollowingId] = useState<string | undefined>('');
+    const [isFollowing, setIsFollowing] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const queryClient = useQueryClient();
 
     useEffect(() => {
         const checkFollowStatus = async () => {
             try {
+                const followingId = window.location.pathname.split('/').pop();
+                setFollowingId(followingId);
+                const followerId = buddy?.buddy_id;
                 const checkResponse = await fetch(
-                    `/api/buddyProfile/follow?followingId=${followingId}&followerId=${buddy?.buddy_id}`,
+                    `/api/buddyProfile/follow?followingId=${followingId}&followerId=${followerId}`,
                     {
                         method: 'GET',
                     },
                 );
 
-                const data = await checkResponse.json(); // 응답 데이터를 JSON으로 파싱
-
-                // 수정된 부분: originFollow 대신 data.followingStatus 사용
+                // APU 응답의 컨텐츠 유형을 파악. 현재 안 쓰여서 잠시 주석 처리.
+                // const contentType =
+                //     checkResponse.headers.get('content-type') || '';
+                const data = await checkResponse.json();
                 if (data.originFollow) {
                     setIsFollowing(true);
                 } else {
@@ -63,12 +67,12 @@ export default function FollowButton() {
             }
 
             const data = await response.json();
-            console.log('follow data', data);
+            // console.log('follow data', data);
 
             showAlert('success', '팔로우 성공했습니다.');
             setIsFollowing(true);
             queryClient.invalidateQueries({
-                queryKey: [QUERY_KEY_BUDDY_PROFILE, followingId],
+                queryKey: [QUERY_KEY_BUDDY, followingId],
             });
         } finally {
             setIsLoading(false);
@@ -95,10 +99,10 @@ export default function FollowButton() {
 
             // const data = await response.json();
 
-            showAlert('success', '팔로우가 취소되었습니다.');
+            showAlert('success', '팔로우가 취소었습니다.');
             setIsFollowing(false);
             queryClient.invalidateQueries({
-                queryKey: [QUERY_KEY_BUDDY_PROFILE, followingId],
+                queryKey: [QUERY_KEY_BUDDY, followingId],
             });
         } finally {
             setIsLoading(false);
