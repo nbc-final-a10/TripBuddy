@@ -33,6 +33,7 @@ import TripEditModalWrapper from '@/components/atoms/trips/TripEditModalWrapper'
 import { useModal } from '@/contexts/modal.context';
 import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 import LeftSmGrayText from '@/components/atoms/write/LeftSmGrayText';
+import Button from '@/components/atoms/common/Button';
 
 type TripCardProps = {
     trip: TripWithContract;
@@ -84,8 +85,6 @@ const TripCard: React.FC<TripCardProps> = ({
     const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts({
         initialCounts: trip.trip_max_buddies_counts,
     });
-
-    const { actions, states } = useSelectRegion();
 
     const modal = useModal();
 
@@ -177,13 +176,19 @@ const TripCard: React.FC<TripCardProps> = ({
                     <TripEditModalWrapper>
                         <div
                             className={clsx(
-                                'w-[80%] mx-auto flex justify-start flex-col mt-2 mb-5 xl:mt-10',
+                                'w-[70%] h-[10%] mx-auto flex justify-start flex-col mt-2 mb-5 xl:mt-2',
                             )}
                         >
                             <Left2xlBoldText text="여행지를 선택해주세요" />
                             <LeftSmGrayText text="지역, 국가, 도시를 1개 선택해주세요." />
                         </div>
-                        <SelectRegions className="w-[80%] h-full z-[9999] bg-white mx-auto" />
+                        <SelectRegions className="w-[70%] h-[84%] mx-auto" />
+                        <Button
+                            className="w-[70%] h-[6%] mx-auto my-2"
+                            onClick={modal.closeModal}
+                        >
+                            완료
+                        </Button>
                     </TripEditModalWrapper>
                 ),
             });
@@ -245,11 +250,6 @@ const TripCard: React.FC<TripCardProps> = ({
         <>
             {isContractMutationPending && <DefaultLoader />}
             {isBookMarkMutationPending && <DefaultLoader />}
-            {/* {modalToOpen.isOpen && modalToOpen.mode === 'region' && (
-                <TripEditModalWrapper>
-                    <SelectRegions actions={actions} states={states} />
-                </TripEditModalWrapper>
-            )} */}
             <div
                 className={clsx(
                     'bg-white box-border h-fit shadow-xl',
@@ -398,8 +398,9 @@ const TripCard: React.FC<TripCardProps> = ({
                                 <Distance />
                                 <span
                                     className={twMerge(
-                                        'cursor-pointer',
-                                        isEdit && 'animate-pulse',
+                                        'relative',
+                                        isEdit &&
+                                            'cursor-pointer animate-pulse',
                                     )}
                                     onClick={handleClickDestination}
                                 >

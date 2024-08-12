@@ -3,8 +3,6 @@
 import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 import LeftSmGrayText from '@/components/atoms/write/LeftSmGrayText';
 import SelectRegions from '@/components/molecules/common/SelectRegion';
-import { useSelectRegion } from '@/hooks';
-import { SecondLevel, ThirdLevel } from '@/types/Location.types';
 import clsx from 'clsx';
 import React from 'react';
 

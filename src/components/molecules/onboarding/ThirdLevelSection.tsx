@@ -31,6 +31,8 @@ const ThirdLevelSection: React.FC<ThirdLevelSectionProps> = memo(
                         'relative h-[70%] overflow-y-auto xl:h-[70%]',
                         pathname === '/search' && 'h-[300px]',
                         pathname === '/write' && 'h-[40vh]',
+                        pathname.startsWith('/edit') &&
+                            'h-[300px] xl:h-[450px]',
                         !secondLevelLocation && 'hidden',
                     )}
                 >
