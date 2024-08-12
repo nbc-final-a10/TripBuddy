@@ -32,6 +32,7 @@ const MobileHeader: React.FC = () => {
     const isWrite = pathname === '/write';
     const isOnboarding = pathname === '/onboarding';
     const isProfile = pathname.startsWith('/profile/');
+    const isEditProfile = pathname.startsWith('/edit/trips');
     const isStoryWrite = pathname === '/write/story';
     const isNotification = pathname === '/notifications';
 
@@ -52,7 +53,8 @@ const MobileHeader: React.FC = () => {
         (isChatId && '') ||
         (isChat && '채팅') ||
         (isNotification && '알림') ||
-        (isRecover && '비밀번호 찾기');
+        (isRecover && '비밀번호 찾기') ||
+        (isEditProfile && '');
 
     const isShow =
         isTrips ||
@@ -68,7 +70,8 @@ const MobileHeader: React.FC = () => {
         isChatId ||
         isChat ||
         isNotification ||
-        isRecover;
+        isRecover ||
+        isEditProfile;
 
     const handleBack = () => {
         if (isRecover) {

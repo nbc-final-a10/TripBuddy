@@ -283,7 +283,7 @@ const SearchPage: React.FC = () => {
                     title="여행지를 선택해주세요."
                     description="지역, 국가, 도시를 1개 선택해주세요."
                 />
-                <SelectRegions />
+                <SelectRegions states={states} actions={actions} />
             </div>
             <div className="my-10" id="date-section">
                 <SearchPageTitle

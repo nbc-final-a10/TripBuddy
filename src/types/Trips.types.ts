@@ -1,5 +1,6 @@
 import { Contract } from './Contract.types';
 import { Tables } from './supabase';
+import { BuddyTheme, TripTheme } from './Themes.types';
 
 export type Trip = Tables<'trips'>;
 
@@ -29,4 +30,16 @@ export type BookMarkRequest = PartialBookMark & {
 export type CalendarData = {
     startDateTimestamp: string;
     endDateTimestamp: string;
+};
+
+export type TripThemeData = {
+    meetPlace: string;
+    selectedTripThemes: (TripTheme | BuddyTheme)[];
+};
+
+export type BuddyThemeData = {
+    wantedSex: string;
+    startAge: number;
+    endAge: number;
+    selectedWantedBuddies: (TripTheme | BuddyTheme)[];
 };

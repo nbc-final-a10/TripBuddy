@@ -49,7 +49,7 @@ const OnBoardingSelectLocationMbti = ({
                 )}
                 {mode === 'location' && states && actions && (
                     <section className="relative w-[90%] h-full xl:h-[80%]">
-                        <SelectRegions />
+                        <SelectRegions states={states} actions={actions} />
                     </section>
                 )}
             </OnBoardingInnerWrapper>

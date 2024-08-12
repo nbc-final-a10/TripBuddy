@@ -180,7 +180,7 @@ const WritePage: React.FC = () => {
     return (
         <div
             className={twMerge(
-                'relative h-[calc(100dvh-56px-57px)]',
+                'relative h-[calc(100dvh-56px-76px)]',
                 step === 5 && 'h-auto',
             )}
         >

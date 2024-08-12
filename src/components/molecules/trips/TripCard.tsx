@@ -8,8 +8,10 @@ import clsx from 'clsx';
 import TripTimeSinceUpload from '@/components/atoms/trips/TripTimeSinceUpload';
 import {
     BookMarkRequest,
+    BuddyThemeData,
     CalendarData,
     PartialBookMark,
+    TripThemeData,
     TripWithContract,
 } from '@/types/Trips.types';
 import Link from 'next/link';
@@ -26,13 +28,7 @@ import {
     useBuddyQueries,
     useContractMutation,
 } from '@/hooks/queries';
-import {
-    useAuth,
-    usePreferTheme,
-    useSelectBuddyCounts,
-    useSelectMeetPlace,
-    useSelectRegion,
-} from '@/hooks';
+import { useAuth, useSelectBuddyCounts } from '@/hooks';
 import Input from '@/components/atoms/common/Input';
 import TripStartDate from '@/components/atoms/trips/TripStartDate';
 import { useModal } from '@/contexts/modal.context';
@@ -40,6 +36,7 @@ import TripEditSelectRegion from './TripEditSelectRegion';
 import TripEditSelectDate from './TripEditSelectDate';
 import TripEditTripTheme from './TripEditTripTheme';
 import { SelectRegionPageProps } from '@/types/Location.types';
+import TripEditSelectGenderBuddyTheme from './TripEditSelectGenderBuddyTheme';
 
 type TripCardProps = {
     trip: TripWithContract;
@@ -57,17 +54,10 @@ const TripCard: React.FC<TripCardProps> = ({
     const { buddy } = useAuth();
     const router = useRouter();
 
-    // const {
-    //     data: contract,
-    //     isPending: isContractPending,
-    //     error: contractError,
-    // } = useContractQuery({
-    //     isBuddy: false,
-    //     id: trip.trip_id,
-    // });
-
-    const selectRegionRef = useRef<SelectRegionPageProps>(null);
+    const selectRegionRef = useRef<Partial<SelectRegionPageProps>>(null);
     const selectDateRef = useRef<CalendarData>(null);
+    const selectTripThemeRef = useRef<TripThemeData>(null);
+    const selectGenderBuddyThemeRef = useRef<BuddyThemeData>(null);
 
     const {
         data: bookMark,
@@ -95,29 +85,7 @@ const TripCard: React.FC<TripCardProps> = ({
         initialCounts: trip.trip_max_buddies_counts,
     });
 
-    const { meetPlace, SelectMeetPlaceButton } = useSelectMeetPlace();
-
-    const [PreferTripThemesToRender, selectedTripThemes] = usePreferTheme({
-        mode: 'trip',
-    });
-
-    console.log(selectDateRef.current);
-
     const modal = useModal();
-
-    // const [modalToOpen, setModalToOpen] = useState<{
-    //     isOpen: boolean;
-    //     mode:
-    //         | 'region'
-    //         | 'date'
-    //         | 'trip-theme'
-    //         | 'buddy-theme'
-    //         | 'contents'
-    //         | null;
-    // }>({
-    //     isOpen: false,
-    //     mode: null,
-    // });
 
     const handleCreateContract = async (
         e: React.MouseEvent<HTMLButtonElement>,
@@ -182,15 +150,16 @@ const TripCard: React.FC<TripCardProps> = ({
         const mode = e.currentTarget.dataset.mode;
         if (mode === 'trip_theme') {
             return modal.openModal({
+                component: () => <TripEditTripTheme ref={selectTripThemeRef} />,
+            });
+        } else if (mode === 'trip_wanted_sex') {
+            return modal.openModal({
                 component: () => (
-                    <TripEditTripTheme
-                        PreferThemeToRender={PreferTripThemesToRender}
-                        SelectMeetPlaceButton={SelectMeetPlaceButton}
+                    <TripEditSelectGenderBuddyTheme
+                        ref={selectGenderBuddyThemeRef}
                     />
                 ),
             });
-        } else if (mode === 'trip_wanted_sex') {
-            console.log('trip_wanted_sex');
         }
     };
 
@@ -227,15 +196,9 @@ const TripCard: React.FC<TripCardProps> = ({
     }, [trip, buddy, isEdit]);
 
     useEffect(() => {
-        if (
-            contractMutationError ||
-            // contractError ||
-            bookMarkError ||
-            bookMarkMutationError
-        ) {
+        if (contractMutationError || bookMarkError || bookMarkMutationError) {
             const message =
                 contractMutationError?.message ||
-                // contractError?.message ||
                 bookMarkError?.message ||
                 bookMarkMutationError?.message;
             showAlert('error', message || '오류가 발생했습니다.');
