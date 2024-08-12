@@ -193,13 +193,7 @@ const WritePage: React.FC = () => {
                             isMini={isMini}
                         />
                     )}
-                    {step === 1 && (
-                        <SelectRegionPage
-                            isMini={isMini}
-                            states={states}
-                            actions={actions}
-                        />
-                    )}
+                    {step === 1 && <SelectRegionPage isMini={isMini} />}
                     {step === 2 && (
                         <SelectDatePage
                             startDateTimestamp={startDateTimestamp}

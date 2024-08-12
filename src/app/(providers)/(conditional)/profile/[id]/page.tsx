@@ -13,7 +13,7 @@ import React from 'react';
 function ProfilePage({ params }: ProfilePageProps) {
     const { buddy, logOut } = useAuth();
 
-    const { data, isLoading, error } = useBuddyProfile(params.id);
+    const { data: clickedBuddy, isLoading, error } = useBuddyProfile(params.id);
 
     const handleLogOut = () => {
         logOut();
@@ -23,8 +23,6 @@ function ProfilePage({ params }: ProfilePageProps) {
     if (error) {
         return <div>버디 프로필을 가져오는 중 오류가 발생했습니다.</div>;
     }
-
-    const clickedBuddy = data?.buddies[0];
 
     return (
         <>

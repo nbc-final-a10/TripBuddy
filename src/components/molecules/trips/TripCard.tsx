@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Calendar_month from '../../../../public/svg/Calendar_month.svg';
 import Distance from '../../../../public/svg/Distance.svg';
 import Groups from '../../../../public/svg/Groups.svg';
@@ -25,8 +25,14 @@ import {
     useBuddyQueries,
     useContractMutation,
 } from '@/hooks/queries';
-import { useAuth, useSelectBuddyCounts } from '@/hooks';
+import { useAuth, useSelectBuddyCounts, useSelectRegion } from '@/hooks';
 import Input from '@/components/atoms/common/Input';
+import TripStartDate from '@/components/atoms/trips/TripStartDate';
+import SelectRegions from '../common/SelectRegion';
+import TripEditModalWrapper from '@/components/atoms/trips/TripEditModalWrapper';
+import { useModal } from '@/contexts/modal.context';
+import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
+import LeftSmGrayText from '@/components/atoms/write/LeftSmGrayText';
 
 type TripCardProps = {
     trip: TripWithContract;
@@ -78,6 +84,24 @@ const TripCard: React.FC<TripCardProps> = ({
     const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts({
         initialCounts: trip.trip_max_buddies_counts,
     });
+
+    const { actions, states } = useSelectRegion();
+
+    const modal = useModal();
+
+    // const [modalToOpen, setModalToOpen] = useState<{
+    //     isOpen: boolean;
+    //     mode:
+    //         | 'region'
+    //         | 'date'
+    //         | 'trip-theme'
+    //         | 'buddy-theme'
+    //         | 'contents'
+    //         | null;
+    // }>({
+    //     isOpen: false,
+    //     mode: null,
+    // });
 
     const handleCreateContract = async (
         e: React.MouseEvent<HTMLButtonElement>,
@@ -146,6 +170,29 @@ const TripCard: React.FC<TripCardProps> = ({
         }
     };
 
+    const handleClickDestination = (e: React.MouseEvent<HTMLSpanElement>) => {
+        if (isEdit)
+            return modal.openModal({
+                component: () => (
+                    <TripEditModalWrapper>
+                        <div
+                            className={clsx(
+                                'w-[80%] mx-auto flex justify-start flex-col mt-2 mb-5 xl:mt-10',
+                            )}
+                        >
+                            <Left2xlBoldText text="여행지를 선택해주세요" />
+                            <LeftSmGrayText text="지역, 국가, 도시를 1개 선택해주세요." />
+                        </div>
+                        <SelectRegions className="w-[80%] h-full z-[9999] bg-white mx-auto" />
+                    </TripEditModalWrapper>
+                ),
+            });
+    };
+
+    const handleClickStartDate = (e: React.MouseEvent<HTMLSpanElement>) => {
+        if (isEdit) return router.push(`/edit/trips/${trip.trip_id}/`);
+    };
+
     const bookmarkButtonText = useMemo(() => {
         if (trip.trip_master_id === buddy?.buddy_id) {
             return '삭제하기';
@@ -198,6 +245,11 @@ const TripCard: React.FC<TripCardProps> = ({
         <>
             {isContractMutationPending && <DefaultLoader />}
             {isBookMarkMutationPending && <DefaultLoader />}
+            {/* {modalToOpen.isOpen && modalToOpen.mode === 'region' && (
+                <TripEditModalWrapper>
+                    <SelectRegions actions={actions} states={states} />
+                </TripEditModalWrapper>
+            )} */}
             <div
                 className={clsx(
                     'bg-white box-border h-fit shadow-xl',
@@ -344,33 +396,24 @@ const TripCard: React.FC<TripCardProps> = ({
                         >
                             <div className="flex gap-2 items-center">
                                 <Distance />
-                                {!isEdit ? (
-                                    <span>{trip.trip_final_destination}</span>
-                                ) : (
-                                    <Link href={`/edit/trips/${trip.trip_id}/`}>
-                                        <span className="cursor-pointer animate-pulse">
-                                            {trip.trip_final_destination}
-                                        </span>
-                                    </Link>
-                                )}
+                                <span
+                                    className={twMerge(
+                                        'cursor-pointer',
+                                        isEdit && 'animate-pulse',
+                                    )}
+                                    onClick={handleClickDestination}
+                                >
+                                    {trip.trip_final_destination}
+                                </span>
                             </div>
 
                             <div className="flex gap-2 items-center">
                                 <Calendar_month />
-                                <span
-                                    className={twMerge(
-                                        'realative',
-                                        isEdit && 'animate-pulse',
-                                    )}
-                                >
-                                    {new Date(
-                                        trip.trip_start_date,
-                                    ).toLocaleDateString('ko-KR', {
-                                        month: 'numeric', // 월 숫자로 표시
-                                        day: 'numeric', // 일 숫자로 표시
-                                        weekday: 'short', // 요일을 짧은 형식으로 표시 (e.g., 'Mon', 'Tue')
-                                    })}
-                                </span>
+                                <TripStartDate
+                                    startDate={trip.trip_start_date}
+                                    className={isEdit ? 'animate-pulse' : ''}
+                                    onClick={handleClickStartDate}
+                                />
                             </div>
 
                             {/** 추후 수정 필요 */}

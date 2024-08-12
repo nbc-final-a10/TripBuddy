@@ -3,31 +3,16 @@
 import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 import LeftSmGrayText from '@/components/atoms/write/LeftSmGrayText';
 import SelectRegions from '@/components/molecules/common/SelectRegion';
+import { useSelectRegion } from '@/hooks';
 import { SecondLevel, ThirdLevel } from '@/types/Location.types';
 import clsx from 'clsx';
 import React from 'react';
 
 type SelectRegionPageProps = {
     isMini?: boolean;
-    states: {
-        firstLevelLocation: string;
-        secondLevelLocation: string | null;
-        thirdLevelLocation: string;
-        selectedSecondLevelLocations: ThirdLevel[];
-        secondLevelLocations: SecondLevel[];
-    };
-    actions: {
-        handleLocationTypeClick: (isKoreaSelected: boolean) => void;
-        handleChipClick: (name: string) => void;
-        handleThirdLevelClick: (locName: string) => void;
-    };
 };
 
-export default function SelectRegionPage({
-    isMini,
-    states,
-    actions,
-}: SelectRegionPageProps) {
+export default function SelectRegionPage({ isMini }: SelectRegionPageProps) {
     return (
         <div>
             <div className={clsx('mt-2 mb-5 xl:mt-10', isMini && 'mb-0.5')}>
@@ -36,7 +21,7 @@ export default function SelectRegionPage({
             </div>
 
             <div className="bg-white h-full">
-                <SelectRegions states={states} actions={actions} />
+                <SelectRegions />
             </div>
         </div>
     );

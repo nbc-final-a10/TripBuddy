@@ -19,7 +19,7 @@ export async function GET(
         if (error) {
             console.error('버디 통신 오류 발생:', error);
             return NextResponse.json(
-                { buddies: null, error: error?.message },
+                { error: error?.message },
                 { status: 500 },
             );
         }
@@ -27,9 +27,6 @@ export async function GET(
         return NextResponse.json(buddy, { status: 200 });
     } catch (error) {
         console.error('버디 통신 오류 발생:', error);
-        return NextResponse.json(
-            { buddies: null, error: '서버 오류' },
-            { status: 500 },
-        );
+        return NextResponse.json({ error: '서버 오류' }, { status: 500 });
     }
 }
