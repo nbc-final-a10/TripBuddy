@@ -34,6 +34,8 @@ import { useModal } from '@/contexts/modal.context';
 import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 import LeftSmGrayText from '@/components/atoms/write/LeftSmGrayText';
 import Button from '@/components/atoms/common/Button';
+import TripEditSelectRegion from './TripEditSelectRegion';
+import TripEditSelectDate from './TripEditSelectDate';
 
 type TripCardProps = {
     trip: TripWithContract;
@@ -169,33 +171,18 @@ const TripCard: React.FC<TripCardProps> = ({
         }
     };
 
-    const handleClickDestination = (e: React.MouseEvent<HTMLSpanElement>) => {
+    const handleClickDestination = () => {
         if (isEdit)
             return modal.openModal({
-                component: () => (
-                    <TripEditModalWrapper>
-                        <div
-                            className={clsx(
-                                'w-[70%] h-[10%] mx-auto flex justify-start flex-col mt-2 mb-5 xl:mt-2',
-                            )}
-                        >
-                            <Left2xlBoldText text="여행지를 선택해주세요" />
-                            <LeftSmGrayText text="지역, 국가, 도시를 1개 선택해주세요." />
-                        </div>
-                        <SelectRegions className="w-[70%] h-[84%] mx-auto" />
-                        <Button
-                            className="w-[70%] h-[6%] mx-auto my-2"
-                            onClick={modal.closeModal}
-                        >
-                            완료
-                        </Button>
-                    </TripEditModalWrapper>
-                ),
+                component: () => <TripEditSelectRegion />,
             });
     };
 
     const handleClickStartDate = (e: React.MouseEvent<HTMLSpanElement>) => {
-        if (isEdit) return router.push(`/edit/trips/${trip.trip_id}/`);
+        if (isEdit)
+            return modal.openModal({
+                component: () => <TripEditSelectDate />,
+            });
     };
 
     const bookmarkButtonText = useMemo(() => {
@@ -412,7 +399,11 @@ const TripCard: React.FC<TripCardProps> = ({
                                 <Calendar_month />
                                 <TripStartDate
                                     startDate={trip.trip_start_date}
-                                    className={isEdit ? 'animate-pulse' : ''}
+                                    className={
+                                        isEdit
+                                            ? 'cursor-pointer animate-pulse'
+                                            : ''
+                                    }
                                     onClick={handleClickStartDate}
                                 />
                             </div>

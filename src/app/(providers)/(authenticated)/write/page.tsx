@@ -194,13 +194,7 @@ const WritePage: React.FC = () => {
                         />
                     )}
                     {step === 1 && <SelectRegionPage isMini={isMini} />}
-                    {step === 2 && (
-                        <SelectDatePage
-                            startDateTimestamp={startDateTimestamp}
-                            endDateTimestamp={endDateTimestamp}
-                            SelectCalendar={SelectCalendar}
-                        />
-                    )}
+                    {step === 2 && <SelectDatePage />}
                     {step === 3 && (
                         <SelectTripThemesPage
                             PreferThemeToRender={PreferTripThemesToRender}
