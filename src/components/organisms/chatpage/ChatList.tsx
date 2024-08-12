@@ -4,14 +4,13 @@ import React, { useEffect, useState } from 'react';
 import ChatListItem from '@/components/molecules/chatpage/ChatListItem';
 import supabase from '@/utils/supabase/client';
 import { ContractData } from '@/types/Chat.types';
-import { useRouter } from 'next/navigation';
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import { useAuth } from '@/hooks';
+import Link from 'next/link';
 
 const ChatList = () => {
     const { buddy: currentBuddy } = useAuth();
     const [chatData, setChatData] = useState<ContractData[]>([]);
-    const router = useRouter();
     const [contractsExist, setContractsExist] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -32,6 +31,7 @@ const ChatList = () => {
 
                 if (!contracts || contracts.length === 0) {
                     setContractsExist(false);
+                    setIsLoading(false);
                     return;
                 }
 
@@ -226,19 +226,28 @@ const ChatList = () => {
 
     // 로딩 추가 (병준)
     useEffect(() => {
+        if (!isLoading) return;
         if (chatData.length > 0) {
             setIsLoading(false);
         }
-    }, [chatData]);
-
-    useEffect(() => {
-        if (!contractsExist) {
-            router.push('/trips');
-        }
-    }, [contractsExist, router]);
+    }, [chatData, contractsExist, isLoading]);
 
     if (isLoading) {
         return <DefaultLoader />;
+    } else if (!contractsExist) {
+        return (
+            <div className="text-center h-full font-bold text-lg flex flex-col justify-center text-grayscale-color-600">
+                <h1 className="text-2xl">아직 참여한 여정이 없습니다!</h1>
+                <br />
+                <Link
+                    href="/trips"
+                    className="text-center font-bold text-xl hover:text-primary-color-400"
+                >
+                    <h2>트립버디즈와 함께</h2>
+                    <h2>즐거운 여행을 시작해 볼까요?</h2>
+                </Link>
+            </div>
+        );
     } else {
         return (
             <div className="flex flex-col p-4">
