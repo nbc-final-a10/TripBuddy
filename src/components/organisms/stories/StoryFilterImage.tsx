@@ -1,5 +1,4 @@
-import useLockBodyScroll from '@/hooks/common/useLockBodyScroll';
-import useTapScroll from '@/hooks/useTapScroll';
+import { useTapScroll } from '@/hooks';
 import { StoryFilter } from '@/types/Story.types';
 import clsx from 'clsx';
 import Image from 'next/image';

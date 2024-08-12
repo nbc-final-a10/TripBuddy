@@ -3,7 +3,7 @@
 import LoaderOnly from '@/components/atoms/common/LoaderOnly';
 import InfiniteScroll from '@/components/molecules/common/InfiniteScroll';
 import TripCard from '@/components/molecules/trips/TripCard';
-import useTripInfiniteQuery from '@/hooks/queries/useTripInfiniteQuery';
+import { useTripInfiniteQuery } from '@/hooks/queries';
 import React from 'react';
 
 const TripListMobile: React.FC = () => {

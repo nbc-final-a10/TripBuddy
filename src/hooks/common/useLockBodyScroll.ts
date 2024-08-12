@@ -1,7 +1,7 @@
 'use client';
 import { useLayoutEffect, useState, useCallback, useRef } from 'react';
 
-const useLockBodyScroll = (initialState: boolean = false) => {
+export const useLockBodyScroll = (initialState: boolean = false) => {
     const [isLocked, setIsLocked] = useState(initialState);
     const [scrollY, setScrollY] = useState(0);
     const originalStyleRef = useRef<string>('');
@@ -55,5 +55,3 @@ const useLockBodyScroll = (initialState: boolean = false) => {
 
     return { isLocked, setLock };
 };
-
-export default useLockBodyScroll;

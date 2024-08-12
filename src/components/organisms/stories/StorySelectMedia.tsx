@@ -1,7 +1,6 @@
 'use client';
 
 import Input from '@/components/atoms/common/Input';
-import useLockBodyScroll from '@/hooks/common/useLockBodyScroll';
 import clsx from 'clsx';
 import React, { useRef } from 'react';
 
@@ -12,7 +11,6 @@ type StorySelectMediaProps = {
 const StorySelectMedia: React.FC<StorySelectMediaProps> = ({
     handleFileChange,
 }) => {
-    // const { isLocked } = useLockBodyScroll(true);
     const inputRef = useRef<HTMLInputElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
 

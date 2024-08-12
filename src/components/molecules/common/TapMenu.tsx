@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import { useAuth } from '@/hooks/auth';
 import TapMenuButton from '@/components/atoms/common/TapMenuButton';
 import { usePathname } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
+import { useAuth } from '@/hooks';
 
 const TapMenu: React.FC = () => {
     const { buddy } = useAuth();

@@ -3,13 +3,15 @@
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
 import TripCard from '@/components/molecules/trips/TripCard';
-import useTripQuery from '@/hooks/queries/useTripQuery';
 import Image from 'next/image';
 import React from 'react';
 import HomePageRecommnedBuddiesList from '../homepage/HomePageRecommendBuddiesList';
-import useRecommendBuddiesQuery from '@/hooks/queries/useRecommendBuddiesQuery';
-import useSpecificBuddyQuery from '@/hooks/queries/useSpecificBuddyQuery';
-import useBuddyQueries from '@/hooks/queries/useBuddyQueries';
+import {
+    useBuddyQueries,
+    useRecommendBuddiesQuery,
+    useSpecificBuddyQuery,
+    useTripQuery,
+} from '@/hooks/queries';
 
 type TripDetailProps = {
     id: string;

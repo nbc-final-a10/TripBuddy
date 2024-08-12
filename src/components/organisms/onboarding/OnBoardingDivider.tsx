@@ -15,8 +15,6 @@ const OnBoardingDivider: React.FC<OnBoardingDividerProps> = ({
     mode,
     name,
 }) => {
-    // const { buddy } = useAuth();
-
     const titleRef = useRef<string>(
         mode === 'welcome'
             ? `${name}님\n 반가워요!`

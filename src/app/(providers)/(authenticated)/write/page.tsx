@@ -1,30 +1,31 @@
 'use client';
 
 import ProgressIndicator from '@/components/atoms/write/ProgressIndicator';
-import CompletePage from '@/components/organisms/write/CompletePage';
 import SelectAdditionalBuddyThemes from '@/components/organisms/write/SelectAdditionalBuddyThemes';
 import SelectRegionPage from '@/components/organisms/write/SelectRegionPage';
 import SelectTripThemesPage from '@/components/organisms/write/SelectTripThemesPage';
 import SelectDatePage from '@/components/organisms/write/SelectDatePage';
 import WelcomePage from '@/components/organisms/write/WelcomePage';
-import useNextButton from '@/hooks/useFunnelNextStep';
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '@/hooks/auth';
-import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
-import useCalendar from '@/hooks/useCalendar';
-import useSelectRegion from '@/hooks/useSelectRegion';
-import usePreferTheme from '@/hooks/usePreferTheme';
 import { Tables } from '@/types/supabase';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import useTripWrite from '@/hooks/MyPage/useTripWrite';
 import WriteTrip from '@/components/organisms/write/WriteTrip';
-import useSelectSex from '@/hooks/useSelectSex';
-import useSelectAges from '@/hooks/useSelectAges';
-import useSelectMeetPlace from '@/hooks/useSelectMeetPlace';
 import { useRouter } from 'next/navigation';
 import { validateStep } from '@/utils/write/validateStep';
 import SuccessNotificationPage from '@/components/organisms/write/SuccessNotificationPage';
 import { twMerge } from 'tailwind-merge';
+import {
+    useAuth,
+    useCalendar,
+    useNextButton,
+    usePreferTheme,
+    useSelectAges,
+    useSelectBuddyCounts,
+    useSelectMeetPlace,
+    useSelectRegion,
+    useSelectSex,
+    useTripWrite,
+} from '@/hooks';
 
 // 버튼 라벨 배열
 const buttonText = [

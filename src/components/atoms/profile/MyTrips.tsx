@@ -1,16 +1,14 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useAccordion, Accordion } from '@/hooks/useAccordion';
 import { FaCalendarCheck, FaPen } from 'react-icons/fa';
 import TripCard from '@/components/molecules/trips/TripCard';
 import fetchWrapper from '@/utils/api/fetchWrapper';
-import { TripWithContract } from '@/types/Trips.types';
-import useTapScroll from '@/hooks/useTapScroll';
 import {
     ContractWithTripsWithContract,
     MyTripsAndContracts,
 } from '@/types/Contract.types';
+import { Accordion, useAccordion, useTapScroll } from '@/hooks';
 
 type MyTripsProps = {
     id: string;

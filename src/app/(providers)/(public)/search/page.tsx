@@ -8,9 +8,7 @@ import MeetingPlaceChipGroup from '@/components/molecules/search/MeetingPlaceChi
 import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
 import SearchResult from '@/components/molecules/search/SearchResult';
 import DateSearchPage from '@/components/organisms/search/DateSearchPage';
-import usePreferTheme from '@/hooks/usePreferTheme';
-// import useSelectBuddyCounts from '@/hooks/useSelectBuddyCounts';
-import useSelectRegion from '@/hooks/useSelectRegion';
+import { usePreferTheme, useSelectRegion } from '@/hooks';
 import { Tables } from '@/types/supabase';
 import { TripWithContract } from '@/types/Trips.types';
 import supabase from '@/utils/supabase/client';

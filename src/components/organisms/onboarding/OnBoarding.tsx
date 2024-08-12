@@ -1,9 +1,6 @@
 'use client';
 
 import ProgressIndicator from '@/components/atoms/write/ProgressIndicator';
-import { useAuth } from '@/hooks/auth';
-import useNextButton from '@/hooks/useFunnelNextStep';
-import usePreferTheme from '@/hooks/usePreferTheme';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import React, { MouseEvent, useEffect, useRef, useState } from 'react';
 import OnBoardingDivider from './OnBoardingDivider';
@@ -11,17 +8,21 @@ import OnBoardingSelectGender from './OnBoardingSelectGender';
 import OnBoardingInput from './OnBoardingInput';
 import OnBoardingSelectLocationMbti from './OnBoardingSelectLocationMbti';
 import OnBoardingSelectPrefer from './OnBoardingSelectPrefer';
-import useSelectRegion from '@/hooks/useSelectRegion';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { onBoardingValidation } from '@/utils/onboarding/onBoardingValidation';
 import { Buddy, PartialBuddy } from '@/types/Auth.types';
-import { getBirthDate } from '@/utils/common/getBirthDate';
 import OnBoardingCalender from './OnBoardingCalender';
 import { CalendarDate, parseDate } from '@internationalized/date';
 import { getAgeFromBirthDate } from '@/utils/common/getAgeFromBirthDate';
-import useUpdateBuddyMutation from '@/hooks/queries/useUpdateBuddyMutation';
 import OnBoardingProfileImage from './OnBoardingProfileImage';
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
+import { useUpdateBuddyMutation } from '@/hooks/queries';
+import {
+    useAuth,
+    useNextButton,
+    usePreferTheme,
+    useSelectRegion,
+} from '@/hooks';
 
 const buttonText = [
     '다음',

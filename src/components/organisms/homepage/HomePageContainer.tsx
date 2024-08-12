@@ -4,15 +4,15 @@ import HomePageSearchBar from './HomePageSearchBar';
 import HomePageStories from '@/components/molecules/homepage/HomePageStories';
 import HomePageTrips from '@/components/molecules/homepage/HomePageTrips';
 import React, { useEffect, useMemo, useRef } from 'react';
-import useTapScroll from '@/hooks/useTapScroll';
 import HomePageTitle from '@/components/molecules/homepage/HomePageTitle';
 import HomePageRecommendBuddiesList from './HomePageRecommendBuddiesList';
 import { useAuth } from '@/hooks/auth';
 import Navigate from '@/components/atoms/common/Navigate';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import useHomeQueries from '@/hooks/queries/useHomeQueries';
 import filterOldTrips from '@/utils/trips/filterOldTrips';
 import { TripWithContract } from '@/types/Trips.types';
+import { useHomeQueries } from '@/hooks/queries';
+import { useTapScroll } from '@/hooks';
 
 const HomePageContainer = () => {
     const buddiesRef = useRef<HTMLDivElement>(null);

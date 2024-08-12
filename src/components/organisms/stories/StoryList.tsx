@@ -2,8 +2,8 @@
 
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import StoryCard from '@/components/molecules/stories/StoryCard';
-import { useAuth } from '@/hooks/auth';
-import useStoriesQuery from '@/hooks/queries/useStoriesQuery';
+import { useAuth } from '@/hooks';
+import { useStoriesQuery } from '@/hooks/queries';
 import { StoryOverlay } from '@/types/Story.types';
 import groupStoriesByBuddyId from '@/utils/stories/groupStoriesByBuddyId';
 import React, { useMemo } from 'react';

@@ -2,7 +2,7 @@
 import ChatMessageList from '@/components/molecules/chatpage/ChatMessageList';
 import ChatMessageSend from '@/components/molecules/chatpage/ChatMessageSend';
 import ChattingTitle from '@/components/molecules/chatpage/ChattingTitle';
-import { useAuth } from '@/hooks/auth';
+import { useAuth } from '@/hooks';
 import { useParams } from 'next/navigation';
 
 const ChattingPage = () => {

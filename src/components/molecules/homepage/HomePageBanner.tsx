@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { useAuth } from '@/hooks/auth';
 import Image from 'next/image';
 import getDaysLeft from '@/utils/common/getDaysLeft';
-import useContractQuery from '@/hooks/queries/useContractQuery';
 import filterOldTrips from '@/utils/trips/filterOldTrips';
+import { useContractQuery } from '@/hooks/queries';
+import { useAuth } from '@/hooks';
 
 const HomePageBanner = () => {
     const { buddy } = useAuth();

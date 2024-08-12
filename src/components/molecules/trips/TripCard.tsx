@@ -14,17 +14,18 @@ import {
 import Link from 'next/link';
 import remainDays from '@/utils/common/getRemainDays';
 import Chip from '@/components/atoms/common/Chip';
-import { useAuth } from '@/hooks/auth';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { Contract, PartialContract } from '@/types/Contract.types';
-import useBuddyQueries from '@/hooks/queries/useBuddyQueries';
 import { twMerge } from 'tailwind-merge';
-import useContractMutation from '@/hooks/queries/useContractMutation';
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
-import useBookMarkMutation from '@/hooks/queries/useBookMarkMutation';
 import { useRouter } from 'next/navigation';
-import useBookMarkQuery from '@/hooks/queries/useBookMarkQuery';
-import useContractQuery from '@/hooks/queries/useContractQuery';
+import {
+    useBookMarkMutation,
+    useBookMarkQuery,
+    useBuddyQueries,
+    useContractMutation,
+} from '@/hooks/queries';
+import { useAuth } from '@/hooks';
 
 type TripCardProps = {
     trip: TripWithContract;
