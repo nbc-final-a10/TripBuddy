@@ -26,6 +26,7 @@ import {
     useContractMutation,
 } from '@/hooks/queries';
 import { useAuth } from '@/hooks';
+import Input from '@/components/atoms/common/Input';
 
 type TripCardProps = {
     trip: TripWithContract;
@@ -130,6 +131,17 @@ const TripCard: React.FC<TripCardProps> = ({
         }
     };
 
+    const handleChipClickWhenIsEdit = (
+        e: React.MouseEvent<HTMLSpanElement>,
+    ) => {
+        const mode = e.currentTarget.dataset.mode;
+        if (mode === 'trip_theme') {
+            console.log('trip_theme');
+        } else if (mode === 'trip_wanted_sex') {
+            console.log('trip_wanted_sex');
+        }
+    };
+
     const bookmarkButtonText = useMemo(() => {
         if (trip.trip_master_id === buddy?.buddy_id) {
             return '삭제하기';
@@ -180,10 +192,8 @@ const TripCard: React.FC<TripCardProps> = ({
 
     return (
         <>
-            {/* {isBookMarkPending && <DefaultLoader />} */}
             {isContractMutationPending && <DefaultLoader />}
             {isBookMarkMutationPending && <DefaultLoader />}
-            {/* {isContractPending && <DefaultLoader />} */}
             <div
                 className={clsx(
                     'bg-white box-border h-fit shadow-xl',
@@ -237,36 +247,77 @@ const TripCard: React.FC<TripCardProps> = ({
                                     {trip.trip_final_destination}
                                 </h2>
                             )}
-                            <h3
-                                className={clsx(
-                                    'text-lg font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap',
-                                    mode === 'list' && 'text-black text-xl',
-                                    mode === 'card' && 'text-gray-600',
-                                )}
-                            >
-                                {trip.trip_title}
-                            </h3>
+                            {!isEdit ? (
+                                <h3
+                                    className={clsx(
+                                        'text-lg font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap',
+                                        mode === 'list' && 'text-black text-xl',
+                                        mode === 'card' && 'text-gray-600',
+                                    )}
+                                >
+                                    {trip.trip_title}
+                                </h3>
+                            ) : (
+                                <Input
+                                    type="text"
+                                    className="text-lg font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap animate-pulse"
+                                    placeholder={trip.trip_title}
+                                ></Input>
+                            )}
 
                             <div className="flex flex-row justify-between">
                                 <div className="flex gap-1">
-                                    <Chip selected={false} intent="square">
+                                    <Chip
+                                        selected={false}
+                                        intent={
+                                            isEdit ? 'square_white' : 'square'
+                                        }
+                                        data-mode="trip_theme"
+                                        className={
+                                            isEdit
+                                                ? 'cursor-pointer animate-pulse'
+                                                : ''
+                                        }
+                                        onClick={handleChipClickWhenIsEdit}
+                                    >
                                         {trip.trip_theme1}
                                     </Chip>
                                     <Chip
                                         selected={false}
                                         intent="square_white"
+                                        data-mode="trip_theme"
+                                        className={
+                                            isEdit
+                                                ? 'cursor-pointer animate-pulse'
+                                                : ''
+                                        }
+                                        onClick={handleChipClickWhenIsEdit}
                                     >
                                         {trip.trip_theme2}
                                     </Chip>
                                     <Chip
                                         selected={false}
                                         intent="square_white"
+                                        data-mode="trip_theme"
+                                        className={
+                                            isEdit
+                                                ? 'cursor-pointer animate-pulse'
+                                                : ''
+                                        }
+                                        onClick={handleChipClickWhenIsEdit}
                                     >
                                         {trip.trip_theme3}
                                     </Chip>
                                     <Chip
                                         selected={false}
                                         intent="square_white"
+                                        data-mode="trip_wanted_sex"
+                                        className={
+                                            isEdit
+                                                ? 'cursor-pointer animate-pulse'
+                                                : ''
+                                        }
+                                        onClick={handleChipClickWhenIsEdit}
                                     >
                                         {trip.trip_wanted_sex}
                                     </Chip>
@@ -289,7 +340,15 @@ const TripCard: React.FC<TripCardProps> = ({
                         >
                             <div className="flex gap-2 items-center">
                                 <Distance />
-                                <span>{trip.trip_final_destination}</span>
+                                {!isEdit ? (
+                                    <span>{trip.trip_final_destination}</span>
+                                ) : (
+                                    <Link href={`/edit/trips/${trip.trip_id}/`}>
+                                        <span className="cursor-pointer animate-pulse">
+                                            {trip.trip_final_destination}
+                                        </span>
+                                    </Link>
+                                )}
                             </div>
 
                             <div className="flex gap-2 items-center">

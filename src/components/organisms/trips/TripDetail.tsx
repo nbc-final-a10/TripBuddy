@@ -79,7 +79,7 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
                     {mode === 'edit' && (
                         <div className="absolute h-full w-full top-0 right-0 bg-black/55 z-10 flex justify-center items-center">
                             <button className="bg-grayscale-color-500/70 rounded p-1">
-                                <SelectImage />
+                                <SelectImage className="w-full h-full animate-pulse" />
                             </button>
                         </div>
                     )}
