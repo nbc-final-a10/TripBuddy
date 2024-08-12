@@ -19,7 +19,6 @@ export default function DateSearchPage() {
     useEffect(() => {
         const startDateParam = searchParams.get('startDate') || '';
         const endDateParam = searchParams.get('endDate') || '';
-        const locationParam = searchParams.get('location') || '';
         setStartDate(startDateParam);
         setEndDate(endDateParam);
     }, [searchParams]);

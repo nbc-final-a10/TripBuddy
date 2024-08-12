@@ -160,18 +160,54 @@ export default function SearchPage() {
         : getTodayDate();
 
     const handleShowResult = async () => {
+        // 필터 리셋
+        setSearchInput('');
+        setSelectedGender(null);
+        setStartAge(18);
+        setEndAge(150);
+        setSelectedMeetingPlace(null);
+        setThirdLevelLocation('');
+        setStartDateTimestamp('');
+        setEndDateTimestamp('');
+        setSelectedThemes([]);
+        setSelectedBuddyThemes([]);
+
+        updateQueryParams({
+            searchInput: '',
+            gender: null,
+            startAge: 18,
+            endAge: 150,
+            meetingPlace: null,
+            location: null,
+            startDate: '',
+            endDate: '',
+            themes: '',
+            buddyThemes: '',
+        });
+
         // 데이터 가져와서 상태 업데이트
-        const { data, error } = await supabase
-            .from(
-                'trips, contract:contract!contract_contract_trip_id_foreign (*)',
-            )
-            .select('*');
+        const { data, error } = await supabase.from('trips').select('*');
         if (error) {
             console.error('Error fetching trips:', error.message);
             return;
         }
 
         let filteredItems = data as Trip[];
+
+        console.log('필터 전: ', filteredItems);
+
+        console.log('Filter values:', {
+            searchInput,
+            selectedGender,
+            startAge,
+            endAge,
+            selectedMeetingPlace,
+            thirdLevelLocation,
+            startDateTimestamp,
+            endDateTimestamp,
+            selectedThemes,
+            selectedBuddyThemes,
+        });
 
         if (searchInput) {
             filteredItems = filteredItems.filter(
@@ -184,11 +220,13 @@ export default function SearchPage() {
                         .includes(searchInput.toLowerCase()),
             );
         }
+        console.log('성 전: ', filteredItems);
 
         if (selectedGender) {
             filteredItems = filteredItems.filter(
                 (item: Trip) => item.trip_wanted_sex === selectedGender,
             );
+            console.log('성 후: ', filteredItems);
         }
 
         if (selectedMeetingPlace) {
@@ -247,6 +285,8 @@ export default function SearchPage() {
         // );
         // setShowResult(true);
         setResultItems(filteredItems as TripWithContract[]);
+        setAllItems(data as TripWithContract[]);
+        setShowResult(true);
 
         // 아무런 필터 조건이 걸려있지 않을 때
         if (
@@ -264,9 +304,6 @@ export default function SearchPage() {
             setVisibleFirstItems(data.length);
         }
 
-        setAllItems(data as TripWithContract[]);
-        setShowResult(true);
-
         // 속도 지연
         // 위에서 offset만큼 떨어진 위치로 스크롤 이동
         setTimeout(() => {
@@ -281,6 +318,14 @@ export default function SearchPage() {
             // resultRef.current?.scrollIntoView({ behavior: 'smooth' });
         }, 100);
     };
+
+    useEffect(() => {
+        console.log('결과 항목들: ', resultItems);
+    }, [resultItems]);
+
+    useEffect(() => {
+        console.log('전체 항목들: ', allItems);
+    }, [allItems]);
 
     const handleThemesButtonClick = () => {
         console.log('전 여정 테마: ', localSelectedThemes);
@@ -343,32 +388,6 @@ export default function SearchPage() {
         selectedThemes,
         selectedBuddyThemes,
     ]);
-
-    // 필터 리셋 핸들러
-    const handleFiltersReset = () => {
-        setSearchInput('');
-        setSelectedGender(null);
-        setStartAge(18);
-        setEndAge(150);
-        setSelectedMeetingPlace(null);
-        setThirdLevelLocation('');
-        setStartDateTimestamp('');
-        setEndDateTimestamp('');
-        setSelectedThemes([]);
-        setSelectedBuddyThemes([]);
-        updateQueryParams({
-            searchInput: '',
-            gender: null,
-            startAge: 18,
-            endAge: 150,
-            meetingPlace: null,
-            location: null,
-            startDate: '',
-            endDate: '',
-            themes: '',
-            buddyThemes: '',
-        });
-    };
 
     return (
         <main className="p-5 xl:p-0 xl:py-5">
@@ -456,15 +475,15 @@ export default function SearchPage() {
             </div>
 
             <div className="xl:flex xl:flex-row justify-center items-center xl:space-x-2">
-                <button
-                    id="result-section"
+                {/* <button
                     className="flex justify-center items-center w-full xl:max-w-[348px] px-28 h-12 rounded-2xl bg-main-color font-semibold text-white text-xl mb-5 xl:mb-8 transition-colors duration-200 ease-in-out active:bg-gray-300 whitespace-nowrap"
                     onClick={handleFiltersReset}
                 >
                     검색 옵션 리셋하기
-                </button>
+                </button> */}
 
                 <button
+                    id="result-section"
                     className="flex justify-center items-center w-full xl:max-w-[348px] px-28 h-12 rounded-2xl bg-main-color font-semibold text-white text-xl mb-5 xl:mb-8 transition-colors duration-200 ease-in-out active:bg-gray-300 whitespace-nowrap"
                     onClick={() => {
                         handleShowResult();

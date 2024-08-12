@@ -20,63 +20,42 @@ const DateSearchButton: React.FC<DateSearchMainPageProps> = ({
     const [startDate, setStartDate] = useState<string>(defaultStartDate);
     const [endDate, setEndDate] = useState<string>(defaultEndDate);
 
-    // 기본 날짜 설정 함수
-    const getFormattedDate = useCallback((offsetDays: number) => {
-        // 날짜 포맷 함수
-        const formatDate = (date: Date) => {
-            if (isNaN(date.getTime())) return 'Invalid date';
-            const week = ['일', '월', '화', '수', '목', '금', '토'];
-            const dayOfWeek = week[date.getDay()];
-            return `${date.getFullYear().toString().slice(-2)}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getDate().toString().padStart(2, '0')} (${dayOfWeek})`;
-        };
+    // 날짜 포맷 함수 ('00.00.00(요일)' 형식)
+    const formatDate = (dateStr: string): string => {
+        const date = new Date(dateStr);
+        if (isNaN(date.getTime())) return '00.00.00(일)';
 
-        const date = new Date();
-        date.setDate(date.getDate() + offsetDays);
-        return formatDate(date);
-    }, []);
+        const week = ['일', '월', '화', '수', '목', '금', '토'];
+        const dayOfWeek = week[date.getDay()];
+        return `${date.getFullYear().toString().slice(-2)}.${(
+            date.getMonth() + 1
+        )
+            .toString()
+            .padStart(
+                2,
+                '0',
+            )}.${date.getDate().toString().padStart(2, '0')} (${dayOfWeek})`;
+    };
 
+    // searchParams 변경될 시 startDate, endDate를 업데이트
     useEffect(() => {
-        const today = getFormattedDate(0);
-        const tomorrow = getFormattedDate(1);
-
         const startDateParam = searchParams.get('startDate');
         const endDateParam = searchParams.get('endDate');
 
-        // 날짜 유효성 검사 함수
-        const isValidDate = (dateStr: string) => {
-            const date = new Date(dateStr);
-            return !isNaN(date.getTime());
-        };
-
-        let newStartDate = startDate;
-        let newEndDate = endDate;
-
-        if (
-            startDateParam &&
-            endDateParam &&
-            isValidDate(startDateParam) &&
-            isValidDate(endDateParam)
-        ) {
-            newStartDate = startDateParam;
-            newEndDate = endDateParam;
+        // 새로운 날짜 들어오면 업데이트, setDateChange 호출
+        if (startDateParam && endDateParam) {
+            setStartDate(startDateParam);
+            setEndDate(endDateParam);
+            setDateChange(startDateParam, endDateParam);
         }
-
-        // 상태가 변경된 경우에만 업데이트
-        if (startDate !== newStartDate || endDate !== newEndDate) {
-            setStartDate(newStartDate);
-            setEndDate(newEndDate);
-        }
-    }, [searchParams, getFormattedDate, startDate, endDate]);
-    // searchParams는 URL의 쿼리 파라미터를 반영, 값이 변경될 때마다 useEffect를 다시 실행
-    // getFormattedDate 함수는 formatDate 함수에 의존함, 날짜 포맷 시 실행
-
-    // 날짜 변경 시 호출되는 useEffect
-    useEffect(() => {
-        setDateChange(startDate, endDate);
-    }, [startDate, endDate, setDateChange]);
+    }, [searchParams, setDateChange]);
 
     const handleClick = () => {
-        router.push('/search/date');
+        // URLSearchParams로 쿼리 파라미터 구성
+        const query = new URLSearchParams();
+        if (defaultStartDate) query.set('startDate', defaultStartDate);
+        if (defaultEndDate) query.set('endDate', defaultEndDate);
+        router.push(`/search/date?${query.toString()}`);
     };
 
     return (
@@ -91,7 +70,7 @@ const DateSearchButton: React.FC<DateSearchMainPageProps> = ({
                     />
                 </div>
                 <span>
-                    {startDate} ~ {endDate}
+                    {formatDate(startDate)} ~ {formatDate(endDate)}
                 </span>
             </button>
         </div>

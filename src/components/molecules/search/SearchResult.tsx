@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import SearchPageTitle from './SearchPageTitle';
 import HomePageTrips from '../homepage/HomePageTrips';
 import useTapScroll from '@/hooks/useTapScroll';
-import { Trip, TripWithContract } from '@/types/Trips.types';
+import { TripWithContract } from '@/types/Trips.types';
 import Image from 'next/image';
 import MascotImage from '@/components/atoms/common/MascotImage';
 
@@ -30,6 +30,9 @@ const SearchResult: React.FC<SearchResultProps> = ({
 
     const filteredItems = items.slice(0, visibleFirstItems);
 
+    console.log('결과 items:', items);
+    console.log('결과 allTrips:', allTrips);
+
     // 시작 날짜 기준으로 빠른 순으로 정렬
     // 검색 결과 여정은 제외
     const sortItems = [...allTrips]
@@ -49,13 +52,15 @@ const SearchResult: React.FC<SearchResultProps> = ({
             <section className="my-10 mt-20">
                 {filteredItems.length === 0 ? (
                     <div className="flex flex-col justify-center items-center mx-auto">
-                        <Image
-                            src={'/images/mascot_sad.webp'}
-                            alt="profile"
-                            width={100}
-                            height={100}
-                            className="mb-10"
-                        />
+                        <div className="relative w-[100px] h-[100px] mb-10">
+                            <Image
+                                src={'/images/mascot_sad.webp'}
+                                alt="profile"
+                                width={100}
+                                height={100}
+                                className="object-contain"
+                            />
+                        </div>
                         <p className="flex justify-center items-center mx-auto">
                             아쉽게도 일치하는 여정 결과가 없어요
                         </p>

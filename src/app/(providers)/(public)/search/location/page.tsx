@@ -3,7 +3,6 @@
 import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
 import useSelectRegion from '@/hooks/useSelectRegion';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
 export default function LocationSearchPage() {
     const { SelectRegion, thirdLevelLocation } = useSelectRegion();
