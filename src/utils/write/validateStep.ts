@@ -75,10 +75,10 @@ export const validateStep = async (step: number, params: any) => {
             showAlert('caution', '시작 나이가 종료 나이보다 높습니다.');
             return false;
         }
-        if (startAge < 18 || endAge > 150) {
+        if (startAge < 20 || endAge > 150) {
             showAlert(
                 'caution',
-                '나이는 18세 이상 150세 이하로 선택해 주세요.',
+                '나이는 20세 이상 150세 이하로 선택해 주세요.',
             );
             return false;
         }

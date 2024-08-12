@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 
 function useSelectAges() {
-    const [startAge, setStartAge] = useState<number>(18);
+    const [startAge, setStartAge] = useState<number>(20);
     const [endAge, setEndAge] = useState<number>(30);
 
     const handleStartAge = (value: number) => {

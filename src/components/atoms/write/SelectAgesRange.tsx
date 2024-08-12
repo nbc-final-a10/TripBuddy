@@ -17,8 +17,8 @@ const SelectAgesRange: React.FC<SelectAgesRangeProps> = ({
     handleEndAge,
 }) => {
     const STEP = 1;
-    const MIN = 18;
-    const MAX = 150;
+    const MIN = 20;
+    const MAX = 70;
 
     const values = [startAge, endAge];
 
