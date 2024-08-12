@@ -137,6 +137,7 @@ const TripCard: React.FC<TripCardProps> = ({
         }
     }, [isContractMutationSuccess]);
 
+    console.log(remainDays(trip.trip_start_date));
     return (
         <>
             {/* {isBookMarkPending && <DefaultLoader />} */}
@@ -184,7 +185,7 @@ const TripCard: React.FC<TripCardProps> = ({
                                         </span>
                                         <span className="text-xs leading-none">
                                             {new Date(
-                                                trip.trip_created_at,
+                                                trip.trip_start_date,
                                             ).toLocaleDateString()}
                                         </span>
                                     </div>
