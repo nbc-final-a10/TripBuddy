@@ -10,7 +10,6 @@ import {
     BookMarkRequest,
     BuddyThemeData,
     CalendarData,
-    PartialBookMark,
     TripThemeData,
     TripWithContract,
 } from '@/types/Trips.types';
@@ -401,7 +400,7 @@ const TripCard: React.FC<TripCardProps> = ({
                                     <span>{`${(trip.contract as Contract[]).length}/${trip.trip_max_buddies_counts}`}</span>
                                 ) : (
                                     <SelectBuddyCounts
-                                        className="w-[10px] h-[10px] xl:w-[20px] xl:h-[20px]"
+                                        className="w-[18px] h-[18px] xl:w-[20px] xl:h-[20px]"
                                         isEdit
                                     />
                                 )}

@@ -18,6 +18,9 @@ import SelectImage from '../../../../public/svg/SelectImage.svg';
 import { useTapScroll } from '@/hooks';
 import HomePageTitle from '@/components/molecules/homepage/HomePageTitle';
 import Navigate from '@/components/atoms/common/Navigate';
+import { useModal } from '@/contexts/modal.context';
+import { PartialTrip, TripEditTextData } from '@/types/Trips.types';
+import TripEditText from '@/components/molecules/trips/TripEditText';
 
 type TripDetailProps = {
     id: string;
@@ -27,7 +30,10 @@ type TripDetailProps = {
 const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
     const { data: trip, isPending, error: tripError } = useTripQuery(id);
     const buddiesRef = useRef<HTMLDivElement>(null);
+    const textRef = useRef<TripEditTextData>(null);
+    const tripDataRef = useRef<PartialTrip>(null);
     const router = useRouter();
+    const modal = useModal();
     const {
         data: buddy,
         isPending: buddyPending,
@@ -46,6 +52,13 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
 
     const { createScrollLeft, createScrollRight } =
         useTapScroll({ refs: [buddiesRef] }) ?? {};
+
+    const handleTextEditClick = () => {
+        if (mode !== 'edit') return;
+        return modal.openModal({
+            component: () => <TripEditText ref={textRef} />,
+        });
+    };
 
     useEffect(() => {
         if (tripError || buddyError || recommendBuddiesError) {
@@ -110,6 +123,16 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
 
             {/** 글 내용 */}
             <div className="flex flex-col bg-white gap-2 h-[217px] p-4">
+                {mode === 'edit' && (
+                    <div className="flex justify-end h-4 items-center">
+                        <span
+                            className="text-grayscale-color-500 text-right flex justify-center"
+                            onClick={handleTextEditClick}
+                        >
+                            수정하기
+                        </span>
+                    </div>
+                )}
                 <p className="text-gray-950 text-center whitespace-pre-wrap h-full flex items-center justify-center">
                     {trip.trip_content}
                 </p>

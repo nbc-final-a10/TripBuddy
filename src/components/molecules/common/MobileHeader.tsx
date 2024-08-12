@@ -9,12 +9,14 @@ import MobileHeaderSettingsButton from '@/components/atoms/common/MobileHeaderSe
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTripQuery } from '@/hooks/queries';
 import { useAuth } from '@/hooks';
+import { useModal } from '@/contexts/modal.context';
 
 const MobileHeader: React.FC = () => {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const router = useRouter();
     const { buddy } = useAuth();
+    const modal = useModal();
 
     const uuidMatch = pathname.match(/\/([^\/]+)\/([0-9a-fA-F-]{36})$/);
     const uuid = uuidMatch ? uuidMatch[2] : null;
@@ -78,6 +80,8 @@ const MobileHeader: React.FC = () => {
             router.push('/login?mode=login');
         } else if (isLogin || isSignup) {
             router.push('/');
+        } else if (isEditProfile) {
+            modal.closeModal();
         } else {
             router.back();
         }

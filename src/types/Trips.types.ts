@@ -43,3 +43,8 @@ export type BuddyThemeData = {
     endAge: number;
     selectedWantedBuddies: (TripTheme | BuddyTheme)[];
 };
+
+export type TripEditTextData = {
+    tripTitle: string;
+    tripContent: string;
+};
