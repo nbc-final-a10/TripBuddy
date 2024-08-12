@@ -4,7 +4,7 @@ import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
 import TripCard from '@/components/molecules/trips/TripCard';
 import Image from 'next/image';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import HomePageRecommnedBuddiesList from '../homepage/HomePageRecommendBuddiesList';
 import {
     useBuddyQueries,
@@ -28,12 +28,15 @@ type TripDetailProps = {
 };
 
 const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
+    const [tripData, setTripData] = useState<PartialTrip | null>(null);
     const { data: trip, isPending, error: tripError } = useTripQuery(id);
     const buddiesRef = useRef<HTMLDivElement>(null);
-    const textRef = useRef<TripEditTextData>(null);
-    const tripDataRef = useRef<PartialTrip>(null);
     const router = useRouter();
     const modal = useModal();
+    const [tripTitleContent, setTripTitleContent] = useState({
+        tripTitle: trip?.trip_title,
+        tripContent: trip?.trip_content,
+    });
     const {
         data: buddy,
         isPending: buddyPending,
@@ -53,11 +56,35 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
     const { createScrollLeft, createScrollRight } =
         useTapScroll({ refs: [buddiesRef] }) ?? {};
 
+    const handleTripTitleChange = (data: {
+        tripTitle: string;
+        tripContent: string;
+    }) => {
+        setTripTitleContent(data);
+    };
+
     const handleTextEditClick = () => {
         if (mode !== 'edit') return;
         return modal.openModal({
-            component: () => <TripEditText ref={textRef} />,
+            component: () => (
+                <TripEditText handleTripTitleChange={handleTripTitleChange} />
+            ),
         });
+    };
+
+    const handleTripDataChange = (data: PartialTrip) => setTripData(data);
+
+    const handleWriteTrip = async () => {
+        const newTripData: PartialTrip = {
+            ...tripData,
+            trip_content: tripTitleContent.tripContent,
+            trip_title: tripTitleContent.tripTitle,
+        };
+        const formData = new FormData();
+        // if (tripImageFile) {
+        //     formData.append('trip_image', tripImageFile);
+        //     formData.append('trip_json', JSON.stringify(tripData));
+        // }
     };
 
     useEffect(() => {
@@ -112,6 +139,8 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
                         mode="detail"
                         queries={queries}
                         isEdit={mode === 'edit'}
+                        handleTripDataChange={handleTripDataChange}
+                        handleTripTitleChange={handleTripTitleChange}
                     />
                 )}
             </div>

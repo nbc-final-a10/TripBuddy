@@ -10,6 +10,8 @@ import {
     BookMarkRequest,
     BuddyThemeData,
     CalendarData,
+    PartialTrip,
+    TripEditTextData,
     TripThemeData,
     TripWithContract,
 } from '@/types/Trips.types';
@@ -36,12 +38,18 @@ import TripEditSelectDate from './TripEditSelectDate';
 import TripEditTripTheme from './TripEditTripTheme';
 import { SelectRegionPageProps } from '@/types/Location.types';
 import TripEditSelectGenderBuddyTheme from './TripEditSelectGenderBuddyTheme';
+import TripEditText from './TripEditText';
 
 type TripCardProps = {
     trip: TripWithContract;
     mode?: 'card' | 'detail' | 'list';
     queries?: ReturnType<typeof useBuddyQueries>;
     isEdit?: boolean;
+    handleTripDataChange: (data: PartialTrip) => void;
+    handleTripTitleChange: (data: {
+        tripTitle: string;
+        tripContent: string;
+    }) => void;
 };
 
 const TripCard: React.FC<TripCardProps> = ({
@@ -49,6 +57,8 @@ const TripCard: React.FC<TripCardProps> = ({
     mode = 'list',
     queries,
     isEdit = false,
+    handleTripDataChange,
+    handleTripTitleChange,
 }) => {
     const { buddy } = useAuth();
     const router = useRouter();
@@ -112,6 +122,52 @@ const TripCard: React.FC<TripCardProps> = ({
         }
 
         if (mode === '수정완료') {
+            const tripData: PartialTrip = {
+                trip_master_id: buddy.buddy_id,
+                trip_max_buddies_counts:
+                    buddyCounts ?? trip.trip_max_buddies_counts,
+                trip_start_date:
+                    selectDateRef.current?.startDateTimestamp ??
+                    trip.trip_start_date,
+                trip_end_date:
+                    selectDateRef.current?.endDateTimestamp ??
+                    trip.trip_end_date,
+                trip_final_destination:
+                    `${selectRegionRef.current?.states?.secondLevelLocation} ${selectRegionRef.current?.states?.thirdLevelLocation}` ??
+                    trip.trip_final_destination,
+                trip_meet_location:
+                    selectTripThemeRef.current?.meetPlace ??
+                    trip.trip_meet_location,
+                trip_theme1:
+                    selectTripThemeRef.current?.selectedTripThemes[0] ??
+                    trip.trip_theme1,
+                trip_theme2:
+                    selectTripThemeRef.current?.selectedTripThemes[1] ??
+                    trip.trip_theme2,
+                trip_theme3:
+                    selectTripThemeRef.current?.selectedTripThemes[2] ??
+                    trip.trip_theme3,
+                trip_wanted_buddies1:
+                    selectGenderBuddyThemeRef.current
+                        ?.selectedWantedBuddies[0] ?? trip.trip_wanted_buddies1,
+                trip_wanted_buddies2:
+                    selectGenderBuddyThemeRef.current
+                        ?.selectedWantedBuddies[1] ?? trip.trip_wanted_buddies2,
+                trip_wanted_buddies3:
+                    selectGenderBuddyThemeRef.current
+                        ?.selectedWantedBuddies[2] ?? trip.trip_wanted_buddies3,
+                trip_wanted_sex:
+                    selectGenderBuddyThemeRef.current?.wantedSex ??
+                    trip.trip_wanted_sex,
+                trip_start_age:
+                    selectGenderBuddyThemeRef.current?.startAge ??
+                    trip.trip_start_age,
+                trip_end_age:
+                    selectGenderBuddyThemeRef.current?.endAge ??
+                    trip.trip_end_age,
+            };
+
+            handleTripDataChange(tripData);
             return showAlert('success', '수정이 완료되었습니다.');
         }
     };
@@ -173,6 +229,17 @@ const TripCard: React.FC<TripCardProps> = ({
         if (isEdit)
             return modal.openModal({
                 component: () => <TripEditSelectDate ref={selectDateRef} />,
+            });
+    };
+
+    const handleClickTripTitle = () => {
+        if (isEdit)
+            return modal.openModal({
+                component: () => (
+                    <TripEditText
+                        handleTripTitleChange={handleTripTitleChange}
+                    />
+                ),
             });
     };
 
@@ -286,11 +353,18 @@ const TripCard: React.FC<TripCardProps> = ({
                                     {trip.trip_title}
                                 </h3>
                             ) : (
-                                <Input
-                                    type="text"
+                                // <Input
+                                //     ref={tripTitleRef}
+                                //     type="text"
+                                //     className="text-lg font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap animate-pulse"
+                                //     placeholder={trip.trip_title}
+                                // ></Input>
+                                <button
                                     className="text-lg font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap animate-pulse"
-                                    placeholder={trip.trip_title}
-                                ></Input>
+                                    onClick={handleClickTripTitle}
+                                >
+                                    {trip.trip_title}
+                                </button>
                             )}
 
                             <div className="flex flex-row justify-between">

@@ -3,17 +3,25 @@ import TripEditModalWrapper from '@/components/atoms/trips/TripEditModalWrapper'
 import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 import { useModal } from '@/contexts/modal.context';
 import { useTripWrite } from '@/hooks';
-import { TripEditTextData } from '@/types/Trips.types';
-import React, { forwardRef } from 'react';
+import React, { useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-const TripEditText = forwardRef<TripEditTextData>((props, ref) => {
+type TripEditTextProps = {
+    handleTripTitleChange: (data: {
+        tripTitle: string;
+        tripContent: string;
+    }) => void;
+};
+
+const TripEditText = ({ handleTripTitleChange }: TripEditTextProps) => {
     const { tripTitle, tripContent, handleTitleChange, handleContentChange } =
         useTripWrite();
 
     const modal = useModal();
 
-    React.useImperativeHandle(ref, () => ({ tripTitle, tripContent }));
+    useEffect(() => {
+        handleTripTitleChange({ tripTitle, tripContent });
+    }, [tripTitle, tripContent, handleTripTitleChange]);
 
     return (
         <TripEditModalWrapper>
@@ -57,8 +65,6 @@ const TripEditText = forwardRef<TripEditTextData>((props, ref) => {
             </Button>
         </TripEditModalWrapper>
     );
-});
-
-TripEditText.displayName = 'TripEditText';
+};
 
 export default TripEditText;
