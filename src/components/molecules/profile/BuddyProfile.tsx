@@ -69,8 +69,8 @@ export default function BuddyProfile({
                         {/* 나이와 성별 */}
                         {clickedBuddy?.buddy_birth ? (
                             <p className="mt-2 text-gray-500">
-                                {`${clickedBuddy?.buddy_birth?.split('-')[0]}
-                                년생 / ${clickedBuddy?.buddy_sex}`}
+                                {`{clickedBuddy?.buddy_birth?.split('-')[0]}
+                                년생 / {clickedBuddy?.buddy_sex}`}
                             </p>
                         ) : (
                             <p className="mt-2 text-gray-500">
