@@ -4,7 +4,7 @@ import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
 import TripCard from '@/components/molecules/trips/TripCard';
 import Image from 'next/image';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import HomePageRecommnedBuddiesList from '../homepage/HomePageRecommendBuddiesList';
 import {
     useBuddyQueries,
@@ -15,6 +15,9 @@ import {
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useRouter } from 'next/navigation';
 import SelectImage from '../../../../public/svg/SelectImage.svg';
+import { useTapScroll } from '@/hooks';
+import HomePageTitle from '@/components/molecules/homepage/HomePageTitle';
+import Navigate from '@/components/atoms/common/Navigate';
 
 type TripDetailProps = {
     id: string;
@@ -23,6 +26,7 @@ type TripDetailProps = {
 
 const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
     const { data: trip, isPending, error: tripError } = useTripQuery(id);
+    const buddiesRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
     const {
         data: buddy,
@@ -39,6 +43,9 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
     const queries = useBuddyQueries(
         trip?.contract.map(contract => contract.contract_buddy_id) || [],
     );
+
+    const { createScrollLeft, createScrollRight } =
+        useTapScroll({ refs: [buddiesRef] }) ?? {};
 
     useEffect(() => {
         if (tripError || buddyError || recommendBuddiesError) {
@@ -109,14 +116,37 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
             </div>
 
             {/** 추천인기 버디즈 */}
-            <div className="flex flex-col bg-white gap-2 h-[350px] p-4 overflow-y-scroll">
-                <h3 className="text-gray-950 text-xl font-bold">
-                    추천인기 버디즈
-                </h3>
-
-                <HomePageRecommnedBuddiesList
-                    buddies={recommendBuddies.buddies}
+            <div className="relative z-10 bg-white">
+                <HomePageTitle
+                    title="추천 인기 버디즈"
+                    buttonText="전체보기"
+                    description="버디즈에게 가장 인기있는 버디즈예요!"
+                    href="/profile/rank"
+                    className="mb-2"
                 />
+
+                <div
+                    className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
+                    ref={buddiesRef}
+                >
+                    <HomePageRecommnedBuddiesList
+                        buddies={recommendBuddies.buddies}
+                    />
+                </div>
+                {createScrollLeft && createScrollRight && (
+                    <>
+                        <Navigate
+                            mode="before"
+                            onClick={createScrollLeft(buddiesRef)}
+                            className="top-[71%]"
+                        />
+                        <Navigate
+                            mode="after"
+                            onClick={createScrollRight(buddiesRef)}
+                            className="top-[71%]"
+                        />
+                    </>
+                )}
             </div>
         </div>
     );
