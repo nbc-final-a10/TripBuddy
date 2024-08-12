@@ -58,7 +58,7 @@ export async function deleteStory(id: string): Promise<void> {
     }
 }
 
-export async function getSpecificStories(
+export async function getSpecificStory(
     id: string,
 ): Promise<StoryWithBuddies[]> {
     const url = `/api/stories/${id}`;

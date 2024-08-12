@@ -4,12 +4,12 @@ import React, { useState } from 'react';
 import DraggableInput from './DraggableInput';
 import Image from 'next/image';
 import clsx from 'clsx';
-import useStoryMutation from '@/hooks/queries/useStoryMutation';
 import { StoryData, StoryFilter, StoryOverlay } from '@/types/Story.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/hooks/auth';
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
+import { useStoryMutation } from '@/hooks/queries';
+import { useAuth } from '@/hooks';
 
 type StoryWriteTextProps = {
     imageFile: File;

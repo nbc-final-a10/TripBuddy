@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-function useTripWrite() {
+export function useTripWrite() {
     const [tripTitle, setTripTitle] = useState('');
     const [tripContent, setTripContent] = useState('');
     const [tripImage, setTripImage] = useState(''); // 옵티미스틱용
@@ -33,5 +33,3 @@ function useTripWrite() {
         handleImageChange,
     };
 }
-
-export default useTripWrite;

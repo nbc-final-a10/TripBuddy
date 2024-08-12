@@ -1,9 +1,8 @@
 'use client';
 
 import { QUERY_KEY_STORIES } from '@/constants/query.constants';
-import { useAuth } from '@/hooks/auth';
-import useStoryLikesMutation from '@/hooks/queries/useStoryLikesMutation';
-import useStoryLikesQuery from '@/hooks/queries/useStoryLikesQuery';
+import { useAuth } from '@/hooks';
+import { useStoryLikesMutation } from '@/hooks/queries';
 import { StoryLikes } from '@/types/Story.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useQueryClient } from '@tanstack/react-query';

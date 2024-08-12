@@ -3,10 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import ChatListItem from '@/components/molecules/chatpage/ChatListItem';
 import supabase from '@/utils/supabase/client';
-import { useAuth } from '@/hooks/auth';
 import { ContractData } from '@/types/Chat.types';
 import { useRouter } from 'next/navigation';
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
+import { useAuth } from '@/hooks';
 
 const ChatList = () => {
     const { buddy: currentBuddy } = useAuth();

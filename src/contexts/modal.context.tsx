@@ -8,8 +8,8 @@ import React, {
     useEffect,
 } from 'react';
 import CustomAlert from '@/components/organisms/common/CustomAlert';
-import useLockBodyScroll from '@/hooks/common/useLockBodyScroll';
 import { ModalContextType, ModalOptions } from '@/types/Modal.types';
+import { useLockBodyScroll } from '@/hooks';
 
 const initialValue: ModalContextType = {
     open: () => {},

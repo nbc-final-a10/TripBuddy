@@ -2,10 +2,10 @@ import React, { useRef } from 'react';
 import SearchPageTitle from './SearchPageTitle';
 import { Tables } from '@/types/supabase';
 import HomePageTrips from '../homepage/HomePageTrips';
-import useTapScroll from '@/hooks/useTapScroll';
 import { Trip, TripWithContract } from '@/types/Trips.types';
 import Image from 'next/image';
 import MascotImage from '@/components/atoms/common/MascotImage';
+import { useTapScroll } from '@/hooks';
 
 // type Trip = Tables<'trips'>;
 

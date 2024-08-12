@@ -1,4 +1,4 @@
-import { useAuth } from '@/hooks/auth';
+import { useAuth } from '@/hooks';
 import React from 'react';
 
 export default function WelcomeMessage() {

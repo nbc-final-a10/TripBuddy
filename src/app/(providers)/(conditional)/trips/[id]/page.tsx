@@ -12,7 +12,7 @@ const TripsDetailPage: React.FC<TripDetailPageProps> = ({
 }) => {
     const { id } = params;
 
-    return <TripDetail id={id} />;
+    return <TripDetail id={id} mode="detail" />;
 };
 
 export default TripsDetailPage;

@@ -2,7 +2,7 @@
 
 import Loading from '@/app/(providers)/loading';
 import TripCard from '@/components/molecules/trips/TripCard';
-import useTripsQuery from '@/hooks/queries/useTripsQuery';
+import { useTripsQuery } from '@/hooks/queries';
 import { TripWithContract } from '@/types/Trips.types';
 import { sliceArrayByLimit } from '@/utils/common/sliceArrayByLimits';
 import React, { useEffect, useMemo, useState } from 'react';
