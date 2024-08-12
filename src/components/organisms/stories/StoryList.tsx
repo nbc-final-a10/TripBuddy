@@ -33,28 +33,22 @@ const StoryList: React.FC = () => {
     if (isPending) return <DefaultLoader />;
     if (!stories) return <div>No stories</div>;
 
+    // console.log(sortedStories);
+
     return (
         <section className="w-[90%] grid grid-cols-2 place-items-center gap-y-4 overflow-hidden xl:grid-cols-4 mx-auto">
             {sortedStories.map(story => (
                 <StoryCard
                     key={story.buddyId}
-                    // id={story.stories[0].story_id}
                     id={story.buddyId}
-                    buddy={story.stories[0].buddies}
-                    name={story.stories[0].buddies.buddy_nickname}
-                    created_at={story.stories[0].story_created_at}
-                    profile_image={
-                        story.stories[0].buddies.buddy_profile_pic ||
-                        '/images/test.webp' // 추후변경요망
-                    }
-                    background_image={story.stories[0].story_media}
                     mode={
                         buddy?.buddy_id === story.stories[0].buddies.buddy_id
                             ? 'my'
                             : 'story'
                     }
-                    storyId={story.stories[0].story_id}
                     overlay={story.stories[0].story_overlay as StoryOverlay[]}
+                    story={story.stories[0]}
+                    likes={story.stories[0].likes}
                 />
             ))}
         </section>

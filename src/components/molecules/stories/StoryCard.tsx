@@ -2,9 +2,11 @@
 
 import AddButtonSmall from '@/components/atoms/stories/AddButtonSmall';
 import LikesButton from '@/components/atoms/stories/LikesButton';
-import useStoryLikesQuery from '@/hooks/queries/useStoryLikesQuery';
-import { Buddy } from '@/types/Auth.types';
-import { StoryOverlay } from '@/types/Story.types';
+import {
+    StoryLikes,
+    StoryOverlay,
+    StoryWithBuddies,
+} from '@/types/Story.types';
 import { getTimeSinceUpload } from '@/utils/common/getTimeSinceUpload';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,57 +14,40 @@ import React from 'react';
 import { twMerge } from 'tailwind-merge';
 
 type StoryCardProps = {
-    name: string;
-    created_at: string;
-    profile_image: string;
-    background_image: string;
     mode: 'my' | 'story';
     id: string;
-    buddy: Buddy;
-    storyId: string;
+    story: StoryWithBuddies;
     overlay: StoryOverlay[];
+    likes: StoryLikes[];
 };
 
 const StoryCard: React.FC<StoryCardProps> = ({
-    name,
-    created_at,
-    profile_image,
-    background_image,
     mode,
     id,
-    buddy,
-    storyId,
+    story,
     overlay,
+    likes,
 }) => {
-    const { data: likes, isPending: isLikesPending } =
-        useStoryLikesQuery(storyId);
-
-    if (isLikesPending)
-        return (
-            <div className="relative min-w-[139px] w-[139px] h-[190px] bg-gray-300 rounded-lg xl:min-w-[254px]"></div>
-        );
-
     return (
-        <div className="relative flex flex-col justify-center items-center min-w-[139px] w-[139px] h-[190px] bg-gray-300 rounded-lg gap-2 aspect-auto xl:min-w-[254px]">
+        <div className="relative flex flex-col justify-center items-center min-w-[139px] w-[139px] h-[190px] bg-gray-3000 rounded-lg gap-2 aspect-auto xl:min-w-[254px]">
             <div className="absolute top-0.5 right-1 w-full flex flex-row justify-end z-[99]">
                 <button className="relative focus:outline-none">
-                    {likes && (
-                        <LikesButton
-                            story_id={storyId}
-                            likes={likes}
-                            mode="card"
-                        />
-                    )}
+                    <LikesButton
+                        storyId={story.story_id}
+                        likesCount={story.story_likes_counts}
+                        mode="card"
+                        likes={likes}
+                    />
                 </button>
             </div>
             <Link
                 className="w-full h-full absolute aspect-auto flex justify-center items-center"
-                href={`/stories/${name}?id=${id}`}
+                href={`/stories/${story.buddies.buddy_nickname}?id=${id}`}
             >
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black/80 rounded-lg z-10"></div>
 
                 <Image
-                    src={background_image}
+                    src={story.story_media}
                     alt="my-profile-background"
                     fill
                     priority
@@ -77,7 +62,7 @@ const StoryCard: React.FC<StoryCardProps> = ({
             <div className="relative w-full h-14"></div>
             <div className="rounded-full relative aspect-square border-4 border-main-color h-[64px] w-[64px] z-10">
                 <Image
-                    src={profile_image}
+                    src={story.buddies.buddy_profile_pic || '/images/test.webp'}
                     alt="my-profile"
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -87,11 +72,11 @@ const StoryCard: React.FC<StoryCardProps> = ({
             </div>
 
             <div className="flex flex-col gap-[2px] text-center text-white z-10">
-                <p className="text-sm">{name}</p>
+                <p className="text-sm">{story.buddies.buddy_nickname}</p>
                 <p className="text-xs">
                     {mode === 'my'
                         ? '내 스토리'
-                        : getTimeSinceUpload(created_at)}
+                        : getTimeSinceUpload(story.story_created_at)}
                 </p>
             </div>
         </div>

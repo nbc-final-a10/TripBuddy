@@ -8,8 +8,6 @@ import MyPageIcon from '../../../../public/svg/mypageicon.svg';
 const HeaderMyPageLink: React.FC = () => {
     const { buddy, logOut } = useAuth();
 
-    console.log(buddy);
-
     const buddy_id = buddy ? buddy.buddy_id : null;
 
     return (

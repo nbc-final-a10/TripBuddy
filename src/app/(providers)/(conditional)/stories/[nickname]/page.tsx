@@ -1,10 +1,8 @@
-import { getSpecificStories, getStories } from '@/api-services/stories';
+import { getSpecificStories } from '@/api-services/stories';
 import Loading from '@/app/loading';
 import StoryDetail from '@/components/organisms/stories/StoryDetail';
 import { QUERY_KEY_STORY } from '@/constants/query.constants';
 import { StoryWithBuddies } from '@/types/Story.types';
-import { getUserFromHeader } from '@/utils/auth/getUserFromHeader';
-import groupStoriesByBuddyId from '@/utils/stories/groupStoriesByBuddyId';
 import {
     dehydrate,
     HydrationBoundary,

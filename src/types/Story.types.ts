@@ -7,6 +7,10 @@ export type StoryWithBuddies = Story & {
     buddies: Buddy;
 };
 
+export type StoryWithBuddiesAndLikes = StoryWithBuddies & {
+    likes: StoryLikes[];
+};
+
 export type PartialStory = Partial<Story>;
 
 export type StoryData = FormData;

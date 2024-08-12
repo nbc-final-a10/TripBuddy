@@ -9,6 +9,7 @@ import React from 'react';
 import HomePageRecommnedBuddiesList from '../homepage/HomePageRecommendBuddiesList';
 import useRecommendBuddiesQuery from '@/hooks/queries/useRecommendBuddiesQuery';
 import useSpecificBuddyQuery from '@/hooks/queries/useSpecificBuddyQuery';
+import useBuddyQueries from '@/hooks/queries/useBuddyQueries';
 
 type TripDetailProps = {
     id: string;
@@ -29,6 +30,10 @@ const TripDetail: React.FC<TripDetailProps> = ({ id }) => {
         error: recommendBuddiesError,
     } = useRecommendBuddiesQuery();
 
+    const queries = useBuddyQueries(
+        trip?.contract.map(contract => contract.contract_buddy_id) || [],
+    );
+
     if (isPending) return <DefaultLoader />;
     if (tripError) return <div>Error: {tripError.message}</div>;
     if (buddyPending) return <DefaultLoader />;
@@ -48,12 +53,15 @@ const TripDetail: React.FC<TripDetailProps> = ({ id }) => {
                         src={trip.trip_thumbnail}
                         alt="trip image"
                         fill
+                        priority
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 33vw"
                         className="object-cover"
                     />
                 </div>
                 {/** 여행 정보 영역 */}
-                <TripCard trip={trip} mode="detail" />
+                {queries.length > 0 && (
+                    <TripCard trip={trip} mode="detail" queries={queries} />
+                )}
             </div>
 
             {/** 글쓴이 정보 영역 */}

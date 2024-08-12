@@ -4,6 +4,7 @@ import {
     StoryLikes,
     StoryLikesData,
     StoryWithBuddies,
+    StoryWithBuddiesAndLikes,
 } from '@/types/Story.types';
 import fetchWrapper from '@/utils/api/fetchWrapper';
 
@@ -20,10 +21,10 @@ export async function postStory(payload: StoryData): Promise<Story> {
     }
 }
 
-export async function getStories(): Promise<StoryWithBuddies[]> {
+export async function getStories(): Promise<StoryWithBuddiesAndLikes[]> {
     const url = `/api/stories`;
     try {
-        const data = await fetchWrapper<StoryWithBuddies[]>(url, {
+        const data = await fetchWrapper<StoryWithBuddiesAndLikes[]>(url, {
             method: 'GET',
             cache: 'no-store',
         });
