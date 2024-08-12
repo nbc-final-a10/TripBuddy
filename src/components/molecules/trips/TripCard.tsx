@@ -26,6 +26,8 @@ import {
     useContractMutation,
 } from '@/hooks/queries';
 import { useAuth } from '@/hooks';
+import { deleteTrip } from '@/utils/trips/deleteTrip';
+import { NextRouter } from 'next/router';
 
 type TripCardProps = {
     trip: TripWithContract;
@@ -104,6 +106,18 @@ const TripCard: React.FC<TripCardProps> = ({
         }
     };
 
+    const handleDelete = async () => {
+        if (trip && buddy) {
+            await deleteTrip(
+                trip.trip_id,
+                buddy.buddy_id,
+                router as unknown as NextRouter,
+            );
+        } else {
+            showAlert('error', '오류가 발생했습니다.');
+        }
+    };
+
     const handleCreateBookMark = async (
         e: React.MouseEvent<HTMLButtonElement>,
     ) => {
@@ -126,7 +140,7 @@ const TripCard: React.FC<TripCardProps> = ({
             return showAlert('success', '찜하기가 완료되었습니다.');
         }
         if (mode === '삭제하기') {
-            return showAlert('success', '삭제가 완료되었습니다.');
+            return handleDelete();
         }
     };
 
