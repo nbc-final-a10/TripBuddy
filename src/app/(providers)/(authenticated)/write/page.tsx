@@ -93,6 +93,9 @@ const WritePage: React.FC = () => {
         disabled: isLoading,
     });
 
+    console.log('startDateTimestamp', startDateTimestamp);
+    console.log('endDateTimestamp', endDateTimestamp);
+
     type TripData = Tables<'trips'>;
     // 파셜트립데이터는 데이터 컬럼을 선택적으로 쓰겠다
     type PartialTripData = Partial<TripData>;
