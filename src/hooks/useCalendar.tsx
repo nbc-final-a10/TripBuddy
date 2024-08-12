@@ -17,8 +17,13 @@ export default function useCalendar() {
         end: CalendarDate;
     }) => {
         setValue(value);
-        setStartDateTimestamp(value.start.toString());
-        setEndDateTimestamp(value.end.toString());
+        // CalendarDate는 setHours 메서드를 지원하지 않으므로 Date 객체로 변환
+        const startDate = new Date(value.start.toString());
+        const endDate = new Date(value.end.toString());
+        startDate.setHours(23, 59, 59, 999);
+        endDate.setHours(23, 59, 59, 999);
+        setStartDateTimestamp(startDate.toISOString().split('T')[0]);
+        setEndDateTimestamp(endDate.toISOString().split('T')[0]);
     };
 
     function SelectCalendar() {

@@ -29,9 +29,6 @@ export const validateStep = async (step: number, params: any) => {
         const startDate = new Date(startDateTimestamp);
         const endDate = new Date(endDateTimestamp);
 
-        startDate.setHours(23, 59, 59, 999);
-        endDate.setHours(23, 59, 59, 999);
-
         if (startDate > endDate) {
             showAlert('caution', '시작 날짜가 종료 날짜보다 늦습니다.');
             return false;
