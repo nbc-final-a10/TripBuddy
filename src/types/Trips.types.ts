@@ -25,3 +25,8 @@ export type PartialBookMark = Partial<BookMark>;
 export type BookMarkRequest = PartialBookMark & {
     is_bookmarked: boolean;
 };
+
+export type CalendarData = {
+    startDateTimestamp: string;
+    endDateTimestamp: string;
+};

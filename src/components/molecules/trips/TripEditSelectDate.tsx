@@ -6,12 +6,18 @@ import LeftSmGrayText from '@/components/atoms/write/LeftSmGrayText';
 import SelectedResultRealtimeText from '@/components/organisms/write/SelectedResultRealtimeText';
 import { useModal } from '@/contexts/modal.context';
 import { useCalendar } from '@/hooks';
-import React from 'react';
+import { CalendarData } from '@/types/Trips.types';
+import React, { forwardRef } from 'react';
 
-const TripEditSelectDate: React.FC = () => {
+const TripEditSelectDate = forwardRef<CalendarData>((props, ref) => {
     const modal = useModal();
     const { SelectCalendar, startDateTimestamp, endDateTimestamp } =
         useCalendar();
+
+    React.useImperativeHandle(ref, () => ({
+        startDateTimestamp,
+        endDateTimestamp,
+    }));
 
     return (
         <TripEditModalWrapper>
@@ -43,6 +49,8 @@ const TripEditSelectDate: React.FC = () => {
             </Button>
         </TripEditModalWrapper>
     );
-};
+});
+
+TripEditSelectDate.displayName = 'TripEditSelectDate';
 
 export default TripEditSelectDate;

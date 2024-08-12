@@ -34,7 +34,7 @@ function LocationList({
     }, [locations]);
 
     return (
-        <div className="relative">
+        <>
             {/* 도/대륙 목록 */}
             <div
                 className={twMerge(
@@ -85,7 +85,7 @@ function LocationList({
                     </button>
                 </div>
             )} */}
-        </div>
+        </>
     );
 }
 

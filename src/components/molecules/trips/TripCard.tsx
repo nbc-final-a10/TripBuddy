@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Calendar_month from '../../../../public/svg/Calendar_month.svg';
 import Distance from '../../../../public/svg/Distance.svg';
 import Groups from '../../../../public/svg/Groups.svg';
@@ -8,6 +8,7 @@ import clsx from 'clsx';
 import TripTimeSinceUpload from '@/components/atoms/trips/TripTimeSinceUpload';
 import {
     BookMarkRequest,
+    CalendarData,
     PartialBookMark,
     TripWithContract,
 } from '@/types/Trips.types';
@@ -25,17 +26,20 @@ import {
     useBuddyQueries,
     useContractMutation,
 } from '@/hooks/queries';
-import { useAuth, useSelectBuddyCounts, useSelectRegion } from '@/hooks';
+import {
+    useAuth,
+    usePreferTheme,
+    useSelectBuddyCounts,
+    useSelectMeetPlace,
+    useSelectRegion,
+} from '@/hooks';
 import Input from '@/components/atoms/common/Input';
 import TripStartDate from '@/components/atoms/trips/TripStartDate';
-import SelectRegions from '../common/SelectRegion';
-import TripEditModalWrapper from '@/components/atoms/trips/TripEditModalWrapper';
 import { useModal } from '@/contexts/modal.context';
-import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
-import LeftSmGrayText from '@/components/atoms/write/LeftSmGrayText';
-import Button from '@/components/atoms/common/Button';
 import TripEditSelectRegion from './TripEditSelectRegion';
 import TripEditSelectDate from './TripEditSelectDate';
+import TripEditTripTheme from './TripEditTripTheme';
+import { SelectRegionPageProps } from '@/types/Location.types';
 
 type TripCardProps = {
     trip: TripWithContract;
@@ -62,6 +66,9 @@ const TripCard: React.FC<TripCardProps> = ({
     //     id: trip.trip_id,
     // });
 
+    const selectRegionRef = useRef<SelectRegionPageProps>(null);
+    const selectDateRef = useRef<CalendarData>(null);
+
     const {
         data: bookMark,
         isPending: isBookMarkPending,
@@ -87,6 +94,14 @@ const TripCard: React.FC<TripCardProps> = ({
     const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts({
         initialCounts: trip.trip_max_buddies_counts,
     });
+
+    const { meetPlace, SelectMeetPlaceButton } = useSelectMeetPlace();
+
+    const [PreferTripThemesToRender, selectedTripThemes] = usePreferTheme({
+        mode: 'trip',
+    });
+
+    console.log(selectDateRef.current);
 
     const modal = useModal();
 
@@ -163,9 +178,17 @@ const TripCard: React.FC<TripCardProps> = ({
     const handleChipClickWhenIsEdit = (
         e: React.MouseEvent<HTMLSpanElement>,
     ) => {
+        if (!isEdit) return;
         const mode = e.currentTarget.dataset.mode;
         if (mode === 'trip_theme') {
-            console.log('trip_theme');
+            return modal.openModal({
+                component: () => (
+                    <TripEditTripTheme
+                        PreferThemeToRender={PreferTripThemesToRender}
+                        SelectMeetPlaceButton={SelectMeetPlaceButton}
+                    />
+                ),
+            });
         } else if (mode === 'trip_wanted_sex') {
             console.log('trip_wanted_sex');
         }
@@ -174,14 +197,14 @@ const TripCard: React.FC<TripCardProps> = ({
     const handleClickDestination = () => {
         if (isEdit)
             return modal.openModal({
-                component: () => <TripEditSelectRegion />,
+                component: () => <TripEditSelectRegion ref={selectRegionRef} />,
             });
     };
 
     const handleClickStartDate = (e: React.MouseEvent<HTMLSpanElement>) => {
         if (isEdit)
             return modal.openModal({
-                component: () => <TripEditSelectDate />,
+                component: () => <TripEditSelectDate ref={selectDateRef} />,
             });
     };
 

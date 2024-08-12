@@ -19,7 +19,7 @@ const WelcomePage: React.FC<WelcomePageProps> = ({
             <div className="mt-4" />
             <div
                 className={twMerge(
-                    'flex justify-center h-[230px] w-[300px] xl:h-[400px] xl:w-[400px]',
+                    'flex justify-center h-[230px] w-[300px] xl:h-[300px] xl:w-[300px]',
                     isMini && 'h-[180px] w-[200px]',
                 )}
             >

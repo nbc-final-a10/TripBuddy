@@ -1,17 +1,34 @@
 import LocationList from '@/components/atoms/write/LocationList';
 import LocationToggleButton from '@/components/atoms/write/LocationToggleButton';
+import { SecondLevel, ThirdLevel } from '@/types/Location.types';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import ThirdLevelSection from '../onboarding/ThirdLevelSection';
-import { useSelectRegion } from '@/hooks';
 
 type SelectRegionProps = {
+    actions: {
+        handleLocationTypeClick: (isKoreaSelected: boolean) => void;
+        handleChipClick: (name: string) => void;
+        handleThirdLevelClick: (locName: string) => void;
+    };
+    states: {
+        firstLevelLocation: string;
+        secondLevelLocation: string | null;
+        selectedSecondLevelLocations: ThirdLevel[];
+        thirdLevelLocation: string;
+        secondLevelLocations: SecondLevel[];
+    };
     className?: string;
 } & React.RefAttributes<HTMLElement>;
 
 const SelectRegions = forwardRef<HTMLElement, SelectRegionProps>(
-    ({ className }, ref) => {
-        const {
+    (
+        {
+            actions: {
+                handleLocationTypeClick,
+                handleChipClick,
+                handleThirdLevelClick,
+            },
             states: {
                 firstLevelLocation,
                 secondLevelLocation,
@@ -19,12 +36,10 @@ const SelectRegions = forwardRef<HTMLElement, SelectRegionProps>(
                 selectedSecondLevelLocations,
                 secondLevelLocations,
             },
-            actions: {
-                handleLocationTypeClick,
-                handleChipClick,
-                handleThirdLevelClick,
-            },
-        } = useSelectRegion();
+            className,
+        },
+        ref,
+    ) => {
         const [innerHeight, setInnerHeight] = useState<number | null>(null);
 
         useEffect(() => {
@@ -32,7 +47,7 @@ const SelectRegions = forwardRef<HTMLElement, SelectRegionProps>(
         }, []);
 
         return (
-            <div className={className}>
+            <div className={twMerge('relative', className)}>
                 {/* 국내/해외 스위치 버튼 */}
                 <section className="relative h-[10%]">
                     <LocationToggleButton
