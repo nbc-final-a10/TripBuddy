@@ -3,21 +3,27 @@
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
 import TripCard from '@/components/molecules/trips/TripCard';
-import useTripQuery from '@/hooks/queries/useTripQuery';
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect } from 'react';
 import HomePageRecommnedBuddiesList from '../homepage/HomePageRecommendBuddiesList';
-import useRecommendBuddiesQuery from '@/hooks/queries/useRecommendBuddiesQuery';
-import useSpecificBuddyQuery from '@/hooks/queries/useSpecificBuddyQuery';
-import useBuddyQueries from '@/hooks/queries/useBuddyQueries';
+import {
+    useBuddyQueries,
+    useRecommendBuddiesQuery,
+    useSpecificBuddyQuery,
+    useTripQuery,
+} from '@/hooks/queries';
+import { showAlert } from '@/utils/ui/openCustomAlert';
+import { useRouter } from 'next/navigation';
+import SelectImage from '../../../../public/svg/SelectImage.svg';
 
 type TripDetailProps = {
     id: string;
+    mode: 'edit' | 'detail';
 };
 
-const TripDetail: React.FC<TripDetailProps> = ({ id }) => {
+const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
     const { data: trip, isPending, error: tripError } = useTripQuery(id);
-
+    const router = useRouter();
     const {
         data: buddy,
         isPending: buddyPending,
@@ -34,13 +40,27 @@ const TripDetail: React.FC<TripDetailProps> = ({ id }) => {
         trip?.contract.map(contract => contract.contract_buddy_id) || [],
     );
 
+    useEffect(() => {
+        if (tripError || buddyError || recommendBuddiesError) {
+            showAlert(
+                'error',
+                tripError?.message ||
+                    buddyError?.message ||
+                    recommendBuddiesError?.message ||
+                    '에러가 발생했습니다.',
+                {
+                    onConfirm: () => {
+                        router.refresh();
+                    },
+                },
+            );
+        }
+    }, [tripError, buddyError, recommendBuddiesError, router]);
+
     if (isPending) return <DefaultLoader />;
-    if (tripError) return <div>Error: {tripError.message}</div>;
     if (buddyPending) return <DefaultLoader />;
-    if (buddyError) return <div>Error: {buddyError.message}</div>;
     if (recommendBuddiesPending) return <DefaultLoader />;
-    if (recommendBuddiesError)
-        return <div>Error: {recommendBuddiesError.message}</div>;
+    if (!trip || !buddy || !recommendBuddies) return null;
 
     // 마스터 아이디로 유저 찾아오는 로직 추가할 것
     return (
@@ -49,6 +69,13 @@ const TripDetail: React.FC<TripDetailProps> = ({ id }) => {
             <div className="relative h-full flex flex-col">
                 {/** 이미지 영역 */}
                 <div className="h-[217px] bg-gray-40 relative aspect-auto">
+                    {mode === 'edit' && (
+                        <div className="absolute h-full w-full top-0 right-0 bg-black/55 z-10 flex justify-center items-center">
+                            <button className="bg-grayscale-color-500/70 rounded p-1">
+                                <SelectImage />
+                            </button>
+                        </div>
+                    )}
                     <Image
                         src={trip.trip_thumbnail}
                         alt="trip image"
@@ -60,7 +87,12 @@ const TripDetail: React.FC<TripDetailProps> = ({ id }) => {
                 </div>
                 {/** 여행 정보 영역 */}
                 {queries.length > 0 && (
-                    <TripCard trip={trip} mode="detail" queries={queries} />
+                    <TripCard
+                        trip={trip}
+                        mode="detail"
+                        queries={queries}
+                        isEdit={mode === 'edit'}
+                    />
                 )}
             </div>
 

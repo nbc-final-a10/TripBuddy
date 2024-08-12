@@ -1,5 +1,5 @@
 'use client';
-import useCheckPwa from '@/hooks/useCheckPwa';
+import useCheckPwa from '@/hooks/common/useCheckPwa';
 import { useEffect, useState } from 'react';
 
 // TypeScript 인터페이스 정의

@@ -1,10 +1,10 @@
 'use client';
 
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import { useAuth } from '@/hooks/auth';
 import React, { useEffect, useState } from 'react';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 import { useQueryClient } from '@tanstack/react-query';
+import { useAuth } from '@/hooks';
 
 export default function FollowButton() {
     const { buddy } = useAuth();

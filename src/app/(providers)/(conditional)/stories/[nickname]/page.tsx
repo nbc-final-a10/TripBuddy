@@ -1,4 +1,4 @@
-import { getSpecificStories } from '@/api-services/stories';
+import { getSpecificStory } from '@/api-services/stories';
 import Loading from '@/app/loading';
 import StoryDetail from '@/components/organisms/stories/StoryDetail';
 import { QUERY_KEY_STORY } from '@/constants/query.constants';
@@ -28,7 +28,7 @@ const StoryPage: React.FC<StoryPageProps> = async ({
     await queryClient.prefetchQuery({
         queryKey: [QUERY_KEY_STORY, id],
         // queryFn: () => getStories(),
-        queryFn: () => getSpecificStories(id),
+        queryFn: () => getSpecificStory(id),
     });
     const dehydratedState = dehydrate(queryClient);
 

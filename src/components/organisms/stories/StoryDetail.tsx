@@ -1,19 +1,20 @@
 'use client';
 
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
-import useTapScroll from '@/hooks/useTapScroll';
 import { StoryOverlay, StoryWithBuddies } from '@/types/Story.types';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { MouseEvent, useRef, useState, useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Close from '../../../../public/svg/Close.svg';
-import { useAuth } from '@/hooks/auth';
-import useDeleteStoryMutation from '@/hooks/queries/useDeleteStoryMutation';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import useSpecificStoriesQuery from '@/hooks/queries/useSpecificStoriesQuery';
 import LikesButton from '@/components/atoms/stories/LikesButton';
-import useStoryLikesQuery from '@/hooks/queries/useStoryLikesQuery';
+import {
+    useDeleteStoryMutation,
+    useSpecificStoryQuery,
+    useStoryLikesQuery,
+} from '@/hooks/queries';
+import { useAuth, useTapScroll } from '@/hooks';
 
 type StoryDetailProps = {
     nickname: string;
@@ -31,7 +32,7 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
         data: queryStories,
         isPending,
         error: selectedStoriesError,
-    } = useSpecificStoriesQuery(id);
+    } = useSpecificStoryQuery(id);
     const {
         mutate: deleteStory,
         isPending: isDeleting,

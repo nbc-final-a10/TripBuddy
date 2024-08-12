@@ -4,11 +4,11 @@ import clsx from 'clsx';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { FormEvent, useEffect, useState } from 'react';
 import { SubmitButton } from '../../atoms/common/SubmitButton';
-import { useAuth } from '@/hooks/auth';
 import { authValidation } from '@/utils/auth/validation';
 import AuthSubText from '@/components/atoms/auth/AuthSubText';
 import { twMerge } from 'tailwind-merge';
 import Input from '@/components/atoms/common/Input';
+import { useAuth } from '@/hooks';
 
 function LogInForm() {
     const { isPending, logIn, sendingResetEmail } = useAuth();

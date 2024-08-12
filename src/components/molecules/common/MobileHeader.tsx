@@ -7,8 +7,8 @@ import Notification from '../../../../public/svg/Alarm.svg';
 import Search from '../../../../public/svg/HomeSearch.svg';
 import MobileHeaderSettingsButton from '@/components/atoms/common/MobileHeaderSettingsButton';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useAuth } from '@/hooks/auth';
-import useTripQuery from '@/hooks/queries/useTripQuery';
+import { useTripQuery } from '@/hooks/queries';
+import { useAuth } from '@/hooks';
 
 const MobileHeader: React.FC = () => {
     const pathname = usePathname();

@@ -4,7 +4,7 @@ import OnBoardingInnerWrapper from '@/components/atoms/onboarding/OnBoardinginne
 import OnBoardingWrapper from '@/components/atoms/onboarding/OnBoardingWrapper';
 import SelectRegions from '@/components/molecules/common/SelectRegion';
 import { mbtis } from '@/data/mbtis';
-import useSelectRegion from '@/hooks/useSelectRegion';
+import { useSelectRegion } from '@/hooks';
 import React, { MouseEvent } from 'react';
 
 type OnBoardingSelectLocationMbtiProps = {
