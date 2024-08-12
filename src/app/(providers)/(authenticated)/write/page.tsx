@@ -47,7 +47,9 @@ const WritePage: React.FC = () => {
 
     const { buddy } = useAuth();
     const router = useRouter();
-    const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
+    const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts({
+        initialCounts: 2,
+    });
     const { SelectCalendar, startDateTimestamp, endDateTimestamp } =
         useCalendar();
     const { actions, states } = useSelectRegion();

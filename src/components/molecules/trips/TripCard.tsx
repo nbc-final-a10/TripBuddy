@@ -25,7 +25,7 @@ import {
     useBuddyQueries,
     useContractMutation,
 } from '@/hooks/queries';
-import { useAuth } from '@/hooks';
+import { useAuth, useSelectBuddyCounts } from '@/hooks';
 import Input from '@/components/atoms/common/Input';
 
 type TripCardProps = {
@@ -74,6 +74,10 @@ const TripCard: React.FC<TripCardProps> = ({
         isPending: isBookMarkMutationPending,
         error: bookMarkMutationError,
     } = useBookMarkMutation();
+
+    const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts({
+        initialCounts: trip.trip_max_buddies_counts,
+    });
 
     const handleCreateContract = async (
         e: React.MouseEvent<HTMLButtonElement>,
@@ -353,7 +357,12 @@ const TripCard: React.FC<TripCardProps> = ({
 
                             <div className="flex gap-2 items-center">
                                 <Calendar_month />
-                                <span>
+                                <span
+                                    className={twMerge(
+                                        'realative',
+                                        isEdit && 'animate-pulse',
+                                    )}
+                                >
                                     {new Date(
                                         trip.trip_start_date,
                                     ).toLocaleDateString('ko-KR', {
@@ -367,7 +376,14 @@ const TripCard: React.FC<TripCardProps> = ({
                             {/** 추후 수정 필요 */}
                             <div className="flex gap-2 items-center">
                                 <Groups />
-                                <span>{`${(trip.contract as Contract[]).length}/${trip.trip_max_buddies_counts}`}</span>
+                                {!isEdit ? (
+                                    <span>{`${(trip.contract as Contract[]).length}/${trip.trip_max_buddies_counts}`}</span>
+                                ) : (
+                                    <SelectBuddyCounts
+                                        className="w-[10px] h-[10px] xl:w-[20px] xl:h-[20px]"
+                                        isEdit
+                                    />
+                                )}
                             </div>
                         </div>
 

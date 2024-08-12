@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 // type useSelectBuddyCountsProps = {
 //     buddyCounts: number;
@@ -9,8 +10,14 @@ import React, { useState } from 'react';
 //     SelectBuddyCounts: () => React.JSX.Element;
 // };
 
-export function useSelectBuddyCounts() {
-    const [buddyCounts, setBuddyCounts] = useState<number>(2);
+type useSelectBuddyCountsProps = {
+    initialCounts?: number;
+};
+
+export function useSelectBuddyCounts({
+    initialCounts = 2,
+}: useSelectBuddyCountsProps) {
+    const [buddyCounts, setBuddyCounts] = useState<number>(initialCounts);
 
     const handleAddBuddyCounts = () => {
         // setBuddyCounts(buddyCounts + 1);
@@ -24,11 +31,25 @@ export function useSelectBuddyCounts() {
 
     // console.log('buddyCounts', buddyCounts);
 
-    const SelectBuddyCounts = () => {
+    const SelectBuddyCounts = ({
+        className,
+        isEdit = false,
+    }: {
+        className?: string;
+        isEdit?: boolean;
+    }) => {
         return (
-            <div className="flex justify-center items-center mx-auto flex-row gap-[2px]">
+            <div
+                className={twMerge(
+                    'flex justify-center items-center mx-auto flex-row gap-[2px]',
+                    isEdit && 'mx-0',
+                )}
+            >
                 <button
-                    className="text-[#647484] w-[30px] h-[30px] xl:w-[50px] xl:h-[50px] bg-[#edeff1] hover:bg-gray-400 flex items-center justify-center"
+                    className={twMerge(
+                        'text-[#647484] w-[30px] h-[30px] xl:w-[50px] xl:h-[50px] bg-[#edeff1] hover:bg-gray-400 flex items-center justify-center cursor-pointer',
+                        className,
+                    )}
                     onClick={handleSubBuddyCounts}
                     disabled={buddyCounts === 2}
                 >
@@ -41,12 +62,20 @@ export function useSelectBuddyCounts() {
                     readOnly
                     name="custom-input-number"
                 />
-                <div className="bg-main-color w-[30px] h-[30px] xl:w-[50px] xl:h-[50px] text-white md:text-base flex items-center justify-center cursor-default">
+                <div
+                    className={twMerge(
+                        'bg-main-color w-[30px] h-[30px] xl:w-[50px] xl:h-[50px] text-white md:text-base flex items-center justify-center cursor-default',
+                        className,
+                    )}
+                >
                     <span>{buddyCounts}</span>
                 </div>
 
                 <button
-                    className="text-[#647484] w-[30px] h-[30px] xl:w-[50px] xl:h-[50px] bg-[#edeff1] hover:bg-gray-400 flex items-center justify-center"
+                    className={twMerge(
+                        'text-[#647484] w-[30px] h-[30px] xl:w-[50px] xl:h-[50px] bg-[#edeff1] hover:bg-gray-400 flex items-center justify-center cursor-pointer',
+                        className,
+                    )}
                     onClick={handleAddBuddyCounts}
                     disabled={buddyCounts === 4}
                 >
