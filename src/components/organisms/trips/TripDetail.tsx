@@ -21,6 +21,7 @@ import Navigate from '@/components/atoms/common/Navigate';
 import { useModal } from '@/contexts/modal.context';
 import { PartialTrip, TripEditTextData } from '@/types/Trips.types';
 import TripEditText from '@/components/molecules/trips/TripEditText';
+import Input from '@/components/atoms/common/Input';
 
 type TripDetailProps = {
     id: string;
@@ -28,8 +29,13 @@ type TripDetailProps = {
 };
 
 const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
-    const [tripData, setTripData] = useState<PartialTrip | null>(null);
     const { data: trip, isPending, error: tripError } = useTripQuery(id);
+    const [tripImage, setTripImage] = useState<string | null>(
+        trip?.trip_thumbnail || null,
+    ); // 옵티미스틱용
+    const [tripData, setTripData] = useState<PartialTrip | null>(null);
+    const [tripImageFile, setTripImageFile] = useState<File | null>(null); // 실제 업로드용
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const buddiesRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
     const modal = useModal();
@@ -61,6 +67,20 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
         tripContent: string;
     }) => {
         setTripTitleContent(data);
+    };
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            setTripImage(objectUrl);
+            setTripImageFile(file);
+        }
+    };
+
+    const handleSvgButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        fileInputRef.current?.click();
     };
 
     const handleTextEditClick = () => {
@@ -119,12 +139,23 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
                     {mode === 'edit' && (
                         <div className="absolute h-full w-full top-0 right-0 bg-black/55 z-10 flex justify-center items-center">
                             <button className="bg-grayscale-color-500/70 rounded p-1">
-                                <SelectImage className="w-full h-full animate-pulse" />
+                                <Input
+                                    type="file"
+                                    accept="image/*"
+                                    intent={false}
+                                    name="trip_image"
+                                    onChange={handleImageChange}
+                                    ref={fileInputRef}
+                                />
+                                <SelectImage
+                                    className="w-full h-full animate-pulse"
+                                    onClick={handleSvgButtonClick}
+                                />
                             </button>
                         </div>
                     )}
                     <Image
-                        src={trip.trip_thumbnail}
+                        src={tripImage || trip.trip_thumbnail}
                         alt="trip image"
                         fill
                         priority

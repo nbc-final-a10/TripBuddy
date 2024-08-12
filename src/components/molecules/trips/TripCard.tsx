@@ -353,14 +353,8 @@ const TripCard: React.FC<TripCardProps> = ({
                                     {trip.trip_title}
                                 </h3>
                             ) : (
-                                // <Input
-                                //     ref={tripTitleRef}
-                                //     type="text"
-                                //     className="text-lg font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap animate-pulse"
-                                //     placeholder={trip.trip_title}
-                                // ></Input>
                                 <button
-                                    className="text-lg font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap animate-pulse"
+                                    className="text-lg font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap animate-pulse text-left"
                                     onClick={handleClickTripTitle}
                                 >
                                     {trip.trip_title}
