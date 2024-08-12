@@ -137,7 +137,6 @@ const TripCard: React.FC<TripCardProps> = ({
         }
     }, [isContractMutationSuccess]);
 
-    console.log(remainDays(trip.trip_start_date));
     return (
         <>
             {/* {isBookMarkPending && <DefaultLoader />} */}
