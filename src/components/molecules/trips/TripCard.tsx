@@ -27,7 +27,8 @@ import {
 } from '@/hooks/queries';
 import { useAuth } from '@/hooks';
 import { deleteTrip } from '@/utils/trips/deleteTrip';
-import { NextRouter } from 'next/router';
+import { useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEY_TRIP_INFINITE } from '@/constants/query.constants';
 
 type TripCardProps = {
     trip: TripWithContract;
@@ -44,6 +45,7 @@ const TripCard: React.FC<TripCardProps> = ({
 }) => {
     const { buddy } = useAuth();
     const router = useRouter();
+    const queryClient = useQueryClient();
 
     // const {
     //     data: contract,
@@ -108,11 +110,25 @@ const TripCard: React.FC<TripCardProps> = ({
 
     const handleDelete = async () => {
         if (trip && buddy) {
-            await deleteTrip(
-                trip.trip_id,
-                buddy.buddy_id,
-                router as unknown as NextRouter,
-            );
+            showAlert('caution', '정말로 삭제하시겠습니까?', {
+                onConfirm: async () => {
+                    const response = await deleteTrip(
+                        trip.trip_id,
+                        buddy.buddy_id,
+                    );
+                    if (response && response.status === 200) {
+                        showAlert('success', '삭제되었습니다.', {
+                            onConfirm: () => {
+                                queryClient.invalidateQueries({
+                                    queryKey: [QUERY_KEY_TRIP_INFINITE],
+                                });
+                                router.push('/trips');
+                            },
+                        });
+                    }
+                },
+                isConfirm: true,
+            });
         } else {
             showAlert('error', '오류가 발생했습니다.');
         }
@@ -313,7 +329,7 @@ const TripCard: React.FC<TripCardProps> = ({
                                         trip.trip_start_date,
                                     ).toLocaleDateString('ko-KR', {
                                         month: 'numeric', // 월 숫자로 표시
-                                        day: 'numeric', // 일 숫자로 표시
+                                        day: 'numeric', // 일 자로 표시
                                         weekday: 'short', // 요일을 짧은 형식으로 표시 (e.g., 'Mon', 'Tue')
                                     })}
                                 </span>
