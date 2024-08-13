@@ -43,15 +43,16 @@ const BuddyTemperature = ({
                 </div>
             )}
             {/* 버디 온도 아이콘 5개 */}
+            {/* Todo: 버디프로필 페이지 말고 다른 곳에서는 스마일 아이콘이 xl에서 커지면 안 됨 */}
             <div className="flex justify-between mt-1">
                 {smileIcons.map((icon, index) => (
                     <Image
                         key={index}
                         src={icon}
-                        alt={`smile ${index + 1}`}
+                        alt={`smile icon ${index + 1}`}
                         width={8}
                         height={8}
-                        className="xl:w-4 xl:h-4"
+                        // className="xl:w-4 xl:h-4"
                         style={{
                             // opacity: temperature >= thresholds[index] ? 1 : 0.3,
                             filter:
