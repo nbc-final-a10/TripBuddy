@@ -87,8 +87,8 @@ export default function BuddyProfile({
                         )}
                         {/* 지역 */}
                         {clickedBuddy?.buddy_region ? (
-                            <p className="mt-2 text-gray-500">
-                                {clickedBuddy?.buddy_region}
+                            <p className="mt-2 text-gray-500 font-bold">
+                                {clickedBuddy?.buddy_region} 거주
                             </p>
                         ) : (
                             <p className="mt-2 text-gray-500">
