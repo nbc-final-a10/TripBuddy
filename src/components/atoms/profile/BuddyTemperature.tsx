@@ -35,10 +35,10 @@ const BuddyTemperature = ({
             {isLabel && (
                 <div className="flex w-full justify-between">
                     <span className="block text-left xl:text-xl">
-                        버디 온도
+                        버디즈 지수
                     </span>
                     <span className="text-gray-500">
-                        {temperature ? `${temperature} °C` : '온도정보없음'}
+                        {temperature ? `${temperature} %` : '정보없음'}
                     </span>
                 </div>
             )}
