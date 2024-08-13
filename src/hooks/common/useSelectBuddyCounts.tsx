@@ -34,9 +34,11 @@ export function useSelectBuddyCounts({
     const SelectBuddyCounts = ({
         className,
         isEdit = false,
+        initialValue = 2,
     }: {
         className?: string;
         isEdit?: boolean;
+        initialValue?: number;
     }) => {
         return (
             <div
@@ -51,7 +53,7 @@ export function useSelectBuddyCounts({
                         className,
                     )}
                     onClick={handleSubBuddyCounts}
-                    disabled={buddyCounts === 2}
+                    disabled={buddyCounts <= initialValue}
                 >
                     -
                 </button>

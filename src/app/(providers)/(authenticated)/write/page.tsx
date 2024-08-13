@@ -135,6 +135,7 @@ const WritePage: React.FC = () => {
                 body: formData,
                 headers: {
                     user: buddy?.buddy_id ?? '', // 헤더에 사용자 ID 포함
+                    mode: 'new',
                 },
             });
             if (response.ok) {

@@ -6,8 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 export function useTripMutation() {
     const queryClient = useQueryClient();
     return useMutation<TripWithContract, Error, TripMutationData>({
-        mutationFn: newTripData =>
-            postTrip({ newTrip: newTripData.newTrip, id: newTripData.id }),
+        mutationFn: newTripData => postTrip(newTripData),
         onSuccess: newTrip => {
             queryClient.invalidateQueries({
                 queryKey: [QUERY_KEY_TRIP, newTrip.trip_id],

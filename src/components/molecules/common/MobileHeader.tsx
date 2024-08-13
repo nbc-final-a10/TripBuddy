@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Arrow_Back from '../../../../public/svg/Arrow_back.svg';
 import Close from '../../../../public/svg/Close.svg';
 import Notification from '../../../../public/svg/Alarm.svg';
@@ -10,6 +10,8 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTripQuery } from '@/hooks/queries';
 import { useAuth } from '@/hooks';
 import { useModal } from '@/contexts/modal.context';
+import { getTrip } from '@/api-services/trips';
+import { TripWithContract } from '@/types/Trips.types';
 
 const MobileHeader: React.FC = () => {
     const pathname = usePathname();
@@ -17,7 +19,7 @@ const MobileHeader: React.FC = () => {
     const router = useRouter();
     const { buddy } = useAuth();
     const modal = useModal();
-
+    const [trip, setTrip] = useState<TripWithContract | null>(null);
     const uuidMatch = pathname.match(/\/([^\/]+)\/([0-9a-fA-F-]{36})$/);
     const uuid = uuidMatch ? uuidMatch[2] : null;
     const isMyProfile = uuid === buddy?.buddy_id;
@@ -38,7 +40,7 @@ const MobileHeader: React.FC = () => {
     const isStoryWrite = pathname === '/write/story';
     const isNotification = pathname === '/notifications';
 
-    const { data: trip } = useTripQuery(isTripDetail && uuid ? uuid : null);
+    // const { data: trip } = useTripQuery(isTripDetail && uuid ? uuid : null);
 
     const headerTitle =
         (isTrips && '모집중 여정') ||
@@ -86,6 +88,16 @@ const MobileHeader: React.FC = () => {
             router.back();
         }
     };
+
+    useEffect(() => {
+        async function fetchTrip() {
+            if (uuid) {
+                const trip = await getTrip(uuid);
+                setTrip(trip);
+            }
+        }
+        fetchTrip();
+    }, [uuid]);
 
     if (!isShow) return null;
 

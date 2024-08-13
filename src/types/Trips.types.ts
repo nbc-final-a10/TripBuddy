@@ -52,4 +52,5 @@ export type TripEditTextData = {
 export type TripMutationData = {
     newTrip: FormData;
     id: string;
+    mode: 'new' | 'patch';
 };

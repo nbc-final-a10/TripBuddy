@@ -49,6 +49,10 @@ type TripCardProps = {
         tripTitle: string;
         tripContent: string;
     }) => void;
+    tripTitleContent?: {
+        tripTitle: string;
+        tripContent: string;
+    };
 };
 
 const TripCard: React.FC<TripCardProps> = ({
@@ -58,6 +62,7 @@ const TripCard: React.FC<TripCardProps> = ({
     isEdit = false,
     handleTripDataChange = () => {},
     handleTripTitleChange = () => {},
+    tripTitleContent,
 }) => {
     const { buddy } = useAuth();
     const router = useRouter();
@@ -121,6 +126,7 @@ const TripCard: React.FC<TripCardProps> = ({
 
         if (mode === '수정완료') {
             const tripData: PartialTrip = {
+                trip_id: trip.trip_id,
                 trip_master_id: buddy.buddy_id,
                 trip_max_buddies_counts:
                     buddyCounts ?? trip.trip_max_buddies_counts,
@@ -131,8 +137,10 @@ const TripCard: React.FC<TripCardProps> = ({
                     selectDateRef.current?.endDateTimestamp ??
                     trip.trip_end_date,
                 trip_final_destination:
-                    `${selectRegionRef.current?.states?.secondLevelLocation} ${selectRegionRef.current?.states?.thirdLevelLocation}` ??
-                    trip.trip_final_destination,
+                    selectRegionRef.current?.states?.secondLevelLocation &&
+                    selectRegionRef.current?.states?.thirdLevelLocation
+                        ? `${selectRegionRef.current?.states?.secondLevelLocation} ${selectRegionRef.current?.states?.thirdLevelLocation}`
+                        : trip.trip_final_destination,
                 trip_meet_location:
                     selectTripThemeRef.current?.meetPlace ??
                     trip.trip_meet_location,
@@ -163,6 +171,7 @@ const TripCard: React.FC<TripCardProps> = ({
                 trip_end_age:
                     selectGenderBuddyThemeRef.current?.endAge ??
                     trip.trip_end_age,
+                trip_thumbnail: trip.trip_thumbnail,
             };
 
             handleTripDataChange(tripData);
@@ -361,7 +370,8 @@ const TripCard: React.FC<TripCardProps> = ({
                                     className="text-lg font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap animate-pulse text-left"
                                     onClick={handleClickTripTitle}
                                 >
-                                    {trip.trip_title}
+                                    {tripTitleContent?.tripTitle ??
+                                        trip.trip_title}
                                 </button>
                             )}
 
@@ -380,7 +390,9 @@ const TripCard: React.FC<TripCardProps> = ({
                                         }
                                         onClick={handleChipClickWhenIsEdit}
                                     >
-                                        {trip.trip_theme1}
+                                        {selectTripThemeRef.current
+                                            ?.selectedTripThemes[0] ??
+                                            trip.trip_theme1}
                                     </Chip>
                                     <Chip
                                         selected={false}
@@ -393,7 +405,9 @@ const TripCard: React.FC<TripCardProps> = ({
                                         }
                                         onClick={handleChipClickWhenIsEdit}
                                     >
-                                        {trip.trip_theme2}
+                                        {selectTripThemeRef.current
+                                            ?.selectedTripThemes[1] ??
+                                            trip.trip_theme2}
                                     </Chip>
                                     <Chip
                                         selected={false}
@@ -406,7 +420,9 @@ const TripCard: React.FC<TripCardProps> = ({
                                         }
                                         onClick={handleChipClickWhenIsEdit}
                                     >
-                                        {trip.trip_theme3}
+                                        {selectTripThemeRef.current
+                                            ?.selectedTripThemes[2] ??
+                                            trip.trip_theme3}
                                     </Chip>
                                     <Chip
                                         selected={false}
@@ -419,7 +435,8 @@ const TripCard: React.FC<TripCardProps> = ({
                                         }
                                         onClick={handleChipClickWhenIsEdit}
                                     >
-                                        {trip.trip_wanted_sex}
+                                        {selectGenderBuddyThemeRef.current
+                                            ?.wantedSex ?? trip.trip_wanted_sex}
                                     </Chip>
                                 </div>
 
@@ -448,14 +465,23 @@ const TripCard: React.FC<TripCardProps> = ({
                                     )}
                                     onClick={handleClickDestination}
                                 >
-                                    {trip.trip_final_destination}
+                                    {selectRegionRef.current?.states
+                                        ?.secondLevelLocation &&
+                                    selectRegionRef.current?.states
+                                        ?.thirdLevelLocation
+                                        ? `${selectRegionRef.current?.states?.secondLevelLocation} ${selectRegionRef.current?.states?.thirdLevelLocation}`
+                                        : trip.trip_final_destination}
                                 </span>
                             </div>
 
                             <div className="flex gap-2 items-center">
                                 <Calendar_month />
                                 <TripStartDate
-                                    startDate={trip.trip_start_date}
+                                    startDate={
+                                        selectDateRef.current
+                                            ?.startDateTimestamp ??
+                                        trip.trip_start_date
+                                    }
                                     className={
                                         isEdit
                                             ? 'cursor-pointer animate-pulse'
@@ -474,6 +500,9 @@ const TripCard: React.FC<TripCardProps> = ({
                                     <SelectBuddyCounts
                                         className="w-[18px] h-[18px] xl:w-[20px] xl:h-[20px]"
                                         isEdit
+                                        initialValue={
+                                            (trip.contract as Contract[]).length
+                                        }
                                     />
                                 )}
                             </div>

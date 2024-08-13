@@ -4,12 +4,13 @@ import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
 import TripCard from '@/components/molecules/trips/TripCard';
 import Image from 'next/image';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import HomePageRecommnedBuddiesList from '../homepage/HomePageRecommendBuddiesList';
 import {
     useBuddyQueries,
     useRecommendBuddiesQuery,
     useSpecificBuddyQuery,
+    useTripMutation,
     useTripQuery,
 } from '@/hooks/queries';
 import { showAlert } from '@/utils/ui/openCustomAlert';
@@ -18,7 +19,7 @@ import SelectImage from '../../../../public/svg/SelectImage.svg';
 import { useTapScroll } from '@/hooks';
 import Navigate from '@/components/atoms/common/Navigate';
 import { useModal } from '@/contexts/modal.context';
-import { PartialTrip, TripEditTextData } from '@/types/Trips.types';
+import { PartialTrip } from '@/types/Trips.types';
 import TripEditText from '@/components/molecules/trips/TripEditText';
 import Input from '@/components/atoms/common/Input';
 import HomePageTitle from '@/components/molecules/homepage/HomePageTitle';
@@ -30,8 +31,8 @@ type TripDetailProps = {
 
 const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
     const { data: trip, isPending, error: tripError } = useTripQuery(id);
-    const [tripImage, setTripImage] = useState<string | null>(
-        trip?.trip_thumbnail || null,
+    const [tripImage, setTripImage] = useState<string>(
+        trip?.trip_thumbnail as string,
     ); // 옵티미스틱용
     const [tripData, setTripData] = useState<PartialTrip | null>(null);
     const [tripImageFile, setTripImageFile] = useState<File | null>(null); // 실제 업로드용
@@ -39,10 +40,15 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
     const buddiesRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
     const modal = useModal();
-    const [tripTitleContent, setTripTitleContent] = useState({
-        tripTitle: trip?.trip_title,
-        tripContent: trip?.trip_content,
+
+    const [tripTitleContent, setTripTitleContent] = useState<{
+        tripTitle: string;
+        tripContent: string;
+    }>({
+        tripTitle: trip?.trip_title || '',
+        tripContent: trip?.trip_content || '',
     });
+
     const {
         data: buddy,
         isPending: buddyPending,
@@ -58,6 +64,12 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
     const queries = useBuddyQueries(
         trip?.contract.map(contract => contract.contract_buddy_id) || [],
     );
+
+    const {
+        mutate: postTrip,
+        isPending: postTripPending,
+        error: postTripError,
+    } = useTripMutation();
 
     const { createScrollLeft, createScrollRight } =
         useTapScroll({ refs: [buddiesRef] }) ?? {};
@@ -94,7 +106,7 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
 
     const handleTripDataChange = (data: PartialTrip) => setTripData(data);
 
-    const handleWriteTrip = async () => {
+    const handleWriteTrip = useCallback(async () => {
         const newTripData: PartialTrip = {
             ...tripData,
             trip_content: tripTitleContent.tripContent,
@@ -107,15 +119,22 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
         } else {
             formData.append('trip_json', JSON.stringify(newTripData));
         }
-    };
+        postTrip({ newTrip: formData, id: id, mode: 'patch' });
+        showAlert('success', '여정 수정이 완료되었습니다.', {
+            onConfirm: () => {
+                router.push(`/trips/${id}`);
+            },
+        });
+    }, [tripData, tripTitleContent, tripImageFile, id, router, postTrip]);
 
     useEffect(() => {
-        if (tripError || buddyError || recommendBuddiesError) {
+        if (tripError || buddyError || recommendBuddiesError || postTripError) {
             showAlert(
                 'error',
                 tripError?.message ||
                     buddyError?.message ||
                     recommendBuddiesError?.message ||
+                    postTripError?.message ||
                     '에러가 발생했습니다.',
                 {
                     onConfirm: () => {
@@ -124,7 +143,19 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
                 },
             );
         }
-    }, [tripError, buddyError, recommendBuddiesError, router]);
+    }, [tripError, buddyError, recommendBuddiesError, postTripError, router]);
+
+    useEffect(() => {
+        if (tripData) handleWriteTrip();
+    }, [tripData, handleWriteTrip]);
+
+    useEffect(() => {
+        console.log('trip 변경될때 마다 ===>', trip);
+        if (trip) setTripImage(trip.trip_thumbnail);
+    }, [trip]);
+
+    // console.log(tripTitleContent.tripContent);
+    // console.log(trip?.trip_content);
 
     if (isPending) return <DefaultLoader />;
     if (buddyPending) return <DefaultLoader />;
@@ -134,6 +165,7 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
     // 마스터 아이디로 유저 찾아오는 로직 추가할 것
     return (
         <div className="flex flex-col gap-2 bg-gray-100">
+            {postTripPending && <DefaultLoader />}
             {/** 이미지 + 여행정보 묶음 영역 */}
             <div className="relative h-full flex flex-col">
                 {/** 이미지 영역 */}
@@ -157,7 +189,7 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
                         </div>
                     )}
                     <Image
-                        src={tripImage || trip.trip_thumbnail}
+                        src={tripImage}
                         alt="trip image"
                         fill
                         priority
@@ -174,6 +206,7 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
                         isEdit={mode === 'edit'}
                         handleTripDataChange={handleTripDataChange}
                         handleTripTitleChange={handleTripTitleChange}
+                        tripTitleContent={tripTitleContent}
                     />
                 )}
             </div>
@@ -196,7 +229,7 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
                     </div>
                 )}
                 <p className="text-gray-950 text-center whitespace-pre-wrap h-full flex items-center justify-center">
-                    {trip.trip_content}
+                    {tripTitleContent.tripContent ?? trip.trip_content}
                 </p>
             </div>
 

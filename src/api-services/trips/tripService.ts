@@ -89,9 +89,11 @@ export async function getBookMark(
 export async function postTrip({
     newTrip,
     id,
+    mode,
 }: {
     newTrip: FormData;
     id: string;
+    mode: 'new' | 'patch';
 }): Promise<TripWithContract> {
     const url = `/api/write`;
     try {
@@ -100,6 +102,7 @@ export async function postTrip({
             body: newTrip,
             headers: {
                 user: id,
+                mode: mode,
             },
         });
         return data;
