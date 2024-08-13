@@ -10,6 +10,7 @@ import SelectAgesRange from '@/components/atoms/write/SelectAgesRange';
 import { useModal } from '@/contexts/modal.context';
 import { usePreferTheme, useSelectAges, useSelectSex } from '@/hooks';
 import { BuddyThemeData } from '@/types/Trips.types';
+import { showAlert } from '@/utils/ui/openCustomAlert';
 import React, { forwardRef } from 'react';
 
 const TripEditSelectGenderBuddyTheme = forwardRef<BuddyThemeData>(
@@ -21,6 +22,15 @@ const TripEditSelectGenderBuddyTheme = forwardRef<BuddyThemeData>(
             mode: 'buddy',
         });
         const modal = useModal();
+
+        const handleClose = () => {
+            if (wantedSex === '' || isNaN(startAge) || isNaN(endAge))
+                return showAlert('caution', '나이와 성별을 선택해주세요.');
+
+            if (selectedWantedBuddies.length < 3)
+                return showAlert('caution', '버디즈 성향을 3개 선택해주세요.');
+            modal.closeModal();
+        };
 
         React.useImperativeHandle(ref, () => ({
             wantedSex,
@@ -60,7 +70,7 @@ const TripEditSelectGenderBuddyTheme = forwardRef<BuddyThemeData>(
                 </div>
                 <Button
                     className="w-[90%] h-[6%] xl:w-[70%] xl:h-[6%] mx-auto my-2"
-                    onClick={modal.closeModal}
+                    onClick={handleClose}
                 >
                     완료
                 </Button>

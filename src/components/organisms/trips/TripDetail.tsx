@@ -2,7 +2,6 @@
 
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
-import TripCard from '@/components/molecules/trips/TripCard';
 import Image from 'next/image';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import HomePageRecommnedBuddiesList from '../homepage/HomePageRecommendBuddiesList';
@@ -23,6 +22,7 @@ import { PartialTrip } from '@/types/Trips.types';
 import TripEditText from '@/components/molecules/trips/TripEditText';
 import Input from '@/components/atoms/common/Input';
 import HomePageTitle from '@/components/molecules/homepage/HomePageTitle';
+import TripCard from './TripCard';
 
 type TripDetailProps = {
     id: string;

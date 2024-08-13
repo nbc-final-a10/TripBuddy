@@ -141,7 +141,7 @@ const WritePage: React.FC = () => {
             if (response.ok) {
                 const data = await response.json();
                 // console.log('게시글 업데이트 성공');
-                setTripId(data.trip.trip_id);
+                setTripId(data.trip_id);
                 // console.log('데이터', data);
                 setIsLoading(false);
                 setIsSuccess(true);

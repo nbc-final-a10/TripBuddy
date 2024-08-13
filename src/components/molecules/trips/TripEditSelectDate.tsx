@@ -7,6 +7,7 @@ import SelectedResultRealtimeText from '@/components/organisms/write/SelectedRes
 import { useModal } from '@/contexts/modal.context';
 import { useCalendar } from '@/hooks';
 import { CalendarData } from '@/types/Trips.types';
+import { showAlert } from '@/utils/ui/openCustomAlert';
 import React, { forwardRef } from 'react';
 
 const TripEditSelectDate = forwardRef<CalendarData>((props, ref) => {
@@ -18,6 +19,12 @@ const TripEditSelectDate = forwardRef<CalendarData>((props, ref) => {
         startDateTimestamp,
         endDateTimestamp,
     }));
+
+    const handleClose = () => {
+        if (startDateTimestamp === '' || endDateTimestamp === '')
+            return showAlert('caution', '날짜를 선택해주세요.');
+        modal.closeModal();
+    };
 
     return (
         <TripEditModalWrapper>
@@ -43,7 +50,7 @@ const TripEditSelectDate = forwardRef<CalendarData>((props, ref) => {
             </div>
             <Button
                 className="w-[70%] h-[6%] mx-auto my-2"
-                onClick={modal.closeModal}
+                onClick={handleClose}
             >
                 완료
             </Button>

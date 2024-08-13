@@ -3,8 +3,8 @@ import TripEditModalWrapper from '@/components/atoms/trips/TripEditModalWrapper'
 import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 import { useModal } from '@/contexts/modal.context';
 import { useTripWrite } from '@/hooks';
+import { showAlert } from '@/utils/ui/openCustomAlert';
 import React, { useEffect } from 'react';
-import { twMerge } from 'tailwind-merge';
 
 type TripEditTextProps = {
     handleTripTitleChange: (data: {
@@ -19,7 +19,15 @@ const TripEditText = ({ handleTripTitleChange }: TripEditTextProps) => {
 
     const modal = useModal();
 
+    const handleClose = () => {
+        if (tripTitle === '' || tripContent === '') {
+            return showAlert('caution', '제목과 내용을 입력해주세요.');
+        }
+        modal.closeModal();
+    };
+
     useEffect(() => {
+        if (tripTitle === '' || tripContent === '') return;
         handleTripTitleChange({ tripTitle, tripContent });
     }, [tripTitle, tripContent, handleTripTitleChange]);
 
@@ -59,7 +67,7 @@ const TripEditText = ({ handleTripTitleChange }: TripEditTextProps) => {
 
             <Button
                 className="xl:w-[70%] w-[90%] h-[6%] mx-auto my-2"
-                onClick={modal.closeModal}
+                onClick={handleClose}
             >
                 완료
             </Button>
