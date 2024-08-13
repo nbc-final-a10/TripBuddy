@@ -204,13 +204,22 @@ const WritePage: React.FC = () => {
     return (
         <div
             className={twMerge(
-                'relative h-[calc(100dvh-56px-76px)]',
-                step === 5 && 'h-auto',
+                'relative h-[calc(100dvh-56px-76px)] xl:h-[calc(100dvh-100px)]',
+                step === 5 && 'xl:h-[calc(100dvh-100px)]',
             )}
         >
-            <ProgressIndicator className="pt-2" step={step} counts={7} />
-            <section className="h-auto flex flex-col">
-                <div className={twMerge('flex flex-col', step === 0 && 'mb-2')}>
+            <ProgressIndicator
+                className="pt-0 h-[2%] xl:h-[5%]"
+                step={step}
+                counts={7}
+            />
+            <section className="h-[98%] xl:h-[95%] flex flex-col">
+                <div
+                    className={twMerge(
+                        'flex flex-col h-[92%] xl:h-[90%]',
+                        step === 0 && 'xl:mb-2',
+                    )}
+                >
                     {step === 0 && (
                         <WelcomePage
                             SelectBuddyCounts={SelectBuddyCounts}
@@ -262,10 +271,10 @@ const WritePage: React.FC = () => {
                         <SuccessNotificationPage isSuccess={isSuccess} />
                     )}
                 </div>
-                <div className="flex justify-center">
+                <div className="relatvie h-[8%] w-[90%] xl:h-[10%] xl:w-[60%] mx-auto flex justify-center items-center">
                     <NextButton
                         className={twMerge(
-                            'text-xl text-white bg-main-color font-bold py-2 px-4 mt-4 mx-2 mb-20 rounded-xl w-full hover:bg-main-color/80',
+                            'text-xl text-white leading-none bg-main-color font-bold py-2 px-4 my-0.5 xl:py-3 rounded-xl w-full hover:bg-main-color/80',
                             isMini && 'mt-0.5 mb-10',
                         )}
                         onClick={async () => {

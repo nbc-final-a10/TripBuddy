@@ -60,9 +60,9 @@ export async function POST(req: NextRequest) {
 
             // OpenAI를 사용하여 이미지를 생성
             const imageGeneration = await openai.images.generate({
-                prompt: `A beautiful landscape in ${tripData.trip_final_destination}`,
+                prompt: `A beautiful landscape in ${tripData.trip_final_destination} with minimal sky, focusing on the ground, trees, mountains, and buildings in the foreground.`,
                 n: 1,
-                size: '1024x1024',
+                size: '512x512',
                 response_format: 'url', // URL로 이미지 반환
             });
 

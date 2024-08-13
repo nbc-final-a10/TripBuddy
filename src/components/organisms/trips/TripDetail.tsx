@@ -149,10 +149,10 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
         if (tripData) handleWriteTrip();
     }, [tripData, handleWriteTrip]);
 
-    useEffect(() => {
-        console.log('trip 변경될때 마다 ===>', trip);
-        if (trip) setTripImage(trip.trip_thumbnail);
-    }, [trip]);
+    // useEffect(() => {
+    //     console.log('trip 변경될때 마다 ===>', trip);
+    //     if (trip) setTripImage(trip.trip_thumbnail);
+    // }, [trip]);
 
     // console.log(tripTitleContent.tripContent);
     // console.log(trip?.trip_content);
@@ -164,12 +164,12 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
 
     // 마스터 아이디로 유저 찾아오는 로직 추가할 것
     return (
-        <div className="flex flex-col gap-2 bg-gray-100">
+        <div className="flex flex-col gap-2 bg-gray-100 h-full mb-20">
             {postTripPending && <DefaultLoader />}
             {/** 이미지 + 여행정보 묶음 영역 */}
             <div className="relative h-full flex flex-col">
                 {/** 이미지 영역 */}
-                <div className="h-[217px] bg-gray-40 relative aspect-auto">
+                <div className="h-[217px] w-full bg-gray-40 relative aspect-auto">
                     {mode === 'edit' && (
                         <div className="absolute h-full w-full top-0 right-0 bg-black/55 z-10 flex justify-center items-center">
                             <button className="bg-grayscale-color-500/70 rounded p-1">
@@ -194,7 +194,7 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
                         fill
                         priority
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 33vw"
-                        className="object-cover"
+                        className="object-cover xl:object-contain"
                     />
                 </div>
                 {/** 여행 정보 영역 */}
