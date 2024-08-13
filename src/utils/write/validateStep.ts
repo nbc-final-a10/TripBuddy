@@ -25,9 +25,12 @@ export const validateStep = async (step: number, params: any) => {
         return true;
     }
     if (step === 2) {
-        const startDate = new Date(startDateTimestamp).getTime();
-        const endDate = new Date(endDateTimestamp).getTime();
-        const now = Date.now();
+        const now = new Date();
+        const startDate = new Date(startDateTimestamp);
+        const endDate = new Date(endDateTimestamp);
+
+        startDate.setHours(23, 59, 59, 999);
+        endDate.setHours(23, 59, 59, 999);
 
         if (startDate > endDate) {
             showAlert('caution', '시작 날짜가 종료 날짜보다 늦습니다.');
@@ -75,10 +78,10 @@ export const validateStep = async (step: number, params: any) => {
             showAlert('caution', '시작 나이가 종료 나이보다 높습니다.');
             return false;
         }
-        if (startAge < 18 || endAge > 150) {
+        if (startAge < 20 || endAge > 150) {
             showAlert(
                 'caution',
-                '나이는 18세 이상 150세 이하로 선택해 주세요.',
+                '나이는 20세 이상 150세 이하로 선택해 주세요.',
             );
             return false;
         }
