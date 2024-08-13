@@ -16,6 +16,9 @@ export default function FollowButton() {
     const queryClient = useQueryClient();
 
     useEffect(() => {
+        const getCurrentBuddyId = buddy?.buddy_id;
+        setFollowerId(getCurrentBuddyId);
+
         const fetchTripMasterId = async () => {
             try {
                 const urlTripId = window.location.pathname.split('/').pop();
@@ -41,40 +44,52 @@ export default function FollowButton() {
             }
         };
 
-        const checkFollowStatus = async () => {
-            if (window.location.pathname.includes('trips')) {
-                const tripMasterId = await fetchTripMasterId();
-                const getCurrentBuddyId = buddy?.buddy_id;
+        const checkFollowStatus = async (
+            followingId: string,
+            followerId: string,
+        ) => {
+            try {
+                const checkResponse = await fetch(
+                    `/api/buddyProfile/follow?followingId=${followingId}&followerId=${followerId}`,
+                    {
+                        method: 'GET',
+                    },
+                );
 
-                if (tripMasterId && getCurrentBuddyId) {
-                    setFollowingId(tripMasterId);
-                    setFollowerId(getCurrentBuddyId);
-
-                    const checkResponse = await fetch(
-                        `/api/buddyProfile/follow?followingId=${tripMasterId}&followerId=${getCurrentBuddyId}`,
-                        {
-                            method: 'GET',
-                        },
+                if (checkResponse.ok) {
+                    const data = await checkResponse.json();
+                    setIsFollowing(data.originFollow.length > 0);
+                    console.log('팔로우 상태', data);
+                } else {
+                    throw new Error(
+                        `Error checking follow status: ${checkResponse.statusText}`,
                     );
-
-                    if (checkResponse.ok) {
-                        const data = await checkResponse.json();
-                        setIsFollowing(data.originFollow.length > 0);
-                        console.log('팔로우 상태', data);
-                    } else {
-                        throw new Error(
-                            `Error checking follow status: ${checkResponse.statusText}`,
-                        );
-                    }
                 }
+            } catch (error) {
+                console.error('Error checking follow status:', error);
             }
         };
 
-        checkFollowStatus();
-    }, [buddy]);
+        const handleTripsLogic = async () => {
+            const tripMasterId = await fetchTripMasterId();
+            if (tripMasterId) {
+                setFollowingId(tripMasterId);
+                await checkFollowStatus(tripMasterId, getCurrentBuddyId || '');
+            }
+        };
 
-    console.log('followingId', followingId);
-    console.log('followerId', followerId);
+        const handleProfileLogic = async () => {
+            const urlBuddyId = window.location.pathname.split('/').pop();
+            setFollowingId(urlBuddyId || '');
+            await checkFollowStatus(urlBuddyId || '', getCurrentBuddyId || '');
+        };
+
+        if (window.location.pathname.includes('trips')) {
+            handleTripsLogic();
+        } else if (window.location.pathname.includes('profile')) {
+            handleProfileLogic();
+        }
+    }, [buddy]);
 
     const handleFollow = async () => {
         if (isLoading) return;
@@ -140,9 +155,13 @@ export default function FollowButton() {
 
     console.log('isFollowing', isFollowing);
 
-    return (
+    return isFollowing === null ? (
+        <div className="text-sm bg-gray-200 rounded-full px-4 py-1 mt-10 animate-pulse h-8 w-32"></div>
+    ) : (
         <button
-            className={`text-sm text-gray-500 bg-gray-200 rounded-full px-4 py-1 mt-10 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`} // 비활성화 스타일 추가
+            className={`text-sm text-gray-500 bg-gray-200 rounded-full px-4 py-1 mt-10 ${
+                isLoading ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
             onClick={isFollowing ? handleUnfollow : handleFollow}
             disabled={isLoading}
         >
