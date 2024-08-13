@@ -26,6 +26,8 @@ import {
     useSelectSex,
     useTripWrite,
 } from '@/hooks';
+import { useTripMutation } from '@/hooks/queries';
+import { PartialTrip, TripMutationData } from '@/types/Trips.types';
 
 // 버튼 라벨 배열
 const buttonText = [
@@ -44,6 +46,12 @@ const WritePage: React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
     const [isMini, setIsMini] = useState<boolean>(false);
+
+    const {
+        mutateAsync: postTrip,
+        isPending: postTripPending,
+        error: postTripError,
+    } = useTripMutation();
 
     const { buddy } = useAuth();
     const router = useRouter();
@@ -96,15 +104,15 @@ const WritePage: React.FC = () => {
         disabled: isLoading,
     });
 
-    type TripData = Tables<'trips'>;
-    // 파셜트립데이터는 데이터 컬럼을 선택적으로 쓰겠다
-    type PartialTripData = Partial<TripData>;
+    // type TripData = Tables<'trips'>;
+    // // 파셜트립데이터는 데이터 컬럼을 선택적으로 쓰겠다
+    // type PartialTripData = Partial<TripData>;
 
     // Todo: 핸들러 함수 정의 (커스텀 훅의 state를 supabase에 한번에 쓰는 함수) -> WritePage에 함수만 내려주기
     // Todo: 더 큰 함수로 바꾸어서 step 별로 유효성 검사 등 실행 로직 분리하기
     const handleWriteTrip = async () => {
         setIsLoading(true);
-        const tripData: PartialTripData = {
+        const tripData: PartialTrip = {
             trip_title: tripTitle,
             trip_content: tripContent,
             trip_thumbnail: '',
@@ -128,34 +136,49 @@ const WritePage: React.FC = () => {
         if (tripImageFile) {
             formData.append('trip_image', tripImageFile);
             formData.append('trip_json', JSON.stringify(tripData));
+        } else {
+            formData.append('trip_json', JSON.stringify(tripData));
         }
         try {
-            const response = await fetch('/api/write', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    user: buddy?.buddy_id ?? '', // 헤더에 사용자 ID 포함
-                    mode: 'new',
-                },
-            });
-            if (response.ok) {
-                const data = await response.json();
-                // console.log('게시글 업데이트 성공');
-                setTripId(data.trip_id);
-                // console.log('데이터', data);
-                setIsLoading(false);
-                setIsSuccess(true);
-                // showAlert('success', '여정을 작성하였습니다.');
-                // router.push(`/trips/${tripId}`);
-                return true;
-            } else {
-                const errorResult = await response.json();
-                console.error('게시글 업데이트 중 오류 발생:', errorResult);
-                showAlert('error', '여정을 작성하지 못하였습니다.');
-                setIsLoading(false);
-                setIsSuccess(false);
-                return false;
+            if (!buddy?.buddy_id) {
+                throw new Error('사용자 ID가 없습니다.');
             }
+            const payload: TripMutationData = {
+                newTrip: formData,
+                id: buddy.buddy_id,
+                mode: 'new',
+            };
+            const data = await postTrip(payload);
+            setTripId(data.trip_id);
+            setIsLoading(false);
+            setIsSuccess(true);
+            return true;
+            // const response = await fetch('/api/write', {
+            //     method: 'POST',
+            //     body: formData,
+            //     headers: {
+            //         user: buddy?.buddy_id ?? '', // 헤더에 사용자 ID 포함
+            //         mode: 'new',
+            //     },
+            // });
+            // if (response.ok) {
+            //     const data = await response.json();
+            //     // console.log('게시글 업데이트 성공');
+            //     setTripId(data.trip_id);
+            //     // console.log('데이터', data);
+            //     setIsLoading(false);
+            //     setIsSuccess(true);
+            //     // showAlert('success', '여정을 작성하였습니다.');
+            //     // router.push(`/trips/${tripId}`);
+            //     return true;
+            // } else {
+            //     const errorResult = await response.json();
+            //     console.error('게시글 업데이트 중 오류 발생:', errorResult);
+            //     showAlert('error', '여정을 작성하지 못하였습니다.');
+            //     setIsLoading(false);
+            //     setIsSuccess(false);
+            //     return false;
+            // }
         } catch (error) {
             console.error('게시글 업데이트 중 오류 발생:', error);
             showAlert('error', '여정을 작성하지 못하였습니다.');

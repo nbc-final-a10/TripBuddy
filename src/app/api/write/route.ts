@@ -5,6 +5,9 @@ import { PartialTrip, TripWithContract } from '@/types/Trips.types';
 import { PostgrestError } from '@supabase/supabase-js';
 import { Contract } from '@/types/Contract.types';
 import { getUserIdAndModeFromHeader } from '@/utils/auth/getUserIdFromHeader';
+import OpenAI from 'openai';
+
+const OPEN_AI_SECRET_KEY = process.env.OPEN_AI_SECRET_KEY;
 
 export async function POST(req: NextRequest) {
     const supabase = createClient();
@@ -50,13 +53,38 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        if (tripImageFile) {
-            const imageBuffer = await convertToWebP(tripImageFile, 1080);
+        if (!tripImageFile && mode === 'new' && tripData) {
+            const openai = new OpenAI({
+                apiKey: OPEN_AI_SECRET_KEY,
+            });
+
+            // OpenAI를 사용하여 이미지를 생성
+            const imageGeneration = await openai.images.generate({
+                prompt: `A beautiful landscape in ${tripData.trip_final_destination}`,
+                n: 1,
+                size: '1024x1024',
+                response_format: 'url', // URL로 이미지 반환
+            });
+
+            const imageUrl = imageGeneration.data[0].url;
+
+            if (!imageUrl) {
+                return NextResponse.json(
+                    { error: '이미지 생성 중 오류 발생' },
+                    { status: 500 },
+                );
+            }
+            // 이미지 다운로드
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+
+            const imageBuffer = await convertToWebP(blob, 1024);
+
             const filePath = `trips_${Date.now()}.webp`;
 
             if (!imageBuffer) {
                 return NextResponse.json(
-                    { trip: null, error: '이미지 변환 중 오류 발생' },
+                    { error: '이미지 변환 중 오류 발생' },
                     { status: 500 },
                 );
             }
@@ -70,7 +98,39 @@ export async function POST(req: NextRequest) {
 
             if (imageError) {
                 return NextResponse.json(
-                    { trip: null, error: '이미지 업로드 중 오류 발생' },
+                    { error: '이미지 업로드 중 오류 발생' },
+                    { status: 500 },
+                );
+            }
+
+            const { data: publicUrl } = supabase.storage
+                .from('trips')
+                .getPublicUrl(filePath);
+
+            tripData.trip_thumbnail = publicUrl.publicUrl;
+        }
+
+        if (tripImageFile) {
+            const imageBuffer = await convertToWebP(tripImageFile, 1080);
+            const filePath = `trips_${Date.now()}.webp`;
+
+            if (!imageBuffer) {
+                return NextResponse.json(
+                    { error: '이미지 변환 중 오류 발생' },
+                    { status: 500 },
+                );
+            }
+
+            const { data: imageData, error: imageError } =
+                await supabase.storage
+                    .from('trips')
+                    .upload(filePath, imageBuffer, {
+                        contentType: 'image/webp',
+                    });
+
+            if (imageError) {
+                return NextResponse.json(
+                    { error: '이미지 업로드 중 오류 발생' },
                     { status: 500 },
                 );
             }
