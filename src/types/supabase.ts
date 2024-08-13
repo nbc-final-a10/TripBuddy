@@ -431,7 +431,7 @@ export type Database = {
           trip_theme1: string
           trip_theme2: string
           trip_theme3: string
-          trip_thumbnail: string | null
+          trip_thumbnail: string
           trip_title: string
           trip_wanted_buddies1: string
           trip_wanted_buddies2: string
@@ -455,7 +455,7 @@ export type Database = {
           trip_theme1: string
           trip_theme2: string
           trip_theme3: string
-          trip_thumbnail?: string | null
+          trip_thumbnail: string
           trip_title: string
           trip_wanted_buddies1: string
           trip_wanted_buddies2: string
@@ -479,7 +479,7 @@ export type Database = {
           trip_theme1?: string
           trip_theme2?: string
           trip_theme3?: string
-          trip_thumbnail?: string | null
+          trip_thumbnail?: string
           trip_title?: string
           trip_wanted_buddies1?: string
           trip_wanted_buddies2?: string
