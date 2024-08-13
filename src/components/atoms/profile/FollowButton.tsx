@@ -9,40 +9,72 @@ import { useAuth } from '@/hooks';
 export default function FollowButton() {
     const { buddy } = useAuth();
     const [followingId, setFollowingId] = useState<string | undefined>('');
-    const [isFollowing, setIsFollowing] = useState<boolean>(false);
+    const [followerId, setFollowerId] = useState<string | undefined>('');
+    const [isFollowing, setIsFollowing] = useState<boolean | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const queryClient = useQueryClient();
 
     useEffect(() => {
-        const checkFollowStatus = async () => {
+        const fetchTripMasterId = async () => {
             try {
-                const followingId = window.location.pathname.split('/').pop();
-                setFollowingId(followingId);
-                const followerId = buddy?.buddy_id;
-                const checkResponse = await fetch(
-                    `/api/buddyProfile/follow?followingId=${followingId}&followerId=${followerId}`,
+                const urlTripId = window.location.pathname.split('/').pop();
+                const tripMasterIdResponse = await fetch(
+                    `/api/contract/trip/masterId?trip_id=${urlTripId}`,
                     {
                         method: 'GET',
                     },
                 );
 
-                // APU 응답의 컨텐츠 유형을 파악. 현재 안 쓰여서 잠시 주석 처리.
-                // const contentType =
-                //     checkResponse.headers.get('content-type') || '';
-                const data = await checkResponse.json();
-                if (data.originFollow) {
-                    setIsFollowing(true);
-                } else {
-                    setIsFollowing(false);
+                if (!tripMasterIdResponse.ok) {
+                    throw new Error(
+                        `Error fetching trip master ID: ${tripMasterIdResponse.statusText}`,
+                    );
                 }
+
+                const tripMasterData = await tripMasterIdResponse.json();
+                console.log('tripMasterData', tripMasterData);
+                return tripMasterData.trip_master_id;
             } catch (error) {
-                console.error('Error checking follow status:', error);
+                console.error('Error fetching trip master ID:', error);
+                return null;
+            }
+        };
+
+        const checkFollowStatus = async () => {
+            if (window.location.pathname.includes('trips')) {
+                const tripMasterId = await fetchTripMasterId();
+                const getCurrentBuddyId = buddy?.buddy_id;
+
+                if (tripMasterId && getCurrentBuddyId) {
+                    setFollowingId(tripMasterId);
+                    setFollowerId(getCurrentBuddyId);
+
+                    const checkResponse = await fetch(
+                        `/api/buddyProfile/follow?followingId=${tripMasterId}&followerId=${getCurrentBuddyId}`,
+                        {
+                            method: 'GET',
+                        },
+                    );
+
+                    if (checkResponse.ok) {
+                        const data = await checkResponse.json();
+                        setIsFollowing(data.originFollow.length > 0);
+                        console.log('팔로우 상태', data);
+                    } else {
+                        throw new Error(
+                            `Error checking follow status: ${checkResponse.statusText}`,
+                        );
+                    }
+                }
             }
         };
 
         checkFollowStatus();
-    }, [buddy, followingId, queryClient]);
+    }, [buddy]);
+
+    console.log('followingId', followingId);
+    console.log('followerId', followerId);
 
     const handleFollow = async () => {
         if (isLoading) return;
@@ -54,20 +86,19 @@ export default function FollowButton() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    followingId,
-                    followerId: buddy?.buddy_id,
+                    followingId: followingId,
+                    followerId: followerId,
                 }),
             });
 
             if (!response.ok) {
                 const errorData = await response.json();
                 console.error('Error:', errorData);
-                showAlert('error', '팔로우 중 오류가 발생했습니다.');
+                showAlert('error', errorData.message);
                 return;
             }
 
             const data = await response.json();
-            // console.log('follow data', data);
 
             showAlert('success', '팔로우 성공했습니다.');
             setIsFollowing(true);
@@ -97,9 +128,7 @@ export default function FollowButton() {
                 return;
             }
 
-            // const data = await response.json();
-
-            showAlert('success', '팔로우가 취소었습니다.');
+            showAlert('success', '팔로우가 취소되었습니다.');
             setIsFollowing(false);
             queryClient.invalidateQueries({
                 queryKey: [QUERY_KEY_BUDDY, followingId],
@@ -108,6 +137,8 @@ export default function FollowButton() {
             setIsLoading(false);
         }
     };
+
+    console.log('isFollowing', isFollowing);
 
     return (
         <button
