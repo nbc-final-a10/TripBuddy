@@ -1,7 +1,7 @@
 import Chip from '../common/Chip';
 import { SecondLevel } from '@/types/Location.types';
 import clsx from 'clsx';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 function LocationList({
@@ -15,11 +15,12 @@ function LocationList({
     onChipClick: (name: string) => void;
     isMini?: boolean | null | 0;
 }) {
-    const scrollRef = React.useRef<HTMLDivElement>(null);
-    const [isScrollable, setIsScrollable] = React.useState(false);
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const [isScrollable, setIsScrollable] = useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(0);
 
     // 가로 스크롤이 생기는지  확인하는 로직
-    React.useEffect(() => {
+    useEffect(() => {
         const checkScrollable = () => {
             if (scrollRef.current) {
                 setIsScrollable(
@@ -33,8 +34,23 @@ function LocationList({
         return () => window.removeEventListener('resize', checkScrollable);
     }, [locations]);
 
+    useEffect(() => {
+        if (scrollRef.current) {
+            const selectedButton = scrollRef.current.children[
+                selectedIndex
+            ] as HTMLElement;
+            if (selectedButton) {
+                selectedButton.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'center',
+                });
+            }
+        }
+    }, [selectedIndex]);
+
     return (
-        <div className="relative">
+        <>
             {/* 도/대륙 목록 */}
             <div
                 className={twMerge(
@@ -43,13 +59,16 @@ function LocationList({
                 )}
                 ref={scrollRef}
             >
-                {locations.map(subLocation => (
+                {locations.map((subLocation, index) => (
                     <div key={subLocation.name.en} className="flex-none">
                         <Chip
                             selected={
                                 selectedLocationName === subLocation.name.ko
                             }
-                            onClick={() => onChipClick(subLocation.name.ko)}
+                            onClick={() => {
+                                onChipClick(subLocation.name.ko);
+                                setSelectedIndex(index);
+                            }}
                             className={clsx('text-sm', isMini && 'text-xs')}
                         >
                             {subLocation.name.ko}
@@ -85,7 +104,7 @@ function LocationList({
                     </button>
                 </div>
             )} */}
-        </div>
+        </>
     );
 }
 

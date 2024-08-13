@@ -1,4 +1,5 @@
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
+import { Buddy } from '@/types/Auth.types';
 import { useQuery } from '@tanstack/react-query';
 
 export const fetchBuddyProfile = async (id: string) => {
@@ -10,7 +11,7 @@ export const fetchBuddyProfile = async (id: string) => {
 };
 
 export function useBuddyProfile(id: string) {
-    return useQuery({
+    return useQuery<Buddy, Error>({
         queryKey: [QUERY_KEY_BUDDY, id],
         queryFn: () => fetchBuddyProfile(id),
         staleTime: Infinity,

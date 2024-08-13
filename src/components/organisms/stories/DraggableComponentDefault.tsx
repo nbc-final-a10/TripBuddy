@@ -1,10 +1,10 @@
 'use client';
 import React, { useState, useRef, DragEvent, TouchEvent } from 'react';
 
-interface Position {
+type Position = {
     top: number;
     left: number;
-}
+};
 
 const DraggableComponent: React.FC = () => {
     const [position, setPosition] = useState<Position>({ top: 100, left: 100 });

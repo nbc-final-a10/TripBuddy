@@ -5,7 +5,7 @@ export default function WelcomeMessage() {
     const { buddy } = useAuth();
     return (
         <div className="flex flex-col items-center">
-            <div className="flex my-4 text-2xl xl:text-4xl xl:mt-20 xl:mb-5">
+            <div className="flex my-4 text-2xl xl:text-4xl xl:mt-3 xl:mb-5">
                 버디즈 모집을 시작해볼까요?
             </div>
             <div className="flex flex-col items-center text-gray-600 xl:text-lg xl:mb-10">

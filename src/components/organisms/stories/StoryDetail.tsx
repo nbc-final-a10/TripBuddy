@@ -130,7 +130,7 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
 
     return (
         <>
-            <section className="relative w-full h-[calc(100dvh-57px-56px)] bg-gray-800 aspect-auto xl:h-[calc(100dvh-100px)] xl:w-[430px] xl:mx-auto overflow-hidden">
+            <section className="relative w-full h-[calc(100dvh-57px-76px)] bg-gray-800 aspect-auto xl:h-[calc(100dvh-100px)] xl:w-[430px] xl:mx-auto overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-full z-20 flex flex-row">
                     <div
                         data-next="before"

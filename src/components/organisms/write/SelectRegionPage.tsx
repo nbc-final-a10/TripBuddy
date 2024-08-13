@@ -3,25 +3,9 @@
 import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 import LeftSmGrayText from '@/components/atoms/write/LeftSmGrayText';
 import SelectRegions from '@/components/molecules/common/SelectRegion';
-import { SecondLevel, ThirdLevel } from '@/types/Location.types';
+import { SelectRegionPageProps } from '@/types/Location.types';
 import clsx from 'clsx';
 import React from 'react';
-
-type SelectRegionPageProps = {
-    isMini?: boolean;
-    states: {
-        firstLevelLocation: string;
-        secondLevelLocation: string | null;
-        thirdLevelLocation: string;
-        selectedSecondLevelLocations: ThirdLevel[];
-        secondLevelLocations: SecondLevel[];
-    };
-    actions: {
-        handleLocationTypeClick: (isKoreaSelected: boolean) => void;
-        handleChipClick: (name: string) => void;
-        handleThirdLevelClick: (locName: string) => void;
-    };
-};
 
 export default function SelectRegionPage({
     isMini,

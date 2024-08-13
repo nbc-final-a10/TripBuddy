@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Calendar_month from '../../../../public/svg/Calendar_month.svg';
 import Distance from '../../../../public/svg/Distance.svg';
 import Groups from '../../../../public/svg/Groups.svg';
@@ -8,7 +8,10 @@ import clsx from 'clsx';
 import TripTimeSinceUpload from '@/components/atoms/trips/TripTimeSinceUpload';
 import {
     BookMarkRequest,
-    PartialBookMark,
+    BuddyThemeData,
+    CalendarData,
+    PartialTrip,
+    TripThemeData,
     TripWithContract,
 } from '@/types/Trips.types';
 import Link from 'next/link';
@@ -25,7 +28,16 @@ import {
     useBuddyQueries,
     useContractMutation,
 } from '@/hooks/queries';
-import { useAuth } from '@/hooks';
+import { useAuth, useSelectBuddyCounts } from '@/hooks';
+import Input from '@/components/atoms/common/Input';
+import TripStartDate from '@/components/atoms/trips/TripStartDate';
+import { useModal } from '@/contexts/modal.context';
+import TripEditSelectRegion from './TripEditSelectRegion';
+import TripEditSelectDate from './TripEditSelectDate';
+import TripEditTripTheme from './TripEditTripTheme';
+import { SelectRegionPageProps } from '@/types/Location.types';
+import TripEditSelectGenderBuddyTheme from './TripEditSelectGenderBuddyTheme';
+import TripEditText from './TripEditText';
 import { deleteTrip } from '@/utils/trips/deleteTrip';
 import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY_TRIP_INFINITE } from '@/constants/query.constants';
@@ -35,6 +47,15 @@ type TripCardProps = {
     mode?: 'card' | 'detail' | 'list';
     queries?: ReturnType<typeof useBuddyQueries>;
     isEdit?: boolean;
+    handleTripDataChange?: (data: PartialTrip) => void;
+    handleTripTitleChange?: (data: {
+        tripTitle: string;
+        tripContent: string;
+    }) => void;
+    tripTitleContent?: {
+        tripTitle: string;
+        tripContent: string;
+    };
 };
 
 const TripCard: React.FC<TripCardProps> = ({
@@ -42,19 +63,18 @@ const TripCard: React.FC<TripCardProps> = ({
     mode = 'list',
     queries,
     isEdit = false,
+    handleTripDataChange = () => {},
+    handleTripTitleChange = () => {},
+    tripTitleContent,
 }) => {
     const { buddy } = useAuth();
     const router = useRouter();
     const queryClient = useQueryClient();
 
-    // const {
-    //     data: contract,
-    //     isPending: isContractPending,
-    //     error: contractError,
-    // } = useContractQuery({
-    //     isBuddy: false,
-    //     id: trip.trip_id,
-    // });
+    const selectRegionRef = useRef<Partial<SelectRegionPageProps>>(null);
+    const selectDateRef = useRef<CalendarData>(null);
+    const selectTripThemeRef = useRef<TripThemeData>(null);
+    const selectGenderBuddyThemeRef = useRef<BuddyThemeData>(null);
 
     const {
         data: bookMark,
@@ -78,6 +98,12 @@ const TripCard: React.FC<TripCardProps> = ({
         error: bookMarkMutationError,
     } = useBookMarkMutation();
 
+    const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts({
+        initialCounts: trip.trip_max_buddies_counts,
+    });
+
+    const modal = useModal();
+
     const handleCreateContract = async (
         e: React.MouseEvent<HTMLButtonElement>,
     ) => {
@@ -95,7 +121,6 @@ const TripCard: React.FC<TripCardProps> = ({
                 contract_trip_id: trip.trip_id,
                 contract_buddy_id: buddy.buddy_id,
             };
-
             createContract(newContract);
         }
 
@@ -104,6 +129,56 @@ const TripCard: React.FC<TripCardProps> = ({
         }
 
         if (mode === '수정완료') {
+            const tripData: PartialTrip = {
+                trip_id: trip.trip_id,
+                trip_master_id: buddy.buddy_id,
+                trip_max_buddies_counts:
+                    buddyCounts ?? trip.trip_max_buddies_counts,
+                trip_start_date:
+                    selectDateRef.current?.startDateTimestamp ??
+                    trip.trip_start_date,
+                trip_end_date:
+                    selectDateRef.current?.endDateTimestamp ??
+                    trip.trip_end_date,
+                trip_final_destination:
+                    selectRegionRef.current?.states?.secondLevelLocation &&
+                    selectRegionRef.current?.states?.thirdLevelLocation
+                        ? `${selectRegionRef.current?.states?.secondLevelLocation} ${selectRegionRef.current?.states?.thirdLevelLocation}`
+                        : trip.trip_final_destination,
+                trip_meet_location:
+                    selectTripThemeRef.current?.meetPlace ??
+                    trip.trip_meet_location,
+                trip_theme1:
+                    selectTripThemeRef.current?.selectedTripThemes[0] ??
+                    trip.trip_theme1,
+                trip_theme2:
+                    selectTripThemeRef.current?.selectedTripThemes[1] ??
+                    trip.trip_theme2,
+                trip_theme3:
+                    selectTripThemeRef.current?.selectedTripThemes[2] ??
+                    trip.trip_theme3,
+                trip_wanted_buddies1:
+                    selectGenderBuddyThemeRef.current
+                        ?.selectedWantedBuddies[0] ?? trip.trip_wanted_buddies1,
+                trip_wanted_buddies2:
+                    selectGenderBuddyThemeRef.current
+                        ?.selectedWantedBuddies[1] ?? trip.trip_wanted_buddies2,
+                trip_wanted_buddies3:
+                    selectGenderBuddyThemeRef.current
+                        ?.selectedWantedBuddies[2] ?? trip.trip_wanted_buddies3,
+                trip_wanted_sex:
+                    selectGenderBuddyThemeRef.current?.wantedSex ??
+                    trip.trip_wanted_sex,
+                trip_start_age:
+                    selectGenderBuddyThemeRef.current?.startAge ??
+                    trip.trip_start_age,
+                trip_end_age:
+                    selectGenderBuddyThemeRef.current?.endAge ??
+                    trip.trip_end_age,
+                trip_thumbnail: trip.trip_thumbnail,
+            };
+
+            handleTripDataChange(tripData);
             return showAlert('success', '수정이 완료되었습니다.');
         }
     };
@@ -160,6 +235,51 @@ const TripCard: React.FC<TripCardProps> = ({
         }
     };
 
+    const handleChipClickWhenIsEdit = (
+        e: React.MouseEvent<HTMLSpanElement>,
+    ) => {
+        if (!isEdit) return;
+        const mode = e.currentTarget.dataset.mode;
+        if (mode === 'trip_theme') {
+            return modal.openModal({
+                component: () => <TripEditTripTheme ref={selectTripThemeRef} />,
+            });
+        } else if (mode === 'trip_wanted_sex') {
+            return modal.openModal({
+                component: () => (
+                    <TripEditSelectGenderBuddyTheme
+                        ref={selectGenderBuddyThemeRef}
+                    />
+                ),
+            });
+        }
+    };
+
+    const handleClickDestination = () => {
+        if (isEdit)
+            return modal.openModal({
+                component: () => <TripEditSelectRegion ref={selectRegionRef} />,
+            });
+    };
+
+    const handleClickStartDate = (e: React.MouseEvent<HTMLSpanElement>) => {
+        if (isEdit)
+            return modal.openModal({
+                component: () => <TripEditSelectDate ref={selectDateRef} />,
+            });
+    };
+
+    const handleClickTripTitle = () => {
+        if (isEdit)
+            return modal.openModal({
+                component: () => (
+                    <TripEditText
+                        handleTripTitleChange={handleTripTitleChange}
+                    />
+                ),
+            });
+    };
+
     const bookmarkButtonText = useMemo(() => {
         if (trip.trip_master_id === buddy?.buddy_id) {
             return '삭제하기';
@@ -175,19 +295,19 @@ const TripCard: React.FC<TripCardProps> = ({
                 return '수정완료';
             }
         }
+        const isBuddyParticipating = trip.contract.find(
+            contract => contract.contract_buddy_id === buddy?.buddy_id,
+        );
+        if (isBuddyParticipating) {
+            return '나가기';
+        }
         return '참여하기';
     }, [trip, buddy, isEdit]);
 
     useEffect(() => {
-        if (
-            contractMutationError ||
-            // contractError ||
-            bookMarkError ||
-            bookMarkMutationError
-        ) {
+        if (contractMutationError || bookMarkError || bookMarkMutationError) {
             const message =
                 contractMutationError?.message ||
-                // contractError?.message ||
                 bookMarkError?.message ||
                 bookMarkMutationError?.message;
             showAlert('error', message || '오류가 발생했습니다.');
@@ -210,10 +330,8 @@ const TripCard: React.FC<TripCardProps> = ({
 
     return (
         <>
-            {/* {isBookMarkPending && <DefaultLoader />} */}
             {isContractMutationPending && <DefaultLoader />}
             {isBookMarkMutationPending && <DefaultLoader />}
-            {/* {isContractPending && <DefaultLoader />} */}
             <div
                 className={clsx(
                     'bg-white box-border h-fit shadow-xl',
@@ -267,38 +385,88 @@ const TripCard: React.FC<TripCardProps> = ({
                                     {trip.trip_final_destination}
                                 </h2>
                             )}
-                            <h3
-                                className={clsx(
-                                    'text-lg font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap',
-                                    mode === 'list' && 'text-black text-xl',
-                                    mode === 'card' && 'text-gray-600',
-                                )}
-                            >
-                                {trip.trip_title}
-                            </h3>
+                            {!isEdit ? (
+                                <h3
+                                    className={clsx(
+                                        'text-lg font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap',
+                                        mode === 'list' && 'text-black text-xl',
+                                        mode === 'card' && 'text-gray-600',
+                                    )}
+                                >
+                                    {trip.trip_title}
+                                </h3>
+                            ) : (
+                                <button
+                                    className="text-lg font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap animate-pulse text-left"
+                                    onClick={handleClickTripTitle}
+                                >
+                                    {tripTitleContent?.tripTitle ??
+                                        trip.trip_title}
+                                </button>
+                            )}
 
                             <div className="flex flex-row justify-between">
                                 <div className="flex gap-1">
-                                    <Chip selected={false} intent="square">
-                                        {trip.trip_theme1}
+                                    <Chip
+                                        selected={false}
+                                        intent={
+                                            isEdit ? 'square_white' : 'square'
+                                        }
+                                        data-mode="trip_theme"
+                                        className={
+                                            isEdit
+                                                ? 'cursor-pointer animate-pulse'
+                                                : ''
+                                        }
+                                        onClick={handleChipClickWhenIsEdit}
+                                    >
+                                        {selectTripThemeRef.current
+                                            ?.selectedTripThemes[0] ??
+                                            trip.trip_theme1}
                                     </Chip>
                                     <Chip
                                         selected={false}
                                         intent="square_white"
+                                        data-mode="trip_theme"
+                                        className={
+                                            isEdit
+                                                ? 'cursor-pointer animate-pulse'
+                                                : ''
+                                        }
+                                        onClick={handleChipClickWhenIsEdit}
                                     >
-                                        {trip.trip_theme2}
+                                        {selectTripThemeRef.current
+                                            ?.selectedTripThemes[1] ??
+                                            trip.trip_theme2}
                                     </Chip>
                                     <Chip
                                         selected={false}
                                         intent="square_white"
+                                        data-mode="trip_theme"
+                                        className={
+                                            isEdit
+                                                ? 'cursor-pointer animate-pulse'
+                                                : ''
+                                        }
+                                        onClick={handleChipClickWhenIsEdit}
                                     >
-                                        {trip.trip_theme3}
+                                        {selectTripThemeRef.current
+                                            ?.selectedTripThemes[2] ??
+                                            trip.trip_theme3}
                                     </Chip>
                                     <Chip
                                         selected={false}
                                         intent="square_white"
+                                        data-mode="trip_wanted_sex"
+                                        className={
+                                            isEdit
+                                                ? 'cursor-pointer animate-pulse'
+                                                : ''
+                                        }
+                                        onClick={handleChipClickWhenIsEdit}
                                     >
-                                        {trip.trip_wanted_sex}
+                                        {selectGenderBuddyThemeRef.current
+                                            ?.wantedSex ?? trip.trip_wanted_sex}
                                     </Chip>
                                 </div>
 
@@ -319,26 +487,54 @@ const TripCard: React.FC<TripCardProps> = ({
                         >
                             <div className="flex gap-2 items-center">
                                 <Distance />
-                                <span>{trip.trip_final_destination}</span>
+                                <span
+                                    className={twMerge(
+                                        'relative',
+                                        isEdit &&
+                                            'cursor-pointer animate-pulse',
+                                    )}
+                                    onClick={handleClickDestination}
+                                >
+                                    {selectRegionRef.current?.states
+                                        ?.secondLevelLocation &&
+                                    selectRegionRef.current?.states
+                                        ?.thirdLevelLocation
+                                        ? `${selectRegionRef.current?.states?.secondLevelLocation} ${selectRegionRef.current?.states?.thirdLevelLocation}`
+                                        : trip.trip_final_destination}
+                                </span>
                             </div>
 
                             <div className="flex gap-2 items-center">
                                 <Calendar_month />
-                                <span>
-                                    {new Date(
-                                        trip.trip_start_date,
-                                    ).toLocaleDateString('ko-KR', {
-                                        month: 'numeric', // 월 숫자로 표시
-                                        day: 'numeric', // 일 자로 표시
-                                        weekday: 'short', // 요일을 짧은 형식으로 표시 (e.g., 'Mon', 'Tue')
-                                    })}
-                                </span>
+                                <TripStartDate
+                                    startDate={
+                                        selectDateRef.current
+                                            ?.startDateTimestamp ??
+                                        trip.trip_start_date
+                                    }
+                                    className={
+                                        isEdit
+                                            ? 'cursor-pointer animate-pulse'
+                                            : ''
+                                    }
+                                    onClick={handleClickStartDate}
+                                />
                             </div>
 
                             {/** 추후 수정 필요 */}
                             <div className="flex gap-2 items-center">
                                 <Groups />
-                                <span>{`${(trip.contract as Contract[]).length}/${trip.trip_max_buddies_counts}`}</span>
+                                {!isEdit ? (
+                                    <span>{`${(trip.contract as Contract[]).length}/${trip.trip_max_buddies_counts}`}</span>
+                                ) : (
+                                    <SelectBuddyCounts
+                                        className="w-[18px] h-[18px] xl:w-[20px] xl:h-[20px]"
+                                        isEdit
+                                        initialValue={
+                                            (trip.contract as Contract[]).length
+                                        }
+                                    />
+                                )}
                             </div>
                         </div>
 

@@ -47,7 +47,9 @@ const WritePage: React.FC = () => {
 
     const { buddy } = useAuth();
     const router = useRouter();
-    const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
+    const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts({
+        initialCounts: 2,
+    });
     const { SelectCalendar, startDateTimestamp, endDateTimestamp } =
         useCalendar();
     const { actions, states } = useSelectRegion();
@@ -133,6 +135,7 @@ const WritePage: React.FC = () => {
                 body: formData,
                 headers: {
                     user: buddy?.buddy_id ?? '', // 헤더에 사용자 ID 포함
+                    mode: 'new',
                 },
             });
             if (response.ok) {
@@ -178,7 +181,7 @@ const WritePage: React.FC = () => {
     return (
         <div
             className={twMerge(
-                'relative h-[calc(100dvh-56px-57px)]',
+                'relative h-[calc(100dvh-56px-76px)]',
                 step === 5 && 'h-auto',
             )}
         >

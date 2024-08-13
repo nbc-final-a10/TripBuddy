@@ -77,6 +77,7 @@ export async function GET(req: NextRequest) {
             } = await supabase
                 .from('trips')
                 .select(
+                    // '*, contract:contract!contract_contract_trip_id_foreign (*)',
                     '*, contract:contract!contract_contract_trip_id_foreign (*)',
                 )
                 .order('trip_created_at', { ascending: false });
