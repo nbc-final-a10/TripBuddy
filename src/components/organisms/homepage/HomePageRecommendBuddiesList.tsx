@@ -4,6 +4,7 @@ import Link from 'next/link';
 import React, { useRef } from 'react';
 import { Buddy } from '@/types/Auth.types';
 import MascotImage from '@/components/atoms/common/MascotImage';
+import { getAgeFromBirthDate } from '@/utils/common/getAgeFromBirthDate';
 
 function HomePageRecommnedBuddiesList({ buddies }: { buddies: Buddy[] }) {
     return (
@@ -40,6 +41,10 @@ function HomePageRecommnedBuddiesList({ buddies }: { buddies: Buddy[] }) {
                                       <div className="text-m font-bold whitespace-nowrap overflow-hidden text-ellipsis w-full">
                                           <span className="block truncate">
                                               {buddy.buddy_nickname}
+                                              {typeof buddy.buddy_birth ===
+                                              'string'
+                                                  ? ` / ${getAgeFromBirthDate(buddy.buddy_birth)} 세`
+                                                  : null}
                                           </span>
                                       </div>
 

@@ -38,6 +38,9 @@ import TripEditTripTheme from './TripEditTripTheme';
 import { SelectRegionPageProps } from '@/types/Location.types';
 import TripEditSelectGenderBuddyTheme from './TripEditSelectGenderBuddyTheme';
 import TripEditText from './TripEditText';
+import { deleteTrip } from '@/utils/trips/deleteTrip';
+import { useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEY_TRIP_INFINITE } from '@/constants/query.constants';
 
 type TripCardProps = {
     trip: TripWithContract;
@@ -66,6 +69,7 @@ const TripCard: React.FC<TripCardProps> = ({
 }) => {
     const { buddy } = useAuth();
     const router = useRouter();
+    const queryClient = useQueryClient();
 
     const selectRegionRef = useRef<Partial<SelectRegionPageProps>>(null);
     const selectDateRef = useRef<CalendarData>(null);
@@ -179,6 +183,32 @@ const TripCard: React.FC<TripCardProps> = ({
         }
     };
 
+    const handleDelete = async () => {
+        if (trip && buddy) {
+            showAlert('caution', '정말로 삭제하시겠습니까?', {
+                onConfirm: async () => {
+                    const response = await deleteTrip(
+                        trip.trip_id,
+                        buddy.buddy_id,
+                    );
+                    if (response && response.status === 200) {
+                        showAlert('success', '삭제되었습니다.', {
+                            onConfirm: () => {
+                                queryClient.invalidateQueries({
+                                    queryKey: [QUERY_KEY_TRIP_INFINITE],
+                                });
+                                router.push('/trips');
+                            },
+                        });
+                    }
+                },
+                isConfirm: true,
+            });
+        } else {
+            showAlert('error', '오류가 발생했습니다.');
+        }
+    };
+
     const handleCreateBookMark = async (
         e: React.MouseEvent<HTMLButtonElement>,
     ) => {
@@ -201,7 +231,7 @@ const TripCard: React.FC<TripCardProps> = ({
             return showAlert('success', '찜하기가 완료되었습니다.');
         }
         if (mode === '삭제하기') {
-            return showAlert('success', '삭제가 완료되었습니다.');
+            return handleDelete();
         }
     };
 
