@@ -6,6 +6,7 @@ import getDaysLeft from '@/utils/common/getDaysLeft';
 import filterOldTrips from '@/utils/trips/filterOldTrips';
 import { useContractQuery } from '@/hooks/queries';
 import { useAuth } from '@/hooks';
+import Link from 'next/link';
 
 const HomePageBanner = () => {
     const { buddy } = useAuth();
@@ -54,7 +55,7 @@ const HomePageBanner = () => {
                 <div className="absolute inset-0 bg-black/30 z-10" />
                 <div className="relative z-20 text-white h-full flex flex-col justify-center gap-3">
                     {upcomingTrips.length > 0 && (
-                        <>
+                        <Link href={`trips/${upcomingTrips[0].trip_id}`}>
                             <p>
                                 <span className="font-bold text-3xl">
                                     {buddy?.buddy_nickname}
@@ -72,7 +73,7 @@ const HomePageBanner = () => {
                                 </span>
                                 일 남았어요!
                             </p>
-                        </>
+                        </Link>
                     )}
                     {!data && buddy && !isPending && (
                         <>

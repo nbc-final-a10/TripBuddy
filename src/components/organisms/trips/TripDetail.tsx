@@ -16,12 +16,12 @@ import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useRouter } from 'next/navigation';
 import SelectImage from '../../../../public/svg/SelectImage.svg';
 import { useTapScroll } from '@/hooks';
-import HomePageTitle from '@/components/molecules/homepage/HomePageTitle';
 import Navigate from '@/components/atoms/common/Navigate';
 import { useModal } from '@/contexts/modal.context';
 import { PartialTrip, TripEditTextData } from '@/types/Trips.types';
 import TripEditText from '@/components/molecules/trips/TripEditText';
 import Input from '@/components/atoms/common/Input';
+import HomePageTitle from '@/components/molecules/homepage/HomePageTitle';
 
 type TripDetailProps = {
     id: string;
