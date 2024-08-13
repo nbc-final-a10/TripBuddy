@@ -45,8 +45,8 @@ type TripCardProps = {
     mode?: 'card' | 'detail' | 'list';
     queries?: ReturnType<typeof useBuddyQueries>;
     isEdit?: boolean;
-    handleTripDataChange: (data: PartialTrip) => void;
-    handleTripTitleChange: (data: {
+    handleTripDataChange?: (data: PartialTrip) => void;
+    handleTripTitleChange?: (data: {
         tripTitle: string;
         tripContent: string;
     }) => void;
@@ -57,8 +57,8 @@ const TripCard: React.FC<TripCardProps> = ({
     mode = 'list',
     queries,
     isEdit = false,
-    handleTripDataChange,
-    handleTripTitleChange,
+    handleTripDataChange = () => {},
+    handleTripTitleChange = () => {},
 }) => {
     const { buddy } = useAuth();
     const router = useRouter();
@@ -257,6 +257,12 @@ const TripCard: React.FC<TripCardProps> = ({
             } else {
                 return '수정완료';
             }
+        }
+        const isBuddyParticipating = trip.contract.find(
+            contract => contract.contract_buddy_id === buddy?.buddy_id,
+        );
+        if (isBuddyParticipating) {
+            return '나가기';
         }
         return '참여하기';
     }, [trip, buddy, isEdit]);
