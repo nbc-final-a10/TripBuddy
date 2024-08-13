@@ -1,6 +1,5 @@
 import MascotImage from '@/components/atoms/common/MascotImage';
 import Center2xlTwoLineText from '@/components/atoms/write/Cneter2xlTwoLineText';
-import WelcomeImage from '@/components/molecules/write/WelcomeImage';
 import React from 'react';
 
 export default function FailPage() {
@@ -12,7 +11,10 @@ export default function FailPage() {
             />
             <div className="relative h-[350px] flex justify-center items-center">
                 <div className="flex justify-center h-[230px] w-[300px] xl:h-[400px] xl:w-[400px] mx-auto">
-                    <MascotImage intent="main" className="w-[70%] h-[70%]" />
+                    <MascotImage
+                        intent="main"
+                        className="w-[70%] h-[70%] filter grayscale"
+                    />
                 </div>
             </div>
         </div>
