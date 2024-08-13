@@ -36,11 +36,11 @@ const TutorialMainPage: React.FC = () => {
     }, [step, router]);
 
     return (
-        <div className="relative flex flex-col items-center h-dvh overflow-hidden bg-white xl:h-[calc(100dvh-100px)] xl:mt-14">
+        <div className="relative  h-dvh overflow-hidden bg-white xl:h-[calc(100dvh-100px)] xl:mt-14 px-[20px] mt-[64px]">
             {step < 4 ? (
                 <button
                     onClick={handleSkip}
-                    className="relative w-full text-right text-base py-1 px-1 rounded mb-4 xl:mb-0"
+                    className="relative w-full text-right text-base py-1 px-1 rounded mb-4 xl:mb-0 "
                 >
                     건너뛰기
                 </button>
@@ -48,17 +48,18 @@ const TutorialMainPage: React.FC = () => {
                 <button className="relative w-full text-right text-base p-4 rounded mb-4 xl:h-[32px] xl:p-0 xl:mb-0"></button>
             )}
 
-            <section className="flex flex-col items-center justify-center w-full xl:h-[100%-64px]">
+            <section className="flex flex-col items-center justify-start w-full flex-1 text-center pb-0 mb-0">
                 <Tuto step={step} />
             </section>
 
-            <div className="mb-5 xl:mb-5">
+            <div className="mb-5 xl:mb-5 flex justify-center">
                 <ProgressIndicator className="pt-5" step={step} counts={5} />
             </div>
             <div className="w-full flex justify-center">
                 <button
                     onClick={handleNext}
-                    className="text-2xl bg-main-color font-bold py-2 px-4 rounded-2xl w-11/12 max-w-md mb-4"
+                    className="text-[18px] bg-main-color font-bold rounded-2xl mb-4 text-white"
+                    style={{ width: '335px', height: '48px' }}
                 >
                     {step < 4 ? '다음' : '홈으로'}
                 </button>
