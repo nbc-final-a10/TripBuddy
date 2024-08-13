@@ -11,7 +11,6 @@ import {
     BuddyThemeData,
     CalendarData,
     PartialTrip,
-    TripEditTextData,
     TripThemeData,
     TripWithContract,
 } from '@/types/Trips.types';
@@ -113,7 +112,6 @@ const TripCard: React.FC<TripCardProps> = ({
                 contract_trip_id: trip.trip_id,
                 contract_buddy_id: buddy.buddy_id,
             };
-
             createContract(newContract);
         }
 

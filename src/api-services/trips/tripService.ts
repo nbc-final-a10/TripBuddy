@@ -2,6 +2,8 @@ import {
     BookMark,
     BookMarkRequest,
     PartialBookMark,
+    PartialTrip,
+    Trip,
     TripInfiniteQueryResponse,
     TripWithContract,
 } from '@/types/Trips.types';
@@ -77,6 +79,28 @@ export async function getBookMark(
         const data = await fetchWrapper<BookMark | null>(url, {
             method: 'GET',
             cache: 'no-store',
+        });
+        return data;
+    } catch (error: any) {
+        throw error;
+    }
+}
+
+export async function postTrip({
+    newTrip,
+    id,
+}: {
+    newTrip: FormData;
+    id: string;
+}): Promise<TripWithContract> {
+    const url = `/api/write`;
+    try {
+        const data = await fetchWrapper<TripWithContract>(url, {
+            method: 'POST',
+            body: newTrip,
+            headers: {
+                user: id,
+            },
         });
         return data;
     } catch (error: any) {

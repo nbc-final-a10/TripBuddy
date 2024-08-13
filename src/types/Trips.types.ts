@@ -48,3 +48,8 @@ export type TripEditTextData = {
     tripTitle: string;
     tripContent: string;
 };
+
+export type TripMutationData = {
+    newTrip: FormData;
+    id: string;
+};

@@ -101,10 +101,12 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
             trip_title: tripTitleContent.tripTitle,
         };
         const formData = new FormData();
-        // if (tripImageFile) {
-        //     formData.append('trip_image', tripImageFile);
-        //     formData.append('trip_json', JSON.stringify(tripData));
-        // }
+        if (tripImageFile) {
+            formData.append('trip_image', tripImageFile);
+            formData.append('trip_json', JSON.stringify(newTripData));
+        } else {
+            formData.append('trip_json', JSON.stringify(newTripData));
+        }
     };
 
     useEffect(() => {
