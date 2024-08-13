@@ -1,8 +1,7 @@
 'use client';
 
 import MascotImage from '@/components/atoms/common/MascotImage';
-import Center2xlTwoLineText from '@/components/atoms/write/Cneter2xlTwoLineText';
-import WelcomeImage from '@/components/molecules/write/WelcomeImage';
+import Center2xlTwoLineText from '@/components/atoms/write/Center2xlTwoLineText';
 import React from 'react';
 
 export default function PendingPage() {
