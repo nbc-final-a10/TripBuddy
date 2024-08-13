@@ -37,7 +37,7 @@ const BuddyTemperature = ({
                     <span className="block text-left xl:text-xl">
                         버디즈 지수
                     </span>
-                    <span className="text-gray-500">
+                    <span className="text-main-color">
                         {temperature ? `${temperature} %` : '정보없음'}
                     </span>
                 </div>
