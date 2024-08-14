@@ -17,6 +17,8 @@ const HomePageBanner = () => {
         id: buddy?.buddy_id,
     });
 
+    console.log('data =====>', data);
+
     useEffect(() => {
         const bannerImgs = [
             'test_city.jpg',
@@ -75,7 +77,7 @@ const HomePageBanner = () => {
                             </p>
                         </Link>
                     )}
-                    {!data && buddy && !isPending && (
+                    {!data?.trips.length && buddy && !isPending && (
                         <>
                             <p>
                                 <span className="font-bold text-3xl">

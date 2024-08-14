@@ -29,9 +29,29 @@ export async function GET(request: Request) {
                 },
             },
         );
-        const { error } = await supabase.auth.exchangeCodeForSession(code);
+        const { data, error } =
+            await supabase.auth.exchangeCodeForSession(code);
 
-        if (!error) {
+        if (!error && data?.session?.user) {
+            const user = data.session.user;
+
+            // 예시 1: 최초 로그인 여부 확인 (created_at이 최근인지 확인)
+            const isNewUser =
+                new Date(user.created_at).getTime() >
+                Date.now() - 60 * 60 * 1000; // 1시간 이내에 생성된 사용자
+
+            console.log('isNewUser =====>', isNewUser);
+
+            // 예시 2: 사용자 메타데이터를 확인하여 리다이렉트
+            const needsOnboarding = !user.user_metadata?.onboarding_complete;
+
+            if (isNewUser || needsOnboarding) {
+                return NextResponse.redirect(
+                    `${origin}/onboarding?funnel=0&mode=first`,
+                );
+            }
+
+            // 로그인 성공 후 일반적인 리다이렉트 처리
             return NextResponse.redirect(`${origin}${next}`);
         }
     }
