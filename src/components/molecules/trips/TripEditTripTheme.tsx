@@ -7,6 +7,7 @@ import LeftXlBoldText from '@/components/atoms/write/LeftXlBoldText';
 import { useModal } from '@/contexts/modal.context';
 import { usePreferTheme, useSelectMeetPlace } from '@/hooks';
 import { TripThemeData } from '@/types/Trips.types';
+import { showAlert } from '@/utils/ui/openCustomAlert';
 import React, { forwardRef } from 'react';
 
 const TripEditTripTheme = forwardRef<TripThemeData>((props, ref) => {
@@ -16,6 +17,14 @@ const TripEditTripTheme = forwardRef<TripThemeData>((props, ref) => {
         mode: 'trip',
     });
     const modal = useModal();
+
+    const handleClose = () => {
+        if (meetPlace === '')
+            return showAlert('caution', '만나실 장소를 선택해주세요.');
+        if (selectedTripThemes.length < 3)
+            return showAlert('caution', '여정 테마를 3개 선택해주세요.');
+        modal.closeModal();
+    };
 
     React.useImperativeHandle(ref, () => ({
         meetPlace,
@@ -39,7 +48,7 @@ const TripEditTripTheme = forwardRef<TripThemeData>((props, ref) => {
             </div>
             <Button
                 className="xl:w-[70%] w-[90%] h-[6%] mx-auto my-2"
-                onClick={modal.closeModal}
+                onClick={handleClose}
             >
                 완료
             </Button>

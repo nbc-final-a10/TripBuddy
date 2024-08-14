@@ -13,7 +13,12 @@ export default function ProgressIndicator({
     className = '',
 }: ProgressIndicatorProps) {
     return (
-        <div className={twMerge('flex ml-2 pt-16 xl:pt-2', className)}>
+        <div
+            className={twMerge(
+                'flex ml-2 pt-16 xl:pt-2 items-center',
+                className,
+            )}
+        >
             {[...Array(counts)].map((_, index) => (
                 <div
                     key={index}

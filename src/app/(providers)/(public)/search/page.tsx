@@ -30,8 +30,8 @@ const SearchPage: React.FC = () => {
 
     const [selectedGender, setSelectedGender] = useState<string | null>(null);
 
-    const [startAge, setStartAge] = useState<number>(18);
-    const [endAge, setEndAge] = useState<number>(150);
+    const [startAge, setStartAge] = useState<number>(20);
+    const [endAge, setEndAge] = useState<number>(70);
 
     // const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
 
