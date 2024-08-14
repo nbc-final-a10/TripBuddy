@@ -79,7 +79,7 @@ export const ModalProviderDefault: React.FC<{ children: React.ReactNode }> = ({
             {children}
             {alertModalOptions && (
                 <CustomAlert
-                    title={alertModalOptions.title}
+                    mode={alertModalOptions.mode}
                     description={alertModalOptions.description}
                     isConfirm={alertModalOptions.options.isConfirm}
                     onCancel={onCancel}

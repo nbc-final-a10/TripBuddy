@@ -18,7 +18,7 @@ const WelcomePage: React.FC<WelcomePageProps> = ({
             <WelcomeMessage />
             <div
                 className={twMerge(
-                    'flex justify-center h-[50%] w-[300px] xl:h-[300px] xl:w-[300px] xl:mx-auto',
+                    'flex justify-center h-[50%] w-[300px] xl:h-[300px] xl:w-[300px] mx-auto',
                     isMini && 'h-[180px] w-[200px]',
                 )}
             >
