@@ -1,6 +1,9 @@
 import { showAlert } from '@/utils/ui/openCustomAlert';
 
-export const validateStep = async (step: number, params: any) => {
+export const validateStep = async (
+    step: number,
+    params: any,
+): Promise<boolean | 'no-image'> => {
     const {
         secondLevelLocation,
         thirdLevelLocation,
@@ -12,9 +15,9 @@ export const validateStep = async (step: number, params: any) => {
         startAge,
         endAge,
         selectedWantedBuddies,
-        tripImageFile,
         tripTitle,
         tripContent,
+        tripImageFile,
     } = params;
 
     if (step === 1) {
@@ -97,20 +100,7 @@ export const validateStep = async (step: number, params: any) => {
     }
     if (step === 5) {
         if (!tripImageFile) {
-            // showAlert('caution', '여정 이미지를 선택해 주세요.');
-            showAlert(
-                'caution',
-                '여정 이미지를 선택해 주세요. 선택하지 않으시면 AI가 자동 생성합니다!',
-                {
-                    onConfirm: () => {
-                        return true;
-                    },
-                    onCancel() {
-                        return false;
-                    },
-                },
-            );
-            // return false;
+            return 'no-image';
         }
         if (!tripTitle) {
             showAlert('caution', '여정 제목을 입력해 주세요.');

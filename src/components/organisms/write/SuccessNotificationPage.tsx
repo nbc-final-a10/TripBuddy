@@ -5,17 +5,17 @@ import PendingPage from './PendingPage';
 
 interface SuccessNotificationProps {
     isSuccess: boolean | null;
+    isFile: boolean;
 }
 
 const SuccessNotificationPage: React.FC<SuccessNotificationProps> = ({
     isSuccess,
+    isFile,
 }) => {
     return (
-        <div className="text-center">
+        <div className="text-center relative h-full">
             {isSuccess === null ? (
-                <>
-                    <PendingPage />
-                </>
+                <PendingPage isFile={isFile} />
             ) : isSuccess ? (
                 <CompletePage />
             ) : (

@@ -7,7 +7,6 @@ import SelectTripThemesPage from '@/components/organisms/write/SelectTripThemesP
 import SelectDatePage from '@/components/organisms/write/SelectDatePage';
 import WelcomePage from '@/components/organisms/write/WelcomePage';
 import React, { useEffect, useState } from 'react';
-import { Tables } from '@/types/supabase';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import WriteTrip from '@/components/organisms/write/WriteTrip';
 import { useRouter } from 'next/navigation';
@@ -97,9 +96,9 @@ const WritePage: React.FC = () => {
                 startAge,
                 endAge,
                 selectedWantedBuddies,
-                tripImageFile,
                 tripTitle,
                 tripContent,
+                tripImageFile,
             }),
         disabled: isLoading,
     });
@@ -153,32 +152,6 @@ const WritePage: React.FC = () => {
             setIsLoading(false);
             setIsSuccess(true);
             return true;
-            // const response = await fetch('/api/write', {
-            //     method: 'POST',
-            //     body: formData,
-            //     headers: {
-            //         user: buddy?.buddy_id ?? '', // 헤더에 사용자 ID 포함
-            //         mode: 'new',
-            //     },
-            // });
-            // if (response.ok) {
-            //     const data = await response.json();
-            //     // console.log('게시글 업데이트 성공');
-            //     setTripId(data.trip_id);
-            //     // console.log('데이터', data);
-            //     setIsLoading(false);
-            //     setIsSuccess(true);
-            //     // showAlert('success', '여정을 작성하였습니다.');
-            //     // router.push(`/trips/${tripId}`);
-            //     return true;
-            // } else {
-            //     const errorResult = await response.json();
-            //     console.error('게시글 업데이트 중 오류 발생:', errorResult);
-            //     showAlert('error', '여정을 작성하지 못하였습니다.');
-            //     setIsLoading(false);
-            //     setIsSuccess(false);
-            //     return false;
-            // }
         } catch (error) {
             console.error('게시글 업데이트 중 오류 발생:', error);
             showAlert('error', '여정을 작성하지 못하였습니다.');
@@ -186,6 +159,10 @@ const WritePage: React.FC = () => {
             setIsSuccess(false);
             return false;
         }
+    };
+
+    const handlePush = (path: string) => {
+        router.push(path);
     };
 
     useEffect(() => {
@@ -197,9 +174,11 @@ const WritePage: React.FC = () => {
         setIsMini(isMini);
     }, []);
 
-    const handlePush = (path: string) => {
-        router.push(path);
-    };
+    useEffect(() => {
+        if (postTripError) {
+            showAlert('error', postTripError.message);
+        }
+    }, [postTripError]);
 
     return (
         <div
@@ -268,32 +247,19 @@ const WritePage: React.FC = () => {
                         />
                     )}
                     {step === 6 && (
-                        <SuccessNotificationPage isSuccess={isSuccess} />
+                        <SuccessNotificationPage
+                            isSuccess={isSuccess}
+                            isFile={!!tripImageFile}
+                        />
                     )}
                 </div>
                 <div className="relatvie h-[8%] w-[90%] xl:h-[10%] xl:w-[60%] mx-auto flex justify-center items-center">
                     <NextButton
                         className={twMerge(
-                            'text-xl text-white leading-none bg-main-color font-bold py-2 px-4 my-0.5 xl:py-3 rounded-xl w-full hover:bg-main-color/80',
+                            'text-xl text-white leading-none bg-main-color font-bold py-3 px-4 my-0.5 xl:py-3 rounded-xl w-full hover:bg-main-color/80',
                             isMini && 'mt-0.5 mb-10',
                         )}
                         onClick={async () => {
-                            const isValid = await validateStep(step, {
-                                secondLevelLocation: states.secondLevelLocation,
-                                thirdLevelLocation: states.thirdLevelLocation,
-                                startDateTimestamp,
-                                endDateTimestamp,
-                                selectedTripThemes,
-                                meetPlace,
-                                wantedSex,
-                                startAge,
-                                endAge,
-                                selectedWantedBuddies,
-                                tripImageFile,
-                                tripTitle,
-                                tripContent,
-                            });
-                            if (!isValid) return; // 유효성 검사 실패 시 미진행
                             if (step === 5) {
                                 const success = await handleWriteTrip();
                                 if (!success) return; // 요청 실패 시 미진행
