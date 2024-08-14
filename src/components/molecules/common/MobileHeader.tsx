@@ -51,7 +51,7 @@ const MobileHeader: React.FC = () => {
         (isOnboarding && '온보딩') ||
         (isProfile && isMyProfile && '마이페이지') ||
         (isProfile && !isMyProfile && '프로필') ||
-        (isStory && '스토리') ||
+        (isStory && '버디즈 스토리') ||
         (isStoryWrite && '스토리에 추가') ||
         (isChatId && '') ||
         (isChat && '채팅') ||
