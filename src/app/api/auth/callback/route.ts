@@ -26,15 +26,6 @@ export async function GET(request: Request) {
                             );
                         } catch {}
                     },
-                    // get(name: string) {
-                    //     return cookieStore.get(name)?.value;
-                    // },
-                    // set(name: string, value: string, options: CookieOptions) {
-                    //     cookieStore.set({ name, value, ...options });
-                    // },
-                    // remove(name: string, options: CookieOptions) {
-                    //     cookieStore.delete({ name, ...options });
-                    // },
                 },
             },
         );
@@ -50,3 +41,12 @@ export async function GET(request: Request) {
 }
 
 // 만일 소셜 로그인인데, 이메일이 같으면(깃헙로그인이든 구글이든) 수파베이스 auth 에는 그냥 업데이트만 됨
+// get(name: string) {
+//     return cookieStore.get(name)?.value;
+// },
+// set(name: string, value: string, options: CookieOptions) {
+//     cookieStore.set({ name, value, ...options });
+// },
+// remove(name: string, options: CookieOptions) {
+//     cookieStore.delete({ name, ...options });
+// },
