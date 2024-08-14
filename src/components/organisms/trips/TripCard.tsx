@@ -41,6 +41,8 @@ import TripEditText from '../../molecules/trips/TripEditText';
 import { deleteTrip } from '@/utils/trips/deleteTrip';
 import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY_TRIP_INFINITE } from '@/constants/query.constants';
+import getIsOverseas from '@/utils/common/getIsOverseas';
+import remainDaysNumber from '@/utils/common/getRemainDaysNumber';
 
 type TripCardProps = {
     trip: TripWithContract;
@@ -353,16 +355,34 @@ const TripCard: React.FC<TripCardProps> = ({
                         <div className="flex flex-col gap-3">
                             <div className="flex flex-row gap-2 justify-between">
                                 {mode === 'card' && (
-                                    <div className="flex flex-row gap-1">
-                                        <Chip selected={false} intent="rounded">
-                                            해외
-                                        </Chip>
-                                        <Chip
-                                            selected={false}
-                                            intent="rounded_blue"
-                                        >
-                                            HOT
-                                        </Chip>
+                                    <div className="flex flex-row gap-1 min-h-[22px]">
+                                        {getIsOverseas(
+                                            trip.trip_final_destination,
+                                        ) ? (
+                                            <Chip
+                                                selected={false}
+                                                intent="rounded"
+                                            >
+                                                해외
+                                            </Chip>
+                                        ) : (
+                                            <Chip
+                                                selected={false}
+                                                intent="rounded_yellow"
+                                            >
+                                                국내
+                                            </Chip>
+                                        )}
+                                        {remainDaysNumber(
+                                            trip.trip_start_date,
+                                        ) <= 20 && (
+                                            <Chip
+                                                selected={false}
+                                                intent="rounded_blue"
+                                            >
+                                                HOT
+                                            </Chip>
+                                        )}
                                     </div>
                                 )}
 
