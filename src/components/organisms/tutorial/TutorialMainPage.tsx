@@ -43,7 +43,7 @@ const TutorialMainPage: React.FC = () => {
     }, [step, router]);
 
     return (
-        <div className="relative  h-dvh overflow-hidden bg-white xl:h-[calc(100dvh-100px)] xl:mt-14 px-[20px] mt-[64px]">
+        <div className="relative  h-dvh overflow-x-auto bg-white xl:h-[calc(100dvh-100px)] xl:mt-14 px-[20px] ">
             <div className="flex justify-between items-center relative w-full mt-[64px] xl:mt-14 px-[20px] min-h-[32px]">
                 {step > 0 ? (
                     <ArrowBack
