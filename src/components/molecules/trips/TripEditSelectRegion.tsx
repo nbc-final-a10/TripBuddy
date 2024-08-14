@@ -8,12 +8,22 @@ import { useModal } from '@/contexts/modal.context';
 import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 import { useSelectRegion } from '@/hooks';
 import { SelectRegionPageProps } from '@/types/Location.types';
+import { showAlert } from '@/utils/ui/openCustomAlert';
 
 const TripEditSelectRegion = forwardRef<Partial<SelectRegionPageProps>>(
     (props, ref) => {
         const { states, actions } = useSelectRegion();
         const modal = useModal();
         React.useImperativeHandle(ref, () => ({ states }));
+
+        const handleClose = () => {
+            if (
+                states.secondLevelLocation === '' ||
+                states.thirdLevelLocation === ''
+            )
+                return showAlert('caution', '지역을 선택해주세요.');
+            modal.closeModal();
+        };
 
         return (
             <TripEditModalWrapper>
@@ -22,13 +32,13 @@ const TripEditSelectRegion = forwardRef<Partial<SelectRegionPageProps>>(
                     <LeftSmGrayText text="지역, 국가, 도시를 1개 선택해주세요." />
                 </div>
                 <SelectRegions
-                    className="xl:w-[70%] w-[90%] h-[84%] mx-auto"
+                    className="xl:w-[70%] w-[90%] h-[78%] mx-auto"
                     states={states}
                     actions={actions}
                 />
                 <Button
                     className="xl:w-[70%] w-[90%] h-[6%] mx-auto my-2"
-                    onClick={modal.closeModal}
+                    onClick={handleClose}
                 >
                     완료
                 </Button>

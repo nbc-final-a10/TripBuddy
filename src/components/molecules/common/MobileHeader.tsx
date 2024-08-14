@@ -7,7 +7,6 @@ import Notification from '../../../../public/svg/Alarm.svg';
 import Search from '../../../../public/svg/HomeSearch.svg';
 import MobileHeaderSettingsButton from '@/components/atoms/common/MobileHeaderSettingsButton';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useTripQuery } from '@/hooks/queries';
 import { useAuth } from '@/hooks';
 import { useModal } from '@/contexts/modal.context';
 import { getTrip } from '@/api-services/trips';
@@ -36,7 +35,7 @@ const MobileHeader: React.FC = () => {
     const isWrite = pathname === '/write';
     const isOnboarding = pathname === '/onboarding';
     const isProfile = pathname.startsWith('/profile/');
-    const isEditProfile = pathname.startsWith('/edit/trips');
+    const isEditTrips = pathname.startsWith('/edit/trips');
     const isStoryWrite = pathname === '/write/story';
     const isNotification = pathname === '/notifications';
 
@@ -58,7 +57,7 @@ const MobileHeader: React.FC = () => {
         (isChat && '채팅') ||
         (isNotification && '알림') ||
         (isRecover && '비밀번호 찾기') ||
-        (isEditProfile && '');
+        (isEditTrips && '');
 
     const isShow =
         isTrips ||
@@ -75,14 +74,15 @@ const MobileHeader: React.FC = () => {
         isChat ||
         isNotification ||
         isRecover ||
-        isEditProfile;
+        isEditTrips;
 
     const handleBack = () => {
         if (isRecover) {
             router.push('/login?mode=login');
         } else if (isLogin || isSignup) {
             router.push('/');
-        } else if (isEditProfile) {
+        } else if (isEditTrips) {
+            router.push(`/trips/${uuid}`);
             modal.closeModal();
         } else {
             router.back();
@@ -140,6 +140,12 @@ const MobileHeader: React.FC = () => {
                         className="cursor-pointer fill-black"
                     />
                 )}
+                {/* {isEditTrips && (
+                    <Close
+                        onClick={() => modal.closeModal()}
+                        className="cursor-pointer fill-black"
+                    />
+                )} */}
             </div>
         </header>
     );

@@ -1,13 +1,14 @@
 'use client';
 
 import Loading from '@/app/(providers)/loading';
-import TripCard from '@/components/molecules/trips/TripCard';
 import { useTripsQuery } from '@/hooks/queries';
 import { TripWithContract } from '@/types/Trips.types';
 import { sliceArrayByLimit } from '@/utils/common/sliceArrayByLimits';
 import React, { useEffect, useMemo, useState } from 'react';
 import { RxTriangleLeft, RxTriangleRight } from 'react-icons/rx';
 import { twMerge } from 'tailwind-merge';
+import TripCard from './TripCard';
+import { showAlert } from '@/utils/ui/openCustomAlert';
 
 const TripListDesktop: React.FC = () => {
     const { data: tripsData, isPending, error } = useTripsQuery();
@@ -28,7 +29,7 @@ const TripListDesktop: React.FC = () => {
         if (next === 'before') {
             if (paginationIndex > 0) setPaginationIndex(prev => prev - 1);
         } else {
-            if (slicedPageArray.length > paginationIndex)
+            if (slicedPageArray.length > paginationIndex + 1)
                 setPaginationIndex(prev => prev + 1);
         }
     };
@@ -39,7 +40,7 @@ const TripListDesktop: React.FC = () => {
 
     useEffect(() => {
         if (error) {
-            console.error(error);
+            showAlert('error', '여정 조회에 실패했습니다.');
         }
     }, [error]);
 

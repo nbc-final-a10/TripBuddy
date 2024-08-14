@@ -14,6 +14,7 @@ const MainSectionWrapper = ({ children }: MainSectionWrapperProps) => {
     const isHidePaddingBottom =
         pathname.startsWith('/chat/') ||
         pathname.startsWith('/stories/') ||
+        pathname.startsWith('/write') ||
         pathname === '/write/story' ||
         pathname === '/login' ||
         pathname === '/signup' ||
@@ -31,7 +32,7 @@ const MainSectionWrapper = ({ children }: MainSectionWrapperProps) => {
         >
             <section
                 className={twMerge(
-                    'relative max-w-[430px] min-w-[320px] mx-auto min-h-dvh pb-[50px] xl:w-[1080px] xl:max-w-[1280px] xl:min-h-full',
+                    'relative max-w-[430px] min-w-[320px] mx-auto min-h-dvh pb-[50px] xl:w-[1080px] xl:max-w-[1280px] xl:h-full',
                     isHidePaddingBottom && 'pb-0',
                 )}
             >
