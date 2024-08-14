@@ -8,12 +8,18 @@ import React, {
     useEffect,
 } from 'react';
 import CustomAlert from '@/components/organisms/common/CustomAlert';
-import { ModalContextType, ModalOptions } from '@/types/Modal.types';
+import {
+    ModalContextType,
+    AlertModalOptions,
+    ModalOptions,
+} from '@/types/Modal.types';
 import { useLockBodyScroll } from '@/hooks';
 
 const initialValue: ModalContextType = {
     open: () => {},
     close: () => {},
+    openModal: () => {},
+    closeModal: () => {},
 };
 
 export const ModalContext = createContext<ModalContextType>(initialValue);
@@ -23,11 +29,21 @@ export const useModal = () => useContext(ModalContext);
 export const ModalProviderDefault: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
+    const [alertModalOptions, setAlertModalOptions] =
+        useState<AlertModalOptions | null>(null);
     const [modalOptions, setModalOptions] = useState<ModalOptions | null>(null);
 
     const { setLock } = useLockBodyScroll();
 
     const open = useCallback(
+        (options: AlertModalOptions) => {
+            setAlertModalOptions(options);
+            setLock(true);
+        },
+        [setLock],
+    );
+
+    const openModal = useCallback(
         (options: ModalOptions) => {
             setModalOptions(options);
             setLock(true);
@@ -36,33 +52,41 @@ export const ModalProviderDefault: React.FC<{ children: React.ReactNode }> = ({
     );
 
     const close = useCallback(() => {
-        if (modalOptions?.options.onConfirm) modalOptions.options.onConfirm();
+        if (alertModalOptions?.options.onConfirm)
+            alertModalOptions.options.onConfirm();
         setLock(false);
-        setModalOptions(null);
-    }, [modalOptions, setLock]);
+        setAlertModalOptions(null);
+    }, [alertModalOptions, setLock]);
 
-    const onCancel = useCallback(() => {
-        if (modalOptions?.options.onCancel) modalOptions.options.onCancel();
-        setLock(false);
+    const closeModal = useCallback(() => {
         setModalOptions(null);
-    }, [modalOptions, setLock]);
-
-    useEffect(() => {
         setLock(false);
     }, [setLock]);
 
+    const onCancel = useCallback(() => {
+        if (alertModalOptions?.options.onCancel)
+            alertModalOptions.options.onCancel();
+        setLock(false);
+        setAlertModalOptions(null);
+    }, [alertModalOptions, setLock]);
+
+    // useEffect(() => {
+    //     setLock(true);
+    // }, [setLock]);
+
     return (
-        <ModalContext.Provider value={{ open, close }}>
+        <ModalContext.Provider value={{ open, close, openModal, closeModal }}>
             {children}
-            {modalOptions && (
+            {alertModalOptions && (
                 <CustomAlert
-                    title={modalOptions.title}
-                    description={modalOptions.description}
-                    isConfirm={modalOptions.options.isConfirm}
+                    title={alertModalOptions.title}
+                    description={alertModalOptions.description}
+                    isConfirm={alertModalOptions.options.isConfirm}
                     onCancel={onCancel}
                     onClose={close}
                 />
             )}
+            {modalOptions && modalOptions.component()}
         </ModalContext.Provider>
     );
 };

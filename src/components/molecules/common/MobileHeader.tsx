@@ -1,21 +1,24 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Arrow_Back from '../../../../public/svg/Arrow_back.svg';
 import Close from '../../../../public/svg/Close.svg';
 import Notification from '../../../../public/svg/Alarm.svg';
 import Search from '../../../../public/svg/HomeSearch.svg';
 import MobileHeaderSettingsButton from '@/components/atoms/common/MobileHeaderSettingsButton';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useTripQuery } from '@/hooks/queries';
 import { useAuth } from '@/hooks';
+import { useModal } from '@/contexts/modal.context';
+import { getTrip } from '@/api-services/trips';
+import { TripWithContract } from '@/types/Trips.types';
 
 const MobileHeader: React.FC = () => {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const router = useRouter();
     const { buddy } = useAuth();
-
+    const modal = useModal();
+    const [trip, setTrip] = useState<TripWithContract | null>(null);
     const uuidMatch = pathname.match(/\/([^\/]+)\/([0-9a-fA-F-]{36})$/);
     const uuid = uuidMatch ? uuidMatch[2] : null;
     const isMyProfile = uuid === buddy?.buddy_id;
@@ -32,10 +35,11 @@ const MobileHeader: React.FC = () => {
     const isWrite = pathname === '/write';
     const isOnboarding = pathname === '/onboarding';
     const isProfile = pathname.startsWith('/profile/');
+    const isEditTrips = pathname.startsWith('/edit/trips');
     const isStoryWrite = pathname === '/write/story';
     const isNotification = pathname === '/notifications';
 
-    const { data: trip } = useTripQuery(isTripDetail && uuid ? uuid : null);
+    // const { data: trip } = useTripQuery(isTripDetail && uuid ? uuid : null);
 
     const headerTitle =
         (isTrips && '모집중 여정') ||
@@ -52,7 +56,8 @@ const MobileHeader: React.FC = () => {
         (isChatId && '') ||
         (isChat && '여정채팅') ||
         (isNotification && '알림') ||
-        (isRecover && '비밀번호 찾기');
+        (isRecover && '비밀번호 찾기') ||
+        (isEditTrips && '');
 
     const isShow =
         isTrips ||
@@ -68,17 +73,31 @@ const MobileHeader: React.FC = () => {
         isChatId ||
         isChat ||
         isNotification ||
-        isRecover;
+        isRecover ||
+        isEditTrips;
 
     const handleBack = () => {
         if (isRecover) {
             router.push('/login?mode=login');
         } else if (isLogin || isSignup) {
             router.push('/');
+        } else if (isEditTrips) {
+            router.push(`/trips/${uuid}`);
+            modal.closeModal();
         } else {
             router.back();
         }
     };
+
+    useEffect(() => {
+        async function fetchTrip() {
+            if (uuid) {
+                const trip = await getTrip(uuid);
+                setTrip(trip);
+            }
+        }
+        fetchTrip();
+    }, [uuid]);
 
     if (!isShow) return null;
 
@@ -121,6 +140,12 @@ const MobileHeader: React.FC = () => {
                         className="cursor-pointer fill-black"
                     />
                 )}
+                {/* {isEditTrips && (
+                    <Close
+                        onClick={() => modal.closeModal()}
+                        className="cursor-pointer fill-black"
+                    />
+                )} */}
             </div>
         </header>
     );

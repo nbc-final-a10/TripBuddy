@@ -17,7 +17,6 @@ export async function GET(
         error: allTripsError,
     }: {
         data: TripWithContract[] | null;
-
         error: PostgrestError | null;
     } = await supabase
         .from('trips')

@@ -1,13 +1,14 @@
 'use client';
 
 import Loading from '@/app/(providers)/loading';
-import TripCard from '@/components/molecules/trips/TripCard';
 import { useTripsQuery } from '@/hooks/queries';
 import { TripWithContract } from '@/types/Trips.types';
 import { sliceArrayByLimit } from '@/utils/common/sliceArrayByLimits';
 import React, { useEffect, useMemo, useState } from 'react';
 import { RxTriangleLeft, RxTriangleRight } from 'react-icons/rx';
 import { twMerge } from 'tailwind-merge';
+import TripCard from './TripCard';
+import { showAlert } from '@/utils/ui/openCustomAlert';
 
 const TripListDesktop: React.FC = () => {
     const { data: tripsData, isPending, error } = useTripsQuery();
@@ -28,7 +29,7 @@ const TripListDesktop: React.FC = () => {
         if (next === 'before') {
             if (paginationIndex > 0) setPaginationIndex(prev => prev - 1);
         } else {
-            if (slicedPageArray.length > paginationIndex)
+            if (slicedPageArray.length > paginationIndex + 1)
                 setPaginationIndex(prev => prev + 1);
         }
     };
@@ -39,7 +40,7 @@ const TripListDesktop: React.FC = () => {
 
     useEffect(() => {
         if (error) {
-            console.error(error);
+            showAlert('error', '여정 조회에 실패했습니다.');
         }
     }, [error]);
 
@@ -48,7 +49,7 @@ const TripListDesktop: React.FC = () => {
     if (!tripsData) return <div>No trips</div>;
 
     return (
-        <section className="w-full flex flex-col justify-center items-center h-[calc(100dvh-56px-57px)] pt-4 mb-10 xl:h-[calc(100dvh-100px)] xl:pt-0 xl:mb-0 xl:gap-6">
+        <section className="w-full flex flex-col justify-center items-center h-[calc(100dvh-57px-76px)] pt-4 mb-10 xl:h-[calc(100dvh-100px)] xl:pt-0 xl:mb-0 xl:gap-6">
             <div className="w-full justify-end items-center hidden xl:flex">
                 <button className="flex justify-between items-center border-1 border-black rounded-md p-1">
                     <select className="w-full focus:outline-none">

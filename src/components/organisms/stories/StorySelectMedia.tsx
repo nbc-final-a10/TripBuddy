@@ -20,7 +20,7 @@ const StorySelectMedia: React.FC<StorySelectMediaProps> = ({
     };
 
     return (
-        <section className="relative flex flex-col gap-4 w-full h-[calc(100dvh-57px-56px)] max-h-dvh overflow-hidden aspect-auto">
+        <section className="relative flex flex-col gap-4 w-full h-[calc(100dvh-57px-76px)] max-h-dvh overflow-hidden aspect-auto">
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black/80 z-10"></div>
 
             <form

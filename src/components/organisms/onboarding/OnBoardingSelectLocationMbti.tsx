@@ -1,3 +1,4 @@
+'use client';
 import Chip from '@/components/atoms/common/Chip';
 import Title from '@/components/atoms/common/Title';
 import OnBoardingInnerWrapper from '@/components/atoms/onboarding/OnBoardinginnerWrapper';

@@ -26,6 +26,8 @@ import {
     useSelectSex,
     useTripWrite,
 } from '@/hooks';
+import { useTripMutation } from '@/hooks/queries';
+import { PartialTrip, TripMutationData } from '@/types/Trips.types';
 
 // 버튼 라벨 배열
 const buttonText = [
@@ -45,9 +47,17 @@ const WritePage: React.FC = () => {
     const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
     const [isMini, setIsMini] = useState<boolean>(false);
 
+    const {
+        mutateAsync: postTrip,
+        isPending: postTripPending,
+        error: postTripError,
+    } = useTripMutation();
+
     const { buddy } = useAuth();
     const router = useRouter();
-    const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
+    const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts({
+        initialCounts: 2,
+    });
     const { SelectCalendar, startDateTimestamp, endDateTimestamp } =
         useCalendar();
     const { actions, states } = useSelectRegion();
@@ -94,15 +104,15 @@ const WritePage: React.FC = () => {
         disabled: isLoading,
     });
 
-    type TripData = Tables<'trips'>;
-    // 파셜트립데이터는 데이터 컬럼을 선택적으로 쓰겠다
-    type PartialTripData = Partial<TripData>;
+    // type TripData = Tables<'trips'>;
+    // // 파셜트립데이터는 데이터 컬럼을 선택적으로 쓰겠다
+    // type PartialTripData = Partial<TripData>;
 
     // Todo: 핸들러 함수 정의 (커스텀 훅의 state를 supabase에 한번에 쓰는 함수) -> WritePage에 함수만 내려주기
     // Todo: 더 큰 함수로 바꾸어서 step 별로 유효성 검사 등 실행 로직 분리하기
     const handleWriteTrip = async () => {
         setIsLoading(true);
-        const tripData: PartialTripData = {
+        const tripData: PartialTrip = {
             trip_title: tripTitle,
             trip_content: tripContent,
             trip_thumbnail: '',
@@ -126,33 +136,49 @@ const WritePage: React.FC = () => {
         if (tripImageFile) {
             formData.append('trip_image', tripImageFile);
             formData.append('trip_json', JSON.stringify(tripData));
+        } else {
+            formData.append('trip_json', JSON.stringify(tripData));
         }
         try {
-            const response = await fetch('/api/write', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    user: buddy?.buddy_id ?? '', // 헤더에 사용자 ID 포함
-                },
-            });
-            if (response.ok) {
-                const data = await response.json();
-                // console.log('게시글 업데이트 성공');
-                setTripId(data.trip.trip_id);
-                // console.log('데이터', data);
-                setIsLoading(false);
-                setIsSuccess(true);
-                // showAlert('success', '여정을 작성하였습니다.');
-                // router.push(`/trips/${tripId}`);
-                return true;
-            } else {
-                const errorResult = await response.json();
-                console.error('게시글 업데이트 중 오류 발생:', errorResult);
-                showAlert('error', '여정을 작성하지 못하였습니다.');
-                setIsLoading(false);
-                setIsSuccess(false);
-                return false;
+            if (!buddy?.buddy_id) {
+                throw new Error('사용자 ID가 없습니다.');
             }
+            const payload: TripMutationData = {
+                newTrip: formData,
+                id: buddy.buddy_id,
+                mode: 'new',
+            };
+            const data = await postTrip(payload);
+            setTripId(data.trip_id);
+            setIsLoading(false);
+            setIsSuccess(true);
+            return true;
+            // const response = await fetch('/api/write', {
+            //     method: 'POST',
+            //     body: formData,
+            //     headers: {
+            //         user: buddy?.buddy_id ?? '', // 헤더에 사용자 ID 포함
+            //         mode: 'new',
+            //     },
+            // });
+            // if (response.ok) {
+            //     const data = await response.json();
+            //     // console.log('게시글 업데이트 성공');
+            //     setTripId(data.trip_id);
+            //     // console.log('데이터', data);
+            //     setIsLoading(false);
+            //     setIsSuccess(true);
+            //     // showAlert('success', '여정을 작성하였습니다.');
+            //     // router.push(`/trips/${tripId}`);
+            //     return true;
+            // } else {
+            //     const errorResult = await response.json();
+            //     console.error('게시글 업데이트 중 오류 발생:', errorResult);
+            //     showAlert('error', '여정을 작성하지 못하였습니다.');
+            //     setIsLoading(false);
+            //     setIsSuccess(false);
+            //     return false;
+            // }
         } catch (error) {
             console.error('게시글 업데이트 중 오류 발생:', error);
             showAlert('error', '여정을 작성하지 못하였습니다.');
@@ -178,13 +204,22 @@ const WritePage: React.FC = () => {
     return (
         <div
             className={twMerge(
-                'relative h-[calc(100dvh-56px-57px)]',
-                step === 5 && 'h-auto',
+                'relative h-[calc(100dvh-56px-76px)] xl:h-[calc(100dvh-100px)]',
+                step === 5 && 'xl:h-[calc(100dvh-100px)]',
             )}
         >
-            <ProgressIndicator className="pt-2" step={step} counts={7} />
-            <section className="h-auto flex flex-col">
-                <div className={twMerge('flex flex-col', step === 0 && 'mb-2')}>
+            <ProgressIndicator
+                className="pt-0 h-[2%] xl:h-[5%]"
+                step={step}
+                counts={7}
+            />
+            <section className="h-[98%] xl:h-[95%] flex flex-col">
+                <div
+                    className={twMerge(
+                        'flex flex-col h-[92%] xl:h-[90%]',
+                        step === 0 && 'xl:mb-2',
+                    )}
+                >
                     {step === 0 && (
                         <WelcomePage
                             SelectBuddyCounts={SelectBuddyCounts}
@@ -236,10 +271,10 @@ const WritePage: React.FC = () => {
                         <SuccessNotificationPage isSuccess={isSuccess} />
                     )}
                 </div>
-                <div className="flex justify-center">
+                <div className="relatvie h-[8%] w-[90%] xl:h-[10%] xl:w-[60%] mx-auto flex justify-center items-center">
                     <NextButton
                         className={twMerge(
-                            'text-xl text-white bg-main-color font-bold py-2 px-4 mt-4 mx-2 mb-20 rounded-xl w-full hover:bg-main-color/80',
+                            'text-xl text-white leading-none bg-main-color font-bold py-2 px-4 my-0.5 xl:py-3 rounded-xl w-full hover:bg-main-color/80',
                             isMini && 'mt-0.5 mb-10',
                         )}
                         onClick={async () => {

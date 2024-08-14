@@ -17,7 +17,6 @@ import { Metadata } from 'next';
 import { defaultMetaData } from '@/data/defaultMetaData';
 import { ModalProviderSetter } from '@/providers/ModalProvider';
 import { ModalProviderDefault } from '@/contexts/modal.context';
-import { getPathnameServer } from '@/utils/common/getPathnameServer';
 
 export const metadata: Metadata = defaultMetaData;
 

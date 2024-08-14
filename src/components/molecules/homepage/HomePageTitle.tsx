@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
+import { twMerge } from 'tailwind-merge';
 import ArrowRight from '../../../../public/svg/ArrowRight.svg';
 
 interface HomePageTitleProps {
@@ -7,6 +8,7 @@ interface HomePageTitleProps {
     buttonText: string;
     description: string;
     href: string;
+    className?: string;
 }
 
 const HomePageTitle: React.FC<HomePageTitleProps> = ({
@@ -14,9 +16,10 @@ const HomePageTitle: React.FC<HomePageTitleProps> = ({
     buttonText,
     description,
     href,
+    className,
 }) => {
     return (
-        <div className="mb-4 mt-12">
+        <div className={twMerge('mb-4', className)}>
             <div className="flex justify-between">
                 <p className="text-grayscale-color-800 text-[22px] font-extrabold">
                     {title}

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 export function useSelectSex() {
     const [wantedSex, setWantedSex] = useState<string>('');
@@ -18,7 +19,12 @@ export function useSelectSex() {
                     <button
                         key={index}
                         onClick={() => setWantedSex(value)}
-                        className={`text-lg ${wantedSex === value ? 'bg-main-color text-white' : 'bg-gray-100'} w-full mx-2 px-4 py-1 xl:py-2 rounded-full`}
+                        className={twMerge(
+                            'text-lg mx-2 px-4 py-1 xl:py-2 rounded-full',
+                            wantedSex === value
+                                ? 'bg-main-color text-white'
+                                : 'bg-gray-100',
+                        )}
                     >
                         {value}
                     </button>
