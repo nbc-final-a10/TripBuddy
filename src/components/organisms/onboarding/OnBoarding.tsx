@@ -270,11 +270,9 @@ const OnBoarding: React.FC = () => {
     useEffect(() => {
         if (isEdit !== null) {
             if (step === stepToDisplay && step <= 11 && isEdit) {
-                console.log('step isEdit true', step);
                 router.push(`/onboarding?funnel=${step}&mode=edit`);
                 setStepToDisplay(step);
             } else if (step === stepToDisplay && step <= 11 && !isEdit) {
-                console.log('step isEdit false', step);
                 router.push(`/onboarding?funnel=${step}&mode=first`);
                 setStepToDisplay(step);
             } else if (step === stepToDisplay && step > 11) {
