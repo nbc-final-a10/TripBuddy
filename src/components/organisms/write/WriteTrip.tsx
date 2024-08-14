@@ -27,11 +27,11 @@ const WriteTrip: React.FC<WriteTripProps> = ({
     const isMini = window.innerHeight < 659;
     return (
         <div className="relative px-2 flex flex-col xl:flex-row">
-            <header className="mb-5 w-[40%]">
+            <header className="mb-5 w-full xl:w-[40%]">
                 <Left2xlBoldText text="모집 글을 작성해봐요!" />
             </header>
 
-            <form className="relative w-[60%]">
+            <form className="relative w-full xl:w-[60%]">
                 <div className="flex items-center">
                     <label className="block mb-1 text-sm font-medium text-gray-700 mr-2">
                         대표 이미지
