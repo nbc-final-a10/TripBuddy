@@ -17,13 +17,13 @@ export default function SelectDatePage({
     const title = '날짜를 선택해주세요';
     const subtitle = `여정 시작 날짜와 종료 날짜의 범위를 선택해주세요.`;
     return (
-        <div className="flex flex-col xl:flex-row">
-            <div className="w-[40%]">
+        <div className="flex flex-col xl:flex-row h-full">
+            <div className="w-full xl:w-[40%]">
                 <Left2xlBoldText className="xl:text-2xl" text={title} />
                 <LeftSmGrayText text={subtitle} />
             </div>
-            <div className="w-[60%]">
-                <div className="flex justify-center">
+            <div className="w-full h-full xl:w-[60%]">
+                <div className="flex justify-center items-center h-[80%]">
                     <SelectCalendar />
                 </div>
                 <div>

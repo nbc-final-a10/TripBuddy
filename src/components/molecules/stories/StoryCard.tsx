@@ -19,6 +19,7 @@ type StoryCardProps = {
     story: StoryWithBuddies;
     overlay: StoryOverlay[];
     likes: StoryLikes[];
+    isMain?: boolean;
 };
 
 const StoryCard: React.FC<StoryCardProps> = ({
@@ -27,19 +28,22 @@ const StoryCard: React.FC<StoryCardProps> = ({
     story,
     overlay,
     likes,
+    isMain = false,
 }) => {
     return (
-        <div className="relative flex flex-col justify-center items-center min-w-[139px] w-[139px] h-[190px] bg-gray-3000 rounded-lg gap-2 aspect-auto xl:min-w-[254px]">
-            <div className="absolute top-0.5 right-1 w-full flex flex-row justify-end z-[99]">
-                <button className="relative focus:outline-none">
-                    <LikesButton
-                        storyId={story.story_id}
-                        likesCount={story.story_likes_counts}
-                        mode="card"
-                        likes={likes}
-                    />
-                </button>
-            </div>
+        <div className="relative flex flex-col justify-center items-center min-w-[163px] w-[163px] h-[223px] bg-gray-3000 rounded-lg gap-2 aspect-auto xl:min-w-[254px]">
+            {!isMain && (
+                <div className="absolute top-0.5 right-1 w-full flex flex-row justify-end z-[99]">
+                    <button className="relative focus:outline-none">
+                        <LikesButton
+                            storyId={story.story_id}
+                            likesCount={story.story_likes_counts}
+                            mode="card"
+                            likes={likes}
+                        />
+                    </button>
+                </div>
+            )}
             <Link
                 className="w-full h-full absolute aspect-auto flex justify-center items-center"
                 href={`/stories/${story.buddies.buddy_nickname}?id=${id}`}

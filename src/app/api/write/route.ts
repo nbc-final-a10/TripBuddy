@@ -58,14 +58,23 @@ export async function POST(req: NextRequest) {
                 apiKey: OPEN_AI_SECRET_KEY,
             });
 
+            const [continent, country] =
+                tripData.trip_final_destination?.split(' ') || [];
+
             // OpenAI를 사용하여 이미지를 생성
             const imageGeneration = await openai.images.generate({
-                prompt: `A beautiful landscape in ${tripData.trip_final_destination} with minimal sky, focusing on the ground, trees, mountains, and buildings in the foreground.`,
+                model: 'dall-e-3',
+                // prompt: `${continent}의 경관, ${country}의 랜드마크, 하늘 최소화, 실제 사진, 맑은 날씨, 도시 경관 위주`,
+                prompt: `고공에서 바라본 ${country} 도시의 경관, 높은 앵글에서의 촬영`,
                 n: 1,
-                size: '512x512',
+                // size: '512x512',
                 response_format: 'url', // URL로 이미지 반환
             });
 
+            // console.log(
+            //     'revised prompt ====>',
+            //     imageGeneration.data[0].revised_prompt,
+            // );
             const imageUrl = imageGeneration.data[0].url;
 
             if (!imageUrl) {
@@ -250,6 +259,9 @@ export async function POST(req: NextRequest) {
         }
     } catch (error) {
         console.error('요청 처리 중 오류 발생:', error);
-        return NextResponse.json({ error: '서버 오류' }, { status: 500 });
+        return NextResponse.json(
+            { error: error instanceof Error ? error.message : 'Unknown error' },
+            { status: 500 },
+        );
     }
 }
