@@ -96,8 +96,8 @@ const MobileHeader: React.FC = () => {
                 setTrip(trip);
             }
         }
-        fetchTrip();
-    }, [uuid]);
+        if (!isProfile) fetchTrip();
+    }, [uuid, isProfile]);
 
     if (!isShow) return null;
 
