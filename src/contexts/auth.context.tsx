@@ -137,7 +137,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
                     'success',
                     `회원가입 성공 ${buddy.buddy_email}님 환영합니다!`,
                     {
-                        onConfirm: () => router.replace('/'),
+                        onConfirm: () => router.replace('/onboarding'),
                     },
                 );
             } catch (error) {

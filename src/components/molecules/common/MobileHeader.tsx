@@ -23,6 +23,7 @@ const MobileHeader: React.FC = () => {
     const uuid = uuidMatch ? uuidMatch[2] : null;
     const isMyProfile = uuid === buddy?.buddy_id;
 
+    const isOboardingEdit = searchParams.get('mode') === 'edit';
     const isTrips = pathname === '/trips';
     const isTripDetail = pathname.startsWith('/trips/');
     const isStory = pathname.startsWith('/stories');
@@ -48,7 +49,7 @@ const MobileHeader: React.FC = () => {
         (isLogin && '') ||
         (isSignup && '') ||
         (isSearch && '검색') ||
-        (isOnboarding && '온보딩') ||
+        (isOnboarding && !isOboardingEdit ? '온보딩' : '프로필 수정') ||
         (isProfile && isMyProfile && '마이페이지') ||
         (isProfile && !isMyProfile && '프로필') ||
         (isStory && '버디즈 스토리') ||
