@@ -85,14 +85,11 @@ const Tuto: React.FC<TutoProps> = ({ step }) => {
                     {content[step].description}
                 </p>
             </div>
-            {/* <div className="relative mt-[24px] mb-[24px] h-[500px] aspect-auto"> */}
             <div className="relative mt-[24px] mb-[24px] h-[500px] flex justify-center items-start">
                 <div className="relative w-[324px] h-[426px] aspect-auto">
                     <NextImage
                         src={content[step].src}
                         alt={content[step].alt}
-                        // width={324}
-                        // height={426}
                         fill
                         priority
                         sizes="(max-width: 768px) 100%, (max-width: 1200px) 30%, 33%"
