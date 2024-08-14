@@ -57,7 +57,7 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
     };
 
     return (
-        <section className="relative flex flex-col gap-4 w-full h-[calc(100dvh-57px-56px)] max-h-dvh overflow-hidden aspect-auto xl:min-w-[320px] xl:max-w-[430px] xl:mx-auto bg-gray-600">
+        <section className="relative flex flex-col gap-4 w-full h-[calc(100dvh-57px-76px)] max-h-dvh overflow-hidden aspect-auto xl:min-w-[320px] xl:max-w-[430px] xl:mx-auto bg-gray-600">
             {isPending && <DefaultLoader />}
             {error && (
                 <div className="z-10 text-white font-bold">

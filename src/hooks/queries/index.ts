@@ -23,3 +23,4 @@ export * from './auth/useLogInMutation';
 export * from './auth/useNaverLogInMutation';
 export * from './auth/useSignUpMutation';
 export * from './auth/useUpdateBuddyMutation';
+export * from './trip/useTripMutation';

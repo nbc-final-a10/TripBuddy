@@ -28,10 +28,12 @@ const ThirdLevelSection: React.FC<ThirdLevelSectionProps> = memo(
                 <section
                     id="third-level-section"
                     className={twMerge(
-                        'relative h-[70%] overflow-y-auto xl:h-[70%]',
+                        'relative h-[74%] overflow-y-auto xl:h-[53vh]',
                         pathname === '/search' && 'h-[300px]',
                         pathname === '/write' && 'h-[40vh]',
-                        !secondLevelLocation && 'hidden',
+                        pathname.startsWith('/edit') && 'h-[70%] xl:h-[450px]',
+                        !secondLevelLocation &&
+                            'hidden xl:flex xl:min-h-[50vh] xl:h-[50vh]',
                     )}
                 >
                     {selectedSecondLevelLocations.map(loc => (
@@ -54,7 +56,7 @@ const ThirdLevelSection: React.FC<ThirdLevelSectionProps> = memo(
                     ))}
                 </section>
 
-                <section className="relative h-[10%] flex items-center justify-center">
+                <section className="relative h-[6%] flex items-center justify-center xl:h-[10%]">
                     {thirdLevelLocation && (
                         <SelectedResultRealtimeText
                             selectedData={thirdLevelLocation}

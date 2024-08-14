@@ -1,3 +1,4 @@
+'use client';
 import Title from '@/components/atoms/common/Title';
 import OnBoardingInnerWrapper from '@/components/atoms/onboarding/OnBoardinginnerWrapper';
 import OnBoardingWrapper from '@/components/atoms/onboarding/OnBoardingWrapper';

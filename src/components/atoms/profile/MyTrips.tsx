@@ -2,13 +2,13 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { FaCalendarCheck, FaPen } from 'react-icons/fa';
-import TripCard from '@/components/molecules/trips/TripCard';
 import fetchWrapper from '@/utils/api/fetchWrapper';
 import {
     ContractWithTripsWithContract,
     MyTripsAndContracts,
 } from '@/types/Contract.types';
 import { Accordion, useAccordion, useTapScroll } from '@/hooks';
+import TripCard from '@/components/organisms/trips/TripCard';
 
 type MyTripsProps = {
     id: string;

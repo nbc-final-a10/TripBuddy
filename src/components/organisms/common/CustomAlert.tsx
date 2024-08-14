@@ -16,7 +16,7 @@ function CustomAlert({
     onCancel = () => {},
 }: CustomAlertProps) {
     return (
-        <div className="bg-black/50 fixed top-0 left-0 w-full h-full flex justify-center items-center z-50">
+        <div className="bg-black/50 fixed top-0 left-0 w-full h-full flex justify-center items-center z-[9999]">
             <dialog open className="rounded-xl z-50">
                 <div className="bg-white w-[300px] min-h-[200px] rounded-lg flex flex-col justify-center items-center gap-5 transition-all duration-300">
                     <div className="flex flex-col items-center gap-2 w-full">

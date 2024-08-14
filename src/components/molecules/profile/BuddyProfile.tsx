@@ -6,6 +6,7 @@ import Link from 'next/link';
 import React from 'react';
 import BuddyProfileSkeleton from './BuddyProfileSkeleton';
 import FollowButton from '@/components/atoms/profile/FollowButton';
+import { getBirthDate } from '@/utils/common/getBirthDate';
 
 type BuddyProfileProps = {
     clickedBuddy: Buddy | null;
@@ -68,8 +69,8 @@ export default function BuddyProfile({
                         {/* 나이와 성별 */}
                         {clickedBuddy?.buddy_birth ? (
                             <p className="mt-2 text-gray-500">
-                                {getAgeFromBirthDate(clickedBuddy?.buddy_birth)}{' '}
-                                {clickedBuddy?.buddy_sex}
+                                {`${clickedBuddy?.buddy_birth?.split('-')[0]}
+                                년생 / ${clickedBuddy?.buddy_sex}`}
                             </p>
                         ) : (
                             <p className="mt-2 text-gray-500">
@@ -111,7 +112,7 @@ export default function BuddyProfile({
                         ) : (
                             <div className="mt-4">
                                 <span className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
-                                    선호하는 버디를 등록해주세요.
+                                    선호하는 버디가 없습니다.
                                 </span>
                             </div>
                         )}
