@@ -7,6 +7,9 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import BuddyProfileSkeleton from './BuddyProfileSkeleton';
 import FollowButton from '@/components/atoms/profile/FollowButton';
+import { useAuth } from '@/hooks';
+import { useRouter } from 'next/navigation';
+import BlurredBuddyProfile from './BlurredBuddyProfile';
 
 type BuddyProfileProps = {
     clickedBuddy: Buddy | null;
@@ -24,6 +27,9 @@ export default function BuddyProfile({
     const [isTripsPage, setIsTripsPage] = useState(false);
     const [isProfilePage, setIsProfilePage] = useState(false);
 
+    const { buddy: currentBuddy } = useAuth();
+    const router = useRouter();
+
     useEffect(() => {
         setIsTripsPage(window.location.pathname.includes('trips'));
         setIsProfilePage(window.location.pathname.includes('profile'));
@@ -34,8 +40,8 @@ export default function BuddyProfile({
     }
 
     return (
-        <div className="flex flex-col items-center justify-center p-4 mt-4 xl:mt-8">
-            <div className="flex items-center">
+        <div className="relative flex flex-col items-center justify-center p-4 mt-4 xl:mt-8">
+            <div className={`flex items-center ${!currentBuddy && 'blur-sm'}`}>
                 <div className="flex flex-col items-center">
                     <Image
                         src={
@@ -143,6 +149,7 @@ export default function BuddyProfile({
                     </div>
                 </div>
             </div>
+            {!currentBuddy && <BlurredBuddyProfile />}
         </div>
     );
 }
