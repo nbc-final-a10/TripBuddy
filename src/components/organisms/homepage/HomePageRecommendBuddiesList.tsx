@@ -6,7 +6,7 @@ import { Buddy } from '@/types/Auth.types';
 import MascotImage from '@/components/atoms/common/MascotImage';
 import { getAgeFromBirthDate } from '@/utils/common/getAgeFromBirthDate';
 
-function HomePageRecommnedBuddiesList({ buddies }: { buddies: Buddy[] }) {
+function HomePageRecommendBuddiesList({ buddies }: { buddies: Buddy[] }) {
     return (
         <>
             {buddies
@@ -67,4 +67,4 @@ function HomePageRecommnedBuddiesList({ buddies }: { buddies: Buddy[] }) {
     );
 }
 
-export default HomePageRecommnedBuddiesList;
+export default HomePageRecommendBuddiesList;
