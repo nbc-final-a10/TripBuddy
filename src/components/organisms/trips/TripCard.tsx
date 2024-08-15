@@ -40,9 +40,13 @@ import TripEditSelectGenderBuddyTheme from '../../molecules/trips/TripEditSelect
 import TripEditText from '../../molecules/trips/TripEditText';
 import { deleteTrip } from '@/utils/trips/deleteTrip';
 import { useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEY_TRIP_INFINITE } from '@/constants/query.constants';
+import {
+    QUERY_KEY_TRIP,
+    QUERY_KEY_TRIP_INFINITE,
+} from '@/constants/query.constants';
 import getIsOverseas from '@/utils/common/getIsOverseas';
 import remainDaysNumber from '@/utils/common/getRemainDaysNumber';
+import { leaveTrip } from '@/utils/trips/leaveTrip';
 
 type TripCardProps = {
     trip: TripWithContract;
@@ -116,6 +120,10 @@ const TripCard: React.FC<TripCardProps> = ({
                     router.push('/login');
                 },
             });
+        }
+
+        if (participantButtonText === '나가기') {
+            return handleLeave();
         }
 
         if (mode === '참여하기') {
@@ -206,6 +214,36 @@ const TripCard: React.FC<TripCardProps> = ({
                 },
                 isConfirm: true,
             });
+        } else {
+            showAlert('error', '오류가 발생했습니다.');
+        }
+    };
+
+    const handleLeave = async () => {
+        if (trip && buddy) {
+            showAlert(
+                'caution',
+                '정말로 나가시겠습니까? 여정에서 나가면 채팅에서도 나가지며 채팅 기록은 삭제되지 않습니다.',
+                {
+                    onConfirm: async () => {
+                        const response = await leaveTrip(
+                            trip.trip_id,
+                            buddy.buddy_id,
+                        );
+                        if (response && response.status === 200) {
+                            showAlert('success', '여정에서 나가셨습니다.', {
+                                onConfirm: () => {
+                                    queryClient.invalidateQueries({
+                                        queryKey: [QUERY_KEY_TRIP],
+                                    });
+                                    router.push(`/trips/${trip.trip_id}`);
+                                },
+                            });
+                        }
+                    },
+                    isConfirm: true,
+                },
+            );
         } else {
             showAlert('error', '오류가 발생했습니다.');
         }
