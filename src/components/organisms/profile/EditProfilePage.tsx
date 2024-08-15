@@ -61,19 +61,23 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                 <div className="mt-6">
                     <div className="flex flex-col space-y-4">
                         <div className="flex justify-between pb-2">
-                            <span className="text-gray-600 w-1/3">닉네임</span>
+                            <span className="text-gray-600 w-1/3 font-bold">
+                                닉네임
+                            </span>
                             <span className="text-gray-800 w-2/3">
                                 {buddy.buddy_nickname}
                             </span>
                         </div>
                         <div className="flex justify-between pb-2">
-                            <span className="text-gray-600 w-1/3">성별</span>
+                            <span className="text-gray-6000 w-1/3 font-bold">
+                                성별
+                            </span>
                             <span className="text-gray-800 w-2/3">
                                 {buddy.buddy_sex}
                             </span>
                         </div>
                         <div className="flex justify-between pb-2">
-                            <span className="text-gray-600 w-1/3">
+                            <span className="text-gray-600 w-1/3 font-bold">
                                 출생년도
                             </span>
                             <span className="text-gray-800 w-2/3">
@@ -85,19 +89,25 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                             </span>
                         </div>
                         <div className="flex justify-between pb-2">
-                            <span className="text-gray-600 w-1/3">소개</span>
+                            <span className="text-gray-600 w-1/3 font-bold">
+                                소개
+                            </span>
                             <span className="text-gray-800 w-2/3">
                                 {buddy.buddy_introduction}
                             </span>
                         </div>
                         <div className="flex justify-between pb-2">
-                            <span className="text-gray-600 w-1/3">MBTI</span>
+                            <span className="text-gray-600 w-1/3 font-bold">
+                                MBTI
+                            </span>
                             <span className="text-gray-800 w-2/3">
                                 {buddy.buddy_mbti}
                             </span>
                         </div>
                         <div className="flex justify-between pb-2">
-                            <span className="text-gray-600 w-1/3">거주지</span>
+                            <span className="text-gray-600 w-1/3 font-bold">
+                                거주지
+                            </span>
                             <span className="text-gray-800 w-2/3">
                                 {buddy.buddy_region}
                             </span>
@@ -108,7 +118,9 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                         className="flex justify-between py-2 cursor-pointer"
                         onClick={() => toggleAccordion('journey')}
                     >
-                        <span className="w-1/2 text-gray-600">선호 여정</span>
+                        <span className="w-1/2 text-gray-600 font-bold">
+                            선호 여정
+                        </span>
                         <span className="w-1/2 text-blue-500 text-right">
                             {isOpen.journey ? '-' : '+'}
                         </span>
@@ -134,7 +146,9 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                         className="flex justify-between py-2 cursor-pointer"
                         onClick={() => toggleAccordion('personality')}
                     >
-                        <span className="w-1/2 text-gray-600">버디즈 성향</span>
+                        <span className="w-1/2 text-gray-600 font-bold">
+                            버디즈 성향
+                        </span>
                         <span className="w-1/2 text-blue-500 text-right">
                             {isOpen.personality ? '-' : '+'}
                         </span>
@@ -160,7 +174,7 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                         className="flex justify-between py-2 cursor-pointer"
                         onClick={() => toggleAccordion('password')}
                     >
-                        <span className="w-1/2 text-gray-600">
+                        <span className="w-1/2 text-gray-600 font-bold">
                             비밀번호 변경
                         </span>
                         <Link href="/recover">
