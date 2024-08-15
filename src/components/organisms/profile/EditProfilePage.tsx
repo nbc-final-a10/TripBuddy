@@ -1,29 +1,51 @@
 'use client';
 
-import React, { useState } from 'react';
-import Image from 'next/image';
+import React, { useEffect, useRef, useState } from 'react';
 import { Buddy } from '@/types/Auth.types';
 import EditProfileSkeleton from '@/components/molecules/profile/EditProfileSkeleton';
-import Link from 'next/link';
 import LinkButton from '@/components/atoms/profile/edit/LinkButton';
+import OnBoardingProfileImage from '../onboarding/OnBoardingProfileImage';
+import { useUpdateBuddyMutation } from '@/hooks/queries';
+import { showAlert } from '@/utils/ui/openCustomAlert';
+import { useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
 
 type EditProfilePageProps = {
     buddy: Buddy;
 };
 
 function EditProfilePage({ buddy }: EditProfilePageProps) {
-    const [isOpen, setIsOpen] = useState({
-        journey: false,
-        personality: false,
-        password: false,
-    });
+    const profileImageRef = useRef<HTMLInputElement>(null);
+    const [selectedMedia, setSelectedMedia] = useState<string>('');
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-    const toggleAccordion = (key: keyof typeof isOpen) => {
-        setIsOpen(prev => ({
-            ...prev,
-            [key]: !prev[key],
-        }));
-    };
+    const { mutate, isPending, error } = useUpdateBuddyMutation();
+    const queryClient = useQueryClient();
+
+    useEffect(() => {
+        if (selectedFile) {
+            const file = selectedFile;
+            setSelectedMedia(URL.createObjectURL(file));
+        }
+    }, [selectedFile]);
+
+    async function handleSubmit() {
+        if (selectedFile) {
+            try {
+                await mutate({
+                    buddyInfo: buddy,
+                    imageFile: selectedFile,
+                });
+                showAlert('success', '프로필 사진이 변경되었습니다');
+                queryClient.invalidateQueries({
+                    queryKey: [QUERY_KEY_BUDDY, buddy.buddy_id],
+                });
+            } catch (error) {
+                showAlert('error', '프로필 사진 변경에 실패했습니다');
+            }
+            return;
+        }
+    }
 
     if (!buddy) {
         return <EditProfileSkeleton />;
@@ -33,7 +55,13 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
         <div className="flex flex-col items-center p-4 min-h-screen">
             <div className="w-full max-w-lg rounded-lg p-6">
                 <div className="flex flex-col items-center mt-6">
-                    <div className="relative">
+                    <OnBoardingProfileImage
+                        buddy={buddy as Buddy}
+                        ref={profileImageRef}
+                        selectedMedia={selectedMedia}
+                        setSelectedFile={setSelectedFile}
+                    />
+                    {/* <div className="relative">
                         <Image
                             src={
                                 buddy?.buddy_profile_pic ||
@@ -56,8 +84,11 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                                 <path d="M12 9a3 3 0 100 6 3 3 0 000-6z" />
                             </svg>
                         </button>
-                    </div>
+                    </div> */}
                     <button className="mt-2">프로필 사진 삭제</button>
+                    <button className="mt-2" onClick={handleSubmit}>
+                        프로필 사진 변경
+                    </button>
                 </div>
                 <div className="mt-6">
                     <div className="flex flex-col space-y-4">
@@ -190,10 +221,7 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                         )}
                     </div>
 
-                    <div
-                        className="flex justify-between py-2 cursor-pointer"
-                        onClick={() => toggleAccordion('password')}
-                    >
+                    <div className="flex justify-between py-2 cursor-pointer">
                         <span className="w-1/2 text-gray-600 font-bold">
                             비밀번호 변경
                         </span>
