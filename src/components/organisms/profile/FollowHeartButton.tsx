@@ -35,7 +35,7 @@ function FollowHeartButton({
                 `/api/buddyProfile/follow?followingId=${followingId}&followerId=${followerId}`,
             );
             const data = await res.json();
-            setIsFollowing(data.originFollow.length > 0);
+            setIsFollowing(data.originFollow?.length > 0);
         };
         const checkOwnCard: () => void = () => {
             if (followingId === followerId) {
