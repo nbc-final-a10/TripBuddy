@@ -12,6 +12,7 @@ import {
 import React, { Suspense } from 'react';
 import Loading from '../loading';
 import { TripInfiniteQueryResponse } from '@/types/Trips.types';
+import FloatingButton from '@/components/atoms/home/FloatingButton';
 
 const TripsPage: React.FC = async () => {
     const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ const TripsPage: React.FC = async () => {
     return (
         <Suspense fallback={<Loading />}>
             <HydrationBoundary state={dehydratedState}>
+                <FloatingButton />
                 <TripList />
             </HydrationBoundary>
         </Suspense>

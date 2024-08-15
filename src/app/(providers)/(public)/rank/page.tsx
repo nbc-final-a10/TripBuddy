@@ -5,16 +5,18 @@ import { Buddy } from '@/types/Auth.types';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import HomePageRecommendBuddiesList from '@/components/organisms/homepage/HomePageRecommendBuddiesList';
 
 const medalIcons = ['/public/gif/medal.gif'];
 
 const Skeleton: React.FC = () => {
     return (
-        <div className="bg-gray-100 rounded-lg p-4 relative animate-pulse">
-            <div className="relative rounded-lg overflow-hidden h-48 bg-gray-300"></div>
-            <div className="mt-4 flex justify-between items-center">
-                <span className="text-xl font-bold text-gray-300 bg-gray-300 rounded w-1/3 h-6"></span>
-                <div className="bg-gray-300 rounded w-1/4 h-6"></div>
+        <div className="min-w-[200px] h-[75px] mx-1 rounded border border-gray-200 flex items-center p-2 animate-pulse mb-4">
+            <div className="flex-shrink-0 w-[75px] h-[75px] bg-gray-300 rounded-lg"></div>
+            <div className="mx-1 flex flex-col w-full">
+                <div className="h-4 bg-gray-300 rounded w-2/3 mb-2"></div>
+                <div className="h-4 bg-gray-300 rounded w-1/2 mb-2"></div>
+                <div className="h-3 bg-gray-300 rounded w-1/4"></div>
             </div>
         </div>
     );
@@ -23,7 +25,6 @@ const Skeleton: React.FC = () => {
 const RankPage: React.FC = () => {
     const [buddies, setBuddies] = useState<Buddy[]>([]);
     const [loading, setLoading] = useState(true);
-    const router = useRouter();
 
     useEffect(() => {
         const fetchBuddies = async () => {
@@ -32,7 +33,6 @@ const RankPage: React.FC = () => {
                     '/api/buddyProfile/buddiesRecommendationList',
                 );
                 const data = await response.json();
-                // console.log(data);
                 setBuddies(data.buddies);
                 setLoading(false);
             } catch (error) {
@@ -56,65 +56,18 @@ const RankPage: React.FC = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                {loading
-                    ? Array.from({ length: 10 }).map((_, index) => (
-                          <Skeleton key={index} />
-                      ))
-                    : buddies.map((buddy, index) => (
-                          <div
-                              key={index}
-                              className="bg-gray-100 rounded-lg p-4 relative transform transition-transform duration-200 hover:-translate-y-2 cursor-pointer"
-                              onClick={() => {
-                                  router.push(`/profile/${buddy.buddy_id}`);
-                              }}
-                          >
-                              <div className="relative rounded-lg overflow-hidden">
-                                  <div className="relative w-full h-48">
-                                      <Image
-                                          src={
-                                              buddy?.buddy_profile_pic ||
-                                              '/default-profile.png'
-                                          }
-                                          alt={buddy?.buddy_nickname}
-                                          fill
-                                          objectFit="cover"
-                                          className="rounded-t-lg"
-                                      />
-                                      <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-75"></div>
-                                      <div className="absolute bottom-0 left-0 p-4 text-white">
-                                          <h3 className="text-2xl font-bold">
-                                              {buddy?.buddy_nickname}
-                                          </h3>
-                                          <p className="text-sm">
-                                              {buddy?.buddy_introduction}
-                                          </p>
-                                      </div>
-                                      {index < 3 && (
-                                          <div className="absolute top-4 right-4">
-                                              <Image
-                                                  // Todo: 금은동 메달 배열에 들어가고 나면 사용
-                                                  // src={medalIcons[index]}
-                                                  src={'/icon/medal.png'}
-                                                  alt={`${index + 1}위 메달`}
-                                                  width={40}
-                                                  height={40}
-                                              />
-                                          </div>
-                                      )}
-                                  </div>
-                              </div>
-                              <div className="mt-4 flex justify-between items-center">
-                                  <span className="text-xl font-bold text-gray-800 whitespace-nowrap mr-2">
-                                      {index + 1}위
-                                  </span>
-                                  <BuddyTemperature
-                                      temperature={buddy?.buddy_temperature}
-                                  />
-                              </div>
-                          </div>
-                      ))}
-            </div>
+            {loading ? (
+                Array.from({ length: 10 }, (_, index) => (
+                    <Skeleton key={index} />
+                ))
+            ) : (
+                <div className="mb-4">
+                    <HomePageRecommendBuddiesList
+                        buddies={buddies}
+                        className="mb-4"
+                    />
+                </div>
+            )}
         </div>
     );
 };
