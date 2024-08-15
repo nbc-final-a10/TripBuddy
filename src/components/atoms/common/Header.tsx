@@ -17,7 +17,7 @@ export default function Header() {
         >
             <div className="w-[1080px] mx-auto flex items-center justify-between flex-row">
                 <div className="flex gap-12 items-center justify-start font-bold w-[80%]">
-                    <Link href="/" className="relative w-[170px] h-[64px]">
+                    <Link href="/" className="relative w-[192px] h-[63px]">
                         <Image
                             src="/images/logo.png"
                             alt="logo"
