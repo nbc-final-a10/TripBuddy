@@ -36,7 +36,6 @@ export default function FollowButton() {
                 }
 
                 const tripMasterData = await tripMasterIdResponse.json();
-                console.log('tripMasterData', tripMasterData);
                 return tripMasterData.trip_master_id;
             } catch (error) {
                 console.error('Error fetching trip master ID:', error);
@@ -59,7 +58,6 @@ export default function FollowButton() {
                 if (checkResponse.ok) {
                     const data = await checkResponse.json();
                     setIsFollowing(data.originFollow.length > 0);
-                    console.log('팔로우 상태', data);
                 } else {
                     throw new Error(
                         `Error checking follow status: ${checkResponse.statusText}`,
@@ -152,8 +150,6 @@ export default function FollowButton() {
             setIsLoading(false);
         }
     };
-
-    console.log('isFollowing', isFollowing);
 
     return isFollowing === null ? (
         <div className="text-sm bg-gray-200 rounded-full px-4 py-1 mt-10 animate-pulse h-8 w-32"></div>
