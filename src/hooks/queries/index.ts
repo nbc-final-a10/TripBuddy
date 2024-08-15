@@ -25,3 +25,4 @@ export * from './auth/useSignUpMutation';
 export * from './auth/useUpdateBuddyMutation';
 export * from './trip/useTripMutation';
 export * from './notification/useNotificationQuery';
+export * from './notification/useNotificationMutation';

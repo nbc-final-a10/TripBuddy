@@ -17,7 +17,7 @@ const HomePageBanner = () => {
         id: buddy?.buddy_id,
     });
 
-    console.log('data =====>', data);
+    // console.log('data =====>', data);
 
     useEffect(() => {
         const bannerImgs = [

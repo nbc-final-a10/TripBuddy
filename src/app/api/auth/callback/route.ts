@@ -42,10 +42,7 @@ export async function GET(request: Request) {
 
             console.log('isNewUser =====>', isNewUser);
 
-            // 예시 2: 사용자 메타데이터를 확인하여 리다이렉트
-            const needsOnboarding = !user.user_metadata?.onboarding_complete;
-
-            if (isNewUser || needsOnboarding) {
+            if (isNewUser) {
                 return NextResponse.redirect(
                     `${origin}/onboarding?funnel=0&mode=first`,
                 );

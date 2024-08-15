@@ -46,13 +46,17 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
         QUERY_KEY_NOTIFICATION,
     ]);
 
+    const filteredNotifications = notifications?.filter(
+        notification => notification.notification_receiver === userId,
+    );
+
     return (
         <Suspense fallback={<Loading />}>
             <HydrationBoundary state={dehydratedState}>
                 <ModalProviderDefault>
                     <AuthProvider>
                         <NotificationProvider
-                            initialNotifications={notifications}
+                            initialNotifications={filteredNotifications}
                         >
                             <Header />
                             <MainSectionWrapper>
