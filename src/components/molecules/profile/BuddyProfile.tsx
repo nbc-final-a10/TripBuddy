@@ -1,12 +1,15 @@
+'use client';
+
 import EditProfileButton from '@/components/atoms/profile/EditProfileButton';
 import { Buddy } from '@/types/Auth.types';
-import { getAgeFromBirthDate } from '@/utils/common/getAgeFromBirthDate';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import BuddyProfileSkeleton from './BuddyProfileSkeleton';
 import FollowButton from '@/components/atoms/profile/FollowButton';
-import { getBirthDate } from '@/utils/common/getBirthDate';
+import { useAuth } from '@/hooks';
+import { useRouter } from 'next/navigation';
+import BlurredBuddyProfile from './BlurredBuddyProfile';
 
 type BuddyProfileProps = {
     clickedBuddy: Buddy | null;
@@ -21,28 +24,39 @@ export default function BuddyProfile({
     buddy = null,
     urlId = '',
 }: BuddyProfileProps) {
+    const [isTripsPage, setIsTripsPage] = useState(false);
+    const [isProfilePage, setIsProfilePage] = useState(false);
+
+    const { buddy: currentBuddy } = useAuth();
+    const router = useRouter();
+
+    useEffect(() => {
+        setIsTripsPage(window.location.pathname.includes('trips'));
+        setIsProfilePage(window.location.pathname.includes('profile'));
+    }, []);
+
     if (loading) {
         return <BuddyProfileSkeleton />;
     }
 
     return (
-        <div className="flex flex-col items-center justify-center p-4 mt-4 xl:mt-8">
-            <div className="flex items-center">
+        <div className="relative flex flex-col items-center justify-center p-4 mt-4 xl:mt-8">
+            <div className={`flex items-center ${!currentBuddy && 'blur-sm'}`}>
                 <div className="flex flex-col items-center">
                     <Image
                         src={
                             clickedBuddy?.buddy_profile_pic ||
-                            '/images/mascot_happy.webp'
+                            'https://pedixhwyfardtsanotrp.supabase.co/storage/v1/object/public/buddies/profile/default_profile.webp'
                         }
                         alt="profile"
                         width={100}
                         height={100}
-                        className="rounded-full w-[100px] h-[100px]"
+                        className={`rounded-full ${isTripsPage ? 'w-[80px] h-[80px]' : 'w-[100px] h-[100px]'}`}
                     />
                     {buddy?.buddy_id === urlId &&
                     // url에 'profile'이 포함되어 있으면 편집 버튼 보여주기
-                    window.location.pathname.includes('profile') ? (
-                        <Link href={`/onboarding?funnel=0&mode=edit`}>
+                    isProfilePage ? (
+                        <Link href={`/edit/profile/${buddy?.buddy_id}`}>
                             <EditProfileButton />
                         </Link>
                     ) : (
@@ -52,7 +66,9 @@ export default function BuddyProfile({
                 <div className="ml-4">
                     <div className="flex flex-col ">
                         <div className="flex items-center">
-                            <span className="text-2xl font-bold xl:text-3xl">
+                            <span
+                                className={`font-bold ${isTripsPage ? 'text-lg' : 'text-2xl'} ${isTripsPage ? 'xl:text-xl' : 'xl:text-3xl'}`}
+                            >
                                 {clickedBuddy?.buddy_nickname}
                             </span>
                             {clickedBuddy?.buddy_mbti ? (
@@ -68,30 +84,44 @@ export default function BuddyProfile({
 
                         {/* 나이와 성별 */}
                         {clickedBuddy?.buddy_birth ? (
-                            <p className="mt-2 text-gray-500">
+                            <p
+                                className={`mt-2 text-gray-500 ${isTripsPage ? 'text-sm' : 'text-base'}`}
+                            >
                                 {`${clickedBuddy?.buddy_birth?.split('-')[0]}
                                 년생 / ${clickedBuddy?.buddy_sex}`}
                             </p>
                         ) : (
-                            <p className="mt-2 text-gray-500">
+                            <p
+                                className={`mt-2 text-gray-500 ${isTripsPage ? 'text-sm' : 'text-base'}`}
+                            >
                                 생년월일 정보가 없습니다.
                             </p>
                         )}
                         {/* 소개글 */}
                         {clickedBuddy?.buddy_introduction ? (
-                            <p className="text-gray-500">
+                            <p
+                                className={`text-gray-500 ${isTripsPage ? 'text-sm' : 'text-base'}`}
+                            >
                                 {clickedBuddy?.buddy_introduction}
                             </p>
                         ) : (
-                            <p className="text-gray-500">소개글이 없습니다.</p>
+                            <p
+                                className={`text-gray-500 ${isTripsPage ? 'text-sm' : 'text-base'}`}
+                            >
+                                소개글이 없습니다.
+                            </p>
                         )}
                         {/* 지역 */}
                         {clickedBuddy?.buddy_region ? (
-                            <p className="mt-2 text-gray-500">
-                                {clickedBuddy?.buddy_region}
+                            <p
+                                className={`mt-2 text-gray-500 font-bold ${isTripsPage ? 'text-sm' : 'text-base'}`}
+                            >
+                                {clickedBuddy?.buddy_region} 거주
                             </p>
                         ) : (
-                            <p className="mt-2 text-gray-500">
+                            <p
+                                className={`mt-2 text-gray-500 ${isTripsPage ? 'text-sm' : 'text-base'}`}
+                            >
                                 지역 정보가 없습니다.
                             </p>
                         )}
@@ -119,6 +149,7 @@ export default function BuddyProfile({
                     </div>
                 </div>
             </div>
+            {!currentBuddy && <BlurredBuddyProfile />}
         </div>
     );
 }

@@ -1,12 +1,17 @@
 import BuddyTemperature from '@/components/atoms/profile/BuddyTemperature';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useRef } from 'react';
 import { Buddy } from '@/types/Auth.types';
 import MascotImage from '@/components/atoms/common/MascotImage';
 import { getAgeFromBirthDate } from '@/utils/common/getAgeFromBirthDate';
 
-function HomePageRecommnedBuddiesList({ buddies }: { buddies: Buddy[] }) {
+function HomePageRecommendBuddiesList({
+    buddies,
+    className,
+}: {
+    buddies: Buddy[];
+    className?: string;
+}) {
     return (
         <>
             {buddies
@@ -16,7 +21,9 @@ function HomePageRecommnedBuddiesList({ buddies }: { buddies: Buddy[] }) {
                           href={`/profile/${buddy.buddy_id}`}
                           passHref
                       >
-                          <div className="min-w-[200px] h-[75px] mx-1 rounded border border-gray-200 cursor-pointer flex items-center">
+                          <div
+                              className={`min-w-[200px] h-[75px] mx-1 rounded border border-gray-200 cursor-pointer flex items-center ${className}`}
+                          >
                               <div className="flex items-center justify-center w-full h-full">
                                   <div className="flex-shrink-0 w-[75px] h-[75px] flex items-center justify-center">
                                       {buddy.buddy_profile_pic ? (
@@ -67,4 +74,4 @@ function HomePageRecommnedBuddiesList({ buddies }: { buddies: Buddy[] }) {
     );
 }
 
-export default HomePageRecommnedBuddiesList;
+export default HomePageRecommendBuddiesList;
