@@ -226,11 +226,15 @@ const TripCard: React.FC<TripCardProps> = ({
             const newBookMark: BookMarkRequest = {
                 bookmark_trip_id: trip.trip_id,
                 bookmark_buddy_id: buddy.buddy_id,
-                is_bookmarked: bookMark ? false : true,
+                is_bookmarked: bookMark ? true : false,
             };
 
             createBookMark(newBookMark);
-            return showAlert('success', '찜하기가 완료되었습니다.');
+            if (bookMark) {
+                return showAlert('success', '찜하기 취소가 완료되었습니다.');
+            } else {
+                return showAlert('success', '찜하기가 완료되었습니다.');
+            }
         }
         if (mode === '삭제하기') {
             return handleDelete();
