@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { Buddy } from '@/types/Auth.types';
 import EditProfileSkeleton from '@/components/molecules/profile/EditProfileSkeleton';
-import { getAgeFromBirthDate } from '@/utils/common/getAgeFromBirthDate';
 import Link from 'next/link';
 
 type EditProfilePageProps = {
@@ -18,30 +17,6 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
         password: false,
     });
 
-    const [formData, setFormData] = useState({
-        nickname: buddy.buddy_nickname,
-        gender: buddy.buddy_sex,
-        birthYear: buddy?.buddy_birth || '',
-        // Todo: 출생년도 포매팅
-        introduction: String(buddy.buddy_introduction || '').split('T')[0],
-        mbti: buddy.buddy_mbti || '',
-        region: buddy.buddy_region || '',
-        preferredTheme1: buddy.buddy_preferred_theme1,
-        preferredTheme2: buddy.buddy_preferred_theme2,
-        preferredTheme3: buddy.buddy_preferred_theme3,
-        preferredBuddy1: buddy.buddy_preferred_buddy1,
-        preferredBuddy2: buddy.buddy_preferred_buddy2,
-        preferredBuddy3: buddy.buddy_preferred_buddy3,
-    });
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
-
     const toggleAccordion = (key: keyof typeof isOpen) => {
         setIsOpen(prev => ({
             ...prev,
@@ -51,18 +26,12 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
 
     const renderProfileEditColumn = (
         label: string,
-        name: keyof typeof formData,
+        value: string | undefined,
     ) => (
         <tr>
             <td className="w-1/3 text-gray-600">{label}</td>
             <td className="w-2/3">
-                <input
-                    type="text"
-                    name={name}
-                    value={formData[name] || ''}
-                    onChange={handleInputChange}
-                    className="w-full border rounded px-2 py-1"
-                />
+                <span className="w-full px-2 py-1">{value || ''}</span>
             </td>
         </tr>
     );
@@ -104,12 +73,30 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                 <div className="mt-6">
                     <table className="w-full">
                         <tbody>
-                            {renderProfileEditColumn('닉네임', 'nickname')}
-                            {renderProfileEditColumn('성별', 'gender')}
-                            {renderProfileEditColumn('출생년도', 'birthYear')}
-                            {renderProfileEditColumn('소개', 'introduction')}
-                            {renderProfileEditColumn('MBTI', 'mbti')}
-                            {renderProfileEditColumn('거주지', 'region')}
+                            {renderProfileEditColumn(
+                                '닉네임',
+                                buddy.buddy_nickname,
+                            )}
+                            {renderProfileEditColumn(
+                                '성별',
+                                buddy.buddy_sex || '',
+                            )}
+                            {renderProfileEditColumn(
+                                '출생년도',
+                                buddy?.buddy_birth || '',
+                            )}
+                            {renderProfileEditColumn(
+                                '소개',
+                                buddy.buddy_introduction || '',
+                            )}
+                            {renderProfileEditColumn(
+                                'MBTI',
+                                buddy.buddy_mbti || '',
+                            )}
+                            {renderProfileEditColumn(
+                                '거주지',
+                                buddy.buddy_region || '',
+                            )}
                         </tbody>
                     </table>
 
@@ -125,22 +112,16 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                     {isOpen.journey && (
                         <div className="pl-4 mb-4">
                             {[
-                                'preferredTheme1',
-                                'preferredTheme2',
-                                'preferredTheme3',
+                                buddy.buddy_preferred_theme1,
+                                buddy.buddy_preferred_theme2,
+                                buddy.buddy_preferred_theme3,
                             ].map((theme, index) => (
-                                <input
+                                <span
                                     key={index}
-                                    type="text"
-                                    name={theme}
-                                    value={
-                                        formData[
-                                            theme as keyof typeof formData
-                                        ] || ''
-                                    }
-                                    onChange={handleInputChange}
-                                    className="w-full border rounded px-2 py-1 mb-2"
-                                />
+                                    className="w-full px-2 py-1 mb-2 block"
+                                >
+                                    {theme || ''}
+                                </span>
                             ))}
                         </div>
                     )}
@@ -157,22 +138,16 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                     {isOpen.personality && (
                         <div className="pl-4 mb-4">
                             {[
-                                'preferredBuddy1',
-                                'preferredBuddy2',
-                                'preferredBuddy3',
-                            ].map((buddy, index) => (
-                                <input
+                                buddy.buddy_preferred_buddy1,
+                                buddy.buddy_preferred_buddy2,
+                                buddy.buddy_preferred_buddy3,
+                            ].map((buddyPref, index) => (
+                                <span
                                     key={index}
-                                    type="text"
-                                    name={buddy}
-                                    value={
-                                        formData[
-                                            buddy as keyof typeof formData
-                                        ] || ''
-                                    }
-                                    onChange={handleInputChange}
-                                    className="w-full border rounded px-2 py-1 mb-2"
-                                />
+                                    className="w-full px-2 py-1 mb-2 block"
+                                >
+                                    {buddyPref || ''}
+                                </span>
                             ))}
                         </div>
                     )}
