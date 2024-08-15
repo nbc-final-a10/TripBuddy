@@ -11,4 +11,5 @@ export type ClassifiedNotification = {
     storyLikes: Notification[];
     follows: Notification[];
     bookmarks: Notification[];
+    contracts: Notification[];
 };

@@ -130,6 +130,7 @@ const TripCard: React.FC<TripCardProps> = ({
             const newContract: PartialContract = {
                 contract_trip_id: trip.trip_id,
                 contract_buddy_id: buddy.buddy_id,
+                contract_isPending: true,
             };
             createContract(newContract);
         }
@@ -365,10 +366,7 @@ const TripCard: React.FC<TripCardProps> = ({
 
     useEffect(() => {
         if (isContractMutationSuccess) {
-            showAlert(
-                'success',
-                '버디장에게 참여 요청이 전달되었습니다. 베타 기간에는 자동으로 참여됩니다.',
-            );
+            showAlert('success', '버디장에게 참여 요청이 전달되었습니다.');
         }
     }, [isContractMutationSuccess]);
 

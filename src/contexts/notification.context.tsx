@@ -17,8 +17,14 @@ import {
     PropsWithChildren,
     useCallback,
     useEffect,
+    useRef,
     useState,
 } from 'react';
+import { useModal } from './modal.context';
+import ContractModal from '@/components/organisms/contract/ContractModal';
+import fetchWrapper from '@/utils/api/fetchWrapper';
+import { Buddy } from '@/types/Auth.types';
+import { showAlert } from '@/utils/ui/openCustomAlert';
 
 type NotificationProviderProps = {
     initialNotifications: Notification[] | undefined;
@@ -55,10 +61,19 @@ export const NotificationProvider = ({
                         notification.notification_type === 'bookmark' &&
                         notification.notification_isRead === false,
                 ) || [],
+            contracts:
+                initialNotifications?.filter(
+                    notification =>
+                        notification.notification_type === 'contract' &&
+                        notification.notification_isRead === false,
+                ) || [],
         } || [],
     );
     const { buddy } = useAuth();
     const { mutate } = useNotificationMutation();
+    const modal = useModal();
+    const prevNotificationsRef = useRef(notifications);
+    const hasFetchedOnceRef = useRef(false);
 
     const handleRealTimePostsUpdate = useCallback(
         (payload: RealtimePostgresInsertPayload<Notification>) => {
@@ -81,6 +96,12 @@ export const NotificationProvider = ({
                         bookmarks: [...prev.bookmarks, payload.new],
                     }));
                 }
+                if (payload.new.notification_type === 'contract') {
+                    setNotifications(prev => ({
+                        ...prev,
+                        contracts: [...prev.contracts, payload.new],
+                    }));
+                }
             }
         },
         [buddy],
@@ -100,6 +121,11 @@ export const NotificationProvider = ({
                     payload.old.notification_id,
             );
             const bookmarkNotification = notifications.bookmarks.find(
+                notification =>
+                    notification.notification_id ===
+                    payload.old.notification_id,
+            );
+            const contractNotification = notifications.contracts.find(
                 notification =>
                     notification.notification_id ===
                     payload.old.notification_id,
@@ -129,6 +155,16 @@ export const NotificationProvider = ({
                 setNotifications(prev => ({
                     ...prev,
                     bookmarks: prev.bookmarks.filter(
+                        item =>
+                            item.notification_id !==
+                            payload.old.notification_id,
+                    ),
+                }));
+            }
+            if (contractNotification) {
+                setNotifications(prev => ({
+                    ...prev,
+                    contracts: prev.contracts.filter(
                         item =>
                             item.notification_id !==
                             payload.old.notification_id,
@@ -170,8 +206,57 @@ export const NotificationProvider = ({
     }, [buddy, handleRealTimePostsDelete, handleRealTimePostsUpdate]);
 
     useEffect(() => {
-        // console.log('notifications 상태 변경 ====>', notifications);
-    }, [notifications, mutate]);
+        const prevNotifications = prevNotificationsRef.current;
+        async function fetchSpecificBuddy() {
+            const promises = notifications.contracts.map(async notification => {
+                const url = `/api/buddyProfile/buddy?id=${notification.notification_sender}`;
+                const promise = fetchWrapper<Buddy>(url, { method: 'GET' });
+                return promise;
+            });
+            const data = await Promise.all(promises);
+            return data;
+        }
+        // 최초 실행 또는 notifications가 변경된 경우에만 실행
+        if (
+            !hasFetchedOnceRef.current ||
+            !prevNotifications ||
+            prevNotifications.contracts.length !==
+                notifications.contracts.length ||
+            JSON.stringify(prevNotifications.contracts) !==
+                JSON.stringify(notifications.contracts)
+        ) {
+            prevNotificationsRef.current = notifications;
+            hasFetchedOnceRef.current = true; // 최초 실행 여부를 기록
+
+            if (!modal) return;
+
+            fetchSpecificBuddy()
+                .then(data => {
+                    console.log('data ====>', data);
+                    showAlert(
+                        'caution',
+                        `새로운 참여 요청이 ${data.length}건 있습니다.`,
+                        {
+                            onConfirm: () => {
+                                modal.openModal({
+                                    component: () => (
+                                        <ContractModal
+                                            buddies={data}
+                                            mode="notification"
+                                        />
+                                    ),
+                                });
+                            },
+                        },
+                    );
+                })
+                .catch(error => {
+                    console.error('error ====>', error);
+                });
+
+            console.log('notifications 상태 변경 ====>', notifications);
+        }
+    }, [notifications, modal]);
 
     return (
         <NotificationContext.Provider value={{ notifications }}>

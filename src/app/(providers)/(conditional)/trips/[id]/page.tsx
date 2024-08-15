@@ -23,10 +23,12 @@ const TripsDetailPage: React.FC<TripDetailPageProps> = async ({
     // console.log('id', id);
 
     const queryClient = new QueryClient();
-    await queryClient.prefetchQuery({
-        queryKey: [QUERY_KEY_TRIP, id],
-        queryFn: () => getTrip(id),
-    });
+    if (id) {
+        await queryClient.prefetchQuery({
+            queryKey: [QUERY_KEY_TRIP, id],
+            queryFn: () => getTrip(id),
+        });
+    }
     const dehydratedState = dehydrate(queryClient);
 
     return (

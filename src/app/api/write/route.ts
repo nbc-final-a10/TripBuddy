@@ -6,6 +6,7 @@ import { PostgrestError } from '@supabase/supabase-js';
 import { Contract } from '@/types/Contract.types';
 import { getUserIdAndModeFromHeader } from '@/utils/auth/getUserIdFromHeader';
 import OpenAI from 'openai';
+import { PartialBuddy } from '@/types/Auth.types';
 
 const OPEN_AI_SECRET_KEY = process.env.OPEN_AI_SECRET_KEY;
 
@@ -189,11 +190,20 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        if (!relatedContracts) {
-            return NextResponse.json({ error: '서버 오류' }, { status: 500 });
-        }
+        // if (!relatedContracts) {
+        //     return NextResponse.json(
+        //         { error: '연관된 계약이 없습니다.' },
+        //         { status: 500 },
+        //     );
+        // }
 
         if (mode === 'patch') {
+            if (!relatedContracts) {
+                return NextResponse.json(
+                    { error: '연관된 계약이 없습니다.' },
+                    { status: 500 },
+                );
+            }
             trip.contract = relatedContracts;
             return NextResponse.json(trip, { status: 200 });
         } else {
@@ -206,7 +216,7 @@ export async function POST(req: NextRequest) {
                 contract_start_date: trip.trip_start_date,
                 contract_end_date: trip.trip_end_date,
                 contract_isLeader: true,
-                contract_isPending: true,
+                contract_isPending: false, // 내가 만든 여정이고 따라서 생성되는 계약 isPending 기본값은 false
                 contract_isValidate: isValidate,
             };
 

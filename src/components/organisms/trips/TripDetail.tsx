@@ -62,7 +62,9 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
     } = useRecommendBuddiesQuery();
 
     const queries = useBuddyQueries(
-        trip?.contract.map(contract => contract.contract_buddy_id) || [],
+        trip?.contract
+            .filter(contract => contract.contract_isPending === false)
+            .map(contract => contract.contract_buddy_id) || [],
     );
 
     const {
