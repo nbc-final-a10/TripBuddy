@@ -90,8 +90,6 @@ function FollowHeartButton({
         }, 2000);
     };
 
-    console.log('clickCount', clickCount);
-
     return (
         <>
             {hasRank && !isOwnCard && (
