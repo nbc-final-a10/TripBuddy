@@ -23,5 +23,5 @@ export const QUERY_KEY_STORIES = 'stories';
 export const QUERY_KEY_STORY_LIKES = 'storyLikes';
 
 // notification 테이블 관련
-
+export const QUERY_KEY_NOTIFICATION = 'notification';
 // payments 테이블 관련
