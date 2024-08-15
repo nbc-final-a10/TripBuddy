@@ -57,6 +57,79 @@ export async function POST(request: NextRequest) {
         }: { data: StoryLikes | null; error: PostgrestError | null } =
             await supabase
                 .from('storylikes')
+                .delete()
+                .eq('storylikes_story_id', story_id)
+                .eq('storylikes_buddy_id', buddy_id);
+
+        if (error) {
+            return NextResponse.json({ error: error.message }, { status: 401 });
+        }
+
+        const {
+            data: likes,
+            error: likesError,
+        }: {
+            data: StoryLikes[] | null;
+            error: PostgrestError | null;
+        } = await supabase
+            .from('storylikes')
+            .select('*')
+            .eq('storylikes_story_id', story_id);
+
+        if (likesError) {
+            console.error(likesError);
+            return NextResponse.json(
+                { error: likesError?.message },
+                { status: 401 },
+            );
+        }
+
+        const {
+            data: story,
+            error: storyError,
+        }: { data: PartialStory | null; error: PostgrestError | null } =
+            await supabase
+                .from('stories')
+                .select('story_created_by, story_id')
+                .eq('story_id', story_id)
+                .single();
+
+        if (storyError) {
+            return NextResponse.json(
+                { error: storyError.message },
+                { status: 401 },
+            );
+        }
+
+        const {
+            data: notification,
+            error: notificationError,
+        }: { data: Notification | null; error: PostgrestError | null } =
+            await supabase
+                .from('notifications')
+                .delete()
+                .eq('notification_sender', buddy_id)
+                .eq('notification_receiver', story?.story_created_by)
+                .select()
+                .single();
+
+        if (notificationError) {
+            return NextResponse.json(
+                { error: notificationError.message },
+                { status: 401 },
+            );
+        }
+
+        // console.log('notification delete success ====>', notification);
+
+        return NextResponse.json({ isLiked: false }, { status: 201 });
+    } else {
+        const {
+            data,
+            error,
+        }: { data: StoryLikes | null; error: PostgrestError | null } =
+            await supabase
+                .from('storylikes')
                 .insert([
                     {
                         storylikes_story_id: story_id,
@@ -147,81 +220,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        console.log('notification insert success ====>', notification);
-
-        return NextResponse.json(likes, { status: 200 });
-    } else {
-        const {
-            data,
-            error,
-        }: { data: StoryLikes | null; error: PostgrestError | null } =
-            await supabase
-                .from('storylikes')
-                .delete()
-                .eq('storylikes_story_id', story_id)
-                .eq('storylikes_buddy_id', buddy_id)
-                .select()
-                .single();
-
-        if (error) {
-            return NextResponse.json({ error: error.message }, { status: 401 });
-        }
-        const {
-            data: likes,
-            error: likesError,
-        }: {
-            data: StoryLikes[] | null;
-            error: PostgrestError | null;
-        } = await supabase
-            .from('storylikes')
-            .select('*')
-            .eq('storylikes_story_id', story_id);
-
-        if (likesError) {
-            console.error(likesError);
-            return NextResponse.json(
-                { error: likesError?.message },
-                { status: 401 },
-            );
-        }
-
-        const {
-            data: story,
-            error: storyError,
-        }: { data: PartialStory | null; error: PostgrestError | null } =
-            await supabase
-                .from('stories')
-                .select('story_created_by, story_id')
-                .eq('story_id', story_id)
-                .single();
-
-        if (storyError) {
-            return NextResponse.json(
-                { error: storyError.message },
-                { status: 401 },
-            );
-        }
-
-        const {
-            data: notification,
-            error: notificationError,
-        }: { data: Notification | null; error: PostgrestError | null } =
-            await supabase
-                .from('notifications')
-                .delete()
-                .eq('notification_sender', buddy_id)
-                .eq('notification_receiver', story?.story_created_by)
-                .select()
-                .single();
-
-        if (notificationError) {
-            return NextResponse.json(
-                { error: notificationError.message },
-                { status: 401 },
-            );
-        }
-
-        console.log('notification delete success ====>', notification);
+        // console.log('notification insert success ====>', notification);
 
         return NextResponse.json(likes, { status: 200 });
     }

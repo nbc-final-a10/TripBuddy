@@ -26,7 +26,7 @@ const MobileHeader: React.FC = () => {
     const isOboardingEdit = searchParams.get('mode') === 'edit';
     const isTrips = pathname === '/trips';
     const isTripDetail = pathname.startsWith('/trips/');
-    const isStory = pathname.startsWith('/stories');
+    const isStory = pathname.startsWith('/stories/');
     const isChatId = pathname.startsWith('/chat/');
     const isChat = pathname === '/chat';
     const isLogin = pathname === '/login';
@@ -49,7 +49,8 @@ const MobileHeader: React.FC = () => {
         (isLogin && '') ||
         (isSignup && '') ||
         (isSearch && '검색') ||
-        (isOnboarding && !isOboardingEdit ? '온보딩' : '프로필 수정') ||
+        (isOnboarding && !isOboardingEdit && '온보딩') ||
+        (isOnboarding && isOboardingEdit && '프로필 수정') ||
         (isProfile && isMyProfile && '마이페이지') ||
         (isProfile && !isMyProfile && '프로필') ||
         (isStory && '버디즈 스토리') ||

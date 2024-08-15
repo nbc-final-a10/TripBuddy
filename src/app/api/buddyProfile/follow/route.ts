@@ -1,4 +1,6 @@
+import { PartialBuddy } from '@/types/Auth.types';
 import { createClient } from '@/utils/supabase/server';
+import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
@@ -63,6 +65,47 @@ export async function POST(req: NextRequest) {
             );
         }
 
+        const {
+            data: buddy,
+            error: buddyError,
+        }: { data: PartialBuddy | null; error: PostgrestError | null } =
+            await supabase
+                .from('buddies')
+                .select('*')
+                .eq('buddy_id', followerId)
+                .single();
+
+        if (buddyError) {
+            return NextResponse.json(
+                { error: buddyError.message },
+                { status: 401 },
+            );
+        }
+
+        const {
+            data: notification,
+            error: notificationError,
+        }: { data: Notification | null; error: PostgrestError | null } =
+            await supabase
+                .from('notifications')
+                .insert([
+                    {
+                        notification_type: 'follow',
+                        notification_sender: buddy?.buddy_id,
+                        notification_receiver: followingId,
+                        notification_content: `${buddy?.buddy_nickname}님이 팔로우 하셨습니다.`,
+                    },
+                ])
+                .select()
+                .single();
+
+        if (notificationError) {
+            return NextResponse.json(
+                { error: notificationError.message },
+                { status: 401 },
+            );
+        }
+
         return NextResponse.json({ follow }, { status: 200 });
     } catch (error) {
         return new Response('팔로잉이 이루어지지 않았습니다.', {
@@ -98,7 +141,24 @@ export async function DELETE(req: NextRequest) {
             );
         }
 
-        return NextResponse.json({ follow }, { status: 200 });
+        const {
+            data: notification,
+            error: notificationError,
+        }: { data: Notification | null; error: PostgrestError | null } =
+            await supabase
+                .from('notifications')
+                .delete()
+                .eq('notification_sender', followerId)
+                .eq('notification_receiver', followingId);
+
+        if (notificationError) {
+            return NextResponse.json(
+                { error: notificationError.message },
+                { status: 401 },
+            );
+        }
+
+        return new NextResponse(null, { status: 204 });
     } catch (error) {
         return new Response('팔로잉이 취소되지 않았습니다.', {
             status: 500,

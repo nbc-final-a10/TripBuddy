@@ -63,13 +63,13 @@ const LikesButton: React.FC<LikesButtonProps> = ({
         if (isLiked && buddy) {
             likesMutate({
                 buddy_id: buddy.buddy_id,
-                isLiked: false,
+                isLiked: true,
                 story_id: storyId,
             });
         } else if (buddy) {
             likesMutate({
                 buddy_id: buddy.buddy_id,
-                isLiked: true,
+                isLiked: false,
                 story_id: storyId,
             });
         }

@@ -57,8 +57,6 @@ export const NotificationProvider = ({
 
     const handleRealTimePostsUpdate = useCallback(
         (payload: RealtimePostgresInsertPayload<Notification>) => {
-            console.log('payload.new', payload);
-
             if (payload.new.notification_receiver === buddy?.buddy_id) {
                 if (payload.new.notification_type === 'like') {
                     setNotifications(prev => ({
@@ -79,8 +77,6 @@ export const NotificationProvider = ({
 
     const handleRealTimePostsDelete = useCallback(
         (payload: RealtimePostgresDeletePayload<Notification>) => {
-            console.log('payload.old', payload);
-
             const notification = notifications.storyLikes.find(
                 notification =>
                     notification.notification_id ===

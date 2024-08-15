@@ -18,6 +18,7 @@ export default function FollowButton() {
         const checkFollowStatus = async () => {
             try {
                 const followingId = window.location.pathname.split('/').pop();
+
                 setFollowingId(followingId);
                 const followerId = buddy?.buddy_id;
                 const checkResponse = await fetch(
