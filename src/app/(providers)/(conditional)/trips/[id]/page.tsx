@@ -20,7 +20,8 @@ const TripsDetailPage: React.FC<TripDetailPageProps> = async ({
 }) => {
     const { id } = params;
 
-    console.log('id', id);
+    // console.log('id', id);
+
     const queryClient = new QueryClient();
     await queryClient.prefetchQuery({
         queryKey: [QUERY_KEY_TRIP, id],

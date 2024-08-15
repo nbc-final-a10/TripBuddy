@@ -10,4 +10,5 @@ export type NotificationContextType = {
 export type ClassifiedNotification = {
     storyLikes: Notification[];
     follows: Notification[];
+    bookmarks: Notification[];
 };

@@ -149,7 +149,8 @@ export async function DELETE(req: NextRequest) {
                 .from('notifications')
                 .delete()
                 .eq('notification_sender', followerId)
-                .eq('notification_receiver', followingId);
+                .eq('notification_receiver', followingId)
+                .eq('notification_type', 'follow');
 
         if (notificationError) {
             return NextResponse.json(

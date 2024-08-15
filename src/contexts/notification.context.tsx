@@ -8,7 +8,6 @@ import {
     NotificationContextType,
 } from '@/types/Notification.types';
 import supabase from '@/utils/supabase/client';
-import { showAlert } from '@/utils/ui/openCustomAlert';
 import {
     RealtimePostgresDeletePayload,
     RealtimePostgresInsertPayload,
@@ -50,6 +49,12 @@ export const NotificationProvider = ({
                         notification.notification_type === 'follow' &&
                         notification.notification_isRead === false,
                 ) || [],
+            bookmarks:
+                initialNotifications?.filter(
+                    notification =>
+                        notification.notification_type === 'bookmark' &&
+                        notification.notification_isRead === false,
+                ) || [],
         } || [],
     );
     const { buddy } = useAuth();
@@ -70,6 +75,12 @@ export const NotificationProvider = ({
                         follows: [...prev.follows, payload.new],
                     }));
                 }
+                if (payload.new.notification_type === 'bookmark') {
+                    setNotifications(prev => ({
+                        ...prev,
+                        bookmarks: [...prev.bookmarks, payload.new],
+                    }));
+                }
             }
         },
         [buddy],
@@ -84,6 +95,11 @@ export const NotificationProvider = ({
             );
 
             const followNotification = notifications.follows.find(
+                notification =>
+                    notification.notification_id ===
+                    payload.old.notification_id,
+            );
+            const bookmarkNotification = notifications.bookmarks.find(
                 notification =>
                     notification.notification_id ===
                     payload.old.notification_id,
@@ -103,6 +119,16 @@ export const NotificationProvider = ({
                 setNotifications(prev => ({
                     ...prev,
                     follows: prev.follows.filter(
+                        item =>
+                            item.notification_id !==
+                            payload.old.notification_id,
+                    ),
+                }));
+            }
+            if (bookmarkNotification) {
+                setNotifications(prev => ({
+                    ...prev,
+                    bookmarks: prev.bookmarks.filter(
                         item =>
                             item.notification_id !==
                             payload.old.notification_id,
