@@ -18,7 +18,7 @@ function CustomAlert({
     return (
         <div className="bg-black/50 fixed top-0 left-0 w-full h-full flex justify-center items-center z-[9999]">
             <dialog open className="rounded-xl z-50">
-                <div className="bg-white w-[300px] min-h-[121px] rounded-lg flex flex-col justify-center items-center gap-3 transition-all duration-300">
+                <div className="bg-white w-[300px] min-h-[121px] max-h-[200px] py-2 rounded-lg flex flex-col justify-center items-center gap-3 transition-all duration-300">
                     <div className="flex flex-col items-center gap-2 w-full">
                         {/* <h2
                             className={`text-2xl font-bold w-full text-center ${
