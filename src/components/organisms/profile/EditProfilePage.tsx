@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Buddy } from '@/types/Auth.types';
 import EditProfileSkeleton from '@/components/molecules/profile/EditProfileSkeleton';
 import Link from 'next/link';
+import LinkButton from '@/components/atoms/profile/edit/LinkButton';
 
 type EditProfilePageProps = {
     buddy: Buddy;
@@ -67,6 +68,7 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                             <span className="text-gray-800 w-2/3">
                                 {buddy.buddy_nickname}
                             </span>
+                            <LinkButton href="/onboarding?funnel=0&mode=edit" />
                         </div>
                         <div className="flex justify-between pb-2">
                             <span className="text-gray-6000 w-1/3 font-bold">
@@ -75,6 +77,7 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                             <span className="text-gray-800 w-2/3">
                                 {buddy.buddy_sex}
                             </span>
+                            <LinkButton href="/onboarding?funnel=3&mode=edit" />
                         </div>
                         <div className="flex justify-between pb-2">
                             <span className="text-gray-600 w-1/3 font-bold">
@@ -87,14 +90,16 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                                       ).toLocaleDateString('ko-KR')
                                     : ''}
                             </span>
+                            <LinkButton href="/onboarding?funnel=2&mode=edit" />
                         </div>
                         <div className="flex justify-between pb-2">
                             <span className="text-gray-600 w-1/3 font-bold">
                                 소개
                             </span>
-                            <span className="text-gray-800 w-2/3">
+                            <span className="text-gray-800 w-2/3 truncate">
                                 {buddy.buddy_introduction}
                             </span>
+                            <LinkButton href="/onboarding?funnel=9&mode=edit" />
                         </div>
                         <div className="flex justify-between pb-2">
                             <span className="text-gray-600 w-1/3 font-bold">
@@ -103,6 +108,7 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                             <span className="text-gray-800 w-2/3">
                                 {buddy.buddy_mbti}
                             </span>
+                            <LinkButton href="/onboarding?funnel=5&mode=edit" />
                         </div>
                         <div className="flex justify-between pb-2">
                             <span className="text-gray-600 w-1/3 font-bold">
@@ -111,64 +117,45 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                             <span className="text-gray-800 w-2/3">
                                 {buddy.buddy_region}
                             </span>
+                            <LinkButton href="/onboarding?funnel=4&mode=edit" />
                         </div>
                     </div>
 
-                    <div
-                        className="flex justify-between py-2 cursor-pointer"
-                        onClick={() => toggleAccordion('journey')}
-                    >
+                    <div className="flex justify-between py-2 cursor-pointer">
                         <span className="w-1/2 text-gray-600 font-bold">
                             선호 여정
                         </span>
-                        <span className="w-1/2 text-blue-500 text-right">
-                            {isOpen.journey ? '-' : '+'}
+                        <LinkButton href="/onboarding?funnel=8&mode=edit" />
+                    </div>
+                    <div className="pl-4 mb-4">
+                        <span className="w-full px-2 py-1 mb-2 mr-2 bg-main-color rounded-xl text-white">
+                            {buddy.buddy_preferred_theme1 || ''}
+                        </span>
+                        <span className="w-full px-2 py-1 mb-2 mr-2 bg-main-color rounded-xl text-white">
+                            {buddy.buddy_preferred_theme2 || ''}
+                        </span>
+                        <span className="w-full px-2 py-1 mb-2 mr-2 bg-main-color rounded-xl text-white">
+                            {buddy.buddy_preferred_theme3 || ''}
                         </span>
                     </div>
-                    {isOpen.journey && (
-                        <div className="pl-4 mb-4">
-                            {[
-                                buddy.buddy_preferred_theme1,
-                                buddy.buddy_preferred_theme2,
-                                buddy.buddy_preferred_theme3,
-                            ].map((theme, index) => (
-                                <span
-                                    key={index}
-                                    className="w-full px-2 py-1 mb-2 block"
-                                >
-                                    {theme || ''}
-                                </span>
-                            ))}
-                        </div>
-                    )}
 
-                    <div
-                        className="flex justify-between py-2 cursor-pointer"
-                        onClick={() => toggleAccordion('personality')}
-                    >
+                    <div className="flex justify-between py-2 cursor-pointer">
                         <span className="w-1/2 text-gray-600 font-bold">
                             버디즈 성향
                         </span>
-                        <span className="w-1/2 text-blue-500 text-right">
-                            {isOpen.personality ? '-' : '+'}
+                        <LinkButton href="/onboarding?funnel=7&mode=edit" />
+                    </div>
+                    <div className="pl-4 mb-4">
+                        <span className="w-full px-2 py-1 mb-2 mr-2 bg-main-color rounded-xl text-white">
+                            {buddy.buddy_preferred_buddy1 || ''}
+                        </span>
+                        <span className="w-full px-2 py-1 mb-2 mr-2 bg-main-color rounded-xl text-white">
+                            {buddy.buddy_preferred_buddy2 || ''}
+                        </span>
+                        <span className="w-full px-2 py-1 mb-2 mr-2 bg-main-color rounded-xl text-white">
+                            {buddy.buddy_preferred_buddy3 || ''}
                         </span>
                     </div>
-                    {isOpen.personality && (
-                        <div className="pl-4 mb-4">
-                            {[
-                                buddy.buddy_preferred_buddy1,
-                                buddy.buddy_preferred_buddy2,
-                                buddy.buddy_preferred_buddy3,
-                            ].map((buddyPref, index) => (
-                                <span
-                                    key={index}
-                                    className="w-full px-2 py-1 mb-2 block"
-                                >
-                                    {buddyPref || ''}
-                                </span>
-                            ))}
-                        </div>
-                    )}
 
                     <div
                         className="flex justify-between py-2 cursor-pointer"
@@ -177,11 +164,7 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                         <span className="w-1/2 text-gray-600 font-bold">
                             비밀번호 변경
                         </span>
-                        <Link href="/recover">
-                            <span className="w-1/2 text-blue-500 text-right">
-                                {'>'}
-                            </span>
-                        </Link>
+                        <LinkButton href="/recover" />
                     </div>
                 </div>
             </div>
