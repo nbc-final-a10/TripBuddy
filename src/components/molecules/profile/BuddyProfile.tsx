@@ -56,7 +56,7 @@ export default function BuddyProfile({
                     {buddy?.buddy_id === urlId &&
                     // url에 'profile'이 포함되어 있으면 편집 버튼 보여주기
                     isProfilePage ? (
-                        <Link href={`/onboarding?funnel=0&mode=edit`}>
+                        <Link href={`/edit/profile/${buddy?.buddy_id}`}>
                             <EditProfileButton />
                         </Link>
                     ) : (
