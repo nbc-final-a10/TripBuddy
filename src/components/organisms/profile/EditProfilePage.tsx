@@ -63,19 +63,26 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                     <div className="flex flex-col space-y-4">
                         <div className="flex justify-between pb-2">
                             <span className="text-gray-600 w-1/3 font-bold">
-                                닉네임
+                                이름
                             </span>
                             <span className="text-gray-800 w-2/3">
-                                {buddy.buddy_nickname}
+                                {buddy.buddy_nickname &&
+                                buddy.buddy_nickname.includes('user_')
+                                    ? '이름을 등록해주세요'
+                                    : buddy.buddy_nickname
+                                      ? buddy.buddy_nickname
+                                      : '이름을 등록해주세요'}
                             </span>
                             <LinkButton href="/onboarding?funnel=0&mode=edit" />
                         </div>
                         <div className="flex justify-between pb-2">
-                            <span className="text-gray-6000 w-1/3 font-bold">
+                            <span className="text-gray-600 w-1/3 font-bold">
                                 성별
                             </span>
                             <span className="text-gray-800 w-2/3">
-                                {buddy.buddy_sex}
+                                {buddy.buddy_sex
+                                    ? buddy.buddy_sex
+                                    : '성별을 등록해주세요'}
                             </span>
                             <LinkButton href="/onboarding?funnel=3&mode=edit" />
                         </div>
@@ -84,11 +91,11 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                                 출생년도
                             </span>
                             <span className="text-gray-800 w-2/3">
-                                {buddy?.buddy_birth
+                                {buddy.buddy_birth
                                     ? new Date(
                                           buddy.buddy_birth,
                                       ).toLocaleDateString('ko-KR')
-                                    : ''}
+                                    : '출생년도를 등록해주세요'}
                             </span>
                             <LinkButton href="/onboarding?funnel=2&mode=edit" />
                         </div>
@@ -97,7 +104,9 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                                 소개
                             </span>
                             <span className="text-gray-800 w-2/3 truncate">
-                                {buddy.buddy_introduction}
+                                {buddy.buddy_introduction
+                                    ? buddy.buddy_introduction
+                                    : '소개글을 등록해주세요'}
                             </span>
                             <LinkButton href="/onboarding?funnel=9&mode=edit" />
                         </div>
@@ -106,7 +115,9 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                                 MBTI
                             </span>
                             <span className="text-gray-800 w-2/3">
-                                {buddy.buddy_mbti}
+                                {buddy.buddy_mbti
+                                    ? buddy.buddy_mbti
+                                    : 'MBTI를 등록해주세요'}
                             </span>
                             <LinkButton href="/onboarding?funnel=5&mode=edit" />
                         </div>
@@ -115,7 +126,9 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                                 거주지
                             </span>
                             <span className="text-gray-800 w-2/3">
-                                {buddy.buddy_region}
+                                {buddy.buddy_region
+                                    ? buddy.buddy_region
+                                    : '거주지를 등록해주세요'}
                             </span>
                             <LinkButton href="/onboarding?funnel=4&mode=edit" />
                         </div>
@@ -128,15 +141,25 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                         <LinkButton href="/onboarding?funnel=8&mode=edit" />
                     </div>
                     <div className="pl-4 mb-4">
-                        <span className="w-full px-2 py-1 mb-2 mr-2 bg-main-color rounded-xl text-white">
-                            {buddy.buddy_preferred_theme1 || ''}
-                        </span>
-                        <span className="w-full px-2 py-1 mb-2 mr-2 bg-main-color rounded-xl text-white">
-                            {buddy.buddy_preferred_theme2 || ''}
-                        </span>
-                        <span className="w-full px-2 py-1 mb-2 mr-2 bg-main-color rounded-xl text-white">
-                            {buddy.buddy_preferred_theme3 || ''}
-                        </span>
+                        {buddy.buddy_preferred_theme1 ||
+                        buddy.buddy_preferred_theme2 ||
+                        buddy.buddy_preferred_theme3 ? (
+                            <>
+                                <span className="w-full px-2 py-1 mb-2 mr-2 bg-main-color rounded-xl text-white">
+                                    {buddy.buddy_preferred_theme1 || ''}
+                                </span>
+                                <span className="w-full px-2 py-1 mb-2 mr-2 bg-main-color rounded-xl text-white">
+                                    {buddy.buddy_preferred_theme2 || ''}
+                                </span>
+                                <span className="w-full px-2 py-1 mb-2 mr-2 bg-main-color rounded-xl text-white">
+                                    {buddy.buddy_preferred_theme3 || ''}
+                                </span>
+                            </>
+                        ) : (
+                            <span className="text-gray-600">
+                                선호하는 여정을 등록해주세요
+                            </span>
+                        )}
                     </div>
 
                     <div className="flex justify-between py-2 cursor-pointer">
@@ -146,15 +169,25 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                         <LinkButton href="/onboarding?funnel=7&mode=edit" />
                     </div>
                     <div className="pl-4 mb-4">
-                        <span className="w-full px-2 py-1 mb-2 mr-2 bg-main-color rounded-xl text-white">
-                            {buddy.buddy_preferred_buddy1 || ''}
-                        </span>
-                        <span className="w-full px-2 py-1 mb-2 mr-2 bg-main-color rounded-xl text-white">
-                            {buddy.buddy_preferred_buddy2 || ''}
-                        </span>
-                        <span className="w-full px-2 py-1 mb-2 mr-2 bg-main-color rounded-xl text-white">
-                            {buddy.buddy_preferred_buddy3 || ''}
-                        </span>
+                        {buddy.buddy_preferred_buddy1 ||
+                        buddy.buddy_preferred_buddy2 ||
+                        buddy.buddy_preferred_buddy3 ? (
+                            <>
+                                <span className="w-full px-2 py-1 mb-2 mr-2 bg-main-color rounded-xl text-white">
+                                    {buddy.buddy_preferred_buddy1 || ''}
+                                </span>
+                                <span className="w-full px-2 py-1 mb-2 mr-2 bg-main-color rounded-xl text-white">
+                                    {buddy.buddy_preferred_buddy2 || ''}
+                                </span>
+                                <span className="w-full px-2 py-1 mb-2 mr-2 bg-main-color rounded-xl text-white">
+                                    {buddy.buddy_preferred_buddy3 || ''}
+                                </span>
+                            </>
+                        ) : (
+                            <span className="text-gray-600">
+                                선호하는 버디즈를 등록해주세요
+                            </span>
+                        )}
                     </div>
 
                     <div
