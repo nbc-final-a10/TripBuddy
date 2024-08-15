@@ -28,6 +28,16 @@ export async function DELETE(req: NextRequest) {
 
     const profilePicUrl = buddy.buddy_profile_pic;
 
+    if (
+        profilePicUrl ===
+        'https://pedixhwyfardtsanotrp.supabase.co/storage/v1/object/public/buddies/profile/default_profile.webp'
+    ) {
+        return NextResponse.json(
+            { error: '기본 프로필 사진은 삭제할 수 없습니다.' },
+            { status: 400 },
+        );
+    }
+
     if (!profilePicUrl) {
         return NextResponse.json(
             { error: '프로필 사진이 없습니다.' },
