@@ -29,7 +29,8 @@ const MainSectionWrapper = ({ children }: MainSectionWrapperProps) => {
                 'bg-slate-50 xl:bg-slate-50 h-auto min-h-dvh overflow-hidden xl:min-h-[calc(100dvh-100px)] xl:h-auto',
                 pathname === '/tutorial' &&
                     'bg-white xl:bg-white xl:min-h-[calc(100dvh-100px)]',
-                pathname === '/stories' && 'xl:max-h-[calc(100dvh-100px)]',
+                pathname.startsWith('/stories/') &&
+                    'xl:max-h-[calc(100dvh-100px)]',
                 pathname === '/trips' && 'xl:max-h-[calc(100dvh-100px)]',
             )}
         >

@@ -678,6 +678,7 @@ const TripCard: React.FC<TripCardProps> = ({
                             mode === 'card' &&
                                 'bg-main-color text-white font-bold rounded-t-none rounded-b-lg w-full',
                         )}
+                        scroll={false}
                     >
                         <button className="flex justify-center items-center w-full h-full">
                             상세보기

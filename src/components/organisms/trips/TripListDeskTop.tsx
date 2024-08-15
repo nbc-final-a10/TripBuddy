@@ -23,7 +23,6 @@ const TripListDesktop: React.FC = () => {
         const { slicedDataArray } = sliceArrayByLimit(filteredTrips ?? [], 8);
         return slicedDataArray;
     }, [tripsData, filter]);
-    console.log(filteredTrips);
 
     const slicedPageArray = useMemo(() => {
         const { slicedPageArray } = sliceArrayByLimit(

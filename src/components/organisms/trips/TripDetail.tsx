@@ -149,6 +149,10 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
         if (tripData) handleWriteTrip();
     }, [tripData, handleWriteTrip]);
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     // useEffect(() => {
     //     console.log('trip 변경될때 마다 ===>', trip);
     //     if (trip) setTripImage(trip.trip_thumbnail);
