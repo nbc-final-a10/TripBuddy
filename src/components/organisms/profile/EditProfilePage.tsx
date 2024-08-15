@@ -24,18 +24,6 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
         }));
     };
 
-    const renderProfileEditColumn = (
-        label: string,
-        value: string | undefined,
-    ) => (
-        <tr>
-            <td className="w-1/3 text-gray-600">{label}</td>
-            <td className="w-2/3">
-                <span className="w-full px-2 py-1">{value || ''}</span>
-            </td>
-        </tr>
-    );
-
     if (!buddy) {
         return <EditProfileSkeleton />;
     }
@@ -71,34 +59,50 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                     <button className="mt-2">프로필 사진 삭제</button>
                 </div>
                 <div className="mt-6">
-                    <table className="w-full">
-                        <tbody>
-                            {renderProfileEditColumn(
-                                '닉네임',
-                                buddy.buddy_nickname,
-                            )}
-                            {renderProfileEditColumn(
-                                '성별',
-                                buddy.buddy_sex || '',
-                            )}
-                            {renderProfileEditColumn(
-                                '출생년도',
-                                buddy?.buddy_birth || '',
-                            )}
-                            {renderProfileEditColumn(
-                                '소개',
-                                buddy.buddy_introduction || '',
-                            )}
-                            {renderProfileEditColumn(
-                                'MBTI',
-                                buddy.buddy_mbti || '',
-                            )}
-                            {renderProfileEditColumn(
-                                '거주지',
-                                buddy.buddy_region || '',
-                            )}
-                        </tbody>
-                    </table>
+                    <div className="flex flex-col space-y-4">
+                        <div className="flex justify-between pb-2">
+                            <span className="text-gray-600 w-1/3">닉네임</span>
+                            <span className="text-gray-800 w-2/3">
+                                {buddy.buddy_nickname}
+                            </span>
+                        </div>
+                        <div className="flex justify-between pb-2">
+                            <span className="text-gray-600 w-1/3">성별</span>
+                            <span className="text-gray-800 w-2/3">
+                                {buddy.buddy_sex}
+                            </span>
+                        </div>
+                        <div className="flex justify-between pb-2">
+                            <span className="text-gray-600 w-1/3">
+                                출생년도
+                            </span>
+                            <span className="text-gray-800 w-2/3">
+                                {buddy?.buddy_birth
+                                    ? new Date(
+                                          buddy.buddy_birth,
+                                      ).toLocaleDateString('ko-KR')
+                                    : ''}
+                            </span>
+                        </div>
+                        <div className="flex justify-between pb-2">
+                            <span className="text-gray-600 w-1/3">소개</span>
+                            <span className="text-gray-800 w-2/3">
+                                {buddy.buddy_introduction}
+                            </span>
+                        </div>
+                        <div className="flex justify-between pb-2">
+                            <span className="text-gray-600 w-1/3">MBTI</span>
+                            <span className="text-gray-800 w-2/3">
+                                {buddy.buddy_mbti}
+                            </span>
+                        </div>
+                        <div className="flex justify-between pb-2">
+                            <span className="text-gray-600 w-1/3">거주지</span>
+                            <span className="text-gray-800 w-2/3">
+                                {buddy.buddy_region}
+                            </span>
+                        </div>
+                    </div>
 
                     <div
                         className="flex justify-between py-2 cursor-pointer"
