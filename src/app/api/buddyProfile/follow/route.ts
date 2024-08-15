@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(
             { message: '자기 자신은 팔로우 할 수 없습니다.' },
             {
-                status: 400,
+                status: 200,
             },
         );
     }

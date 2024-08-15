@@ -29,23 +29,25 @@ function FollowHeartButton({
     }, [pathname]);
 
     useEffect(() => {
-        // 기존 팔로우 여부 검사
-        const checkFollowStatus: () => Promise<void> = async () => {
-            const res = await fetch(
-                `/api/buddyProfile/follow?followingId=${followingId}&followerId=${followerId}`,
-            );
-            const data = await res.json();
-            setIsFollowing(data.originFollow?.length > 0);
-        };
-        const checkOwnCard: () => void = () => {
-            if (followingId === followerId) {
-                setIsOwnCard(true);
-            }
-        };
+        if (hasRank) {
+            // 기존 팔로우 여부 검사
+            const checkFollowStatus: () => Promise<void> = async () => {
+                const res = await fetch(
+                    `/api/buddyProfile/follow?followingId=${followingId}&followerId=${followerId}`,
+                );
+                const data = await res.json();
+                setIsFollowing(data.originFollow?.length > 0);
+            };
+            const checkOwnCard: () => void = () => {
+                if (followingId === followerId) {
+                    setIsOwnCard(true);
+                }
+            };
 
-        checkFollowStatus();
-        checkOwnCard();
-    }, [followingId, followerId]);
+            checkFollowStatus();
+            checkOwnCard();
+        }
+    }, [followingId, followerId, hasRank]);
 
     const handleFollowToggle = async (
         e: React.MouseEvent<HTMLButtonElement>,
