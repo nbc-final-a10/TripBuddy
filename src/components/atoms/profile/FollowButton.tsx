@@ -155,7 +155,7 @@ export default function FollowButton() {
         <div className="text-sm bg-gray-200 rounded-full px-4 py-1 mt-10 animate-pulse h-8 w-32"></div>
     ) : (
         <button
-            className={`text-sm text-gray-500 bg-gray-200 rounded-full px-4 py-1 mt-10 ${
+            className={`text-sm text-white bg-main-color rounded-full px-4 py-1 mt-10 ${
                 isLoading ? 'opacity-50 cursor-not-allowed' : ''
             }`}
             onClick={isFollowing ? handleUnfollow : handleFollow}
