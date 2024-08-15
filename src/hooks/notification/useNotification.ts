@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-import { AuthContext } from '@/contexts/auth.context';
 import { NotificationContext } from '@/contexts/notification.context';
 
 export const useNotification = () => {
