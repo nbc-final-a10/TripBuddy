@@ -46,7 +46,7 @@ export default function BuddyProfile({
                     <Image
                         src={
                             clickedBuddy?.buddy_profile_pic ||
-                            '/images/mascot_happy.webp'
+                            'https://pedixhwyfardtsanotrp.supabase.co/storage/v1/object/public/buddies/profile/default_profile.webp'
                         }
                         alt="profile"
                         width={100}
