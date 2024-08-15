@@ -47,6 +47,38 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
         }
     }
 
+    const handleDelete = async () => {
+        showAlert('caution', '정말로 삭제하시겠습니까?', {
+            onConfirm: async () => {
+                try {
+                    const response = await fetch(
+                        `/api/buddyProfile/profilePicture?buddy_id=${buddy.buddy_id}`,
+                        {
+                            method: 'DELETE',
+                        },
+                    );
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(
+                            data.error ||
+                                '문제가 발생했습니다. 문제가 지속되면 관리자에게 문의해주세요.',
+                        );
+                    }
+
+                    queryClient.invalidateQueries({
+                        queryKey: [QUERY_KEY_BUDDY, buddy.buddy_id],
+                    });
+                    showAlert('success', data.message);
+                } catch (err: any) {
+                    showAlert('error', err.message);
+                }
+            },
+            isConfirm: true,
+        });
+    };
+
     if (!buddy) {
         return <EditProfileSkeleton />;
     }
@@ -85,7 +117,9 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                             </svg>
                         </button>
                     </div> */}
-                    <button className="mt-2">프로필 사진 삭제</button>
+                    <button className="mt-2" onClick={handleDelete}>
+                        프로필 사진 삭제
+                    </button>
                     <button className="mt-2" onClick={handleSubmit}>
                         프로필 사진 변경
                     </button>
