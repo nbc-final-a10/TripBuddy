@@ -75,15 +75,15 @@ const Tuto: React.FC<TutoProps> = ({ step }) => {
     return (
         <div className="relative h-full bg-white pt-[8px]">
             {/* {!isImageLoaded && <DefaultLoader />} */}
-            <div className="relative h-[20%]">
+            <div className="relative h-[18%] flex flex-col justify-start items-center xl:h-[23%]">
                 <h1 className="text-center font-bold text-2xl md:text-3xl ">
                     {content[step].title}
                 </h1>
-                <p className="text-center text-lg md:text-xl text-gray-600 mb-4 xl:mb-8">
+                <p className="text-center text-lg md:text-xl text-gray-600 mb-2 xl:mb-4">
                     {content[step].description}
                 </p>
             </div>
-            <div className="relative flex justify-center items-start h-[80%]">
+            <div className="relative flex justify-center items-start h-[80%] xl:h-[76%]">
                 <div className="relative w-[324px] h-[426px] aspect-auto">
                     <Image
                         src={content[step].src}
