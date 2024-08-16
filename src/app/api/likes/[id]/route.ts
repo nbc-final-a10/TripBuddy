@@ -207,6 +207,7 @@ export async function POST(request: NextRequest) {
                         notification_sender: buddy_id,
                         notification_receiver: story?.story_created_by,
                         notification_content: `${buddy?.buddy_nickname}님이 스토리를 좋아합니다.`,
+                        notification_origin_id: story_id,
                     },
                 ])
                 .select()

@@ -2,18 +2,30 @@
 
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
 import { useModal } from '@/contexts/modal.context';
+import { useNotificationMutation } from '@/hooks/queries';
 import { Buddy } from '@/types/Auth.types';
+import { Notification } from '@/types/Notification.types';
 import React from 'react';
 
 type ContractModalProps = {
     buddies: Buddy[];
     mode?: 'default' | 'notification';
+    notifications: Notification[];
 };
 
-const ContractModal: React.FC<ContractModalProps> = ({ buddies, mode }) => {
+const ContractModal: React.FC<ContractModalProps> = ({
+    buddies,
+    mode,
+    notifications,
+}) => {
     const modal = useModal();
 
+    const { mutate } = useNotificationMutation();
+
     const handleCancel = () => {
+        // 컨트랙트를 삭제해야함
+        // 그러려면 buddyID 로 컨트랙트 테이블 조회
+        // 그러면 관련된 컨트랙츠와 트립스를 보내줌
         modal.closeModal();
     };
 

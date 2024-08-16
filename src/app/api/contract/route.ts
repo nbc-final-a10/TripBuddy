@@ -166,6 +166,7 @@ export async function POST(req: NextRequest) {
                         notification_sender: payload.contract_buddy_id,
                         notification_receiver: trip.trip_master_id,
                         notification_content: `${buddy?.buddy_nickname}님이 참가 요청을 보냈어요!`,
+                        notification_origin_id: payload.contract_trip_id,
                     },
                 ])
                 .select()
