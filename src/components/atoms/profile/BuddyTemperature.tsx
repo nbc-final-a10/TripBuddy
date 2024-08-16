@@ -12,11 +12,11 @@ const BuddyTemperature = ({
     isTempText = true,
 }: BuddyTemperatureProps) => {
     const smileIcons = [
-        '/svg/Smile1.svg',
-        '/svg/Smile2.svg',
-        '/svg/Smile3.svg',
-        '/svg/Smile4.svg',
-        '/svg/Smile5.svg',
+        '/svg/smile1.svg',
+        '/svg/smile2.svg',
+        '/svg/smile3.svg',
+        '/svg/smile4.svg',
+        '/svg/smile5.svg',
     ];
 
     // 각 아이콘이 활성화될 임계 온도
