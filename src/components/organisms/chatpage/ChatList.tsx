@@ -190,25 +190,13 @@ const ChatList = () => {
                 'postgres_changes',
                 { event: 'INSERT', schema: 'public', table: 'messages' },
                 async () => {
-                    await fetchChatData();
-                },
-            )
-            .subscribe();
-
-        const readUpdateSubscription = supabase
-            .channel('chat-room')
-            .on(
-                'postgres_changes',
-                { event: 'UPDATE', schema: 'public', table: 'contract' },
-                async () => {
-                    await fetchChatData();
+                    fetchUnreadCounts();
                 },
             )
             .subscribe();
 
         return () => {
             messageSubscription.unsubscribe();
-            readUpdateSubscription.unsubscribe();
         };
     });
 

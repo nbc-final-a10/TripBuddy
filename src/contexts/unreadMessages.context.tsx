@@ -62,36 +62,18 @@ export const UnreadMessagesProvider: React.FC<{
 
         fetchUnreadCounts();
 
-        const messageSubscription = supabase
+        const readUpdateSubscription = supabase
             .channel('chat-room')
             .on(
                 'postgres_changes',
-                { event: 'INSERT', schema: 'public', table: 'messages' },
+                { event: 'UPDATE', schema: 'public', table: 'contract' },
                 async () => {
                     await fetchUnreadCounts();
                 },
             )
             .subscribe();
 
-        const readUpdateSubscription = supabase
-            .channel('chat-room')
-            .on(
-                'postgres_changes',
-                { event: 'UPDATE', schema: 'public', table: 'contract' },
-                async payload => {
-                    const { old, new: updated } = payload;
-                    if (
-                        old.contract_last_message_read !==
-                        updated.contract_last_message_read
-                    ) {
-                        await fetchUnreadCounts();
-                    }
-                },
-            )
-            .subscribe();
-
         return () => {
-            messageSubscription.unsubscribe();
             readUpdateSubscription.unsubscribe();
         };
     }, [fetchUnreadCounts, currentBuddy]);
