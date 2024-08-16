@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import FollowingList from '@/components/molecules/profile/followList/FollowingList';
-import FollowerList from '@/components/molecules/profile/followList/FollwerList';
+import FollowerList from '@/components/molecules/profile/followList/FollowerList';
 import useFollowListToggle from '@/hooks/myPage/useFollowListToggle';
 import { useFollowCountQuery } from '@/hooks/queries/buddy/useGetFollowCounts';
 
@@ -50,7 +50,10 @@ function FollowPage() {
                 />
             )}
             {activeButton === '팔로워' && (
-                <FollowerList followerList={followerList} />
+                <FollowerList
+                    followerList={followerList}
+                    activeButton={activeButton}
+                />
             )}
         </>
     );
