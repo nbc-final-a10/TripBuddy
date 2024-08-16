@@ -10,12 +10,14 @@ import FollowButton from '@/components/atoms/profile/FollowButton';
 import { useAuth } from '@/hooks';
 import { usePathname } from 'next/navigation';
 import BlurredBuddyProfile from './BlurredBuddyProfile';
+import { twMerge } from 'tailwind-merge';
 
 type BuddyProfileProps = {
     clickedBuddy: Buddy | null;
     loading: boolean;
     buddy?: Buddy | null;
     urlId?: string;
+    mode?: 'default' | 'notification';
 };
 
 export default function BuddyProfile({
@@ -23,6 +25,7 @@ export default function BuddyProfile({
     loading,
     buddy = null,
     urlId = '',
+    mode = 'default',
 }: BuddyProfileProps) {
     const [currentPathname, setCurrentPathname] = useState('');
 
@@ -42,8 +45,15 @@ export default function BuddyProfile({
     }
 
     return (
-        <div className="relative flex flex-col items-center justify-center p-4 mt-4 xl:mt-8">
-            <div className={`flex items-center ${!currentBuddy && 'blur-sm'}`}>
+        <div
+            className={twMerge(
+                'relative flex flex-col items-center justify-center p-4 mt-4 xl:mt-8',
+                mode === 'notification' && 'py-1 px-4 mt-0',
+            )}
+        >
+            <div
+                className={`flex items-center ${!currentBuddy && mode === 'default' && 'blur-sm'}`}
+            >
                 <div className="flex flex-col items-center">
                     <Image
                         src={
@@ -151,7 +161,7 @@ export default function BuddyProfile({
                     </div>
                 </div>
             </div>
-            {!currentBuddy && <BlurredBuddyProfile />}
+            {!currentBuddy && mode === 'default' && <BlurredBuddyProfile />}
         </div>
     );
 }

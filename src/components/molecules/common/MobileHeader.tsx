@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks';
 import { useModal } from '@/contexts/modal.context';
 import { getTrip } from '@/api-services/trips';
 import { TripWithContract } from '@/types/Trips.types';
+import Link from 'next/link';
 
 const MobileHeader: React.FC = () => {
     const pathname = usePathname();
@@ -26,7 +27,7 @@ const MobileHeader: React.FC = () => {
     const isOboardingEdit = searchParams.get('mode') === 'edit';
     const isTrips = pathname === '/trips';
     const isTripDetail = pathname.startsWith('/trips/');
-    const isStory = pathname.startsWith('/stories');
+    const isStory = pathname.startsWith('/stories/');
     const isChatId = pathname.startsWith('/chat/');
     const isChat = pathname === '/chat';
     const isLogin = pathname === '/login';
@@ -49,7 +50,8 @@ const MobileHeader: React.FC = () => {
         (isLogin && '') ||
         (isSignup && '') ||
         (isSearch && '검색') ||
-        (isOnboarding && !isOboardingEdit ? '온보딩' : '프로필 수정') ||
+        (isOnboarding && !isOboardingEdit && '온보딩') ||
+        (isOnboarding && isOboardingEdit && '프로필 수정') ||
         (isProfile && isMyProfile && '마이페이지') ||
         (isProfile && !isMyProfile && '프로필') ||
         (isStory && '버디즈 스토리') ||
@@ -91,14 +93,17 @@ const MobileHeader: React.FC = () => {
     };
 
     useEffect(() => {
+        if (!buddy || !isTripDetail) return;
         async function fetchTrip() {
             if (uuid) {
                 const trip = await getTrip(uuid);
-                setTrip(trip);
+                if (trip.trip_master_id === buddy?.buddy_id) {
+                    setTrip(trip);
+                }
             }
         }
         if (!isProfile) fetchTrip();
-    }, [uuid, isProfile]);
+    }, [uuid, isProfile, buddy, isTripDetail]);
 
     if (!isShow) return null;
 
@@ -130,11 +135,11 @@ const MobileHeader: React.FC = () => {
                     <MobileHeaderSettingsButton uuid={uuid} />
                 )}
                 {/** 수정페이지 구현하면 수정으로 가게 추후 수정 요망 */}
-                {isTripDetail &&
-                    trip &&
-                    trip.trip_master_id === buddy?.buddy_id && (
+                {trip && (
+                    <Link href={`/edit/trips/${trip.trip_id}`}>
                         <span>수정</span>
-                    )}
+                    </Link>
+                )}
                 {(isSearch || isWrite) && (
                     <Close
                         onClick={() => router.push('/trips')}

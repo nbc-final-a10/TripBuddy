@@ -130,6 +130,7 @@ const TripCard: React.FC<TripCardProps> = ({
             const newContract: PartialContract = {
                 contract_trip_id: trip.trip_id,
                 contract_buddy_id: buddy.buddy_id,
+                contract_isPending: true,
             };
             createContract(newContract);
         }
@@ -264,11 +265,15 @@ const TripCard: React.FC<TripCardProps> = ({
             const newBookMark: BookMarkRequest = {
                 bookmark_trip_id: trip.trip_id,
                 bookmark_buddy_id: buddy.buddy_id,
-                is_bookmarked: bookMark ? false : true,
+                is_bookmarked: bookMark ? true : false,
             };
 
             createBookMark(newBookMark);
-            return showAlert('success', '찜하기가 완료되었습니다.');
+            if (bookMark) {
+                return showAlert('success', '찜하기 취소가 완료되었습니다.');
+            } else {
+                return showAlert('success', '찜하기가 완료되었습니다.');
+            }
         }
         if (mode === '삭제하기') {
             return handleDelete();
@@ -361,10 +366,7 @@ const TripCard: React.FC<TripCardProps> = ({
 
     useEffect(() => {
         if (isContractMutationSuccess) {
-            showAlert(
-                'success',
-                '버디장에게 참여 요청이 전달되었습니다. 베타 기간에는 자동으로 참여됩니다.',
-            );
+            showAlert('success', '버디장에게 참여 요청이 전달되었습니다.');
         }
     }, [isContractMutationSuccess]);
 
@@ -674,6 +676,7 @@ const TripCard: React.FC<TripCardProps> = ({
                             mode === 'card' &&
                                 'bg-main-color text-white font-bold rounded-t-none rounded-b-lg w-full',
                         )}
+                        scroll={false}
                     >
                         <button className="flex justify-center items-center w-full h-full">
                             상세보기

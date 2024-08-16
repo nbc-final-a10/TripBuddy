@@ -9,7 +9,7 @@ import { postStoryLikes } from '@/api-services/stories';
 
 export function useStoryLikesMutation(id: string) {
     const queryClient = useQueryClient();
-    return useMutation<StoryLikes[], Error, StoryLikesData>({
+    return useMutation<StoryLikes[] | null, Error, StoryLikesData>({
         mutationFn: (data: StoryLikesData) => postStoryLikes(data),
         onMutate: async (data: StoryLikesData) => {
             await queryClient.cancelQueries({
@@ -19,7 +19,8 @@ export function useStoryLikesMutation(id: string) {
                 QUERY_KEY_STORY_LIKES,
                 id,
             ]);
-            if (data.isLiked) {
+            console.log('data ====>', data);
+            if (!data.isLiked) {
                 queryClient.setQueryData<PartialStoryLikes[]>(
                     [QUERY_KEY_STORY_LIKES, id],
                     old =>

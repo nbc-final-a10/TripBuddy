@@ -47,6 +47,14 @@ export default function FollowButton() {
             followingId: string,
             followerId: string,
         ) => {
+            // 내가 내가 만든 여정을 보는 상황에서 에러남..
+            const isMe = followingId === followerId;
+
+            if (isMe) {
+                setIsFollowing(null);
+                return;
+            }
+
             try {
                 const checkResponse = await fetch(
                     `/api/buddyProfile/follow?followingId=${followingId}&followerId=${followerId}`,
@@ -83,9 +91,13 @@ export default function FollowButton() {
         };
 
         if (window.location.pathname.includes('trips')) {
+            setIsLoading(true);
             handleTripsLogic();
+            setIsLoading(false);
         } else if (window.location.pathname.includes('profile')) {
+            setIsLoading(true);
             handleProfileLogic();
+            setIsLoading(false);
         }
     }, [buddy]);
 
@@ -151,8 +163,10 @@ export default function FollowButton() {
         }
     };
 
-    return isFollowing === null ? (
+    return isLoading ? (
         <div className="text-sm bg-gray-200 rounded-full px-4 py-1 mt-10 animate-pulse h-7 w-24"></div>
+    ) : isFollowing === null ? (
+        <div className="rounded-full px-4 py-1 mt-10 h-7 w-24"></div>
     ) : (
         <button
             className={`text-sm text-white bg-main-color rounded-full px-4 py-1 mt-10 ${

@@ -32,14 +32,14 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
     async function handleSubmit() {
         if (selectedFile) {
             try {
-                await mutate({
+                mutate({
                     buddyInfo: buddy,
                     imageFile: selectedFile,
                 });
                 showAlert('success', '프로필 사진이 변경되었습니다');
-                queryClient.invalidateQueries({
-                    queryKey: [QUERY_KEY_BUDDY, buddy.buddy_id],
-                });
+                // queryClient.invalidateQueries({
+                //     queryKey: [QUERY_KEY_BUDDY, buddy.buddy_id],
+                // });
             } catch (error) {
                 showAlert('error', '프로필 사진 변경에 실패했습니다');
             }
@@ -92,6 +92,7 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                         ref={profileImageRef}
                         selectedMedia={selectedMedia}
                         setSelectedFile={setSelectedFile}
+                        mode="edit"
                     />
                     {/* <div className="relative">
                         <Image
