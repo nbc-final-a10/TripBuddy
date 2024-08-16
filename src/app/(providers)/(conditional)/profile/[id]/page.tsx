@@ -6,14 +6,44 @@ import BuddyFollow from '@/components/molecules/profile/BuddyFollow';
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
 import { useAuth } from '@/hooks';
 import { useBuddyProfile } from '@/hooks/queries';
+import { useFollowCountQuery } from '@/hooks/queries/buddy/useGetFollowCounts';
 import { ProfilePageProps } from '@/types/ProfileParams.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 function ProfilePage({ params }: ProfilePageProps) {
+    const [followingList, setFollowingList] = useState<string[]>([]);
+    const [followerList, setFollowerList] = useState<string[]>([]);
     const { buddy, logOut } = useAuth();
     const { data: clickedBuddy, isLoading, error } = useBuddyProfile(params.id);
+    const [readyToFetch, setReadyToFetch] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (clickedBuddy?.buddy_id) {
+            setReadyToFetch(true);
+        }
+    }, [clickedBuddy?.buddy_id]);
+
+    const { data: followList } = useFollowCountQuery(
+        clickedBuddy?.buddy_id || '',
+        readyToFetch,
+    );
+
+    useEffect(() => {
+        if (!followList || !clickedBuddy?.buddy_id) return;
+
+        const newFollowingList = followList
+            .filter(data => data.follow_following_id === clickedBuddy.buddy_id)
+            .map(data => data.follow_follower_id);
+
+        const newFollowerList = followList
+            .filter(data => data.follow_follower_id === clickedBuddy.buddy_id)
+            .map(data => data.follow_following_id);
+
+        setFollowingList(newFollowingList);
+        setFollowerList(newFollowerList);
+    }, [followList, clickedBuddy?.buddy_id]);
 
     const handleLogOut = () => {
         logOut();
@@ -44,9 +74,7 @@ function ProfilePage({ params }: ProfilePageProps) {
                             <BuddyFollow
                                 id={params.id}
                                 type="팔로잉"
-                                count={
-                                    clickedBuddy?.buddy_following_counts || 0
-                                }
+                                count={followingList.length}
                             />
                         </Link>
                     </span>
@@ -58,7 +86,7 @@ function ProfilePage({ params }: ProfilePageProps) {
                             <BuddyFollow
                                 id={params.id}
                                 type="팔로워"
-                                count={clickedBuddy?.buddy_follower_counts || 0}
+                                count={followerList.length}
                             />
                         </Link>
                     </span>

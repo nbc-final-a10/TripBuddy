@@ -1,116 +1,52 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import FollowingList from '@/components/molecules/profile/followList/FollowingList';
 import FollowerList from '@/components/molecules/profile/followList/FollwerList';
 import useFollowListToggle from '@/hooks/myPage/useFollowListToggle';
-import { Buddy } from '@/types/Auth.types';
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-
-export type FollowData = {
-    follow_id: string;
-    follow_following_id: string;
-    follow_follower_id: string;
-};
+import { Follow } from '@/types/Follow.types';
+import { fetchFollowData } from '@/api-services/auth/client';
+import { useBuddyQuery } from '@/hooks/queries';
+import { useFollowCountQuery } from '@/hooks/queries/buddy/useGetFollowCounts';
 
 function FollowPage() {
     const { activeButton, FollowListToggleButton } = useFollowListToggle();
     const { id: clickedBuddyId } = useParams<{ id: string }>();
-    const [followData, setFollowData] = useState<FollowData[]>([]);
+    const [followData, setFollowData] = useState<Follow[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const [followingList, setFollowingList] = useState<Buddy[]>([]);
-    const [followerList, setFollowerList] = useState<Buddy[]>([]);
+    const [followingList, setFollowingList] = useState<string[]>([]);
+    const [followerList, setFollowerList] = useState<string[]>([]);
+
+    const { data: followList, isLoading } = useFollowCountQuery(clickedBuddyId);
 
     useEffect(() => {
-        const fetchFollowingData = async () => {
-            try {
-                const res = await fetch(
-                    `/api/buddyProfile/follow/followList?current_buddy_id=${clickedBuddyId}`,
-                );
-                const data = await res.json();
+        if (!followList) return;
 
-                if (res.ok) {
-                    setFollowData(data.originFollow as FollowData[]);
-                } else {
-                    console.error(data.message);
-                }
-            } catch (error) {
-                console.error(
-                    '팔로잉 데이터를 가져오는 중 오류가 발생했습니다:',
-                    error,
-                );
-            } finally {
-                setLoading(false);
-            }
-        };
+        const newFollowingList = followList
+            .filter(data => data.follow_following_id === clickedBuddyId)
+            .map(data => data.follow_follower_id);
 
-        if (clickedBuddyId) {
-            fetchFollowingData();
-        }
-    }, [clickedBuddyId]);
+        const newFollowerList = followList
+            .filter(data => data.follow_follower_id === clickedBuddyId)
+            .map(data => data.follow_following_id);
 
-    useEffect(() => {
-        const fetchBuddyData = async (
-            buddyId: string,
-        ): Promise<Buddy | null> => {
-            try {
-                const res = await fetch(
-                    `/api/buddyProfile/buddy?id=${buddyId}`,
-                );
-                if (res.ok) {
-                    return res.json();
-                } else {
-                    console.error(
-                        `Failed to fetch data for buddy id: ${buddyId}`,
-                    );
-                    return null;
-                }
-            } catch (error) {
-                console.error(
-                    `Error fetching data for buddy id: ${buddyId}`,
-                    error,
-                );
-                return null;
-            }
-        };
-
-        const loadBuddyData = async () => {
-            const newFollowingList = await Promise.all(
-                followData
-                    .filter(data => data.follow_following_id === clickedBuddyId)
-                    .map(data => fetchBuddyData(data.follow_follower_id)),
-            );
-
-            const newFollowerList = await Promise.all(
-                followData
-                    .filter(data => data.follow_follower_id === clickedBuddyId)
-                    .map(data => fetchBuddyData(data.follow_following_id)),
-            );
-
-            setFollowingList(
-                newFollowingList.filter(buddy => buddy !== null) as Buddy[],
-            );
-            setFollowerList(
-                newFollowerList.filter(buddy => buddy !== null) as Buddy[],
-            );
-        };
-
-        if (followData.length > 0) {
-            loadBuddyData();
-        }
-    }, [followData, clickedBuddyId]);
+        setFollowingList(newFollowingList);
+        setFollowerList(newFollowerList);
+    }, [followList, clickedBuddyId]);
 
     console.log('followingList', followingList);
     console.log('followerList', followerList);
 
-    if (loading) {
+    if (isLoading) {
         return <DefaultLoader />;
     }
 
     return (
         <>
-            <div className="flex justify-center mb-4">
+            <span>팔로우페이지</span>
+            {/* <div className="flex justify-center mb-4">
                 <FollowListToggleButton />
             </div>
             {activeButton === '팔로잉' && (
@@ -118,7 +54,7 @@ function FollowPage() {
             )}
             {activeButton === '팔로워' && (
                 <FollowerList followerList={followerList} />
-            )}
+            )} */}
         </>
     );
 }
