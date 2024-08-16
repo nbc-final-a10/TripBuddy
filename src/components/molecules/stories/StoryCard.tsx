@@ -10,6 +10,7 @@ import {
 import { getTimeSinceUpload } from '@/utils/common/getTimeSinceUpload';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -30,8 +31,15 @@ const StoryCard: React.FC<StoryCardProps> = ({
     likes,
     isMain = false,
 }) => {
+    const pathname = usePathname();
+
     return (
-        <div className="relative flex flex-col justify-center items-center min-w-[163px] w-[163px] h-[223px] bg-gray-3000 rounded-lg gap-2 aspect-auto xl:min-w-[254px]">
+        <div
+            className={twMerge(
+                'relative flex flex-col justify-center items-center min-w-[163px] w-[163px] h-[223px] bg-gray-3000 rounded-lg gap-2 aspect-auto xl:min-w-[254px]',
+                pathname === '/' && 'min-w-[139px] w-[139px] h-[190px]',
+            )}
+        >
             {!isMain && (
                 <div className="absolute top-0.5 right-1 w-full flex flex-row justify-end z-[99]">
                     <button className="relative focus:outline-none">

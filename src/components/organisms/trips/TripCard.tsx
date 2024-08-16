@@ -376,23 +376,23 @@ const TripCard: React.FC<TripCardProps> = ({
             {isBookMarkMutationPending && <DefaultLoader />}
             <div
                 className={clsx(
-                    'bg-white box-border h-fit shadow-xl',
-                    mode === 'detail' && 'p-4',
-                    mode === 'list' && 'w-[90%] rounded-lg xl:w-full',
+                    'bg-white box-border shadow-xl',
+                    mode === 'detail' && 'h-fit p-4',
+                    mode === 'list' && 'w-[90%] h-fit rounded-lg xl:w-full',
                     mode === 'card' &&
-                        'h-[215px] rounded-lg min-w-[250px] xl:min-w-[254px]',
+                        'h-[215px] min-h-[215px] rounded-lg min-w-[211px] xl:min-w-[254px]',
                 )}
             >
                 <div
                     className={clsx(
-                        'bg-white p-2 rounded-lg box-border h-auto w-full',
+                        'relative bg-white p-2 rounded-lg box-border h-[86%] w-full',
                         mode === 'detail' && 'bg-white rounded-none',
                         mode === 'list' && 'bg-gray-200 rounded-b-none',
                         mode === 'card' && 'rounded-b-none',
                     )}
                 >
-                    <div className="flex flex-col gap-3">
-                        <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-5">
                             <div className="flex flex-row gap-2 justify-between">
                                 {mode === 'card' && (
                                     <div className="flex flex-row gap-1 min-h-[22px]">
@@ -427,11 +427,11 @@ const TripCard: React.FC<TripCardProps> = ({
                                 )}
 
                                 {mode === 'card' && (
-                                    <div className="flex flex-row gap-2 text-sm">
-                                        <span className="font-bold text-md leading-none">
+                                    <div className="flex flex-row gap-2">
+                                        <span className="font-bold text-md leading-none text-[16px]">
                                             {`${remainDays(trip.trip_start_date)}`}
                                         </span>
-                                        <span className="text-xs leading-none">
+                                        <span className="text-xs leading-none text-[14px]">
                                             {new Date(
                                                 trip.trip_start_date,
                                             ).toLocaleDateString()}
@@ -439,31 +439,33 @@ const TripCard: React.FC<TripCardProps> = ({
                                     </div>
                                 )}
                             </div>
-
-                            {mode === 'card' && (
-                                <h2 className="text-xl font-bold leading-none pt-1">
-                                    {trip.trip_final_destination}
-                                </h2>
-                            )}
-                            {!isEdit ? (
-                                <h3
-                                    className={clsx(
-                                        'text-lg font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap',
-                                        mode === 'list' && 'text-black text-xl',
-                                        mode === 'card' && 'text-gray-600',
-                                    )}
-                                >
-                                    {trip.trip_title}
-                                </h3>
-                            ) : (
-                                <button
-                                    className="text-lg font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap animate-pulse text-left"
-                                    onClick={handleClickTripTitle}
-                                >
-                                    {tripTitleContent?.tripTitle ??
-                                        trip.trip_title}
-                                </button>
-                            )}
+                            <div className="flex flex-col gap-2">
+                                {mode === 'card' && (
+                                    <h2 className="text-[18px] font-bold leading-none pt-1">
+                                        {trip.trip_final_destination}
+                                    </h2>
+                                )}
+                                {!isEdit ? (
+                                    <h3
+                                        className={clsx(
+                                            'text-[16px] font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap',
+                                            mode === 'list' &&
+                                                'text-black text-xl',
+                                            mode === 'card' && 'text-gray-600',
+                                        )}
+                                    >
+                                        {trip.trip_title}
+                                    </h3>
+                                ) : (
+                                    <button
+                                        className="text-lg font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap animate-pulse text-left"
+                                        onClick={handleClickTripTitle}
+                                    >
+                                        {tripTitleContent?.tripTitle ??
+                                            trip.trip_title}
+                                    </button>
+                                )}
+                            </div>
 
                             <div className="flex flex-row justify-between">
                                 <div className="flex gap-1">
@@ -602,8 +604,8 @@ const TripCard: React.FC<TripCardProps> = ({
                         {mode === 'card' && (
                             <div className="flex flex-col gap-1">
                                 <div className="flex flex-row">
-                                    <p className="text-sm leading-none">
-                                        {`신청`}
+                                    <p className="text-[12px] leading-none">
+                                        {`신청 `}
                                         <span className="text-gray-5000">{`${(trip.contract as Contract[]).length}`}</span>
                                         <span className="text-gray-500">{`/${trip.trip_max_buddies_counts}`}</span>
                                     </p>
@@ -639,7 +641,7 @@ const TripCard: React.FC<TripCardProps> = ({
 
                 <div
                     className={clsx(
-                        'flex w-full text-white rounded-lg h-[16%]',
+                        'relative flex w-full text-white rounded-lg h-[16%]',
                         mode === 'detail' &&
                             'bg-white text-gray-950 rounded-none justify-center gap-2',
                         mode === 'list' && 'justify-between',
@@ -678,7 +680,7 @@ const TripCard: React.FC<TripCardProps> = ({
                         )}
                         scroll={false}
                     >
-                        <button className="flex justify-center items-center w-full h-full">
+                        <button className="flex justify-center items-center w-full h-full text-[14px]">
                             상세보기
                         </button>
                     </Link>

@@ -44,6 +44,7 @@ const HomePageBanner = () => {
     return (
         <div className="relative h-[200px] z-0">
             <div className="relative text-left font-semibold text-2xl px-4 py-8 h-[230px] flex flex-col justify-end aspect-auto z-0">
+                <div className="absolute top-0 left-0 w-full h-full bg-black/40"></div>
                 {randomImgSrc && (
                     <Image
                         src={randomImgSrc}
