@@ -21,7 +21,6 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
     >([]);
     const [isPageVisible, setIsPageVisible] = useState(true);
 
-    // Fetch messages on mount
     useEffect(() => {
         const fetchMessages = async () => {
             const { data, error } = await supabase
@@ -48,7 +47,6 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
         fetchMessages();
     }, [id]);
 
-    // Handle new messages via Realtime
     useEffect(() => {
         const channel = supabase
             .channel('chat-room')
@@ -59,7 +57,6 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                     const newMessage = payload.new as Message;
 
                     if (newMessage.message_trip_id === id) {
-                        // Fetch sender info
                         const { data: buddyData, error: senderError } =
                             await supabase
                                 .from('buddies')
@@ -80,13 +77,14 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                             buddy: buddyData,
                         };
 
-                        setMessages(prevMessages => [
-                            ...prevMessages,
-                            newMessageWithBuddy,
-                        ]);
+                        if (newMessage.message_trip_id === id) {
+                            setMessages(prevMessages => [
+                                ...prevMessages,
+                                newMessageWithBuddy,
+                            ]);
+                        }
 
                         if (isPageVisible) {
-                            // Update all users' last message read status if the page is visible
                             const { data: contracts, error: contractsError } =
                                 await supabase
                                     .from('contract')
@@ -123,7 +121,6 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
         };
     }, [id, isPageVisible]);
 
-    // Handle visibility change
     useEffect(() => {
         const handleVisibilityChange = () => {
             setIsPageVisible(document.visibilityState === 'visible');
@@ -139,7 +136,6 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
         };
     }, []);
 
-    // Update read status for current user's last message
     useEffect(() => {
         const handleReadMessages = async () => {
             if (messages.length > 0 && isPageVisible) {

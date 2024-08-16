@@ -41,7 +41,6 @@ const ChatList = () => {
                     contract => contract.contract_trip_id,
                 );
 
-                // Fetch other related data (buddies, trips, etc.)
                 const { data: allBuddies, error: allBuddiesError } =
                     await supabase
                         .from('contract')
@@ -243,7 +242,6 @@ const ChatList = () => {
                         }
                         last_message_content={chat.last_message_content}
                         last_message_time={chat.last_message_time}
-                        unread_count={chat.unread_count} // Pass unread_count to ChatListItem
                     />
                 ))}
             </div>

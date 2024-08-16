@@ -32,6 +32,8 @@ export const UnreadMessagesProvider: React.FC<{
     const [totalUnreadCount, setTotalUnreadCount] = useState<number>(0);
 
     const fetchUnreadCounts = useCallback(async () => {
+        if (!currentBuddy?.buddy_id) return;
+
         try {
             const { data, error } = await supabase.rpc('get_unread_counts', {
                 current_buddy_id: currentBuddy?.buddy_id,
@@ -42,7 +44,7 @@ export const UnreadMessagesProvider: React.FC<{
                 return;
             }
 
-            const unreadCounts: UnreadCount[] = data as UnreadCount[];
+            const unreadCounts: UnreadCount[] = data || [];
             let total = 0;
             unreadCounts.forEach(({ contract_trip_id, unread_count }) => {
                 setUnreadCount(contract_trip_id, unread_count);
@@ -56,6 +58,8 @@ export const UnreadMessagesProvider: React.FC<{
     }, [currentBuddy, setUnreadCount]);
 
     useEffect(() => {
+        if (!currentBuddy?.buddy_id) return;
+
         fetchUnreadCounts();
 
         const messageSubscription = supabase
@@ -64,7 +68,7 @@ export const UnreadMessagesProvider: React.FC<{
                 'postgres_changes',
                 { event: 'INSERT', schema: 'public', table: 'messages' },
                 async () => {
-                    await fetchUnreadCounts(); // Re-fetch counts when a new message arrives
+                    await fetchUnreadCounts();
                 },
             )
             .subscribe();
@@ -74,8 +78,14 @@ export const UnreadMessagesProvider: React.FC<{
             .on(
                 'postgres_changes',
                 { event: 'UPDATE', schema: 'public', table: 'contract' },
-                async () => {
-                    await fetchUnreadCounts(); // Re-fetch counts when a contract is updated
+                async payload => {
+                    const { old, new: updated } = payload;
+                    if (
+                        old.contract_last_message_read !==
+                        updated.contract_last_message_read
+                    ) {
+                        await fetchUnreadCounts();
+                    }
                 },
             )
             .subscribe();
@@ -84,7 +94,7 @@ export const UnreadMessagesProvider: React.FC<{
             messageSubscription.unsubscribe();
             readUpdateSubscription.unsubscribe();
         };
-    }, [fetchUnreadCounts]);
+    }, [fetchUnreadCounts, currentBuddy]);
 
     return (
         <UnreadMessagesContext.Provider
