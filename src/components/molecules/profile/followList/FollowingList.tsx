@@ -4,7 +4,7 @@ import BuddyCard from '../BuddyCard';
 import { FollowData } from '@/app/(providers)/(conditional)/profile/follow/[id]/page';
 
 type FollowingListProps = {
-    followingList: string[];
+    followingList: Buddy[];
 };
 
 const Skeleton: React.FC = () => {
