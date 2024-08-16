@@ -11,7 +11,7 @@ import React from 'react';
 
 const chipVariants = cva(
     [
-        'text-sm',
+        'text-[12px]',
         'text-center',
         'border',
         'rounded-full',
@@ -20,17 +20,17 @@ const chipVariants = cva(
         'transition-opacity',
         'whitespace-nowrap',
         'cursor-pointer',
-        'leading-none',
+        // 'leading-none',
     ],
     {
         variants: {
             intent: {
                 natural: 'bg-gray-400 border-gray-400 text-gray-500',
-                square: 'rounded-md px-1 py-1',
-                square_white: 'rounded-md px-1 py-1',
-                rounded: 'px-[6px] py-[3px] rounded-xl',
-                rounded_blue: 'px-[6px] py-[3px] rounded-xl',
-                rounded_yellow: 'px-[6px] py-[3px] rounded-xl',
+                square: 'rounded-md px-1 py-[1px] text-[12px]',
+                square_white: 'rounded-md px-1 py-[1px] text-[12px]',
+                rounded: 'px-[6px] py-[1px] rounded-xl',
+                rounded_blue: 'px-[6px] py-[1px] rounded-xl',
+                rounded_yellow: 'px-[6px] py-[1px] rounded-xl',
                 onBoarding: 'bg-gray-200 text-gray-500 border-gray-200',
             },
             variant: {

@@ -9,4 +9,6 @@ export type ContractData = {
     contract_buddies_profiles: string[];
     last_message_content?: string;
     last_message_time?: string;
+    contract_last_message_read?: string;
+    unread_count?: number;
 };

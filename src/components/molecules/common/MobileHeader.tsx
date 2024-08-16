@@ -57,7 +57,7 @@ const MobileHeader: React.FC = () => {
         (isStory && '버디즈 스토리') ||
         (isStoryWrite && '스토리에 추가') ||
         (isChatId && '') ||
-        (isChat && '채팅') ||
+        (isChat && '여정채팅') ||
         (isNotification && '알림') ||
         (isRecover && '비밀번호 찾기') ||
         (isEditTrips && '');

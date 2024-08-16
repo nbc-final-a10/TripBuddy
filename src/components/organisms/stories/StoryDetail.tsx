@@ -126,11 +126,12 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
 
     const storyOverlay = selectedStory?.story_overlay as StoryOverlay[];
 
-    if (isLoading) return <DefaultLoader />;
+    // if (isLoading) return <DefaultLoader />;
 
     return (
         <>
             <section className="relative w-full h-[calc(100dvh-57px-76px)] bg-gray-800 aspect-auto xl:h-[calc(100dvh-100px)] xl:w-[430px] xl:mx-auto overflow-hidden">
+                {isLoading && <DefaultLoader />}
                 <div className="absolute top-0 left-0 w-full h-full z-20 flex flex-row">
                     <div
                         data-next="before"

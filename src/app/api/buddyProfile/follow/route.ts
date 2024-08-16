@@ -115,6 +115,7 @@ export async function POST(req: NextRequest) {
                         notification_type: 'follow',
                         notification_sender: buddy?.buddy_id,
                         notification_receiver: followingId,
+                        notification_origin_id: followingId,
                         notification_content: `${buddy?.buddy_nickname}님이 팔로우 하셨습니다.`,
                     },
                 ])

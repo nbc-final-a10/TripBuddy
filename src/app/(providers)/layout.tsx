@@ -20,6 +20,7 @@ import { Metadata } from 'next';
 import { defaultMetaData } from '@/data/defaultMetaData';
 import { ModalProviderSetter } from '@/providers/ModalProvider';
 import { ModalProviderDefault } from '@/contexts/modal.context';
+import { UnreadMessagesProvider } from '@/contexts/unreadMessages.context';
 import { NotificationProvider } from '@/contexts/notification.context';
 import { getNotifications } from '@/api-services/notification';
 import { Notification } from '@/types/Notification.types';
@@ -58,14 +59,16 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
                         <NotificationProvider
                             initialNotifications={filteredNotifications}
                         >
-                            <Header />
-                            <MainSectionWrapper>
-                                <ModalProviderSetter>
-                                    <MobileHeader />
-                                    {children}
-                                    <TapMenu />
-                                </ModalProviderSetter>
-                            </MainSectionWrapper>
+                            <UnreadMessagesProvider>
+                                <Header />
+                                <MainSectionWrapper>
+                                    <ModalProviderSetter>
+                                        <MobileHeader />
+                                        {children}
+                                        <TapMenu />
+                                    </ModalProviderSetter>
+                                </MainSectionWrapper>
+                            </UnreadMessagesProvider>
                         </NotificationProvider>
                     </AuthProvider>
                 </ModalProviderDefault>

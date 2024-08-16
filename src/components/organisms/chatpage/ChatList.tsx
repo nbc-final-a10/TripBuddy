@@ -1,19 +1,19 @@
 'use client';
-
 import React, { useEffect, useState } from 'react';
-import ChatListItem from '@/components/molecules/chatpage/ChatListItem';
 import supabase from '@/utils/supabase/client';
 import { ContractData } from '@/types/Chat.types';
-import { useRouter } from 'next/navigation';
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
+import { useUnreadMessagesContext } from '@/contexts/unreadMessages.context';
+import ChatListItem from '@/components/molecules/chatpage/ChatListItem';
+import Link from 'next/link';
 import { useAuth } from '@/hooks';
 
 const ChatList = () => {
     const { buddy: currentBuddy } = useAuth();
     const [chatData, setChatData] = useState<ContractData[]>([]);
-    const router = useRouter();
     const [contractsExist, setContractsExist] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
+    const { totalUnreadCount, fetchUnreadCounts } = useUnreadMessagesContext();
 
     useEffect(() => {
         const fetchChatData = async () => {
@@ -23,25 +23,25 @@ const ChatList = () => {
                 const { data: contracts, error: contractsError } =
                     await supabase
                         .from('contract')
-                        .select('contract_id, contract_trip_id')
+                        .select(
+                            'contract_id, contract_trip_id, contract_last_message_read',
+                        )
                         .eq('contract_buddy_id', currentBuddy.buddy_id)
-                        // .eq('contract_isPending', false)
                         .eq('contract_isValidate', true);
 
                 if (contractsError) throw contractsError;
 
                 if (!contracts || contracts.length === 0) {
                     setContractsExist(false);
+                    setIsLoading(false);
                     return;
                 }
 
-                const contractIds = contracts.map(
-                    contract => contract.contract_id,
-                );
                 const tripIds = contracts.map(
                     contract => contract.contract_trip_id,
                 );
 
+                // Fetch other related data (buddies, trips, etc.)
                 const { data: allBuddies, error: allBuddiesError } =
                     await supabase
                         .from('contract')
@@ -102,7 +102,6 @@ const ChatList = () => {
 
                 contracts.forEach(contract => {
                     const { contract_id, contract_trip_id } = contract;
-
                     const buddyIds = Array.from(
                         buddiesByTrip[contract_trip_id] || [],
                     );
@@ -117,6 +116,7 @@ const ChatList = () => {
                         contract_buddies_profiles: buddyProfiles,
                         last_message_content: '채팅을 시작해보세요',
                         last_message_time: '',
+                        unread_count: totalUnreadCount, // Use totalUnreadCount from context
                     });
                 });
 
@@ -174,7 +174,9 @@ const ChatList = () => {
                     setChatData(Array.from(contractDataMap.values()));
                 };
 
-                fetchLastMessages();
+                await fetchLastMessages();
+
+                setIsLoading(false);
             } catch (error) {
                 console.error('Error fetching chat data:', error);
                 setIsLoading(false);
@@ -182,63 +184,51 @@ const ChatList = () => {
         };
 
         fetchChatData();
+
         const messageSubscription = supabase
             .channel('chat-room')
             .on(
                 'postgres_changes',
                 { event: 'INSERT', schema: 'public', table: 'messages' },
-                payload => {
-                    const newMessage = payload.new as {
-                        message_trip_id: string;
-                        message_content: string;
-                        message_created_at: string;
-                    };
+                async () => {
+                    await fetchChatData();
+                },
+            )
+            .subscribe();
 
-                    setChatData(prevData =>
-                        prevData.map(chat => {
-                            if (
-                                chat.contract_trip_id ===
-                                newMessage.message_trip_id
-                            ) {
-                                return {
-                                    ...chat,
-                                    last_message_content:
-                                        newMessage.message_content,
-                                    last_message_time: new Date(
-                                        newMessage.message_created_at,
-                                    ).toLocaleTimeString('en-GB', {
-                                        hour: '2-digit',
-                                        minute: '2-digit',
-                                    }),
-                                };
-                            }
-                            return chat;
-                        }),
-                    );
+        const readUpdateSubscription = supabase
+            .channel('chat-room')
+            .on(
+                'postgres_changes',
+                { event: 'UPDATE', schema: 'public', table: 'contract' },
+                async () => {
+                    await fetchChatData();
                 },
             )
             .subscribe();
 
         return () => {
             messageSubscription.unsubscribe();
+            readUpdateSubscription.unsubscribe();
         };
-    }, [currentBuddy]);
-
-    // 로딩 추가 (병준)
-    useEffect(() => {
-        if (chatData.length > 0) {
-            setIsLoading(false);
-        }
-    }, [chatData]);
-
-    useEffect(() => {
-        if (!contractsExist) {
-            router.push('/trips');
-        }
-    }, [contractsExist, router]);
+    });
 
     if (isLoading) {
         return <DefaultLoader />;
+    } else if (!contractsExist) {
+        return (
+            <div className="text-center h-full font-bold text-lg flex flex-col justify-center text-grayscale-color-600">
+                <h1 className="text-2xl">아직 참여한 여정이 없습니다!</h1>
+                <br />
+                <Link
+                    href="/trips"
+                    className="text-center font-bold text-xl hover:text-primary-color-400"
+                >
+                    <h2>트립버디즈와 함께</h2>
+                    <h2>즐거운 여행을 시작해 볼까요?</h2>
+                </Link>
+            </div>
+        );
     } else {
         return (
             <div className="flex flex-col p-4">
@@ -253,6 +243,7 @@ const ChatList = () => {
                         }
                         last_message_content={chat.last_message_content}
                         last_message_time={chat.last_message_time}
+                        unread_count={chat.unread_count} // Pass unread_count to ChatListItem
                     />
                 ))}
             </div>

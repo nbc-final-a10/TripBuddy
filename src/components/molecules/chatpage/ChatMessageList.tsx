@@ -19,51 +19,9 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
             buddy: { buddy_profile_pic: string; buddy_nickname: string };
         })[]
     >([]);
+    const [isPageVisible, setIsPageVisible] = useState(true);
 
-    useEffect(() => {
-        const channel = supabase
-            .channel('chat-room')
-            .on(
-                'postgres_changes',
-                { event: 'INSERT', schema: 'public', table: 'messages' },
-                async payload => {
-                    const newMessage = payload.new as Message;
-
-                    const { data: buddyData, error: senderError } =
-                        await supabase
-                            .from('buddies')
-                            .select('buddy_profile_pic, buddy_nickname')
-                            .eq('buddy_id', newMessage.message_sender_id)
-                            .single();
-
-                    if (senderError) {
-                        console.error(
-                            'Error fetching sender info:',
-                            senderError,
-                        );
-                        return;
-                    }
-
-                    const newMessageWithBuddy = {
-                        ...newMessage,
-                        buddy: buddyData,
-                    };
-
-                    if (newMessage.message_trip_id === id) {
-                        setMessages(prevMessages => [
-                            ...prevMessages,
-                            newMessageWithBuddy,
-                        ]);
-                    }
-                },
-            )
-            .subscribe();
-
-        return () => {
-            channel.unsubscribe();
-        };
-    }, [id]);
-
+    // Fetch messages on mount
     useEffect(() => {
         const fetchMessages = async () => {
             const { data, error } = await supabase
@@ -90,6 +48,118 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
         fetchMessages();
     }, [id]);
 
+    // Handle new messages via Realtime
+    useEffect(() => {
+        const channel = supabase
+            .channel('chat-room')
+            .on(
+                'postgres_changes',
+                { event: 'INSERT', schema: 'public', table: 'messages' },
+                async payload => {
+                    const newMessage = payload.new as Message;
+
+                    if (newMessage.message_trip_id === id) {
+                        // Fetch sender info
+                        const { data: buddyData, error: senderError } =
+                            await supabase
+                                .from('buddies')
+                                .select('buddy_profile_pic, buddy_nickname')
+                                .eq('buddy_id', newMessage.message_sender_id)
+                                .single();
+
+                        if (senderError) {
+                            console.error(
+                                'Error fetching sender info:',
+                                senderError,
+                            );
+                            return;
+                        }
+
+                        const newMessageWithBuddy = {
+                            ...newMessage,
+                            buddy: buddyData,
+                        };
+
+                        setMessages(prevMessages => [
+                            ...prevMessages,
+                            newMessageWithBuddy,
+                        ]);
+
+                        if (isPageVisible) {
+                            // Update all users' last message read status if the page is visible
+                            const { data: contracts, error: contractsError } =
+                                await supabase
+                                    .from('contract')
+                                    .select('contract_id')
+                                    .eq('contract_trip_id', id);
+
+                            if (contractsError) {
+                                console.error(
+                                    'Error fetching contracts:',
+                                    contractsError,
+                                );
+                                return;
+                            }
+
+                            const updates = contracts.map(contract =>
+                                supabase
+                                    .from('contract')
+                                    .update({
+                                        contract_last_message_read:
+                                            newMessage.message_id,
+                                    })
+                                    .eq('contract_id', contract.contract_id),
+                            );
+
+                            await Promise.all(updates);
+                        }
+                    }
+                },
+            )
+            .subscribe();
+
+        return () => {
+            channel.unsubscribe();
+        };
+    }, [id, isPageVisible]);
+
+    // Handle visibility change
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            setIsPageVisible(document.visibilityState === 'visible');
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener(
+                'visibilitychange',
+                handleVisibilityChange,
+            );
+        };
+    }, []);
+
+    // Update read status for current user's last message
+    useEffect(() => {
+        const handleReadMessages = async () => {
+            if (messages.length > 0 && isPageVisible) {
+                const lastMessageId = messages[messages.length - 1].message_id;
+                const { data, error } = await supabase
+                    .from('contract')
+                    .update({ contract_last_message_read: lastMessageId })
+                    .eq('contract_trip_id', id)
+                    .eq('contract_buddy_id', currentBuddy?.buddy_id);
+
+                if (error) {
+                    console.error('Error updating last message read:', error);
+                }
+            }
+        };
+
+        handleReadMessages();
+    }, [messages, currentBuddy, id, isPageVisible]);
+
+    // Scroll to the bottom when messages change
     useEffect(() => {
         const scrollContainer = scrollRef.current;
         if (scrollContainer) {
