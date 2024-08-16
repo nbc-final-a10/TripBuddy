@@ -3,6 +3,7 @@ import HomePageContainer from '@/components/organisms/homepage/HomePageContainer
 import {
     QUERY_KEY_BUDDIES,
     QUERY_KEY_STORIES,
+    QUERY_KEY_TRIP_BY_CONTRACT,
     QUERY_KEY_TRIPS,
 } from '@/constants/query.constants';
 import {
@@ -13,8 +14,11 @@ import {
 import React, { Suspense } from 'react';
 import Loading from '../loading';
 import { getBuddyTripStory } from '@/api-services/home';
+import { getUserFromHeader } from '@/utils/auth/getUserFromHeader';
+import { getContract } from '@/api-services/contracts';
 
 const HomePage: React.FC = async () => {
+    const userId = getUserFromHeader();
     const queryClient = new QueryClient();
     await queryClient.prefetchQuery({
         queryKey: [QUERY_KEY_BUDDIES],
@@ -30,6 +34,10 @@ const HomePage: React.FC = async () => {
         queryKey: [QUERY_KEY_STORIES],
         queryFn: () => getBuddyTripStory(QUERY_KEY_STORIES),
         staleTime: 1000 * 60 * 5,
+    });
+    await queryClient.prefetchQuery({
+        queryKey: [QUERY_KEY_TRIP_BY_CONTRACT, userId],
+        queryFn: () => getContract(true, userId || ''),
     });
     const dehydratedState = dehydrate(queryClient);
     return (
