@@ -1,18 +1,20 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import ChatListItem from '@/components/molecules/chatpage/ChatListItem';
 import supabase from '@/utils/supabase/client';
 import { ContractData } from '@/types/Chat.types';
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import { useAuth } from '@/hooks';
+import ChatListItem from '@/components/molecules/chatpage/ChatListItem';
 import Link from 'next/link';
+import useChatStore from '@/zustand/chat.store';
 
 const ChatList = () => {
     const { buddy: currentBuddy } = useAuth();
     const [chatData, setChatData] = useState<ContractData[]>([]);
     const [contractsExist, setContractsExist] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
+    const { setUnreadCount, getUnreadCount } = useChatStore();
 
     useEffect(() => {
         const fetchChatData = async () => {
@@ -22,9 +24,10 @@ const ChatList = () => {
                 const { data: contracts, error: contractsError } =
                     await supabase
                         .from('contract')
-                        .select('contract_id, contract_trip_id')
+                        .select(
+                            'contract_id, contract_trip_id, contract_last_message_read',
+                        )
                         .eq('contract_buddy_id', currentBuddy.buddy_id)
-                        // .eq('contract_isPending', false)
                         .eq('contract_isValidate', true);
 
                 if (contractsError) throw contractsError;
@@ -35,13 +38,32 @@ const ChatList = () => {
                     return;
                 }
 
-                const contractIds = contracts.map(
-                    contract => contract.contract_id,
-                );
                 const tripIds = contracts.map(
                     contract => contract.contract_trip_id,
                 );
 
+                const { data: unreadCounts, error: unreadCountsError } =
+                    await supabase.rpc('get_unread_counts', {
+                        current_buddy_id: currentBuddy.buddy_id,
+                    });
+
+                if (unreadCountsError) throw unreadCountsError;
+
+                if (unreadCounts) {
+                    unreadCounts.forEach(
+                        ({
+                            contract_trip_id,
+                            unread_count,
+                        }: {
+                            contract_trip_id: string;
+                            unread_count: number;
+                        }) => {
+                            setUnreadCount(contract_trip_id, unread_count);
+                        },
+                    );
+                }
+
+                // Fetch other related data (buddies, trips, etc.)
                 const { data: allBuddies, error: allBuddiesError } =
                     await supabase
                         .from('contract')
@@ -102,7 +124,6 @@ const ChatList = () => {
 
                 contracts.forEach(contract => {
                     const { contract_id, contract_trip_id } = contract;
-
                     const buddyIds = Array.from(
                         buddiesByTrip[contract_trip_id] || [],
                     );
@@ -117,6 +138,7 @@ const ChatList = () => {
                         contract_buddies_profiles: buddyProfiles,
                         last_message_content: '채팅을 시작해보세요',
                         last_message_time: '',
+                        unread_count: getUnreadCount(contract_trip_id),
                     });
                 });
 
@@ -174,7 +196,9 @@ const ChatList = () => {
                     setChatData(Array.from(contractDataMap.values()));
                 };
 
-                fetchLastMessages();
+                await fetchLastMessages();
+
+                setIsLoading(false);
             } catch (error) {
                 console.error('Error fetching chat data:', error);
                 setIsLoading(false);
@@ -182,6 +206,7 @@ const ChatList = () => {
         };
 
         fetchChatData();
+
         const messageSubscription = supabase
             .channel('chat-room')
             .on(
@@ -218,19 +243,53 @@ const ChatList = () => {
                 },
             )
             .subscribe();
+        const readUpdateSubscription = supabase
+            .channel('chat-room')
+            .on(
+                'postgres_changes',
+                { event: 'UPDATE', schema: 'public', table: 'contract' },
+                async payload => {
+                    const updatedContract = payload.new as {
+                        contract_trip_id: string;
+                        contract_last_message_read: string;
+                    };
+
+                    // Update unread count based on contract changes
+                    const { data: unreadCounts, error: unreadCountsError } =
+                        await supabase.rpc('get_unread_counts', {
+                            current_buddy_id: currentBuddy?.buddy_id,
+                        });
+
+                    if (unreadCountsError) {
+                        console.error(
+                            'Error fetching unread counts:',
+                            unreadCountsError,
+                        );
+                        return;
+                    }
+
+                    if (unreadCounts) {
+                        unreadCounts.forEach(
+                            ({
+                                contract_trip_id,
+                                unread_count,
+                            }: {
+                                contract_trip_id: string;
+                                unread_count: number;
+                            }) => {
+                                setUnreadCount(contract_trip_id, unread_count);
+                            },
+                        );
+                    }
+                },
+            )
+            .subscribe();
 
         return () => {
             messageSubscription.unsubscribe();
+            readUpdateSubscription.unsubscribe();
         };
-    }, [currentBuddy]);
-
-    // 로딩 추가 (병준)
-    useEffect(() => {
-        if (!isLoading) return;
-        if (chatData.length > 0) {
-            setIsLoading(false);
-        }
-    }, [chatData, contractsExist, isLoading]);
+    }, [currentBuddy, setUnreadCount, getUnreadCount]);
 
     if (isLoading) {
         return <DefaultLoader />;
