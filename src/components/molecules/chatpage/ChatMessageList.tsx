@@ -56,61 +56,59 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                 async payload => {
                     const newMessage = payload.new as Message;
 
-                    if (newMessage.message_trip_id === id) {
-                        const { data: buddyData, error: senderError } =
-                            await supabase
-                                .from('buddies')
-                                .select('buddy_profile_pic, buddy_nickname')
-                                .eq('buddy_id', newMessage.message_sender_id)
-                                .single();
+                    const { data: buddyData, error: senderError } =
+                        await supabase
+                            .from('buddies')
+                            .select('buddy_profile_pic, buddy_nickname')
+                            .eq('buddy_id', newMessage.message_sender_id)
+                            .single();
 
-                        if (senderError) {
+                    if (senderError) {
+                        console.error(
+                            'Error fetching sender info:',
+                            senderError,
+                        );
+                        return;
+                    }
+
+                    const newMessageWithBuddy = {
+                        ...newMessage,
+                        buddy: buddyData,
+                    };
+
+                    if (newMessage.message_trip_id === id) {
+                        setMessages(prevMessages => [
+                            ...prevMessages,
+                            newMessageWithBuddy,
+                        ]);
+                    }
+
+                    if (isPageVisible) {
+                        const { data: contracts, error: contractsError } =
+                            await supabase
+                                .from('contract')
+                                .select('contract_id')
+                                .eq('contract_trip_id', id);
+
+                        if (contractsError) {
                             console.error(
-                                'Error fetching sender info:',
-                                senderError,
+                                'Error fetching contracts:',
+                                contractsError,
                             );
                             return;
                         }
 
-                        const newMessageWithBuddy = {
-                            ...newMessage,
-                            buddy: buddyData,
-                        };
+                        const updates = contracts.map(contract =>
+                            supabase
+                                .from('contract')
+                                .update({
+                                    contract_last_message_read:
+                                        newMessage.message_id,
+                                })
+                                .eq('contract_id', contract.contract_id),
+                        );
 
-                        if (newMessage.message_trip_id === id) {
-                            setMessages(prevMessages => [
-                                ...prevMessages,
-                                newMessageWithBuddy,
-                            ]);
-                        }
-
-                        if (isPageVisible) {
-                            const { data: contracts, error: contractsError } =
-                                await supabase
-                                    .from('contract')
-                                    .select('contract_id')
-                                    .eq('contract_trip_id', id);
-
-                            if (contractsError) {
-                                console.error(
-                                    'Error fetching contracts:',
-                                    contractsError,
-                                );
-                                return;
-                            }
-
-                            const updates = contracts.map(contract =>
-                                supabase
-                                    .from('contract')
-                                    .update({
-                                        contract_last_message_read:
-                                            newMessage.message_id,
-                                    })
-                                    .eq('contract_id', contract.contract_id),
-                            );
-
-                            await Promise.all(updates);
-                        }
+                        await Promise.all(updates);
                     }
                 },
             )

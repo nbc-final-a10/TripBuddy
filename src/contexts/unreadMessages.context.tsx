@@ -9,14 +9,10 @@ import React, {
 import supabase from '@/utils/supabase/client';
 import useChatStore from '@/zustand/chat.store';
 import { useAuth } from '@/hooks';
-
-type UnreadCount = {
-    contract_trip_id: string;
-    unread_count: number;
-};
+import { UnreadCount } from '@/types/UnreadCount.types';
 
 type UnreadMessagesContextType = {
-    totalUnreadCount: number;
+    contractUnreadCounts: Record<string, number>;
     fetchUnreadCounts: () => void;
 };
 
@@ -29,14 +25,15 @@ export const UnreadMessagesProvider: React.FC<{
 }> = ({ children }) => {
     const { buddy: currentBuddy } = useAuth();
     const { setUnreadCount } = useChatStore();
-    const [totalUnreadCount, setTotalUnreadCount] = useState<number>(0);
-
+    const [contractUnreadCounts, setContractUnreadCounts] = useState<
+        Record<string, number>
+    >({});
     const fetchUnreadCounts = useCallback(async () => {
         if (!currentBuddy?.buddy_id) return;
 
         try {
             const { data, error } = await supabase.rpc('get_unread_counts', {
-                current_buddy_id: currentBuddy?.buddy_id,
+                current_buddy_id: currentBuddy.buddy_id,
             });
 
             if (error) {
@@ -45,42 +42,57 @@ export const UnreadMessagesProvider: React.FC<{
             }
 
             const unreadCounts: UnreadCount[] = data || [];
-            let total = 0;
+            let updatedUnreadCounts: Record<string, number> = {};
             unreadCounts.forEach(({ contract_trip_id, unread_count }) => {
                 setUnreadCount(contract_trip_id, unread_count);
-                total += unread_count;
+                updatedUnreadCounts[contract_trip_id] = unread_count;
             });
 
-            setTotalUnreadCount(total);
+            setContractUnreadCounts(updatedUnreadCounts);
         } catch (error) {
             console.error('Error fetching unread counts:', error);
         }
     }, [currentBuddy, setUnreadCount]);
 
     useEffect(() => {
-        if (!currentBuddy?.buddy_id) return;
-
         fetchUnreadCounts();
 
-        const readUpdateSubscription = supabase
+        const messagesSubscription = supabase
             .channel('chat-room')
             .on(
                 'postgres_changes',
-                { event: 'UPDATE', schema: 'public', table: 'contract' },
-                async () => {
-                    await fetchUnreadCounts();
+                { event: '*', schema: 'public', table: 'messages' },
+                () => {
+                    fetchUnreadCounts();
                 },
             )
+            // contract 변경이 실시간 감지가 안 돼서 채팅방에서 뒤로 가면 새로고침 하는 거로 임시로 작성
+            // .on(
+            //     'postgres_changes',
+            //     {
+            //         event: 'UPDATE',
+            //         schema: 'public',
+            //         table: 'contract',
+            //     },
+            //     payload => {
+            //         if (
+            //             payload.new.contract_last_message_read !==
+            //             payload.old.contract_last_message_read
+            //         ) {
+            //             fetchUnreadCounts();
+            //         }
+            //     },
+            // )
             .subscribe();
 
         return () => {
-            readUpdateSubscription.unsubscribe();
+            messagesSubscription.unsubscribe();
         };
-    }, [fetchUnreadCounts, currentBuddy]);
+    }, [fetchUnreadCounts]);
 
     return (
         <UnreadMessagesContext.Provider
-            value={{ totalUnreadCount, fetchUnreadCounts }}
+            value={{ contractUnreadCounts, fetchUnreadCounts }}
         >
             {children}
         </UnreadMessagesContext.Provider>

@@ -13,7 +13,7 @@ const ChatList = () => {
     const [chatData, setChatData] = useState<ContractData[]>([]);
     const [contractsExist, setContractsExist] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
-    const { totalUnreadCount, fetchUnreadCounts } = useUnreadMessagesContext();
+    const { contractUnreadCounts } = useUnreadMessagesContext(); // 컨텍스트에서 unread counts 가져오기
 
     useEffect(() => {
         const fetchChatData = async () => {
@@ -115,7 +115,8 @@ const ChatList = () => {
                         contract_buddies_profiles: buddyProfiles,
                         last_message_content: '채팅을 시작해보세요',
                         last_message_time: '',
-                        unread_count: totalUnreadCount, // Use totalUnreadCount from context
+                        unread_count:
+                            contractUnreadCounts[contract_trip_id] || 0,
                     });
                 });
 
@@ -183,22 +184,7 @@ const ChatList = () => {
         };
 
         fetchChatData();
-
-        const messageSubscription = supabase
-            .channel('chat-room')
-            .on(
-                'postgres_changes',
-                { event: 'INSERT', schema: 'public', table: 'messages' },
-                async () => {
-                    fetchUnreadCounts();
-                },
-            )
-            .subscribe();
-
-        return () => {
-            messageSubscription.unsubscribe();
-        };
-    });
+    }, [currentBuddy, contractUnreadCounts]);
 
     if (isLoading) {
         return <DefaultLoader />;
