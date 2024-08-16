@@ -1,15 +1,19 @@
 import Chip from '../common/Chip';
 import { SecondLevel } from '@/types/Location.types';
+import clsx from 'clsx';
 import React from 'react';
+import { twMerge } from 'tailwind-merge';
 
 function LocationList({
     locations,
     selectedLocationName,
     onChipClick,
+    isMini,
 }: {
     locations: SecondLevel[];
     selectedLocationName: string;
     onChipClick: (name: string) => void;
+    isMini?: boolean | null | 0;
 }) {
     const scrollRef = React.useRef<HTMLDivElement>(null);
     const [isScrollable, setIsScrollable] = React.useState(false);
@@ -33,7 +37,10 @@ function LocationList({
         <div className="relative">
             {/* 도/대륙 목록 */}
             <div
-                className="flex flex-nowrap gap-2 py-3 whitespace-nowrap overflow-x-hidden scrollbar-hide"
+                className={twMerge(
+                    'flex flex-nowrap gap-2 py-3 whitespace-nowrap overflow-x-hidden scrollbar-hide',
+                    isMini && 'py-2',
+                )}
                 ref={scrollRef}
             >
                 {locations.map(subLocation => (
@@ -43,6 +50,7 @@ function LocationList({
                                 selectedLocationName === subLocation.name.ko
                             }
                             onClick={() => onChipClick(subLocation.name.ko)}
+                            className={clsx('text-sm', isMini && 'text-xs')}
                         >
                             {subLocation.name.ko}
                         </Chip>

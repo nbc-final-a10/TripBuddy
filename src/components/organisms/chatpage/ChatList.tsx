@@ -6,12 +6,14 @@ import supabase from '@/utils/supabase/client';
 import { useAuth } from '@/hooks/auth';
 import { ContractData } from '@/types/Chat.types';
 import { useRouter } from 'next/navigation';
+import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 
 const ChatList = () => {
     const { buddy: currentBuddy } = useAuth();
     const [chatData, setChatData] = useState<ContractData[]>([]);
     const router = useRouter();
     const [contractsExist, setContractsExist] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchChatData = async () => {
@@ -175,6 +177,7 @@ const ChatList = () => {
                 fetchLastMessages();
             } catch (error) {
                 console.error('Error fetching chat data:', error);
+                setIsLoading(false);
             }
         };
 
@@ -221,27 +224,40 @@ const ChatList = () => {
         };
     }, [currentBuddy]);
 
+    // 로딩 추가 (병준)
+    useEffect(() => {
+        if (chatData.length > 0) {
+            setIsLoading(false);
+        }
+    }, [chatData]);
+
     useEffect(() => {
         if (!contractsExist) {
             router.push('/trips');
         }
     }, [contractsExist, router]);
 
-    return (
-        <div className="flex flex-col p-4">
-            {chatData.map(chat => (
-                <ChatListItem
-                    key={chat.contract_id}
-                    contract_id={chat.contract_id}
-                    contract_trip_id={chat.contract_trip_id}
-                    trip_title={chat.trip_title}
-                    contract_buddies_profiles={chat.contract_buddies_profiles}
-                    last_message_content={chat.last_message_content}
-                    last_message_time={chat.last_message_time}
-                />
-            ))}
-        </div>
-    );
+    if (isLoading) {
+        return <DefaultLoader />;
+    } else {
+        return (
+            <div className="flex flex-col p-4">
+                {chatData.map(chat => (
+                    <ChatListItem
+                        key={chat.contract_id}
+                        contract_id={chat.contract_id}
+                        contract_trip_id={chat.contract_trip_id}
+                        trip_title={chat.trip_title}
+                        contract_buddies_profiles={
+                            chat.contract_buddies_profiles
+                        }
+                        last_message_content={chat.last_message_content}
+                        last_message_time={chat.last_message_time}
+                    />
+                ))}
+            </div>
+        );
+    }
 };
 
 export default ChatList;

@@ -1,99 +1,20 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/hooks/auth';
 import Image from 'next/image';
-import supabase from '@/utils/supabase/client';
-
-type Trip = {
-    trip_final_destination: string;
-    trip_start_date: string;
-    trip_id: string;
-};
+import getDaysLeft from '@/utils/common/getDaysLeft';
+import useContractQuery from '@/hooks/queries/useContractQuery';
+import filterOldTrips from '@/utils/trips/filterOldTrips';
 
 const HomePageBanner = () => {
     const { buddy } = useAuth();
-    const [expectedTrip, setExpectedTrip] = useState<Trip | null>(null);
-    const [daysLeft, setDaysLeft] = useState<number | null>(null);
     const [randomImgSrc, setRandomImgSrc] = useState<string>('');
 
-    useEffect(() => {
-        if (buddy) {
-            const fetchRecentTrip = async () => {
-                try {
-                    const { data: contractsData, error: contractsError } =
-                        await supabase
-                            .from('contract')
-                            .select('contract_trip_id')
-                            .eq('contract_buddy_id', buddy.buddy_id);
-
-                    if (contractsError) {
-                        throw contractsError;
-                    }
-
-                    if (contractsData && contractsData.length > 0) {
-                        const contractTripIds = contractsData.map(
-                            contract => contract.contract_trip_id,
-                        );
-
-                        const { data: tripData, error: tripError } =
-                            await supabase
-                                .from('trips')
-                                .select(
-                                    'trip_id, trip_start_date, trip_final_destination',
-                                )
-                                .in('trip_id', contractTripIds)
-                                .order('trip_start_date', { ascending: false })
-                                .limit(1)
-                                .single();
-
-                        if (tripError) {
-                            throw tripError;
-                        }
-
-                        if (tripData) {
-                            setExpectedTrip(tripData);
-                            const startDate = new Date(
-                                tripData.trip_start_date,
-                            );
-                            const today = new Date();
-
-                            const todayStart = new Date(
-                                today.getFullYear(),
-                                today.getMonth(),
-                                today.getDate(),
-                            );
-                            const startDateStart = new Date(
-                                startDate.getFullYear(),
-                                startDate.getMonth(),
-                                startDate.getDate(),
-                            );
-
-                            const timeDiff =
-                                startDateStart.getTime() - todayStart.getTime();
-                            const daysDiff = Math.ceil(
-                                timeDiff / (1000 * 3600 * 24),
-                            );
-                            setDaysLeft(daysDiff);
-                        }
-                    } else {
-                        // console.log('No contracts found for the buddy');
-                    }
-                } catch (error: unknown) {
-                    if (error instanceof Error) {
-                        console.error(
-                            'Error fetching trip data:',
-                            error.message,
-                        );
-                    } else {
-                        console.error('An unknown error occurred:', error);
-                    }
-                }
-            };
-
-            fetchRecentTrip();
-        }
-    }, [buddy]);
+    const { data, isPending, error } = useContractQuery({
+        isBuddy: true,
+        id: buddy?.buddy_id,
+    });
 
     useEffect(() => {
         const bannerImgs = [
@@ -107,6 +28,15 @@ const HomePageBanner = () => {
             bannerImgs[Math.floor(Math.random() * bannerImgs.length)];
         setRandomImgSrc(`/images/${randomImg}`);
     }, []);
+
+    useEffect(() => {
+        if (error) console.error(error);
+    }, [error]);
+
+    const upcomingTrips = useMemo(() => {
+        if (!data) return [];
+        return filterOldTrips(data.trips);
+    }, [data]);
 
     return (
         <div className="relative h-[200px] z-0">
@@ -123,7 +53,7 @@ const HomePageBanner = () => {
                 )}
                 <div className="absolute inset-0 bg-black/30 z-10" />
                 <div className="relative z-20 text-white h-full flex flex-col justify-center gap-3">
-                    {expectedTrip && (
+                    {upcomingTrips.length > 0 && (
                         <>
                             <p>
                                 <span className="font-bold text-3xl">
@@ -132,18 +62,19 @@ const HomePageBanner = () => {
                                 님,
                             </p>
                             <p>
-                                예정된 {expectedTrip.trip_final_destination}{' '}
-                                여행이
+                                {`예정된 ${upcomingTrips[0].trip_final_destination} 여행이`}
                             </p>
                             <p>
                                 <span className="font-bold text-3xl">
-                                    {daysLeft}
+                                    {getDaysLeft(
+                                        upcomingTrips[0].trip_start_date,
+                                    )}
                                 </span>
                                 일 남았어요!
                             </p>
                         </>
                     )}
-                    {!expectedTrip && buddy && (
+                    {!data && buddy && !isPending && (
                         <>
                             <p>
                                 <span className="font-bold text-3xl">
@@ -157,9 +88,9 @@ const HomePageBanner = () => {
 
                     {!buddy && (
                         <>
-                            <p className="font-bold text-3xl">트립버디즈와</p>
-                            <p>즐거운 여정을</p>
-                            <p className="font-bold text-3xl">시작해보세요!</p>
+                            <p className="text-2xl">트립버디즈와</p>
+                            <p className="font-bold text-3xl">즐거운 여정을</p>
+                            <p className="text-2xl">시작해보세요!</p>
                         </>
                     )}
                 </div>

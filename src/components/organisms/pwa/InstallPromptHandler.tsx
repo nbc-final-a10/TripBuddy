@@ -45,8 +45,9 @@ const InstallPromptHandler = () => {
         }
     }, [isPwa]);
 
-    const handleInstallClick = () => {
+    const handleInstallClick = async () => {
         // console.log('버튼 클릭되었음');
+        alert(deferredPrompt);
         if (deferredPrompt) {
             (deferredPrompt as any).prompt();
             (deferredPrompt as any).userChoice.then((choiceResult: any) => {
@@ -58,21 +59,37 @@ const InstallPromptHandler = () => {
                 setDeferredPrompt(null);
             });
         } else {
-            alert('설치 가능 여부를 확인할 수 없습니다.');
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'PWA 설치',
+                        text: '이 링크를 통해 PWA를 설치하세요:',
+                        url: window.location.href,
+                    });
+                    console.log('PWA 설치 링크가 공유되었습니다.');
+                } catch (error) {
+                    console.error('PWA 설치 링크 공유 실패:', error);
+                }
+            } else {
+                alert('이 브라우저는 웹 공유 API를 지원하지 않습니다.');
+            }
         }
     };
 
     useEffect(() => {
+        // alert('serviceWorker' in navigator);
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js', { type: 'module' }).then(
                 function (registration) {
-                    // console.log(
-                    //     'Service Worker registered with scope:',
-                    //     registration.scope,
-                    // );
+                    alert('Service Worker registered with scope:');
+                    console.log(
+                        'Service Worker registered with scope:',
+                        registration.scope,
+                    );
                 },
                 function (error) {
-                    // console.log('Service Worker registration failed:', error);
+                    alert('Service Worker registration failed:');
+                    console.log('Service Worker registration failed:', error);
                 },
             );
         }
@@ -80,6 +97,7 @@ const InstallPromptHandler = () => {
         const handler = (e: BeforeInstallPromptEvent) => {
             // console.log('beforeinstallprompt 이벤트 발생', e);
             e.preventDefault();
+            alert(e);
             setDeferredPrompt(e);
         };
 
@@ -95,12 +113,14 @@ const InstallPromptHandler = () => {
     }
 
     return (
-        <button
-            onClick={handleInstallClick}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md"
-        >
-            홈 화면에 추가하기
-        </button>
+        <div className="fixed bottom-0 right-0 m-4 z-50">
+            <button
+                onClick={handleInstallClick}
+                className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            >
+                홈 화면에 추가하기
+            </button>
+        </div>
     );
 };
 

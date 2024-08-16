@@ -7,9 +7,19 @@
         {
             "src": "/test_icon.png",
             "type": "image/png",
-            "sizes": "512x512"
+            "sizes": "512x512",
+            "purpose": "any maskable"
         }
     ],
+    "share_target": {
+        "action": "/",
+        "method": "POST",
+        "enctype": "multipart/form-data",
+        "params": {
+            "title": "title",
+            "text": "text"
+        }
+    },
     "start_url": ".",
     "background_color": "#ffffff",
     "theme_color": "#000000",

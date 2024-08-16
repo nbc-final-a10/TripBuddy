@@ -29,10 +29,12 @@ const LocationSearchButton: React.FC<LocationSearchMainPageProps> = ({
         router.push(`/search/location?${currentQuery.toString()}`);
     };
 
+    console.log(location);
+
     return (
         <div className="xl:w-[300px] bg-grayscale-color-85 py-1.5 pl-10 rounded-2xl flex box-border">
             <button onClick={handleClick}>
-                <div className="absolute left-8 top-[173px] xl:top-[164px] transform -translate-y-1/2 xl:top-[164px] xl:left-3 xl:left-[333px]">
+                <div className="absolute left-8 top-[173px] xl:top-[64px] transform -translate-y-1/2 xl:top-[164px] xl:left-3 xl:left-[333px]">
                     <Image
                         src="/svg/Place.svg"
                         alt="Place"

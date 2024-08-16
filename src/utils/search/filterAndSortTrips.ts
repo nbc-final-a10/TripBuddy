@@ -1,11 +1,9 @@
-import { Tables } from '@/types/supabase';
-
-type Trip = Tables<'trips'>;
+import { TripWithContract } from '@/types/Trips.types';
 
 export const filterAndSortTrips = (
-    trips: Trip[],
+    trips: TripWithContract[],
     selectedThemes: string[],
-): Trip[] => {
+): TripWithContract[] => {
     return trips
         .map(trip => {
             // 선택된 테마와 일치하는 테마의 갯수
@@ -28,9 +26,9 @@ export const filterAndSortTrips = (
 // trip 객체만 반환
 
 export const filterAndSortTripsBuddies = (
-    trips: Trip[],
+    trips: TripWithContract[],
     selectedBuddyThemes: string[],
-): Trip[] => {
+): TripWithContract[] => {
     return trips
         .map(trip => {
             const buddyThemes = [

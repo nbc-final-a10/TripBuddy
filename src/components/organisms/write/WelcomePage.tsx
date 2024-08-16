@@ -1,18 +1,29 @@
 import MascotImage from '@/components/atoms/common/MascotImage';
 import WelcomeMessage from '@/components/molecules/write/WelcomeMessage';
+import clsx from 'clsx';
 import React from 'react';
+import { twMerge } from 'tailwind-merge';
 
 type WelcomePageProps = {
     SelectBuddyCounts: React.FC;
+    isMini?: boolean;
 };
 
-const WelcomePage: React.FC<WelcomePageProps> = ({ SelectBuddyCounts }) => {
+const WelcomePage: React.FC<WelcomePageProps> = ({
+    SelectBuddyCounts,
+    isMini,
+}) => {
     return (
         <div className="flex flex-col items-center">
             <WelcomeMessage />
             <div className="mt-4" />
-            <div className="flex justify-center h-[300px] w-[300px] xl:h-[400px] xl:w-[400px]">
-                <MascotImage intent="main" />
+            <div
+                className={twMerge(
+                    'flex justify-center h-[230px] w-[300px] xl:h-[400px] xl:w-[400px]',
+                    isMini && 'h-[180px] w-[200px]',
+                )}
+            >
+                <MascotImage intent="main" className="w-[70%] h-[70%]" />
             </div>
             <div className="flex mt-5 mb-2 text-2xl xl:text-4xl xl:mt-5 xl:mb-5">
                 여정 인원을 선택해주세요

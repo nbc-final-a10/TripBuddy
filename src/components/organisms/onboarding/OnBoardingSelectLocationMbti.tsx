@@ -2,7 +2,9 @@ import Chip from '@/components/atoms/common/Chip';
 import Title from '@/components/atoms/common/Title';
 import OnBoardingInnerWrapper from '@/components/atoms/onboarding/OnBoardinginnerWrapper';
 import OnBoardingWrapper from '@/components/atoms/onboarding/OnBoardingWrapper';
+import SelectRegions from '@/components/molecules/common/SelectRegion';
 import { mbtis } from '@/data/mbtis';
+import useSelectRegion from '@/hooks/useSelectRegion';
 import React, { MouseEvent } from 'react';
 
 type OnBoardingSelectLocationMbtiProps = {
@@ -10,7 +12,8 @@ type OnBoardingSelectLocationMbtiProps = {
     selected: string;
     isLabel?: boolean;
     handleChange?: (e: MouseEvent<HTMLSpanElement>) => void;
-    SelectRegion?: React.FC | null;
+    states?: ReturnType<typeof useSelectRegion>['states'] | null;
+    actions?: ReturnType<typeof useSelectRegion>['actions'] | null;
 };
 
 const OnBoardingSelectLocationMbti = ({
@@ -18,7 +21,8 @@ const OnBoardingSelectLocationMbti = ({
     selected,
     handleChange = () => {},
     isLabel = false,
-    SelectRegion = null,
+    states = null,
+    actions = null,
 }: OnBoardingSelectLocationMbtiProps) => {
     return (
         <OnBoardingWrapper>
@@ -42,9 +46,9 @@ const OnBoardingSelectLocationMbti = ({
                         ))}
                     </section>
                 )}
-                {mode === 'location' && SelectRegion && (
-                    <section className="relative w-[90%] h-full xl:h-[90%]">
-                        <SelectRegion />
+                {mode === 'location' && states && actions && (
+                    <section className="relative w-[90%] h-full xl:h-[80%]">
+                        <SelectRegions states={states} actions={actions} />
                     </section>
                 )}
             </OnBoardingInnerWrapper>

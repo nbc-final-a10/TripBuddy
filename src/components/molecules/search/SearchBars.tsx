@@ -3,8 +3,27 @@
 import DateSearchButton from '@/components/atoms/search/DateSearchButton';
 import LocationSearchButton from '@/components/atoms/search/LocationSearchButton';
 import SearchInput from '@/components/atoms/search/SearchInput';
-import { SearchBarsProps } from '@/types/SearchBarsProps';
+import useSelectRegion from '@/hooks/useSelectRegion';
 import React from 'react';
+
+export type SearchBarsProps = {
+    searchInput: string;
+    setSearchInput: React.Dispatch<React.SetStateAction<string>>;
+
+    thirdLevelLocation: string | null;
+    setThirdLevelLocation: (locName: string) => void;
+
+    startDateTimestamp: string;
+    setStartDateTimestamp: React.Dispatch<React.SetStateAction<string>>;
+    endDateTimestamp: string;
+    setEndDateTimestamp: React.Dispatch<React.SetStateAction<string>>;
+
+    handleShowResult: () => void;
+    handleKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+
+    // formattedStartDate: string;
+    // formattedEndDate: string;
+};
 
 const SearchBars: React.FC<SearchBarsProps> = ({
     searchInput,
@@ -19,11 +38,26 @@ const SearchBars: React.FC<SearchBarsProps> = ({
 
     handleShowResult,
     handleKeyDown,
-    formattedStartDate,
-    formattedEndDate,
+    // formattedStartDate,
+    // formattedEndDate,
 }) => {
+    const {
+        actions: {
+            handleLocationTypeClick,
+            handleChipClick,
+            handleThirdLevelClick,
+        },
+        states: {
+            thirdLevelLocation: selectedThirdLevelLocation,
+            firstLevelLocation,
+            secondLevelLocation,
+            secondLevelLocations,
+            selectedSecondLevelLocations,
+        },
+    } = useSelectRegion();
+
     return (
-        <section className="flex flex-col mx-auto mb-10 mt-6 gap-[18px] xl:flex-row xl:items-center xl:justify-center xl:max-w-screen-xl xl:gap-5">
+        <section className="flex flex-col mx-auto my-6 gap-[18px] xl:flex-row xl:items-center xl:justify-center xl:max-w-screen-xl xl:gap-5">
             <SearchInput
                 value={searchInput}
                 onKeyDown={handleKeyDown}
@@ -31,8 +65,8 @@ const SearchBars: React.FC<SearchBarsProps> = ({
             />
 
             <DateSearchButton
-                defaultStartDate={formattedStartDate}
-                defaultEndDate={formattedEndDate}
+                defaultStartDate={startDateTimestamp}
+                defaultEndDate={endDateTimestamp}
                 setDateChange={(start, end) => {
                     setStartDateTimestamp(start);
                     setEndDateTimestamp(end);
@@ -41,7 +75,7 @@ const SearchBars: React.FC<SearchBarsProps> = ({
 
             <LocationSearchButton
                 onClick={() => {}}
-                location={thirdLevelLocation || undefined}
+                location={thirdLevelLocation || ''}
             />
 
             <button

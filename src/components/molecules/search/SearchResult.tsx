@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import SearchPageTitle from './SearchPageTitle';
+import SearchPageTitle from '../../atoms/search/SearchPageTitle';
 import HomePageTrips from '../homepage/HomePageTrips';
 import useTapScroll from '@/hooks/useTapScroll';
 import { TripWithContract } from '@/types/Trips.types';
@@ -58,7 +58,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
                                 alt="profile"
                                 width={100}
                                 height={100}
-                                className="object-contain"
+                                className="object-contain h-[100px] w-[100px]"
                             />
                         </div>
                         <p className="flex justify-center items-center mx-auto">

@@ -23,8 +23,8 @@ import useSelectAges from '@/hooks/useSelectAges';
 import useSelectMeetPlace from '@/hooks/useSelectMeetPlace';
 import { useRouter } from 'next/navigation';
 import { validateStep } from '@/utils/write/validateStep';
-import FailPage from '@/components/organisms/write/FailPage';
 import SuccessNotificationPage from '@/components/organisms/write/SuccessNotificationPage';
+import { twMerge } from 'tailwind-merge';
 
 // 버튼 라벨 배열
 const buttonText = [
@@ -42,14 +42,14 @@ const WritePage: React.FC = () => {
     const [tripId, setTripId] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
+    const [isMini, setIsMini] = useState<boolean>(false);
 
     const { buddy } = useAuth();
     const router = useRouter();
     const { buddyCounts, SelectBuddyCounts } = useSelectBuddyCounts();
     const { SelectCalendar, startDateTimestamp, endDateTimestamp } =
         useCalendar();
-    const { SelectRegion, secondLevelLocation, thirdLevelLocation } =
-        useSelectRegion();
+    const { actions, states } = useSelectRegion();
     const [PreferTripThemesToRender, selectedTripThemes] = usePreferTheme({
         mode: 'trip',
     });
@@ -76,8 +76,8 @@ const WritePage: React.FC = () => {
         limit: 6,
         validateStep: () =>
             validateStep(step, {
-                secondLevelLocation,
-                thirdLevelLocation,
+                secondLevelLocation: states.secondLevelLocation,
+                thirdLevelLocation: states.thirdLevelLocation,
                 startDateTimestamp,
                 endDateTimestamp,
                 selectedTripThemes,
@@ -109,7 +109,7 @@ const WritePage: React.FC = () => {
             trip_max_buddies_counts: buddyCounts,
             trip_start_date: startDateTimestamp,
             trip_end_date: endDateTimestamp,
-            trip_final_destination: `${secondLevelLocation} ${thirdLevelLocation}`,
+            trip_final_destination: `${states.secondLevelLocation} ${states.thirdLevelLocation}`,
             trip_meet_location: meetPlace,
             trip_theme1: selectedTripThemes[0],
             trip_theme2: selectedTripThemes[1],
@@ -164,24 +164,37 @@ const WritePage: React.FC = () => {
     useEffect(() => {
         setStepToDisplay(step);
     }, [step]);
-    // console.log(buttonText[stepToDisplay]);
+
+    useEffect(() => {
+        const isMini = window.innerHeight < 659;
+        setIsMini(isMini);
+    }, []);
 
     const handlePush = (path: string) => {
         router.push(path);
     };
 
     return (
-        <>
-            <ProgressIndicator step={step} counts={7} />
+        <div
+            className={twMerge(
+                'relative h-[calc(100dvh-56px-57px)]',
+                step === 5 && 'h-auto',
+            )}
+        >
+            <ProgressIndicator className="pt-2" step={step} counts={7} />
             <section className="h-auto flex flex-col">
-                <div className="flex flex-col">
+                <div className={twMerge('flex flex-col', step === 0 && 'mb-2')}>
                     {step === 0 && (
-                        <WelcomePage SelectBuddyCounts={SelectBuddyCounts} />
+                        <WelcomePage
+                            SelectBuddyCounts={SelectBuddyCounts}
+                            isMini={isMini}
+                        />
                     )}
                     {step === 1 && (
                         <SelectRegionPage
-                            SelectRegion={SelectRegion}
-                            pxHeight={60}
+                            isMini={isMini}
+                            states={states}
+                            actions={actions}
                         />
                     )}
                     {step === 2 && (
@@ -224,11 +237,14 @@ const WritePage: React.FC = () => {
                 </div>
                 <div className="flex justify-center">
                     <NextButton
-                        className="text-xl text-white bg-main-color font-bold py-2 px-4 mt-4 mx-2 mb-20 rounded-xl w-full hover:bg-main-color/80"
+                        className={twMerge(
+                            'text-xl text-white bg-main-color font-bold py-2 px-4 mt-4 mx-2 mb-20 rounded-xl w-full hover:bg-main-color/80',
+                            isMini && 'mt-0.5 mb-10',
+                        )}
                         onClick={async () => {
                             const isValid = await validateStep(step, {
-                                secondLevelLocation,
-                                thirdLevelLocation,
+                                secondLevelLocation: states.secondLevelLocation,
+                                thirdLevelLocation: states.thirdLevelLocation,
                                 startDateTimestamp,
                                 endDateTimestamp,
                                 selectedTripThemes,
@@ -252,7 +268,7 @@ const WritePage: React.FC = () => {
                     />
                 </div>
             </section>
-        </>
+        </div>
     );
 };
 

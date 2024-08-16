@@ -15,13 +15,13 @@ export async function GET(
         data: story,
         error: storyError,
     }: {
-        data: StoryWithBuddies | null;
+        data: StoryWithBuddies[] | null;
         error: PostgrestError | null;
     } = await supabase
         .from('stories')
         .select('*, buddies:story_created_by (*)')
-        .eq('story_id', id)
-        .maybeSingle();
+        .eq('story_created_by', id)
+        .order('story_created_at', { ascending: false });
 
     if (storyError) {
         console.error(storyError);
@@ -36,4 +36,32 @@ export async function GET(
     }
 
     return NextResponse.json(story, { status: 200 });
+}
+
+export async function DELETE(
+    req: NextRequest,
+    { params }: { params: { id: string } },
+) {
+    const { id } = params;
+
+    const supabase = createClient();
+
+    const {
+        error: storyError,
+    }: {
+        error: PostgrestError | null;
+    } = await supabase.from('stories').delete().eq('story_id', id);
+
+    if (storyError) {
+        console.error(storyError);
+        return NextResponse.json(
+            { error: storyError?.message },
+            { status: 401 },
+        );
+    }
+
+    return NextResponse.json(
+        { message: 'story deleted successfully' },
+        { status: 200 },
+    );
 }

@@ -6,6 +6,7 @@ import LeftXsmGrayText from '@/components/atoms/write/LeftXsmGrayText';
 import React from 'react';
 import SelectAgesRange from '@/components/atoms/write/SelectAgesRange';
 import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
+import { twMerge } from 'tailwind-merge';
 
 type SelectAdditionalBuddyThemesProps = {
     PreferThemeToRender: React.FC;
@@ -24,17 +25,19 @@ export default function SelectAdditionalBuddyThemes({
     handleStartAge,
     handleEndAge,
 }: SelectAdditionalBuddyThemesProps) {
+    const isMini = window.innerHeight < 659;
+
     return (
-        <div>
-            <div className="mb-10">
+        <div className="relative">
+            <div className={twMerge('mb-2', isMini && 'mb-0')}>
                 <Left2xlBoldText text="원하는 버디즈의 특성을 알려주세요" />
                 <LeftSmGrayText text="모두 필수 선택 항목입니다" />
             </div>
-            <div className="mb-5">
+            <div className={twMerge('mb-2', isMini && 'mb-0')}>
                 <LeftXlBoldText text="성별" />
                 <SelectWantedSexButton />
             </div>
-            <div className="mb-5">
+            <div className={twMerge('mb-5', isMini && 'mb-0')}>
                 <LeftXlBoldText text="나이" />
                 <SelectAgesRange
                     startAge={startAge}
@@ -43,11 +46,11 @@ export default function SelectAdditionalBuddyThemes({
                     handleEndAge={handleEndAge}
                 />
             </div>
-            <div className="mb-5">
+            <div className={twMerge('mb-5', isMini && 'mb-1')}>
                 <LeftXlBoldText text="버디즈 성향" />
                 <LeftXsmGrayText text="3개를 선택해주세요" />
             </div>
-            <div className="mx-2">
+            <div className={twMerge('mx-2', isMini && 'mb-1')}>
                 <PreferThemeToRender />
             </div>
         </div>

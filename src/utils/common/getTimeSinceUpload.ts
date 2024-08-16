@@ -8,12 +8,12 @@ export function getTimeSinceUpload(tripCreatedAt: string): string {
     const diffInDays = Math.floor(diffInHours / 24);
 
     if (diffInMinutes < 1) {
-        return '방금 업로드';
+        return '방금';
     } else if (diffInMinutes < 60) {
-        return `${diffInMinutes}분 전 업로드`;
+        return `${diffInMinutes}분 전`;
     } else if (diffInHours < 24) {
-        return `${diffInHours}시간 전 업로드`;
+        return `${diffInHours}시간 전`;
     } else {
-        return `${diffInDays}일 전 업로드`;
+        return `${diffInDays}일 전`;
     }
 }

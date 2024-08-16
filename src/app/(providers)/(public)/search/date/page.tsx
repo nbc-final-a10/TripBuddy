@@ -1,6 +1,6 @@
 'use client';
 
-import SearchPageTitle from '@/components/molecules/search/SearchPageTitle';
+import SearchPageTitle from '@/components/atoms/search/SearchPageTitle';
 import DateSearch from '@/components/organisms/search/DateSearch';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -38,7 +38,7 @@ export default function DateSearchPage() {
     };
 
     return (
-        <div className="p-5 pt-8 xl:grid xl:grid-cols-3 xl:gap-4">
+        <div className="p-5 pt-8 xl:grid xl:grid-cols-3 xl:gap-4 bg-white">
             <div className="xl:col-span-1">
                 <SearchPageTitle
                     title="언제 떠나시나요?"

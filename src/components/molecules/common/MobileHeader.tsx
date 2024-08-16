@@ -3,14 +3,22 @@
 import React from 'react';
 import Arrow_Back from '../../../../public/svg/Arrow_back.svg';
 import Close from '../../../../public/svg/Close.svg';
-import Notification from '../../../../public/svg/Notifications_unread.svg';
+import Notification from '../../../../public/svg/Alarm.svg';
 import Search from '../../../../public/svg/HomeSearch.svg';
 import MobileHeaderSettingsButton from '@/components/atoms/common/MobileHeaderSettingsButton';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useAuth } from '@/hooks/auth';
+import useTripQuery from '@/hooks/queries/useTripQuery';
 
 const MobileHeader: React.FC = () => {
     const pathname = usePathname();
+    const searchParams = useSearchParams();
     const router = useRouter();
+    const { buddy } = useAuth();
+
+    const uuidMatch = pathname.match(/\/([^\/]+)\/([0-9a-fA-F-]{36})$/);
+    const uuid = uuidMatch ? uuidMatch[2] : null;
+    const isMyProfile = uuid === buddy?.buddy_id;
 
     const isTrips = pathname === '/trips';
     const isTripDetail = pathname.startsWith('/trips/');
@@ -18,6 +26,7 @@ const MobileHeader: React.FC = () => {
     const isChatId = pathname.startsWith('/chat/');
     const isChat = pathname === '/chat';
     const isLogin = pathname === '/login';
+    const isRecover = searchParams.get('mode') === 'recover';
     const isSignup = pathname === '/signup';
     const isSearch = pathname === '/search';
     const isWrite = pathname === '/write';
@@ -26,6 +35,9 @@ const MobileHeader: React.FC = () => {
     const isStoryWrite = pathname === '/write/story';
     const isLocation = pathname === '/search/location';
     const isDate = pathname === '/search/date';
+    const isNotification = pathname === '/notifications';
+
+    const { data: trip } = useTripQuery(isTripDetail && uuid ? uuid : null);
 
     const headerTitle =
         (isTrips && '모집중 여정') ||
@@ -35,13 +47,15 @@ const MobileHeader: React.FC = () => {
         (isSignup && '') ||
         (isSearch && '검색') ||
         (isOnboarding && '온보딩') ||
-        (isProfile && '프로필') ||
+        (isProfile && isMyProfile && '마이페이지') ||
+        (isProfile && !isMyProfile && '프로필') ||
         (isStory && '스토리') ||
         (isStoryWrite && '스토리에 추가') ||
         (isChatId && '') ||
         (isChat && '채팅') ||
         (isLocation && '위치 검색') ||
         (isDate && '날짜 선택');
+    (isNotification && '알림') || (isRecover && '비밀번호 찾기');
 
     const isShow =
         isTrips ||
@@ -58,20 +72,24 @@ const MobileHeader: React.FC = () => {
         isChat ||
         isLocation ||
         isDate;
+    isNotification || isRecover;
+
+    const handleBack = () => {
+        if (isRecover) {
+            router.push('/login?mode=login');
+        } else if (isLogin || isSignup) {
+            router.push('/');
+        } else {
+            router.back();
+        }
+    };
 
     if (!isShow) return null;
 
     return (
         <header className="relative h-[57px] w-full flex flex-row items-center px-5 xl:hidden bg-white">
             <div className="w-[calc(100%/3)] flex justify-start items-center">
-                <Arrow_Back
-                    onClick={
-                        isLogin || isSignup
-                            ? () => router.push('/')
-                            : () => router.back()
-                    }
-                    className="cursor-pointer"
-                />
+                <Arrow_Back onClick={handleBack} className="cursor-pointer" />
             </div>
             <div className="w-[calc(100%/3)] flex justify-center items-center">
                 <h1 className="text-center leading-3 text-xl font-semibold">
@@ -86,15 +104,25 @@ const MobileHeader: React.FC = () => {
                         className="cursor-pointer"
                     />
                 )}
-                {isTrips && <Notification />}
-                {isProfile && (
-                    <MobileHeaderSettingsButton pathname={pathname} />
+                {isTrips && (
+                    <Notification
+                        onClick={() => router.push('/notifications')}
+                        className="cursor-pointer"
+                    />
                 )}
-                {isTripDetail && <span>수정</span>}
+                {isProfile && uuid && (
+                    <MobileHeaderSettingsButton uuid={uuid} />
+                )}
+                {/** 수정페이지 구현하면 수정으로 가게 추후 수정 요망 */}
+                {isTripDetail &&
+                    trip &&
+                    trip.trip_master_id === buddy?.buddy_id && (
+                        <span>수정</span>
+                    )}
                 {(isSearch || isWrite) && (
                     <Close
                         onClick={() => router.push('/trips')}
-                        className="cursor-pointer"
+                        className="cursor-pointer fill-black"
                     />
                 )}
             </div>

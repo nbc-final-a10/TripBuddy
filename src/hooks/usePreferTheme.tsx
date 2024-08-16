@@ -57,7 +57,9 @@ const usePreferTheme = ({
     }) => {
         useEffect(() => {
             if (externalSetSelectedTheme) {
-                externalSetSelectedTheme(selectedTheme);
+                if (selectedTheme.length > 0) {
+                    externalSetSelectedTheme(selectedTheme);
+                }
             }
         }, [externalSetSelectedTheme]);
 

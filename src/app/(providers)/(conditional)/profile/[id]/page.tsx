@@ -6,45 +6,32 @@ import BuddyFollow from '@/components/molecules/profile/BuddyFollow';
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
 import { useAuth } from '@/hooks/auth';
 import { ProfilePageProps } from '@/types/ProfileParams.types';
-import { Buddy } from '@/types/Auth.types';
-import { useEffect, useState } from 'react';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import { useRouter } from 'next/navigation';
+import React from 'react';
+import useBuddyProfile from '@/hooks/queries/useBuddyProfile';
 
 function ProfilePage({ params }: ProfilePageProps) {
     const { buddy, logOut } = useAuth();
-    const router = useRouter();
 
-    const [clickedBuddy, setClickedBuddy] = useState<Buddy | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchClickedBuddy = async () => {
-            try {
-                const response = await fetch(
-                    `/api/buddyProfile/buddy?id=${params.id}`,
-                );
-                const data = await response.json();
-                // console.log(data);
-                setClickedBuddy(data.buddies[0]);
-                setLoading(false);
-            } catch (error) {
-                console.error('버디 통신 오류 발생:', error);
-            }
-        };
-        fetchClickedBuddy();
-    }, [params.id]);
+    const { data, isLoading, error } = useBuddyProfile(params.id);
 
     const handleLogOut = () => {
         logOut();
         showAlert('success', '로그아웃 완료되었습니다.');
     };
+
+    if (error) {
+        return <div>버디 프로필을 가져오는 중 오류가 발생했습니다.</div>;
+    }
+
+    const clickedBuddy = data?.buddies[0];
+
     return (
         <>
             <section className="flex flex-col items-center justify-center w-full h-full">
                 <BuddyProfile
                     clickedBuddy={clickedBuddy || null}
-                    loading={loading}
+                    loading={isLoading}
                     buddy={buddy}
                     urlId={`${params.id}`}
                 />

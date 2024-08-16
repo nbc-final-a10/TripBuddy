@@ -1,3 +1,5 @@
+import { PostgrestError } from '@supabase/supabase-js';
+import { Contract, PartialContract } from '@/types/Contract.types';
 import { createClient } from '@/utils/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -5,13 +7,13 @@ export async function POST(req: NextRequest) {
     const supabase = createClient();
 
     try {
-        const { tripId, userId } = await req.json();
+        const payload: PartialContract = await req.json();
 
         // trip 데이터를 가져오기 위해 Supabase에서 trips 테이블을 조회
         const { data: trip, error: tripError } = await supabase
             .from('trips')
             .select('*')
-            .eq('trip_id', tripId)
+            .eq('trip_id', payload.contract_trip_id)
             .maybeSingle();
 
         if (tripError) {
@@ -34,8 +36,8 @@ export async function POST(req: NextRequest) {
             await supabase
                 .from('contract')
                 .select('*')
-                .eq('contract_trip_id', tripId)
-                .eq('contract_buddy_id', userId);
+                .eq('contract_trip_id', payload.contract_trip_id)
+                .eq('contract_buddy_id', payload.contract_buddy_id);
 
         if (existingContractsError) {
             console.error(
@@ -69,7 +71,7 @@ export async function POST(req: NextRequest) {
             await supabase
                 .from('contract')
                 .select('*', { count: 'exact' })
-                .eq('contract_trip_id', tripId);
+                .eq('contract_trip_id', payload.contract_trip_id);
 
         if (contractCountError) {
             console.error('contract 수 확인 중 오류 발생:', contractCountError);
@@ -94,8 +96,8 @@ export async function POST(req: NextRequest) {
         const isValidate = today <= tripEndDate;
 
         const contractData = {
-            contract_trip_id: tripId,
-            contract_buddy_id: userId,
+            contract_trip_id: payload.contract_trip_id,
+            contract_buddy_id: payload.contract_buddy_id,
             contract_start_date: trip.trip_start_date,
             contract_end_date: trip.trip_end_date,
             contract_isLeader: false,
@@ -105,10 +107,15 @@ export async function POST(req: NextRequest) {
         };
 
         // 'contract' 테이블에 contract 데이터를 삽입
-        const { data: contract, error: contractError } = await supabase
-            .from('contract')
-            .insert(contractData)
-            .select();
+        const {
+            data: contract,
+            error: contractError,
+        }: { data: Contract | null; error: PostgrestError | null } =
+            await supabase
+                .from('contract')
+                .insert(contractData)
+                .select()
+                .single();
 
         if (contractError) {
             console.error('컨트랙트 생성 중 오류 발생:', contractError);
@@ -118,7 +125,14 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        return NextResponse.json({ contract: contract[0] }, { status: 200 });
+        if (!contract) {
+            return NextResponse.json(
+                { contract: null, error: '컨트랙트 생성 중 오류 발생' },
+                { status: 500 },
+            );
+        }
+
+        return NextResponse.json(contract, { status: 200 });
     } catch (error) {
         console.error('요청 처리 중 오류 발생:', error);
         return NextResponse.json(

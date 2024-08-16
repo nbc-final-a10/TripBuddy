@@ -10,6 +10,18 @@ const TutorialMainPage: React.FC = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
 
+    const handleNext = async () => {
+        if (step < 4) {
+            setStep(prev => prev + 1);
+        } else {
+            await setCookieAction();
+        }
+    };
+
+    const handleSkip = async () => {
+        await setCookieAction();
+    };
+
     useEffect(() => {
         const funnel = searchParams.get('funnel');
         if (funnel) {
@@ -23,20 +35,8 @@ const TutorialMainPage: React.FC = () => {
         }
     }, [step, router]);
 
-    const handleNext = async () => {
-        if (step < 4) {
-            setStep(prev => prev + 1);
-        } else {
-            await setCookieAction();
-        }
-    };
-
-    const handleSkip = async () => {
-        await setCookieAction();
-    };
-
     return (
-        <div className="relative flex flex-col items-center h-dvh overflow-hidden bg-white xl:h-[calc(100dvh-100px)]">
+        <div className="relative flex flex-col items-center h-dvh overflow-hidden bg-white xl:h-[calc(100dvh-100px)] xl:mt-14">
             {step < 4 ? (
                 <button
                     onClick={handleSkip}

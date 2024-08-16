@@ -8,8 +8,8 @@ import fetchWrapper from '@/utils/api/fetchWrapper';
 import { TripWithContract } from '@/types/Trips.types';
 import useTapScroll from '@/hooks/useTapScroll';
 import {
-    ContractWithTrips,
     ContractWithTripsWithContract,
+    MyTripsAndContracts,
 } from '@/types/Contract.types';
 
 type MyTripsProps = {
@@ -19,10 +19,10 @@ type MyTripsProps = {
 export default function MyTrips({ id }: MyTripsProps) {
     const participatingAccordion = useAccordion();
     const createdAccordion = useAccordion();
-    const [trips, setTrips] = useState<{
-        created: TripWithContract[];
-        participated: ContractWithTrips[];
-    }>({ created: [], participated: [] });
+    const [trips, setTrips] = useState<MyTripsAndContracts>({
+        created: [],
+        participated: [],
+    });
 
     const createdTripsRef = useRef<HTMLDivElement>(null);
     const participatingTripsRef = useRef<HTMLDivElement>(null);
@@ -34,12 +34,12 @@ export default function MyTrips({ id }: MyTripsProps) {
     useEffect(() => {
         const fetchTrips = async () => {
             try {
-                const data = await fetchWrapper<{
-                    created: TripWithContract[];
-                    participated: ContractWithTrips[];
-                }>(`/api/trips/my/${id}`, {
-                    method: 'GET',
-                });
+                const data = await fetchWrapper<MyTripsAndContracts>(
+                    `/api/trips/my/${id}`,
+                    {
+                        method: 'GET',
+                    },
+                );
                 setTrips(data);
             } catch (error) {
                 console.error('Error fetching trips:', error);
@@ -48,6 +48,8 @@ export default function MyTrips({ id }: MyTripsProps) {
 
         fetchTrips();
     }, [id]);
+
+    // console.log(trips);
 
     return (
         <div className="p-2 bg-gray-100 rounded-xl">
@@ -88,16 +90,15 @@ export default function MyTrips({ id }: MyTripsProps) {
                 >
                     {trips.participated.length > 0 ? (
                         trips.participated.map((contract, index) => {
-                            const contractWithTrips =
-                                contract as ContractWithTripsWithContract;
-                            contractWithTrips.trips.contract =
-                                trips.participated;
+                            // const contractWithTrips =
+                            //     contract as ContractWithTripsWithContract;
+                            // contractWithTrips.trips.contract =
+                            //     trips.participated;
 
-                            // console.log(contractWithTrips);
                             return (
                                 <TripCard
-                                    key={contract.trips.trip_id}
-                                    trip={contractWithTrips.trips}
+                                    key={contract.trip_id}
+                                    trip={contract}
                                     mode="card"
                                 />
                             );

@@ -3,6 +3,7 @@
 import React from 'react';
 import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 import Image from 'next/image';
+import { twMerge } from 'tailwind-merge';
 
 type WriteTripProps = {
     tripTitle: string;
@@ -23,13 +24,14 @@ const WriteTrip: React.FC<WriteTripProps> = ({
     handleContentChange,
     handleImageChange,
 }) => {
+    const isMini = window.innerHeight < 659;
     return (
-        <div className="p-4">
+        <div className="relative px-2">
             <header className="mb-5">
                 <Left2xlBoldText text="모집 글을 작성해봐요!" />
             </header>
 
-            <form className="space-y-4">
+            <form className="relative">
                 <div className="flex items-center">
                     <label className="block mb-1 text-sm font-medium text-gray-700 mr-2">
                         대표 이미지
@@ -71,7 +73,7 @@ const WriteTrip: React.FC<WriteTripProps> = ({
                     />
                     <span className="block text-right text-sm text-gray-500">{`${tripTitle.length}/20`}</span>
                 </div>
-                <div>
+                <div className="relative mt-0">
                     <label className="block mb-1 text-sm font-medium text-gray-700">
                         글 내용
                     </label>
@@ -79,7 +81,10 @@ const WriteTrip: React.FC<WriteTripProps> = ({
                         value={tripContent}
                         onChange={handleContentChange}
                         placeholder="내용을 입력해주세요."
-                        className="w-full h-96 px-3 py-2 bg-[#E8E8E8] border border-[#E8E8E8] rounded-xl resize-none"
+                        className={twMerge(
+                            'w-full h-72 px-3 py-2 bg-[#E8E8E8] border border-[#E8E8E8] rounded-xl resize-none xl:h-96',
+                            isMini && 'h-44',
+                        )}
                     />
                 </div>
             </form>

@@ -1,4 +1,4 @@
-import { Trip, TripWithContract } from '@/types/Trips.types';
+import { TripWithContract } from '@/types/Trips.types';
 import React from 'react';
 import TripCard from '../trips/TripCard';
 
