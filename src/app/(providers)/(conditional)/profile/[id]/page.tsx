@@ -25,11 +25,11 @@ function ProfilePage({ params }: ProfilePageProps) {
     useEffect(() => {
         if (!followList || !clickedBuddy?.buddy_id) return;
 
-        const newFollowingList = followList
+        const newFollowerList = followList
             .filter(data => data.follow_following_id === clickedBuddy.buddy_id)
             .map(data => data.follow_follower_id);
 
-        const newFollowerList = followList
+        const newFollowingList = followList
             .filter(data => data.follow_follower_id === clickedBuddy.buddy_id)
             .map(data => data.follow_following_id);
 
