@@ -39,8 +39,8 @@ const ContractModal: React.FC<ContractModalProps> = ({
         const newNotification = notifications[index];
         newNotification.notification_isRead = true;
         mutateNotification(newNotification);
-        modal.closeModal();
         if (index < notifications.length - 1) setIndex(prev => prev + 1);
+        if (index === notifications.length - 1) modal.closeModal();
     };
 
     const handleClose = () => {
@@ -55,15 +55,15 @@ const ContractModal: React.FC<ContractModalProps> = ({
             );
             if (currentContracts) {
                 currentContracts.contract_isPending = false;
-                console.log('currentContracts ====>', currentContracts);
+                // console.log('currentContracts ====>', currentContracts);
                 mutateContract(currentContracts);
             }
             const newNotification = notifications[index];
             newNotification.notification_isRead = true;
-            console.log('newNotification ====>', newNotification);
+            // console.log('newNotification ====>', newNotification);
             mutateNotification(newNotification);
-            modal.closeModal();
             if (index < notifications.length - 1) setIndex(prev => prev + 1);
+            if (index === notifications.length - 1) modal.closeModal();
         } catch (error: any) {
             showAlert('error', error.message);
         }
@@ -83,6 +83,13 @@ const ContractModal: React.FC<ContractModalProps> = ({
             showAlert('error', errorMessage || '오류가 발생했습니다.');
         }
     }, [notificationError, contractError]);
+
+    useEffect(() => {
+        if (!modal) return;
+        if (index !== 0 && index === notifications.length - 1) {
+            modal.closeModal();
+        }
+    }, [index, notifications, modal]);
 
     return (
         <div className="bg-black/60 fixed top-0 left-0 w-full h-full flex justify-center items-center z-[9999]">
