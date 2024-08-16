@@ -205,58 +205,58 @@ export const NotificationProvider = ({
         };
     }, [buddy, handleRealTimePostsDelete, handleRealTimePostsUpdate]);
 
-    useEffect(() => {
-        const prevNotifications = prevNotificationsRef.current;
-        async function fetchSpecificBuddy() {
-            const promises = notifications.contracts.map(async notification => {
-                const url = `/api/buddyProfile/buddy?id=${notification.notification_sender}`;
-                const promise = fetchWrapper<Buddy>(url, { method: 'GET' });
-                return promise;
-            });
-            const data = await Promise.all(promises);
-            return data;
-        }
-        // 최초 실행 또는 notifications가 변경된 경우에만 실행
-        if (
-            !hasFetchedOnceRef.current ||
-            !prevNotifications ||
-            prevNotifications.contracts.length !==
-                notifications.contracts.length ||
-            JSON.stringify(prevNotifications.contracts) !==
-                JSON.stringify(notifications.contracts)
-        ) {
-            prevNotificationsRef.current = notifications;
-            hasFetchedOnceRef.current = true; // 최초 실행 여부를 기록
+    // useEffect(() => {
+    //     const prevNotifications = prevNotificationsRef.current;
+    //     async function fetchSpecificBuddy() {
+    //         const promises = notifications.contracts.map(async notification => {
+    //             const url = `/api/buddyProfile/buddy?id=${notification.notification_sender}`;
+    //             const promise = fetchWrapper<Buddy>(url, { method: 'GET' });
+    //             return promise;
+    //         });
+    //         const data = await Promise.all(promises);
+    //         return data;
+    //     }
+    //     // 최초 실행 또는 notifications가 변경된 경우에만 실행
+    //     if (
+    //         !hasFetchedOnceRef.current ||
+    //         !prevNotifications ||
+    //         prevNotifications.contracts.length !==
+    //             notifications.contracts.length ||
+    //         JSON.stringify(prevNotifications.contracts) !==
+    //             JSON.stringify(notifications.contracts)
+    //     ) {
+    //         prevNotificationsRef.current = notifications;
+    //         hasFetchedOnceRef.current = true; // 최초 실행 여부를 기록
 
-            if (!modal) return;
+    //         if (!modal) return;
 
-            fetchSpecificBuddy()
-                .then(data => {
-                    console.log('data ====>', data);
-                    showAlert(
-                        'caution',
-                        `새로운 참여 요청이 ${data.length}건 있습니다.`,
-                        {
-                            onConfirm: () => {
-                                modal.openModal({
-                                    component: () => (
-                                        <ContractModal
-                                            buddies={data}
-                                            mode="notification"
-                                        />
-                                    ),
-                                });
-                            },
-                        },
-                    );
-                })
-                .catch(error => {
-                    console.error('error ====>', error);
-                });
+    //         fetchSpecificBuddy()
+    //             .then(data => {
+    //                 console.log('data ====>', data);
+    //                 showAlert(
+    //                     'caution',
+    //                     `새로운 참여 요청이 ${data.length}건 있습니다.`,
+    //                     {
+    //                         onConfirm: () => {
+    //                             modal.openModal({
+    //                                 component: () => (
+    //                                     <ContractModal
+    //                                         buddies={data}
+    //                                         mode="notification"
+    //                                     />
+    //                                 ),
+    //                             });
+    //                         },
+    //                     },
+    //                 );
+    //             })
+    //             .catch(error => {
+    //                 console.error('error ====>', error);
+    //             });
 
-            console.log('notifications 상태 변경 ====>', notifications);
-        }
-    }, [notifications, modal]);
+    //         console.log('notifications 상태 변경 ====>', notifications);
+    //     }
+    // }, [notifications, modal]);
 
     return (
         <NotificationContext.Provider value={{ notifications }}>
