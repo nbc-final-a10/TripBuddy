@@ -56,7 +56,7 @@ export default function Header() {
                                     : 'text-black'
                             }
                         >
-                            채팅
+                            여정채팅
                         </Link>
                     </div>
                 </div>
