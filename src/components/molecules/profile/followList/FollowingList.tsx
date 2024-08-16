@@ -1,6 +1,6 @@
 import { Buddy } from '@/types/Auth.types';
 import React from 'react';
-import BuddyCard from '../BuddyCard';
+import BuddyCard from '../FollowBuddyCard';
 
 type FollowingListProps = {
     followingList: string[];

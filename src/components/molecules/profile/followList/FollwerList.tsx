@@ -1,5 +1,5 @@
 import React from 'react';
-import BuddyCard from '../BuddyCard';
+import BuddyCard from '../FollowBuddyCard';
 
 type FollowerListProps = {
     followerList: string[];
