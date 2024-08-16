@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     }: { data: Notification | null; error: PostgrestError | null } =
         await supabase
             .from('notifications')
-            .upsert({ ...notificationPayload })
+            .upsert([{ ...notificationPayload }], { ignoreDuplicates: false })
             .select()
             .single();
 

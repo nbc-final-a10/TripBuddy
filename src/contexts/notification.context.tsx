@@ -24,6 +24,7 @@ import ContractModal from '@/components/organisms/contract/ContractModal';
 import fetchWrapper from '@/utils/api/fetchWrapper';
 import { Buddy } from '@/types/Auth.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
+import { useContractQueries } from '@/hooks/queries';
 
 type NotificationProviderProps = {
     initialNotifications: Notification[] | undefined;
@@ -72,6 +73,12 @@ export const NotificationProvider = ({
     const modal = useModal();
     const prevNotificationsRef = useRef(notifications);
     const hasFetchedOnceRef = useRef(false);
+
+    const queries = useContractQueries(
+        notifications.contracts
+            .map(notification => notification.notification_origin_id)
+            .filter((id): id is string => id !== null),
+    );
 
     const handleRealTimePostsUpdate = useCallback(
         (payload: RealtimePostgresInsertPayload<Notification>) => {
@@ -203,7 +210,12 @@ export const NotificationProvider = ({
         };
     }, [buddy, handleRealTimePostsDelete, handleRealTimePostsUpdate]);
 
+    const isPending = queries.some(query => query.isPending);
+
     useEffect(() => {
+        if (isPending) return;
+        if (queries.length === 0) return;
+
         const prevNotifications = prevNotificationsRef.current;
         async function fetchSpecificBuddy() {
             const promises = notifications.contracts.map(async notification => {
@@ -214,6 +226,7 @@ export const NotificationProvider = ({
             const data = await Promise.all(promises);
             return data;
         }
+
         // 최초 실행 또는 notifications가 변경된 경우에만 실행
         if (
             !hasFetchedOnceRef.current ||
@@ -230,25 +243,28 @@ export const NotificationProvider = ({
 
             fetchSpecificBuddy()
                 .then(data => {
-                    showAlert(
-                        'caution',
-                        `새로운 참여 요청이 ${data.length}건 있습니다.`,
-                        {
-                            onConfirm: () => {
-                                modal.openModal({
-                                    component: () => (
-                                        <ContractModal
-                                            notifications={
-                                                notifications.contracts
-                                            }
-                                            buddies={data}
-                                            mode="notification"
-                                        />
-                                    ),
-                                });
+                    if (data.length > 0) {
+                        showAlert(
+                            'caution',
+                            `새로운 참여 요청이 ${data.length}건 있습니다.`,
+                            {
+                                onConfirm: () => {
+                                    modal.openModal({
+                                        component: () => (
+                                            <ContractModal
+                                                queries={queries}
+                                                notifications={
+                                                    notifications.contracts
+                                                }
+                                                buddies={data}
+                                                mode="notification"
+                                            />
+                                        ),
+                                    });
+                                },
                             },
-                        },
-                    );
+                        );
+                    }
                 })
                 .catch(error => {
                     console.error('error ====>', error);
@@ -256,7 +272,7 @@ export const NotificationProvider = ({
 
             console.log('notifications 상태 변경 ====>', notifications);
         }
-    }, [notifications, modal]);
+    }, [modal, queries, notifications, isPending]);
 
     return (
         <NotificationContext.Provider value={{ notifications }}>
