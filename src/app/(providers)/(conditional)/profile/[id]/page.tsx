@@ -1,7 +1,7 @@
 'use client';
 
 import BuddyTemperature from '@/components/atoms/profile/BuddyTemperature';
-import MyTrips from '@/components/atoms/profile/MyTrips';
+import MyTripsButton from '@/components/atoms/profile/MyTripsButton';
 import BuddyFollow from '@/components/molecules/profile/BuddyFollow';
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
 import { useAuth } from '@/hooks';
@@ -9,6 +9,7 @@ import { useBuddyProfile } from '@/hooks/queries';
 import { useFollowCountQuery } from '@/hooks/queries/buddy/useGetFollowCounts';
 import { ProfilePageProps } from '@/types/ProfileParams.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
+import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
@@ -92,13 +93,23 @@ function ProfilePage({ params }: ProfilePageProps) {
                 </div>
             </section>
 
-            <section className="mt-16 mx-8">
-                <Link href={`/profile/mytrips/${params.id}?view=created`}>
-                    만든 여행
-                </Link>
-                <Link href={`/profile/mytrips/${params.id}?view=participated`}>
-                    참여한 여행
-                </Link>
+            <section className="mt-16 mx-8 bg-gray-100">
+                <div className="flex flex-col">
+                    {['created', 'bookmarked', 'participated'].map(view => (
+                        <MyTripsButton
+                            key={view}
+                            view={
+                                view as
+                                    | 'created'
+                                    | 'bookmarked'
+                                    | 'participated'
+                            }
+                            src={`/svg/Mytrips_${view}.svg`}
+                            alt={`내가 ${view === 'created' ? '만든' : view === 'bookmarked' ? '찜한' : '참여한'} 여정`}
+                            id={params.id}
+                        />
+                    ))}
+                </div>
             </section>
 
             {buddy?.buddy_id === clickedBuddy?.buddy_id && (
