@@ -376,67 +376,67 @@ const TripCard: React.FC<TripCardProps> = ({
             {isBookMarkMutationPending && <DefaultLoader />}
             <div
                 className={clsx(
-                    'bg-white box-border shadow-xl',
-                    mode === 'detail' && 'h-fit p-4',
+                    'bg-white box-border shadow-xl xl:shadow-none',
+                    mode === 'detail' && 'h-fit p-4 xl:w-[60%]',
                     mode === 'list' && 'w-[90%] h-fit rounded-lg xl:w-full',
                     mode === 'card' &&
-                        'h-[215px] min-h-[215px] rounded-lg min-w-[211px] xl:min-w-[254px]',
+                        'h-[215px] min-h-[215px] rounded-lg min-w-[211px] xl:min-w-[252px]',
                 )}
             >
                 <div
                     className={clsx(
-                        'relative bg-white p-2 rounded-lg box-border h-[86%] w-full',
+                        'relative bg-white p-2 rounded-lg box-border h-[84%] w-full xl:py-0 xl:px-2',
                         mode === 'detail' && 'bg-white rounded-none',
                         mode === 'list' && 'bg-gray-200 rounded-b-none',
                         mode === 'card' && 'rounded-b-none',
                     )}
                 >
-                    <div className="flex flex-col gap-4">
-                        <div className="flex flex-col gap-5">
+                    <div className="flex flex-col gap-4 xl:pb-3">
+                        <div className="flex flex-col gap-5 xl:gap-3">
                             <div className="flex flex-row gap-2 justify-between">
                                 {mode === 'card' && (
-                                    <div className="flex flex-row gap-1 min-h-[22px]">
-                                        {getIsOverseas(
-                                            trip.trip_final_destination,
-                                        ) ? (
-                                            <Chip
-                                                selected={false}
-                                                intent="rounded"
-                                            >
-                                                해외
-                                            </Chip>
-                                        ) : (
-                                            <Chip
-                                                selected={false}
-                                                intent="rounded_yellow"
-                                            >
-                                                국내
-                                            </Chip>
-                                        )}
-                                        {remainDaysNumber(
-                                            trip.trip_start_date,
-                                        ) <= 20 && (
-                                            <Chip
-                                                selected={false}
-                                                intent="rounded_blue"
-                                            >
-                                                HOT
-                                            </Chip>
-                                        )}
-                                    </div>
-                                )}
-
-                                {mode === 'card' && (
-                                    <div className="flex flex-row gap-2">
-                                        <span className="font-bold text-md leading-none text-[16px]">
-                                            {`${remainDays(trip.trip_start_date)}`}
-                                        </span>
-                                        <span className="text-xs leading-none text-[14px]">
-                                            {new Date(
+                                    <>
+                                        <div className="flex flex-row gap-1 min-h-[22px]">
+                                            {getIsOverseas(
+                                                trip.trip_final_destination,
+                                            ) ? (
+                                                <Chip
+                                                    selected={false}
+                                                    intent="rounded"
+                                                >
+                                                    해외
+                                                </Chip>
+                                            ) : (
+                                                <Chip
+                                                    selected={false}
+                                                    intent="rounded_yellow"
+                                                >
+                                                    국내
+                                                </Chip>
+                                            )}
+                                            {remainDaysNumber(
                                                 trip.trip_start_date,
-                                            ).toLocaleDateString()}
-                                        </span>
-                                    </div>
+                                            ) <= 20 && (
+                                                <Chip
+                                                    selected={false}
+                                                    intent="rounded_blue"
+                                                >
+                                                    HOT
+                                                </Chip>
+                                            )}
+                                        </div>
+
+                                        <div className="flex flex-row gap-2">
+                                            <span className="font-bold text-md leading-none text-[16px]">
+                                                {`${remainDays(trip.trip_start_date)}`}
+                                            </span>
+                                            <span className="text-xs leading-none text-[14px]">
+                                                {new Date(
+                                                    trip.trip_start_date,
+                                                ).toLocaleDateString()}
+                                            </span>
+                                        </div>
+                                    </>
                                 )}
                             </div>
                             <div className="flex flex-col gap-2">
@@ -448,7 +448,7 @@ const TripCard: React.FC<TripCardProps> = ({
                                 {!isEdit ? (
                                     <h3
                                         className={clsx(
-                                            'text-[16px] font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap',
+                                            'text-[16px] font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap xl:text-[26px] xl:font-semibold',
                                             mode === 'list' &&
                                                 'text-black text-xl',
                                             mode === 'card' && 'text-gray-600',

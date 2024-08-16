@@ -117,7 +117,7 @@ const HomePageContainer = () => {
                     href="/trips"
                 />
                 <div
-                    className="relative h-fit overflow-x-scroll scrollbar-hidden flex gap-[10px] min-h-[220px]"
+                    className="relative h-fit overflow-x-scroll scrollbar-hidden flex gap-[10px] min-h-[215px] px-[1px]"
                     ref={tripsRef}
                 >
                     {upcomingTrips.length > 0 && (

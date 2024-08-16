@@ -36,7 +36,7 @@ const StoryCard: React.FC<StoryCardProps> = ({
     return (
         <div
             className={twMerge(
-                'relative flex flex-col justify-center items-center min-w-[163px] w-[163px] h-[223px] bg-gray-3000 rounded-lg gap-2 aspect-auto xl:min-w-[254px]',
+                'relative flex flex-col justify-center items-center min-w-[163px] w-[163px] h-[223px] rounded-lg gap-2 aspect-auto xl:min-w-[252px]',
                 pathname === '/' && 'min-w-[139px] w-[139px] h-[190px]',
             )}
         >
