@@ -14,14 +14,6 @@ export type FollowData = {
     follow_follower_id: string;
 };
 
-// export type Buddy = {
-//     buddy_id: string;
-//     buddy_nickname: string;
-//     buddy_profile_pic: string | null;
-//     buddy_temperature: number;
-//     // 필요한 다른 속성들 추가
-// };
-
 function FollowPage() {
     const { activeButton, FollowListToggleButton } = useFollowListToggle();
     const { id: clickedBuddyId } = useParams<{ id: string }>();

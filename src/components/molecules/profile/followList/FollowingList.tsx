@@ -1,7 +1,6 @@
 import { Buddy } from '@/types/Auth.types';
 import React from 'react';
 import BuddyCard from '../BuddyCard';
-import { FollowData } from '@/app/(providers)/(conditional)/profile/follow/[id]/page';
 
 type FollowingListProps = {
     followingList: Buddy[];
@@ -23,7 +22,7 @@ const Skeleton: React.FC = () => {
 function FollowingList({ followingList }: FollowingListProps) {
     return (
         <div className="mb-4">
-            <BuddyCard />
+            <BuddyCard followList={followingList} />
         </div>
     );
 }

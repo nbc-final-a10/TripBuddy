@@ -1,4 +1,3 @@
-import { FollowData } from '@/app/(providers)/(conditional)/profile/follow/[id]/page';
 import { Buddy } from '@/types/Auth.types';
 import React from 'react';
 
