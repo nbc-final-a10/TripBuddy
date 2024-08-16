@@ -41,6 +41,7 @@ export default function MyTrips() {
 
     return (
         <>
+            {/* TODO: 아래 두 카드 반복되는 컴포넌트라 재사용 가능하게 리팩토링 */}
             {view === 'created' ? (
                 <CreatedTrips created={trips.created} />
             ) : view === 'participated' ? (

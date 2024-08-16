@@ -6,7 +6,7 @@ function ParticipatedTrips(trips: { participated: TripWithContract[] }) {
     return (
         <div>
             {trips.participated.length > 0 ? (
-                <div className="grid grid-cols-1 lg:grid-cols-2">
+                <div className="grid grid-cols-1 xl:grid-cols-2">
                     {trips.participated.map((trip: TripWithContract) => (
                         <TripCard key={trip.trip_id} trip={trip} mode="card" />
                     ))}
