@@ -9,6 +9,14 @@ export async function GET(
     { params }: { params: { id: string } },
 ) {
     const { id } = params;
+
+    if (!id) {
+        return NextResponse.json(
+            { error: '여정 ID가 필요합니다.' },
+            { status: 400 },
+        );
+    }
+
     const supabase = createClient();
 
     const {

@@ -4,7 +4,7 @@ import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
 import Image from 'next/image';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import HomePageRecommnedBuddiesList from '../homepage/HomePageRecommendBuddiesList';
+import HomePageRecommendBuddiesList from '../homepage/HomePageRecommendBuddiesList';
 import {
     useBuddyQueries,
     useRecommendBuddiesQuery,
@@ -62,7 +62,9 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
     } = useRecommendBuddiesQuery();
 
     const queries = useBuddyQueries(
-        trip?.contract.map(contract => contract.contract_buddy_id) || [],
+        trip?.contract
+            .filter(contract => contract.contract_isPending === false)
+            .map(contract => contract.contract_buddy_id) || [],
     );
 
     const {
@@ -148,6 +150,10 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
     useEffect(() => {
         if (tripData) handleWriteTrip();
     }, [tripData, handleWriteTrip]);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     // useEffect(() => {
     //     console.log('trip 변경될때 마다 ===>', trip);
@@ -247,7 +253,7 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
                     className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
                     ref={buddiesRef}
                 >
-                    <HomePageRecommnedBuddiesList
+                    <HomePageRecommendBuddiesList
                         buddies={recommendBuddies.buddies}
                     />
                 </div>

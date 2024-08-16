@@ -40,9 +40,13 @@ import TripEditSelectGenderBuddyTheme from '../../molecules/trips/TripEditSelect
 import TripEditText from '../../molecules/trips/TripEditText';
 import { deleteTrip } from '@/utils/trips/deleteTrip';
 import { useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEY_TRIP_INFINITE } from '@/constants/query.constants';
+import {
+    QUERY_KEY_TRIP,
+    QUERY_KEY_TRIP_INFINITE,
+} from '@/constants/query.constants';
 import getIsOverseas from '@/utils/common/getIsOverseas';
 import remainDaysNumber from '@/utils/common/getRemainDaysNumber';
+import { leaveTrip } from '@/utils/trips/leaveTrip';
 
 type TripCardProps = {
     trip: TripWithContract;
@@ -118,10 +122,15 @@ const TripCard: React.FC<TripCardProps> = ({
             });
         }
 
+        if (participantButtonText === '나가기') {
+            return handleLeave();
+        }
+
         if (mode === '참여하기') {
             const newContract: PartialContract = {
                 contract_trip_id: trip.trip_id,
                 contract_buddy_id: buddy.buddy_id,
+                contract_isPending: true,
             };
             createContract(newContract);
         }
@@ -211,6 +220,36 @@ const TripCard: React.FC<TripCardProps> = ({
         }
     };
 
+    const handleLeave = async () => {
+        if (trip && buddy) {
+            showAlert(
+                'caution',
+                '정말로 나가시겠습니까? 여정에서 나가면 채팅에서도 나가지며 채팅 기록은 삭제되지 않습니다.',
+                {
+                    onConfirm: async () => {
+                        const response = await leaveTrip(
+                            trip.trip_id,
+                            buddy.buddy_id,
+                        );
+                        if (response && response.status === 200) {
+                            showAlert('success', '여정에서 나가셨습니다.', {
+                                onConfirm: () => {
+                                    queryClient.invalidateQueries({
+                                        queryKey: [QUERY_KEY_TRIP],
+                                    });
+                                    router.push(`/trips/${trip.trip_id}`);
+                                },
+                            });
+                        }
+                    },
+                    isConfirm: true,
+                },
+            );
+        } else {
+            showAlert('error', '오류가 발생했습니다.');
+        }
+    };
+
     const handleCreateBookMark = async (
         e: React.MouseEvent<HTMLButtonElement>,
     ) => {
@@ -226,11 +265,15 @@ const TripCard: React.FC<TripCardProps> = ({
             const newBookMark: BookMarkRequest = {
                 bookmark_trip_id: trip.trip_id,
                 bookmark_buddy_id: buddy.buddy_id,
-                is_bookmarked: bookMark ? false : true,
+                is_bookmarked: bookMark ? true : false,
             };
 
             createBookMark(newBookMark);
-            return showAlert('success', '찜하기가 완료되었습니다.');
+            if (bookMark) {
+                return showAlert('success', '찜하기 취소가 완료되었습니다.');
+            } else {
+                return showAlert('success', '찜하기가 완료되었습니다.');
+            }
         }
         if (mode === '삭제하기') {
             return handleDelete();
@@ -323,10 +366,7 @@ const TripCard: React.FC<TripCardProps> = ({
 
     useEffect(() => {
         if (isContractMutationSuccess) {
-            showAlert(
-                'success',
-                '버디장에게 참여 요청이 전달되었습니다. 베타 기간에는 자동으로 참여됩니다.',
-            );
+            showAlert('success', '버디장에게 참여 요청이 전달되었습니다.');
         }
     }, [isContractMutationSuccess]);
 
@@ -636,6 +676,7 @@ const TripCard: React.FC<TripCardProps> = ({
                             mode === 'card' &&
                                 'bg-main-color text-white font-bold rounded-t-none rounded-b-lg w-full',
                         )}
+                        scroll={false}
                     >
                         <button className="flex justify-center items-center w-full h-full">
                             상세보기

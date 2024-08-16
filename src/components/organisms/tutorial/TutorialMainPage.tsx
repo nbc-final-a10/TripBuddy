@@ -43,8 +43,8 @@ const TutorialMainPage: React.FC = () => {
     }, [step, router]);
 
     return (
-        <div className="relative  h-dvh overflow-x-auto bg-white xl:h-[calc(100dvh-100px)] xl:mt-14 px-[20px] ">
-            <div className="flex justify-between items-center relative w-full mt-[64px] xl:mt-14 px-[20px] min-h-[32px]">
+        <div className="relative flex flex-col bg-white h-dvh py-2 xl:py-4">
+            <div className="flex justify-between items-center relative w-full px-[20px] h-[32px]">
                 {step > 0 ? (
                     <ArrowBack
                         onClick={handleBack}
@@ -64,21 +64,27 @@ const TutorialMainPage: React.FC = () => {
                 )}
             </div>
 
-            <section className="flex flex-col items-center justify-start w-full flex-1 text-center pb-0 mb-0">
+            <div className="flex flex-col items-center justify-start w-full flex-1 text-center">
                 <Tuto step={step} />
-            </section>
-
-            <div className="mb-5 xl:mb-5 flex justify-center">
-                <ProgressIndicator className="pt-5" step={step} counts={5} />
             </div>
-            <div className="w-full flex justify-center">
-                <button
-                    onClick={handleNext}
-                    className="text-[18px] bg-main-color font-bold rounded-2xl mb-4 text-white"
-                    style={{ width: '335px', height: '48px' }}
-                >
-                    {step < 4 ? '다음' : '홈으로'}
-                </button>
+
+            <div className="flex flex-col items-center justify-center">
+                <div className="flex justify-center items-center pt-2 pb-3">
+                    <ProgressIndicator
+                        className="flex justify-center items-center pt-0"
+                        step={step}
+                        counts={5}
+                    />
+                </div>
+                <div className="w-full flex justify-center">
+                    <button
+                        onClick={handleNext}
+                        className="text-[18px] bg-main-color font-bold rounded-2xl mb-4 text-white"
+                        style={{ width: '335px', height: '48px' }}
+                    >
+                        {step < 4 ? '다음' : '홈으로'}
+                    </button>
+                </div>
             </div>
         </div>
     );
