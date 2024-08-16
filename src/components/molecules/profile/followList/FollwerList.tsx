@@ -1,12 +1,16 @@
-import { Buddy } from '@/types/Auth.types';
 import React from 'react';
+import BuddyCard from '../BuddyCard';
 
 type FollowerListProps = {
-    followerList: Buddy[];
+    followerList: string[];
 };
 
 function FollowerList({ followerList }: FollowerListProps) {
-    return <div>팔로워 리스트</div>;
+    return (
+        <div className="mb-4">
+            <BuddyCard followList={followerList} />
+        </div>
+    );
 }
 
 export default FollowerList;

@@ -3,7 +3,7 @@ import React from 'react';
 import BuddyCard from '../BuddyCard';
 
 type FollowingListProps = {
-    followingList: Buddy[];
+    followingList: string[];
 };
 
 const Skeleton: React.FC = () => {
