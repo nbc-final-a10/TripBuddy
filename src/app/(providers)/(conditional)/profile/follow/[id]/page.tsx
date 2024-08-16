@@ -7,7 +7,8 @@ import useFollowListToggle from '@/hooks/myPage/useFollowListToggle';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-type FollowData = {
+export type FollowData = {
+    follow_id: string;
     follow_following_id: string;
     follow_follower_id: string;
 };
@@ -29,7 +30,7 @@ function FollowPage() {
                 const data = await res.json();
 
                 if (res.ok) {
-                    setFollowData(data.originFollow);
+                    setFollowData(data.originFollow as FollowData[]);
                 } else {
                     console.error(data.message);
                 }
@@ -69,10 +70,10 @@ function FollowPage() {
                 <FollowListToggleButton />
             </div>
             {activeButton === '팔로잉' && (
-                <FollowingList clickedBuddyId={clickedBuddyId} />
+                <FollowingList followingList={followingList} />
             )}
             {activeButton === '팔로워' && (
-                <FollowerList clickedBuddyId={clickedBuddyId} />
+                <FollowerList followerList={followerList} />
             )}
         </>
     );

@@ -1,10 +1,10 @@
-import HomePageRecommendBuddiesList from '@/components/organisms/homepage/HomePageRecommendBuddiesList';
 import { Buddy } from '@/types/Auth.types';
 import React from 'react';
 import BuddyCard from '../BuddyCard';
+import { FollowData } from '@/app/(providers)/(conditional)/profile/follow/[id]/page';
 
 type FollowingListProps = {
-    clickedBuddyId: string;
+    followingList: FollowData[];
 };
 
 const Skeleton: React.FC = () => {
@@ -20,7 +20,7 @@ const Skeleton: React.FC = () => {
     );
 };
 
-function FollowingList({ clickedBuddyId }: FollowingListProps) {
+function FollowingList({ followingList }: FollowingListProps) {
     return (
         <div className="mb-4">
             <BuddyCard />
