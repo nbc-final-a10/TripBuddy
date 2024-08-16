@@ -4,8 +4,7 @@ import React from 'react';
 import BuddyCard from '../BuddyCard';
 
 type FollowingListProps = {
-    currentBuddyId: string;
-    loading: boolean;
+    clickedBuddyId: string;
 };
 
 const Skeleton: React.FC = () => {
@@ -21,7 +20,7 @@ const Skeleton: React.FC = () => {
     );
 };
 
-function FollowingList() {
+function FollowingList({ clickedBuddyId }: FollowingListProps) {
     return (
         <div className="mb-4">
             <BuddyCard />

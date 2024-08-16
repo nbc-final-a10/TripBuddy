@@ -8,11 +8,11 @@ import { useAuth } from '@/hooks';
 import { useBuddyProfile } from '@/hooks/queries';
 import { ProfilePageProps } from '@/types/ProfileParams.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
+import Link from 'next/link';
 import React from 'react';
 
 function ProfilePage({ params }: ProfilePageProps) {
     const { buddy, logOut } = useAuth();
-
     const { data: clickedBuddy, isLoading, error } = useBuddyProfile(params.id);
 
     const handleLogOut = () => {
@@ -38,19 +38,29 @@ function ProfilePage({ params }: ProfilePageProps) {
             <section className="w-full h-full flex justify-center items-center my-4">
                 <div className="flex flex-row items-center mx-4 space-x-4 w-full">
                     <span className="flex-1">
-                        <BuddyFollow
-                            id={params.id}
-                            type="팔로잉"
-                            count={clickedBuddy?.buddy_following_counts || 0}
-                        />
+                        <Link
+                            href={`/profile/follow/${params.id}?view=following`}
+                        >
+                            <BuddyFollow
+                                id={params.id}
+                                type="팔로잉"
+                                count={
+                                    clickedBuddy?.buddy_following_counts || 0
+                                }
+                            />
+                        </Link>
                     </span>
                     <span className="border-l border-gray-300 h-10 mx-2" />
                     <span className="flex-1">
-                        <BuddyFollow
-                            id={params.id}
-                            type="팔로워"
-                            count={clickedBuddy?.buddy_follower_counts || 0}
-                        />
+                        <Link
+                            href={`/profile/follow/${params.id}?view=follower`}
+                        >
+                            <BuddyFollow
+                                id={params.id}
+                                type="팔로워"
+                                count={clickedBuddy?.buddy_follower_counts || 0}
+                            />
+                        </Link>
                     </span>
                 </div>
                 <div className="flex flex-col items-center mr-8 w-full">
