@@ -66,7 +66,7 @@ export const UnreadMessagesProvider: React.FC<{
                     fetchUnreadCounts();
                 },
             )
-            // contract 변경이 실시간 감지가 안 돼서 채팅방에서 뒤로 가면 새로고침 하는 거로 임시로 작성
+            // contract 변경이 실시간 감지가 안 돼서.. 채팅방에서 나가면 새로고침 하는 거로 임시로 작성
             // .on(
             //     'postgres_changes',
             //     {
