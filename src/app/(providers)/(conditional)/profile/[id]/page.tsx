@@ -17,17 +17,9 @@ function ProfilePage({ params }: ProfilePageProps) {
     const [followerList, setFollowerList] = useState<string[]>([]);
     const { buddy, logOut } = useAuth();
     const { data: clickedBuddy, isLoading, error } = useBuddyProfile(params.id);
-    const [readyToFetch, setReadyToFetch] = useState<boolean>(false);
-
-    useEffect(() => {
-        if (clickedBuddy?.buddy_id) {
-            setReadyToFetch(true);
-        }
-    }, [clickedBuddy?.buddy_id]);
 
     const { data: followList } = useFollowCountQuery(
         clickedBuddy?.buddy_id || '',
-        readyToFetch,
     );
 
     useEffect(() => {
