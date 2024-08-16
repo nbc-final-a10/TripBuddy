@@ -93,7 +93,12 @@ function ProfilePage({ params }: ProfilePageProps) {
             </section>
 
             <section className="mt-16 mx-8">
-                <MyTrips id={params.id} />
+                <Link href={`/profile/mytrips/${params.id}?view=created`}>
+                    만든 여행
+                </Link>
+                <Link href={`/profile/mytrips/${params.id}?view=participated`}>
+                    참여한 여행
+                </Link>
             </section>
 
             {buddy?.buddy_id === clickedBuddy?.buddy_id && (

@@ -1,20 +1,20 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import fetchWrapper from '@/utils/api/fetchWrapper';
 import { MyTripsAndContracts } from '@/types/Contract.types';
 import CreatedTrips from '@/components/molecules/profile/myTrips/CreatedTrips';
 import ParticipatedTrips from '@/components/molecules/profile/myTrips/ParticipatedTrips';
+import { useParams } from 'next/navigation';
 
-type MyTripsProps = {
-    id: string;
-};
-
-export default function MyTrips({ id }: MyTripsProps) {
+export default function MyTrips() {
+    const { id } = useParams();
     const [trips, setTrips] = useState<MyTripsAndContracts>({
         created: [],
         participated: [],
     });
+
+    console.log('id', id);
 
     useEffect(() => {
         const fetchTrips = async () => {
@@ -31,13 +31,21 @@ export default function MyTrips({ id }: MyTripsProps) {
             }
         };
 
-        fetchTrips();
+        if (id) {
+            fetchTrips();
+        }
     }, [id]);
+
+    const queryParams = new URLSearchParams(window.location.search);
+    const view = queryParams.get('view');
 
     return (
         <>
-            <CreatedTrips created={trips.created} />
-            <ParticipatedTrips participated={trips.participated} />
+            {view === 'created' ? (
+                <CreatedTrips created={trips.created} />
+            ) : view === 'participated' ? (
+                <ParticipatedTrips participated={trips.participated} />
+            ) : null}
         </>
     );
 }
