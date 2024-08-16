@@ -44,7 +44,10 @@ function FollowPage() {
                 <FollowListToggleButton />
             </div>
             {activeButton === '팔로잉' && (
-                <FollowingList followingList={followingList} />
+                <FollowingList
+                    followingList={followingList}
+                    activeButton={activeButton}
+                />
             )}
             {activeButton === '팔로워' && (
                 <FollowerList followerList={followerList} />

@@ -4,6 +4,7 @@ import BuddyCard from '../BuddyCard';
 
 type FollowingListProps = {
     followingList: string[];
+    activeButton: string;
 };
 
 const Skeleton: React.FC = () => {
@@ -19,10 +20,10 @@ const Skeleton: React.FC = () => {
     );
 };
 
-function FollowingList({ followingList }: FollowingListProps) {
+function FollowingList({ followingList, activeButton }: FollowingListProps) {
     return (
         <div className="mb-4">
-            <BuddyCard followList={followingList} />
+            <BuddyCard followList={followingList} activeButton={activeButton} />
         </div>
     );
 }

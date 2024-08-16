@@ -10,6 +10,7 @@ import FollowHeartButton from '@/components/organisms/profile/FollowHeartButton'
 
 interface BuddyCardProps {
     followList: string[];
+    activeButton: string;
 }
 
 const BuddyCardSkeleton: React.FC = () => {
@@ -25,7 +26,7 @@ const BuddyCardSkeleton: React.FC = () => {
     );
 };
 
-function BuddyCard({ followList }: BuddyCardProps) {
+function BuddyCard({ followList, activeButton }: BuddyCardProps) {
     const { buddy: currentBuddy } = useAuth();
     const router = useRouter();
     const [buddies, setBuddies] = useState<Buddy[]>([]);
@@ -76,6 +77,20 @@ function BuddyCard({ followList }: BuddyCardProps) {
                         <BuddyCardSkeleton key={index} />
                     ))}
                 </>
+            ) : buddies.length === 0 ? (
+                <div className="flex flex-col items-center justify-center mt-10">
+                    <Image
+                        src="/images/mascot_sad.webp"
+                        alt="sad mascot image"
+                        width={300}
+                        height={300}
+                    />
+                    <div className="text-center font-bold text-3xl text-gray-500 mt-10">
+                        {activeButton === '팔로잉'
+                            ? '이런, 팔로잉하는 버디가 없군요!'
+                            : '이런, 회원님을 팔로우 하는 버디가 없군요!'}
+                    </div>
+                </div>
             ) : (
                 buddies.map((buddy: Buddy, index: number) => (
                     <div
