@@ -2,10 +2,7 @@
 
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import React, { useEffect, useState } from 'react';
-import {
-    QUERY_KEY_BUDDY,
-    QUERY_KEY_FOLLOW_COUNT,
-} from '@/constants/query.constants';
+import { QUERY_KEY_FOLLOW_COUNT } from '@/constants/query.constants';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks';
 import { useParams } from 'next/navigation';
@@ -26,7 +23,6 @@ export default function FollowButton() {
 
         const fetchTripMasterId = async () => {
             try {
-                // const urlTripId = window.location.pathname.split('/').pop();
                 const tripMasterIdResponse = await fetch(
                     `/api/contract/trip/masterId?trip_id=${currentBuddyId}`,
                     {
@@ -176,10 +172,10 @@ export default function FollowButton() {
         }
     };
 
-    return isLoading ? (
-        <div className="text-sm bg-gray-200 rounded-full px-4 py-1 mt-10 animate-pulse h-7 w-24"></div>
-    ) : isFollowing === null ? (
-        <div className="rounded-full px-4 py-1 mt-10 h-7 w-24"></div>
+    console.log('isFollowing', isFollowing);
+
+    return isLoading || isFollowing === null ? (
+        <div className="text-sm bg-gray-200 rounded-full px-4 py-1 mt-10 animate-pulse h-7 w-24" />
     ) : (
         <button
             className={`text-sm text-white bg-main-color rounded-full px-4 py-1 mt-10 ${
