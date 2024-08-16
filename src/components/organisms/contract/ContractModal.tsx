@@ -55,6 +55,8 @@ const ContractModal: React.FC<ContractModalProps> = ({
             );
             if (currentContracts) {
                 currentContracts.contract_isPending = false;
+                currentContracts.contract_validate_date =
+                    new Date().toISOString();
                 // console.log('currentContracts ====>', currentContracts);
                 mutateContract(currentContracts);
             }
