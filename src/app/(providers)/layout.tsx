@@ -17,6 +17,7 @@ import { Metadata } from 'next';
 import { defaultMetaData } from '@/data/defaultMetaData';
 import { ModalProviderSetter } from '@/providers/ModalProvider';
 import { ModalProviderDefault } from '@/contexts/modal.context';
+import { UnreadMessagesProvider } from '@/contexts/unreadMessages.context';
 
 export const metadata: Metadata = defaultMetaData;
 
@@ -37,14 +38,16 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
             <HydrationBoundary state={dehydratedState}>
                 <ModalProviderDefault>
                     <AuthProvider>
-                        <Header />
-                        <MainSectionWrapper>
-                            <ModalProviderSetter>
-                                <MobileHeader />
-                                {children}
-                                <TapMenu />
-                            </ModalProviderSetter>
-                        </MainSectionWrapper>
+                        <UnreadMessagesProvider>
+                            <Header />
+                            <MainSectionWrapper>
+                                <ModalProviderSetter>
+                                    <MobileHeader />
+                                    {children}
+                                    <TapMenu />
+                                </ModalProviderSetter>
+                            </MainSectionWrapper>
+                        </UnreadMessagesProvider>
                     </AuthProvider>
                 </ModalProviderDefault>
             </HydrationBoundary>

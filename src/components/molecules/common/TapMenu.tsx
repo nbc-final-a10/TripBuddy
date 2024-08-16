@@ -5,11 +5,15 @@ import TapMenuButton from '@/components/atoms/common/TapMenuButton';
 import { usePathname } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 import { useAuth } from '@/hooks';
+import UnreadMessages from '@/components/atoms/chatpage/UnreadMessages';
+import useChatStore from '@/zustand/chat.store';
 
 const TapMenu: React.FC = () => {
     const { buddy } = useAuth();
     const pathname = usePathname();
     const buddy_id = buddy ? buddy.buddy_id : '';
+
+    const totalUnreadCount = useChatStore(state => state.getTotalUnreadCount());
 
     const hidden =
         pathname.startsWith('/chat/') ||

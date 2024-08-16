@@ -1,20 +1,19 @@
 'use client';
-
 import React, { useEffect, useState } from 'react';
 import supabase from '@/utils/supabase/client';
 import { ContractData } from '@/types/Chat.types';
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
-import { useAuth } from '@/hooks';
+import { useUnreadMessagesContext } from '@/contexts/unreadMessages.context';
 import ChatListItem from '@/components/molecules/chatpage/ChatListItem';
 import Link from 'next/link';
-import useChatStore from '@/zustand/chat.store';
+import { useAuth } from '@/hooks';
 
 const ChatList = () => {
     const { buddy: currentBuddy } = useAuth();
     const [chatData, setChatData] = useState<ContractData[]>([]);
     const [contractsExist, setContractsExist] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
-    const { setUnreadCount, getUnreadCount } = useChatStore();
+    const { totalUnreadCount, fetchUnreadCounts } = useUnreadMessagesContext();
 
     useEffect(() => {
         const fetchChatData = async () => {
@@ -41,27 +40,6 @@ const ChatList = () => {
                 const tripIds = contracts.map(
                     contract => contract.contract_trip_id,
                 );
-
-                const { data: unreadCounts, error: unreadCountsError } =
-                    await supabase.rpc('get_unread_counts', {
-                        current_buddy_id: currentBuddy.buddy_id,
-                    });
-
-                if (unreadCountsError) throw unreadCountsError;
-
-                if (unreadCounts) {
-                    unreadCounts.forEach(
-                        ({
-                            contract_trip_id,
-                            unread_count,
-                        }: {
-                            contract_trip_id: string;
-                            unread_count: number;
-                        }) => {
-                            setUnreadCount(contract_trip_id, unread_count);
-                        },
-                    );
-                }
 
                 // Fetch other related data (buddies, trips, etc.)
                 const { data: allBuddies, error: allBuddiesError } =
@@ -138,7 +116,7 @@ const ChatList = () => {
                         contract_buddies_profiles: buddyProfiles,
                         last_message_content: '채팅을 시작해보세요',
                         last_message_time: '',
-                        unread_count: getUnreadCount(contract_trip_id),
+                        unread_count: totalUnreadCount, // Use totalUnreadCount from context
                     });
                 });
 
@@ -212,75 +190,19 @@ const ChatList = () => {
             .on(
                 'postgres_changes',
                 { event: 'INSERT', schema: 'public', table: 'messages' },
-                payload => {
-                    const newMessage = payload.new as {
-                        message_trip_id: string;
-                        message_content: string;
-                        message_created_at: string;
-                    };
-
-                    setChatData(prevData =>
-                        prevData.map(chat => {
-                            if (
-                                chat.contract_trip_id ===
-                                newMessage.message_trip_id
-                            ) {
-                                return {
-                                    ...chat,
-                                    last_message_content:
-                                        newMessage.message_content,
-                                    last_message_time: new Date(
-                                        newMessage.message_created_at,
-                                    ).toLocaleTimeString('en-GB', {
-                                        hour: '2-digit',
-                                        minute: '2-digit',
-                                    }),
-                                };
-                            }
-                            return chat;
-                        }),
-                    );
+                async () => {
+                    await fetchChatData();
                 },
             )
             .subscribe();
+
         const readUpdateSubscription = supabase
             .channel('chat-room')
             .on(
                 'postgres_changes',
                 { event: 'UPDATE', schema: 'public', table: 'contract' },
-                async payload => {
-                    const updatedContract = payload.new as {
-                        contract_trip_id: string;
-                        contract_last_message_read: string;
-                    };
-
-                    // Update unread count based on contract changes
-                    const { data: unreadCounts, error: unreadCountsError } =
-                        await supabase.rpc('get_unread_counts', {
-                            current_buddy_id: currentBuddy?.buddy_id,
-                        });
-
-                    if (unreadCountsError) {
-                        console.error(
-                            'Error fetching unread counts:',
-                            unreadCountsError,
-                        );
-                        return;
-                    }
-
-                    if (unreadCounts) {
-                        unreadCounts.forEach(
-                            ({
-                                contract_trip_id,
-                                unread_count,
-                            }: {
-                                contract_trip_id: string;
-                                unread_count: number;
-                            }) => {
-                                setUnreadCount(contract_trip_id, unread_count);
-                            },
-                        );
-                    }
+                async () => {
+                    await fetchChatData();
                 },
             )
             .subscribe();
@@ -289,7 +211,7 @@ const ChatList = () => {
             messageSubscription.unsubscribe();
             readUpdateSubscription.unsubscribe();
         };
-    }, [currentBuddy, setUnreadCount, getUnreadCount]);
+    });
 
     if (isLoading) {
         return <DefaultLoader />;
@@ -321,6 +243,7 @@ const ChatList = () => {
                         }
                         last_message_content={chat.last_message_content}
                         last_message_time={chat.last_message_time}
+                        unread_count={chat.unread_count} // Pass unread_count to ChatListItem
                     />
                 ))}
             </div>
