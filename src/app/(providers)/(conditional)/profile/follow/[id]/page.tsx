@@ -18,8 +18,8 @@ function FollowPage() {
     const { id: clickedBuddyId } = useParams<{ id: string }>();
     const [followData, setFollowData] = useState<FollowData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const [followingList, setFollowingList] = useState<FollowData[]>([]);
-    const [followerList, setFollowerList] = useState<FollowData[]>([]);
+    const [followingList, setFollowingList] = useState<string[]>([]); // 여기서는 ID 값만 저장
+    const [followerList, setFollowerList] = useState<string[]>([]); // 여기서는 ID 값만 저장
 
     useEffect(() => {
         const fetchFollowingData = async () => {
@@ -50,12 +50,14 @@ function FollowPage() {
     }, [clickedBuddyId]);
 
     useEffect(() => {
-        const newFollowingList = followData.filter(
-            data => data.follow_following_id === clickedBuddyId,
-        );
-        const newFollowerList = followData.filter(
-            data => data.follow_follower_id === clickedBuddyId,
-        );
+        const newFollowingList = followData
+            .filter(data => data.follow_following_id === clickedBuddyId)
+            .map(data => data.follow_follower_id);
+
+        const newFollowerList = followData
+            .filter(data => data.follow_follower_id === clickedBuddyId)
+            .map(data => data.follow_following_id);
+
         setFollowingList(newFollowingList);
         setFollowerList(newFollowerList);
     }, [followData, clickedBuddyId]);

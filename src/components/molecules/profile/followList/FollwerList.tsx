@@ -3,7 +3,7 @@ import { Buddy } from '@/types/Auth.types';
 import React from 'react';
 
 type FollowerListProps = {
-    followerList: FollowData[];
+    followerList: string[];
 };
 
 function FollowerList({ followerList }: FollowerListProps) {
