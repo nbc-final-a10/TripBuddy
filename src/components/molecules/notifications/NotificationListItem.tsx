@@ -47,17 +47,13 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
             };
             mutateNotification(updatedNotification);
         }
-        router.push(url);
+        window.location.href = url; // 알림 누르면 unread 반영되기 위해 새로고침 되도록 임시 설정
     };
 
     return (
         <li>
             <div
-                className={`xl:rounded-[16px] flex px-[20px] py-[12px] gap-[10px] cursor-pointer ${
-                    notification.notification_isRead
-                        ? 'bg-white'
-                        : 'bg-primary-color-100'
-                }`}
+                className="bg-white rounded-[16px] flex px-[20px] py-[12px] gap-[10px] cursor-pointer xl:bg-grayscale-color-70"
                 onClick={handleClick}
             >
                 <div>

@@ -23,7 +23,7 @@ const NotificationsListMobile = () => {
     );
 
     return (
-        <ul className="flex flex-col xl:gap-[10px]">
+        <ul className="my-[20px] xl:my-0 flex flex-col xl:gap-[10px]">
             {allNotifications.map(notification => (
                 <NotificationListItem
                     key={notification.notification_id}

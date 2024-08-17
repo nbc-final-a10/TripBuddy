@@ -20,7 +20,8 @@ const HeaderMyPageLink: React.FC = () => {
             )}
             {!buddy_id && <Link href="/signup">JOIN</Link>}
 
-            <NotificationButton />
+            {buddy_id && <NotificationButton />}
+
             <Link href={buddy_id ? `/profile/${buddy_id}` : '/login'}>
                 <MyPageIcon
                     className={
