@@ -46,7 +46,7 @@ const NotificationsListDesktop = () => {
 
     return (
         <div>
-            <ul className="flex flex-col xl:gap-[10px]">
+            <ul className="flex flex-col gap-[18px]">
                 {currentNotifications.map(notification => (
                     <NotificationListItem
                         key={notification.notification_id}
@@ -54,7 +54,7 @@ const NotificationsListDesktop = () => {
                     />
                 ))}
             </ul>
-            <div className="w-full justify-center items-center hidden xl:flex mt-4">
+            <div className="w-full justify-center items-center flex mt-4">
                 <div className="flex justify-center items-center gap-3">
                     <div
                         className={`text-2xl ${currentPage === 1 ? 'text-grayscale-color-300 cursor-default' : 'text-grayscale-color-800 cursor-pointer'}`}

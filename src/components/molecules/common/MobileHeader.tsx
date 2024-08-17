@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import Arrow_Back from '../../../../public/svg/Arrow_back.svg';
 import Close from '../../../../public/svg/Close.svg';
-import Notification from '../../../../public/svg/Alarm.svg';
 import Search from '../../../../public/svg/HomeSearch.svg';
 import MobileHeaderSettingsButton from '@/components/atoms/common/MobileHeaderSettingsButton';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -132,14 +131,7 @@ const MobileHeader: React.FC = () => {
                         className="cursor-pointer"
                     />
                 )}
-                {isTrips && (
-                    <div
-                        onClick={() => router.push('/notifications')}
-                        className="cursor-pointer relative"
-                    >
-                        <NotificationButton />
-                    </div>
-                )}
+                {isTrips && <NotificationButton />}
                 {isProfile && uuid && (
                     <MobileHeaderSettingsButton uuid={uuid} />
                 )}
