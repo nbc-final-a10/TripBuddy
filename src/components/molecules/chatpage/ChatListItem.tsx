@@ -46,7 +46,7 @@ const ChatListItem: React.FC<ContractData> = ({
                         {trip_title}
                     </p>
                     <p className="text-[14px] font-medium text-grayscale-color-500">
-                        {last_message_content || 'No messages yet'}
+                        {last_message_content || '채팅을 시작해보세요'}
                     </p>
                 </div>
                 <div className="flex flex-col justify-between">

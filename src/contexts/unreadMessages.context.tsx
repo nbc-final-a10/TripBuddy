@@ -9,14 +9,10 @@ import React, {
 import supabase from '@/utils/supabase/client';
 import useChatStore from '@/zustand/chat.store';
 import { useAuth } from '@/hooks';
-
-type UnreadCount = {
-    contract_trip_id: string;
-    unread_count: number;
-};
+import { UnreadCount } from '@/types/UnreadCount.types';
 
 type UnreadMessagesContextType = {
-    totalUnreadCount: number;
+    contractUnreadCounts: Record<string, number>;
     fetchUnreadCounts: () => void;
 };
 
@@ -29,12 +25,15 @@ export const UnreadMessagesProvider: React.FC<{
 }> = ({ children }) => {
     const { buddy: currentBuddy } = useAuth();
     const { setUnreadCount } = useChatStore();
-    const [totalUnreadCount, setTotalUnreadCount] = useState<number>(0);
-
+    const [contractUnreadCounts, setContractUnreadCounts] = useState<
+        Record<string, number>
+    >({});
     const fetchUnreadCounts = useCallback(async () => {
+        if (!currentBuddy?.buddy_id) return;
+
         try {
             const { data, error } = await supabase.rpc('get_unread_counts', {
-                current_buddy_id: currentBuddy?.buddy_id,
+                current_buddy_id: currentBuddy.buddy_id,
             });
 
             if (error) {
@@ -42,14 +41,14 @@ export const UnreadMessagesProvider: React.FC<{
                 return;
             }
 
-            const unreadCounts: UnreadCount[] = data as UnreadCount[];
-            let total = 0;
+            const unreadCounts: UnreadCount[] = data || [];
+            let updatedUnreadCounts: Record<string, number> = {};
             unreadCounts.forEach(({ contract_trip_id, unread_count }) => {
                 setUnreadCount(contract_trip_id, unread_count);
-                total += unread_count;
+                updatedUnreadCounts[contract_trip_id] = unread_count;
             });
 
-            setTotalUnreadCount(total);
+            setContractUnreadCounts(updatedUnreadCounts);
         } catch (error) {
             console.error('Error fetching unread counts:', error);
         }
@@ -58,37 +57,42 @@ export const UnreadMessagesProvider: React.FC<{
     useEffect(() => {
         fetchUnreadCounts();
 
-        const messageSubscription = supabase
+        const messagesSubscription = supabase
             .channel('chat-room')
             .on(
                 'postgres_changes',
-                { event: 'INSERT', schema: 'public', table: 'messages' },
-                async () => {
-                    await fetchUnreadCounts(); // Re-fetch counts when a new message arrives
+                { event: '*', schema: 'public', table: 'messages' },
+                () => {
+                    fetchUnreadCounts();
                 },
             )
-            .subscribe();
-
-        const readUpdateSubscription = supabase
-            .channel('chat-room')
-            .on(
-                'postgres_changes',
-                { event: 'UPDATE', schema: 'public', table: 'contract' },
-                async () => {
-                    await fetchUnreadCounts(); // Re-fetch counts when a contract is updated
-                },
-            )
+            // contract 변경이 실시간 감지가 안 돼서.. 채팅방에서 나가면 새로고침 하는 거로 임시로 작성
+            // .on(
+            //     'postgres_changes',
+            //     {
+            //         event: 'UPDATE',
+            //         schema: 'public',
+            //         table: 'contract',
+            //     },
+            //     payload => {
+            //         if (
+            //             payload.new.contract_last_message_read !==
+            //             payload.old.contract_last_message_read
+            //         ) {
+            //             fetchUnreadCounts();
+            //         }
+            //     },
+            // )
             .subscribe();
 
         return () => {
-            messageSubscription.unsubscribe();
-            readUpdateSubscription.unsubscribe();
+            messagesSubscription.unsubscribe();
         };
     }, [fetchUnreadCounts]);
 
     return (
         <UnreadMessagesContext.Provider
-            value={{ totalUnreadCount, fetchUnreadCounts }}
+            value={{ contractUnreadCounts, fetchUnreadCounts }}
         >
             {children}
         </UnreadMessagesContext.Provider>

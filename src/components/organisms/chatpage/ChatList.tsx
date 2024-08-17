@@ -7,13 +7,15 @@ import { useUnreadMessagesContext } from '@/contexts/unreadMessages.context';
 import ChatListItem from '@/components/molecules/chatpage/ChatListItem';
 import Link from 'next/link';
 import { useAuth } from '@/hooks';
+import { getTimeSinceUpload } from '@/utils/common/getTimeSinceUpload';
+import { getTimeIfDateIsToday } from '@/utils/common/getTimeIfDateIsToday';
 
 const ChatList = () => {
     const { buddy: currentBuddy } = useAuth();
     const [chatData, setChatData] = useState<ContractData[]>([]);
     const [contractsExist, setContractsExist] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
-    const { totalUnreadCount, fetchUnreadCounts } = useUnreadMessagesContext();
+    const { contractUnreadCounts } = useUnreadMessagesContext();
 
     useEffect(() => {
         const fetchChatData = async () => {
@@ -41,7 +43,6 @@ const ChatList = () => {
                     contract => contract.contract_trip_id,
                 );
 
-                // Fetch other related data (buddies, trips, etc.)
                 const { data: allBuddies, error: allBuddiesError } =
                     await supabase
                         .from('contract')
@@ -114,9 +115,10 @@ const ChatList = () => {
                         contract_trip_id,
                         trip_title: tripTitleMap[contract_trip_id] || '',
                         contract_buddies_profiles: buddyProfiles,
-                        last_message_content: '채팅을 시작해보세요',
+                        last_message_content: '',
                         last_message_time: '',
-                        unread_count: totalUnreadCount, // Use totalUnreadCount from context
+                        unread_count:
+                            contractUnreadCounts[contract_trip_id] || 0,
                     });
                 });
 
@@ -162,16 +164,22 @@ const ChatList = () => {
                         if (contractData) {
                             contractData.last_message_content =
                                 message.message_content;
-                            contractData.last_message_time = new Date(
-                                message.message_created_at,
-                            ).toLocaleTimeString('en-GB', {
-                                hour: '2-digit',
-                                minute: '2-digit',
-                            });
+                            contractData.last_message_time =
+                                message.message_created_at;
                         }
                     });
 
-                    setChatData(Array.from(contractDataMap.values()));
+                    setChatData(
+                        Array.from(contractDataMap.values()).sort((a, b) => {
+                            const dateA = new Date(
+                                a.last_message_time || '1970-01-01T00:00:00Z',
+                            ).getTime();
+                            const dateB = new Date(
+                                b.last_message_time || '1970-01-01T00:00:00Z',
+                            ).getTime();
+                            return dateB - dateA;
+                        }),
+                    );
                 };
 
                 await fetchLastMessages();
@@ -184,34 +192,7 @@ const ChatList = () => {
         };
 
         fetchChatData();
-
-        const messageSubscription = supabase
-            .channel('chat-room')
-            .on(
-                'postgres_changes',
-                { event: 'INSERT', schema: 'public', table: 'messages' },
-                async () => {
-                    await fetchChatData();
-                },
-            )
-            .subscribe();
-
-        const readUpdateSubscription = supabase
-            .channel('chat-room')
-            .on(
-                'postgres_changes',
-                { event: 'UPDATE', schema: 'public', table: 'contract' },
-                async () => {
-                    await fetchChatData();
-                },
-            )
-            .subscribe();
-
-        return () => {
-            messageSubscription.unsubscribe();
-            readUpdateSubscription.unsubscribe();
-        };
-    });
+    }, [currentBuddy, contractUnreadCounts]);
 
     if (isLoading) {
         return <DefaultLoader />;
@@ -232,20 +213,26 @@ const ChatList = () => {
     } else {
         return (
             <div className="flex flex-col p-4">
-                {chatData.map(chat => (
-                    <ChatListItem
-                        key={chat.contract_id}
-                        contract_id={chat.contract_id}
-                        contract_trip_id={chat.contract_trip_id}
-                        trip_title={chat.trip_title}
-                        contract_buddies_profiles={
-                            chat.contract_buddies_profiles
-                        }
-                        last_message_content={chat.last_message_content}
-                        last_message_time={chat.last_message_time}
-                        unread_count={chat.unread_count} // Pass unread_count to ChatListItem
-                    />
-                ))}
+                {chatData.map(chat => {
+                    const lastMessageTime = chat.last_message_time
+                        ? getTimeIfDateIsToday(chat.last_message_time) ||
+                          getTimeSinceUpload(chat.last_message_time)
+                        : '';
+
+                    return (
+                        <ChatListItem
+                            key={chat.contract_id}
+                            contract_id={chat.contract_id}
+                            contract_trip_id={chat.contract_trip_id}
+                            trip_title={chat.trip_title}
+                            contract_buddies_profiles={
+                                chat.contract_buddies_profiles
+                            }
+                            last_message_content={chat.last_message_content}
+                            last_message_time={lastMessageTime}
+                        />
+                    );
+                })}
             </div>
         );
     }
