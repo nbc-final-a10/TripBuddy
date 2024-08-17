@@ -14,7 +14,7 @@ export default function SelectTripThemesPage({
 }: SelectTripThemesPageProps) {
     return (
         <div>
-            <div className="flex flex-col xl:flex-row">
+            <div className="flex flex-col xl:flex-row xl:items-center">
                 <div className="mb-10 xl:w-[40%]">
                     <Left2xlBoldText
                         className="xl:text-2xl"
@@ -22,11 +22,11 @@ export default function SelectTripThemesPage({
                     />
                     <LeftSmGrayText text="여정 테마를 3개 선택해주세요" />
                 </div>
-                <div className="mb-10 mx-2 xl:w-[60%]">
+                <div className="mb-10 mx-2 xl:w-[60%] xl:mb-0">
                     <PreferThemeToRender />
                 </div>
             </div>
-            <div className="mb-10 mx-2 flex flex-col xl:flex-row">
+            <div className="mb-10 mx-2 flex flex-col xl:flex-row xl:mt-10">
                 <div className="xl:w-[40%]">
                     <LeftXlBoldText
                         className="xl:text-xl"

@@ -21,9 +21,10 @@ export function useSelectSex() {
                         onClick={() => setWantedSex(value)}
                         className={twMerge(
                             'text-lg mx-2 px-4 py-1 xl:py-2 rounded-full',
+                            'xl:w-[100px]',
                             wantedSex === value
                                 ? 'bg-main-color text-white'
-                                : 'bg-gray-100',
+                                : 'bg-gray-200 text-gray-500 border-gray-200',
                         )}
                     >
                         {value}

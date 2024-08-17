@@ -29,7 +29,9 @@ export default function SelectAdditionalBuddyThemes({
 
     return (
         <div className="relative flex flex-col xl:flex-row">
-            <div className={twMerge('mb-2 xl:w-[40%]', isMini && 'mb-0')}>
+            <div
+                className={twMerge('mb-0 xl:mb-2 xl:w-[40%]', isMini && 'mb-0')}
+            >
                 <Left2xlBoldText
                     className="xl:text-xl"
                     text="원하는 버디즈의 특성을 알려주세요"

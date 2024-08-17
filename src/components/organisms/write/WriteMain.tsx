@@ -188,7 +188,7 @@ const WriteMain: React.FC = () => {
             )}
         >
             <ProgressIndicator
-                className="pt-0 h-[2%] xl:h-[5%]"
+                className="pt-1.5 h-[2%] xl:h-[5%]"
                 step={step}
                 counts={7}
             />
