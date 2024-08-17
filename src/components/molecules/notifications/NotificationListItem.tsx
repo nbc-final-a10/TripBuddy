@@ -53,7 +53,11 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
     return (
         <li>
             <div
-                className="flex px-[20px] py-[12px] gap-[10px] cursor-pointer"
+                className={`xl:rounded-[16px] flex px-[20px] py-[12px] gap-[10px] cursor-pointer ${
+                    notification.notification_isRead
+                        ? 'bg-white'
+                        : 'bg-primary-color-100'
+                }`}
                 onClick={handleClick}
             >
                 <div>

@@ -1,5 +1,5 @@
 'use client';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import NotificationListItem from '@/components/molecules/notifications/NotificationListItem';
 import { NotificationContext } from '@/contexts/notification.context';
 import { ClassifiedNotification } from '@/types/Notification.types';
@@ -16,19 +16,15 @@ const NotificationsList = () => {
         ...notifications.contracts,
     ];
 
-    const unreadNotifications = allNotifications.filter(
-        notification => !notification.notification_isRead,
-    );
-
-    unreadNotifications.sort(
+    allNotifications.sort(
         (a, b) =>
             new Date(b.notification_created_at).getTime() -
             new Date(a.notification_created_at).getTime(),
     );
 
     return (
-        <ul>
-            {unreadNotifications.map(notification => (
+        <ul className="flex flex-col xl:gap-[10px]">
+            {allNotifications.map(notification => (
                 <NotificationListItem
                     key={notification.notification_id}
                     notification={notification}
