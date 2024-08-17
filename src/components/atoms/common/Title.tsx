@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 import React from 'react';
 
-type O_TitleProps = {
+type TitleProps = {
     children: React.ReactNode;
     className?: string;
     align?: 'left' | 'center' | 'right';
 };
 
-const Title: React.FC<O_TitleProps> = ({
+const Title: React.FC<TitleProps> = ({
     children,
     className,
     align = 'center',

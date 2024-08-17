@@ -1,8 +1,8 @@
 import { getInfiniteTrips, getTrips } from '@/api-services/trips';
 import TripList from '@/components/organisms/trips/TripList';
 import {
-    QUERY_KEY_TRIP,
     QUERY_KEY_TRIP_INFINITE,
+    QUERY_KEY_TRIPS,
 } from '@/constants/query.constants';
 import {
     dehydrate,
@@ -12,6 +12,7 @@ import {
 import React, { Suspense } from 'react';
 import Loading from '../loading';
 import { TripInfiniteQueryResponse } from '@/types/Trips.types';
+import FloatingButton from '@/components/atoms/home/FloatingButton';
 
 const TripsPage: React.FC = async () => {
     const queryClient = new QueryClient();
@@ -29,7 +30,7 @@ const TripsPage: React.FC = async () => {
         pages: 1,
     });
     await queryClient.prefetchQuery({
-        queryKey: [QUERY_KEY_TRIP],
+        queryKey: [QUERY_KEY_TRIPS],
         queryFn: () => getTrips(),
     });
     const dehydratedState = dehydrate(queryClient);
@@ -37,6 +38,7 @@ const TripsPage: React.FC = async () => {
     return (
         <Suspense fallback={<Loading />}>
             <HydrationBoundary state={dehydratedState}>
+                <FloatingButton />
                 <TripList />
             </HydrationBoundary>
         </Suspense>

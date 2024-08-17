@@ -12,10 +12,19 @@ type OnBoardingInputProps = {
     ref: React.Ref<HTMLInputElement>;
     selectedMedia: string;
     setSelectedFile: (file: File | null) => void;
+    mode?: 'onboarding' | 'edit';
 };
 
 const OnBoardingProfileImage = forwardRef(
-    ({ buddy, selectedMedia, setSelectedFile }: OnBoardingInputProps, ref) => {
+    (
+        {
+            buddy,
+            selectedMedia,
+            setSelectedFile,
+            mode = 'onboarding',
+        }: OnBoardingInputProps,
+        ref,
+    ) => {
         const handleAddButtonClick = (
             e: React.MouseEvent<HTMLButtonElement>,
         ) => {
@@ -32,7 +41,9 @@ const OnBoardingProfileImage = forwardRef(
         return (
             <OnBoardingWrapper>
                 <OnBoardingInnerWrapper align="start">
-                    <Title align="left">프로필 이미지를 선택해주세요</Title>
+                    {mode === 'onboarding' && (
+                        <Title align="left">프로필 이미지를 선택해주세요</Title>
+                    )}
 
                     <div className="relative rounded-full border-4 border-main-color h-[100px] w-[100px] z-10 aspect-auto">
                         <Image

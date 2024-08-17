@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth } from '@/hooks/auth';
+import { useAuth } from '@/hooks';
 import Settings from '../../../../public/svg/Settings.svg';
 import { useRouter } from 'next/navigation';
 

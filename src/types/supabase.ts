@@ -93,21 +93,23 @@ export type Database = {
                     contract_isLeader: boolean;
                     contract_isPending: boolean;
                     contract_isValidate: boolean;
+                    contract_last_message_read: string | null;
                     contract_start_date: string;
                     contract_trip_id: string;
-                    contract_validate_date: string;
+                    contract_validate_date: string | null;
                 };
                 Insert: {
                     contract_buddy_id: string;
-                    contract_created_at: string;
+                    contract_created_at?: string;
                     contract_end_date: string;
-                    contract_id: string;
+                    contract_id?: string;
                     contract_isLeader: boolean;
                     contract_isPending: boolean;
                     contract_isValidate: boolean;
+                    contract_last_message_read?: string | null;
                     contract_start_date: string;
                     contract_trip_id: string;
-                    contract_validate_date: string;
+                    contract_validate_date?: string | null;
                 };
                 Update: {
                     contract_buddy_id?: string;
@@ -117,9 +119,10 @@ export type Database = {
                     contract_isLeader?: boolean;
                     contract_isPending?: boolean;
                     contract_isValidate?: boolean;
+                    contract_last_message_read?: string | null;
                     contract_start_date?: string;
                     contract_trip_id?: string;
-                    contract_validate_date?: string;
+                    contract_validate_date?: string | null;
                 };
                 Relationships: [
                     {
@@ -128,6 +131,13 @@ export type Database = {
                         isOneToOne: false;
                         referencedRelation: 'buddies';
                         referencedColumns: ['buddy_id'];
+                    },
+                    {
+                        foreignKeyName: 'contract_contract_last_message_read_fkey';
+                        columns: ['contract_last_message_read'];
+                        isOneToOne: false;
+                        referencedRelation: 'messages';
+                        referencedColumns: ['message_id'];
                     },
                     {
                         foreignKeyName: 'contract_contract_trip_id_foreign';
@@ -146,10 +156,10 @@ export type Database = {
                     follow_id: string;
                 };
                 Insert: {
-                    follow_created_at: string;
+                    follow_created_at?: string;
                     follow_follower_id: string;
                     follow_following_id: string;
-                    follow_id: string;
+                    follow_id?: string;
                 };
                 Update: {
                     follow_created_at?: string;
@@ -306,10 +316,10 @@ export type Database = {
                     story_overlay: Json;
                 };
                 Insert: {
-                    story_created_at: string;
-                    story_created_by: string;
-                    story_id: string;
-                    story_likes_counts: number;
+                    story_created_at?: string;
+                    story_created_by?: string;
+                    story_id?: string;
+                    story_likes_counts?: number;
                     story_media: string;
                     story_overlay: Json;
                 };
@@ -340,8 +350,8 @@ export type Database = {
                 };
                 Insert: {
                     storylikes_buddy_id: string;
-                    storylikes_created_at: string;
-                    storylikes_id: string;
+                    storylikes_created_at?: string;
+                    storylikes_id?: string;
                     storylikes_story_id: string;
                 };
                 Update: {
@@ -376,8 +386,8 @@ export type Database = {
                 };
                 Insert: {
                     bookmark_buddy_id: string;
-                    bookmark_created_at: string;
-                    bookmark_id: string;
+                    bookmark_created_at?: string;
+                    bookmark_id?: string;
                     bookmark_trip_id: string;
                 };
                 Update: {
@@ -431,13 +441,13 @@ export type Database = {
                 Insert: {
                     trip_bookmarks_counts?: number;
                     trip_content: string;
-                    trip_created_at: string;
+                    trip_created_at?: string;
                     trip_end_age: number;
                     trip_end_date: string;
                     trip_final_destination: string;
-                    trip_id: string;
-                    trip_isValidate: boolean;
-                    trip_master_id: string;
+                    trip_id?: string;
+                    trip_isValidate?: boolean;
+                    trip_master_id?: string;
                     trip_max_buddies_counts: number;
                     trip_meet_location: string;
                     trip_start_age: number;
@@ -478,11 +488,11 @@ export type Database = {
                 };
                 Relationships: [
                     {
-                        foreignKeyName: 'trips_trip_id_foreign';
-                        columns: ['trip_id'];
-                        isOneToOne: true;
-                        referencedRelation: 'contract';
-                        referencedColumns: ['contract_id'];
+                        foreignKeyName: 'trips_trip_master_id_fkey';
+                        columns: ['trip_master_id'];
+                        isOneToOne: false;
+                        referencedRelation: 'buddies';
+                        referencedColumns: ['buddy_id'];
                     },
                 ];
             };

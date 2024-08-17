@@ -1,9 +1,12 @@
 import { NextRequest } from 'next/server';
 
-export function getUserIdFromHeader(req: NextRequest): string | null {
+export function getUserIdAndModeFromHeader(
+    req: NextRequest,
+): { userId: string; mode: string } | null {
     const userId = req.headers.get('user');
-    if (!userId) {
+    const mode = req.headers.get('mode');
+    if (!userId || !mode) {
         return null;
     }
-    return userId;
+    return { userId, mode };
 }

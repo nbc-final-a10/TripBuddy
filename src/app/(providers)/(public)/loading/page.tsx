@@ -1,7 +1,7 @@
 'use client';
 
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
-import { useAuth } from '@/hooks/auth';
+import { useAuth } from '@/hooks';
 import React, { useEffect } from 'react';
 
 const LoadingPage: React.FC = () => {

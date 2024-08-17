@@ -4,16 +4,16 @@ import BuddyTemperature from '@/components/atoms/profile/BuddyTemperature';
 import MyTrips from '@/components/atoms/profile/MyTrips';
 import BuddyFollow from '@/components/molecules/profile/BuddyFollow';
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
-import { useAuth } from '@/hooks/auth';
+import { useAuth } from '@/hooks';
+import { useBuddyProfile } from '@/hooks/queries';
 import { ProfilePageProps } from '@/types/ProfileParams.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import React from 'react';
-import useBuddyProfile from '@/hooks/queries/useBuddyProfile';
 
 function ProfilePage({ params }: ProfilePageProps) {
     const { buddy, logOut } = useAuth();
 
-    const { data, isLoading, error } = useBuddyProfile(params.id);
+    const { data: clickedBuddy, isLoading, error } = useBuddyProfile(params.id);
 
     const handleLogOut = () => {
         logOut();
@@ -23,8 +23,6 @@ function ProfilePage({ params }: ProfilePageProps) {
     if (error) {
         return <div>버디 프로필을 가져오는 중 오류가 발생했습니다.</div>;
     }
-
-    const clickedBuddy = data?.buddies[0];
 
     return (
         <>

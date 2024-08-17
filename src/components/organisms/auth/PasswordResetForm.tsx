@@ -2,7 +2,7 @@
 
 import Input from '@/components/atoms/common/Input';
 import { SubmitButton } from '@/components/atoms/common/SubmitButton';
-import { useAuth } from '@/hooks/auth';
+import { useAuth } from '@/hooks';
 import { authValidation } from '@/utils/auth/validation';
 import { FormEvent } from 'react';
 

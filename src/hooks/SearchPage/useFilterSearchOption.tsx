@@ -6,7 +6,7 @@ import {
 import supabase from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 
-export function useFilteredTrips(filters: {
+export function useFilteredTrips(initialFilters: {
     searchInput: string;
     startDateTimestamp: string;
     endDateTimestamp: string;
@@ -18,48 +18,45 @@ export function useFilteredTrips(filters: {
     selectedThemes: string[];
     selectedBuddyThemes: string[];
 }) {
+    const [filters, setFilters] = useState(initialFilters);
     const [resultItems, setResultItems] = useState<TripWithContract[]>([]);
     const [allItems, setAllItems] = useState<TripWithContract[]>([]);
+    const [showAllItems, setShowAllItems] = useState(false);
 
     useEffect(() => {
         const fetchFilteredTrips = async () => {
-            const { data, error } = await supabase.from('trips').select('*');
+            const { data, error } = await supabase
+                .from('trips')
+                .select(
+                    '*, contract:contract!contract_contract_trip_id_foreign (*)',
+                );
             if (error) {
                 console.error('Fetch Error:', error.message);
                 return;
             }
 
-            let filteredItems = data as TripWithContract[];
+            const allData = data as TripWithContract[];
+            let filteredItems = [...allData];
 
-            // filters 객체 구조 분해하여 변수 사용
-            const {
-                searchInput,
-                startDateTimestamp,
-                endDateTimestamp,
-                thirdLevelLocation,
-                selectedGender,
-                startAge,
-                endAge,
-                selectedMeetingPlace,
-                selectedThemes,
-                selectedBuddyThemes,
-            } = filters;
+            console.log('필터 전 데이터: ', filteredItems);
 
-            if (searchInput) {
+            // 검색어
+            if (filters.searchInput) {
                 filteredItems = filteredItems.filter(
                     (item: TripWithContract) =>
                         item.trip_title
                             .toLowerCase()
-                            .includes(searchInput.toLowerCase()) ||
+                            .includes(filters.searchInput.toLowerCase()) ||
                         item.trip_content
                             .toLowerCase()
-                            .includes(searchInput.toLowerCase()),
+                            .includes(filters.searchInput.toLowerCase()),
                 );
             }
 
-            if (startDateTimestamp && endDateTimestamp) {
-                const startDate = new Date(startDateTimestamp);
-                const endDate = new Date(endDateTimestamp);
+            // 날짜
+            if (filters.startDateTimestamp && filters.endDateTimestamp) {
+                const startDate = new Date(filters.startDateTimestamp);
+                const endDate = new Date(filters.endDateTimestamp);
 
                 filteredItems = filteredItems.filter(
                     (item: TripWithContract) => {
@@ -73,55 +70,71 @@ export function useFilteredTrips(filters: {
                 );
             }
 
-            if (thirdLevelLocation !== null) {
+            // 장소
+            if (filters.thirdLevelLocation !== null) {
                 filteredItems = filteredItems.filter((item: TripWithContract) =>
                     item.trip_final_destination.includes(
-                        thirdLevelLocation as string,
+                        filters.thirdLevelLocation as string,
                     ),
                 );
             }
 
-            if (selectedGender) {
+            // 성별
+            if (filters.selectedGender) {
                 filteredItems = filteredItems.filter(
                     (item: TripWithContract) =>
-                        item.trip_wanted_sex === selectedGender,
+                        item.trip_wanted_sex === filters.selectedGender,
                 );
             }
 
-            if (selectedMeetingPlace) {
+            // 만남 장소
+            if (filters.selectedMeetingPlace) {
                 filteredItems = filteredItems.filter(
                     (item: TripWithContract) =>
-                        item.trip_meet_location === selectedMeetingPlace,
+                        item.trip_meet_location ===
+                        filters.selectedMeetingPlace,
                 );
             }
 
-            if (startAge !== undefined && endAge !== undefined) {
+            // 나이
+            if (
+                filters.startAge !== undefined &&
+                filters.endAge !== undefined
+            ) {
                 filteredItems = filteredItems.filter(
                     (item: TripWithContract) =>
-                        item.trip_start_age >= startAge &&
-                        item.trip_end_age <= endAge,
+                        item.trip_start_age >= filters.startAge &&
+                        item.trip_end_age <= filters.endAge,
                 );
             }
 
-            if (selectedThemes.length > 0) {
+            // 여정 테마
+            if (filters.selectedThemes.length > 0) {
                 filteredItems = filterAndSortTrips(
                     filteredItems,
-                    selectedThemes,
-                );
-            }
-            if (selectedBuddyThemes.length > 0) {
-                filteredItems = filterAndSortTripsBuddies(
-                    filteredItems,
-                    selectedBuddyThemes,
+                    filters.selectedThemes,
                 );
             }
 
-            setResultItems(filteredItems);
-            setAllItems(data as TripWithContract[]);
+            // 버디즈 성향
+            if (filters.selectedBuddyThemes.length > 0) {
+                filteredItems = filterAndSortTripsBuddies(
+                    filteredItems,
+                    filters.selectedBuddyThemes,
+                );
+            }
+
+            console.log('필터 후 데이터: ', filteredItems);
+
+            setResultItems(
+                filteredItems.length === 0 ? allData : filteredItems,
+            );
+            setAllItems(allData);
+            setShowAllItems(filteredItems.length === 0);
         };
 
         fetchFilteredTrips();
     }, [filters]);
 
-    return { resultItems, allItems };
+    return { resultItems, allItems, setFilters, showAllItems };
 }

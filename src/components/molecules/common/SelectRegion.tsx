@@ -1,10 +1,10 @@
 import LocationList from '@/components/atoms/write/LocationList';
 import LocationToggleButton from '@/components/atoms/write/LocationToggleButton';
-import locationData from '@/data/location';
 import { SecondLevel, ThirdLevel } from '@/types/Location.types';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import ThirdLevelSection from '../onboarding/ThirdLevelSection';
+import { useTapScroll } from '@/hooks';
 
 type SelectRegionProps = {
     actions: {
@@ -19,6 +19,7 @@ type SelectRegionProps = {
         thirdLevelLocation: string;
         secondLevelLocations: SecondLevel[];
     };
+    className?: string;
 } & React.RefAttributes<HTMLElement>;
 
 const SelectRegions = forwardRef<HTMLElement, SelectRegionProps>(
@@ -36,6 +37,7 @@ const SelectRegions = forwardRef<HTMLElement, SelectRegionProps>(
                 selectedSecondLevelLocations,
                 secondLevelLocations,
             },
+            className,
         },
         ref,
     ) => {
@@ -46,7 +48,7 @@ const SelectRegions = forwardRef<HTMLElement, SelectRegionProps>(
         }, []);
 
         return (
-            <>
+            <div className={twMerge('relative', className)}>
                 {/* 국내/해외 스위치 버튼 */}
                 <section className="relative h-[10%]">
                     <LocationToggleButton
@@ -82,7 +84,7 @@ const SelectRegions = forwardRef<HTMLElement, SelectRegionProps>(
                     secondLevelLocation={secondLevelLocation}
                     thirdLevelLocation={thirdLevelLocation}
                 />
-            </>
+            </div>
         );
     },
 );

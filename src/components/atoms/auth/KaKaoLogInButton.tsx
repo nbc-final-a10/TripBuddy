@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth } from '@/hooks/auth';
+import { useAuth } from '@/hooks';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { usePathname } from 'next/navigation';
 import React from 'react';

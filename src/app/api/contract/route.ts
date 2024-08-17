@@ -2,6 +2,8 @@ import { PostgrestError } from '@supabase/supabase-js';
 import { Contract, PartialContract } from '@/types/Contract.types';
 import { createClient } from '@/utils/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
+import { PartialBuddy } from '@/types/Auth.types';
+import { Trip } from '@/types/Trips.types';
 
 export async function POST(req: NextRequest) {
     const supabase = createClient();
@@ -10,7 +12,10 @@ export async function POST(req: NextRequest) {
         const payload: PartialContract = await req.json();
 
         // trip 데이터를 가져오기 위해 Supabase에서 trips 테이블을 조회
-        const { data: trip, error: tripError } = await supabase
+        const {
+            data: trip,
+            error: tripError,
+        }: { data: Trip | null; error: PostgrestError | null } = await supabase
             .from('trips')
             .select('*')
             .eq('trip_id', payload.contract_trip_id)
@@ -101,7 +106,7 @@ export async function POST(req: NextRequest) {
             contract_start_date: trip.trip_start_date,
             contract_end_date: trip.trip_end_date,
             contract_isLeader: false,
-            contract_isPending: true,
+            contract_isPending: payload.contract_isPending ?? false, // 다른사람이 참여할 경우에는 펜딩상태를 토글가능하게
             contract_isValidate: isValidate,
             contract_created_at: new Date().toISOString(),
         };
@@ -129,6 +134,47 @@ export async function POST(req: NextRequest) {
             return NextResponse.json(
                 { contract: null, error: '컨트랙트 생성 중 오류 발생' },
                 { status: 500 },
+            );
+        }
+
+        const {
+            data: buddy,
+            error: buddyError,
+        }: { data: PartialBuddy | null; error: PostgrestError | null } =
+            await supabase
+                .from('buddies')
+                .select('buddy_nickname')
+                .eq('buddy_id', payload.contract_buddy_id)
+                .single();
+
+        if (buddyError) {
+            return NextResponse.json(
+                { error: buddyError.message },
+                { status: 401 },
+            );
+        }
+
+        const {
+            data: notification,
+            error: notificationError,
+        }: { data: Notification | null; error: PostgrestError | null } =
+            await supabase
+                .from('notifications')
+                .insert([
+                    {
+                        notification_type: 'contract',
+                        notification_sender: payload.contract_buddy_id,
+                        notification_receiver: trip.trip_master_id,
+                        notification_content: `${buddy?.buddy_nickname}님이 참가 요청을 보냈어요!`,
+                    },
+                ])
+                .select()
+                .single();
+
+        if (notificationError) {
+            return NextResponse.json(
+                { error: notificationError.message },
+                { status: 401 },
             );
         }
 

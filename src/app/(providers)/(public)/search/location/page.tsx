@@ -4,7 +4,7 @@ import LocationSearchButton from '@/components/atoms/search/LocationSearchButton
 import SearchPageTitle from '@/components/atoms/search/SearchPageTitle';
 import SelectRegions from '@/components/molecules/common/SelectRegion';
 import SelectRegionPage from '@/components/organisms/write/SelectRegionPage';
-import useSelectRegion from '@/hooks/useSelectRegion';
+import { useSelectRegion } from '@/hooks';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 

@@ -1,28 +1,33 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Arrow_Back from '../../../../public/svg/Arrow_back.svg';
 import Close from '../../../../public/svg/Close.svg';
 import Notification from '../../../../public/svg/Alarm.svg';
 import Search from '../../../../public/svg/HomeSearch.svg';
 import MobileHeaderSettingsButton from '@/components/atoms/common/MobileHeaderSettingsButton';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useAuth } from '@/hooks/auth';
-import useTripQuery from '@/hooks/queries/useTripQuery';
+import { useAuth } from '@/hooks';
+import { useModal } from '@/contexts/modal.context';
+import { getTrip } from '@/api-services/trips';
+import { TripWithContract } from '@/types/Trips.types';
+import Link from 'next/link';
 
 const MobileHeader: React.FC = () => {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const router = useRouter();
     const { buddy } = useAuth();
-
+    const modal = useModal();
+    const [trip, setTrip] = useState<TripWithContract | null>(null);
     const uuidMatch = pathname.match(/\/([^\/]+)\/([0-9a-fA-F-]{36})$/);
     const uuid = uuidMatch ? uuidMatch[2] : null;
     const isMyProfile = uuid === buddy?.buddy_id;
 
+    const isOboardingEdit = searchParams.get('mode') === 'edit';
     const isTrips = pathname === '/trips';
     const isTripDetail = pathname.startsWith('/trips/');
-    const isStory = pathname.startsWith('/stories');
+    const isStory = pathname.startsWith('/stories/');
     const isChatId = pathname.startsWith('/chat/');
     const isChat = pathname === '/chat';
     const isLogin = pathname === '/login';
@@ -32,12 +37,13 @@ const MobileHeader: React.FC = () => {
     const isWrite = pathname === '/write';
     const isOnboarding = pathname === '/onboarding';
     const isProfile = pathname.startsWith('/profile/');
+    const isEditTrips = pathname.startsWith('/edit/trips');
     const isStoryWrite = pathname === '/write/story';
     const isLocation = pathname === '/search/location';
     const isDate = pathname === '/search/date';
     const isNotification = pathname === '/notifications';
 
-    const { data: trip } = useTripQuery(isTripDetail && uuid ? uuid : null);
+    // const { data: trip } = useTripQuery(isTripDetail && uuid ? uuid : null);
 
     const headerTitle =
         (isTrips && '모집중 여정') ||
@@ -46,16 +52,19 @@ const MobileHeader: React.FC = () => {
         (isLogin && '') ||
         (isSignup && '') ||
         (isSearch && '검색') ||
-        (isOnboarding && '온보딩') ||
+        (isLocation && '위치 검색') ||
+        (isDate && '날짜 선택') ||
+        (isOnboarding && !isOboardingEdit && '온보딩') ||
+        (isOnboarding && isOboardingEdit && '프로필 수정') ||
         (isProfile && isMyProfile && '마이페이지') ||
         (isProfile && !isMyProfile && '프로필') ||
-        (isStory && '스토리') ||
+        (isStory && '버디즈 스토리') ||
         (isStoryWrite && '스토리에 추가') ||
         (isChatId && '') ||
         (isChat && '채팅') ||
-        (isLocation && '위치 검색') ||
-        (isDate && '날짜 선택');
-    (isNotification && '알림') || (isRecover && '비밀번호 찾기');
+        (isNotification && '알림') ||
+        (isRecover && '비밀번호 찾기') ||
+        (isEditTrips && '');
 
     const isShow =
         isTrips ||
@@ -63,6 +72,8 @@ const MobileHeader: React.FC = () => {
         isLogin ||
         isSignup ||
         isSearch ||
+        isLocation ||
+        isDate ||
         isWrite ||
         isOnboarding ||
         isProfile ||
@@ -70,19 +81,35 @@ const MobileHeader: React.FC = () => {
         isStory ||
         isChatId ||
         isChat ||
-        isLocation ||
-        isDate;
-    isNotification || isRecover;
+        isNotification ||
+        isRecover ||
+        isEditTrips;
 
     const handleBack = () => {
         if (isRecover) {
             router.push('/login?mode=login');
         } else if (isLogin || isSignup) {
             router.push('/');
+        } else if (isEditTrips) {
+            router.push(`/trips/${uuid}`);
+            modal.closeModal();
         } else {
             router.back();
         }
     };
+
+    useEffect(() => {
+        if (!buddy || !isTripDetail) return;
+        async function fetchTrip() {
+            if (uuid) {
+                const trip = await getTrip(uuid);
+                if (trip.trip_master_id === buddy?.buddy_id) {
+                    setTrip(trip);
+                }
+            }
+        }
+        if (!isProfile) fetchTrip();
+    }, [uuid, isProfile, buddy, isTripDetail]);
 
     if (!isShow) return null;
 
@@ -114,17 +141,23 @@ const MobileHeader: React.FC = () => {
                     <MobileHeaderSettingsButton uuid={uuid} />
                 )}
                 {/** 수정페이지 구현하면 수정으로 가게 추후 수정 요망 */}
-                {isTripDetail &&
-                    trip &&
-                    trip.trip_master_id === buddy?.buddy_id && (
+                {trip && (
+                    <Link href={`/edit/trips/${trip.trip_id}`}>
                         <span>수정</span>
-                    )}
+                    </Link>
+                )}
                 {(isSearch || isWrite) && (
                     <Close
                         onClick={() => router.push('/trips')}
                         className="cursor-pointer fill-black"
                     />
                 )}
+                {/* {isEditTrips && (
+                    <Close
+                        onClick={() => modal.closeModal()}
+                        className="cursor-pointer fill-black"
+                    />
+                )} */}
             </div>
         </header>
     );

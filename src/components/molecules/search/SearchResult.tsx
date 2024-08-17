@@ -1,10 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import SearchPageTitle from '../../atoms/search/SearchPageTitle';
 import HomePageTrips from '../homepage/HomePageTrips';
-import useTapScroll from '@/hooks/useTapScroll';
 import { TripWithContract } from '@/types/Trips.types';
 import Image from 'next/image';
 import MascotImage from '@/components/atoms/common/MascotImage';
+import { useTapScroll } from '@/hooks';
 
 type SearchResultProps = {
     items: TripWithContract[];
@@ -30,8 +30,10 @@ const SearchResult: React.FC<SearchResultProps> = ({
 
     const filteredItems = items.slice(0, visibleFirstItems);
 
-    console.log('결과 items:', items);
-    console.log('결과 allTrips:', allTrips);
+    // useEffect(() => {
+    //     console.log('결과 items:', items);
+    //     console.log('결과 allTrips:', allTrips);
+    // }, [items, allTrips]);
 
     // 시작 날짜 기준으로 빠른 순으로 정렬
     // 검색 결과 여정은 제외
@@ -44,8 +46,8 @@ const SearchResult: React.FC<SearchResultProps> = ({
             );
         });
 
-    // console.log('filteredItems: ', filteredItems);
-    // console.log('sortItems: ', sortItems);
+    console.log('filteredItems: ', filteredItems);
+    console.log('sortItems: ', sortItems);
 
     return (
         <>

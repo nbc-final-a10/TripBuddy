@@ -2,8 +2,8 @@
 
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import StoryCard from '@/components/molecules/stories/StoryCard';
-import { useAuth } from '@/hooks/auth';
-import useStoriesQuery from '@/hooks/queries/useStoriesQuery';
+import { useAuth } from '@/hooks';
+import { useStoriesQuery } from '@/hooks/queries';
 import { StoryOverlay } from '@/types/Story.types';
 import groupStoriesByBuddyId from '@/utils/stories/groupStoriesByBuddyId';
 import React, { useMemo } from 'react';
@@ -36,7 +36,7 @@ const StoryList: React.FC = () => {
     // console.log(sortedStories);
 
     return (
-        <section className="w-[90%] grid grid-cols-2 place-items-center gap-y-4 overflow-hidden xl:grid-cols-4 mx-auto">
+        <section className="w-[92%] py-2 grid grid-cols-2 place-items-center gap-y-3 overflow-hidden xl:grid-cols-4 mx-auto xl:w-full">
             {sortedStories.map(story => (
                 <StoryCard
                     key={story.buddyId}

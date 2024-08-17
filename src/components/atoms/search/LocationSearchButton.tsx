@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 
 type LocationSearchMainPageProps = {
@@ -14,6 +14,8 @@ const LocationSearchButton: React.FC<LocationSearchMainPageProps> = ({
     location,
 }) => {
     const router = useRouter();
+    // const searchParams = useSearchParams();
+    // const location = searchParams.get{'location'}
 
     const handleClick = () => {
         // 현재 URL 쿼리 파라미터를 가져옴
@@ -27,9 +29,10 @@ const LocationSearchButton: React.FC<LocationSearchMainPageProps> = ({
 
         // 페이지를 이동할 때 쿼리 파라미터를 포함한다
         router.push(`/search/location?${currentQuery.toString()}`);
+        onClick();
     };
 
-    console.log(location);
+    // console.log('선택 장소: ', location);
 
     return (
         <div className="xl:w-[300px] bg-grayscale-color-85 py-1.5 pl-10 rounded-2xl flex box-border">

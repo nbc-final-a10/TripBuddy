@@ -1,13 +1,14 @@
 import { VariantProps, cva } from 'class-variance-authority';
 import Link from 'next/link';
 import React, { ComponentProps, forwardRef, PropsWithChildren } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 const buttonVariant = cva(
-    'border rounded font-semibold transition hover:brightness-90 active:brightness-75',
+    'rounded font-semibold transition hover:brightness-90 active:brightness-75',
     {
         variants: {
             intent: {
-                primary: 'border-main-color',
+                primary: 'bg-primary-color-400',
                 secondary: 'border-secondary-color',
                 danger: 'border-red-500',
                 onBoarding: 'w-[90%] h-[88px] bg-transparent font-semibold',
@@ -19,7 +20,7 @@ const buttonVariant = cva(
             },
             variant: {
                 selected: 'border-[#9E6B00] text-[#9E6B00]',
-                unselected: 'text-black',
+                unselected: 'text-white',
             },
         },
         compoundVariants: [
@@ -66,8 +67,8 @@ const buttonVariant = cva(
 type ButtonVariantType = VariantProps<typeof buttonVariant>;
 
 type ButtonProps = {
-    selected: boolean | null;
-    onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+    selected?: boolean | null;
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 } & ButtonVariantType &
     (
         | ({} & ComponentProps<'button'>)
@@ -79,9 +80,10 @@ const Button = forwardRef(
         {
             intent = 'primary',
             size = 'md',
-            selected,
+            selected = false,
             children,
             onClick,
+            className,
             ...props
         }: PropsWithChildren<ButtonProps>,
         ref,
@@ -89,11 +91,14 @@ const Button = forwardRef(
         if ('href' in props) {
             return (
                 <a
-                    className={buttonVariant({
-                        intent,
-                        size,
-                        variant: selected ? 'selected' : 'unselected',
-                    })}
+                    className={twMerge(
+                        buttonVariant({
+                            intent,
+                            size,
+                            variant: selected ? 'selected' : 'unselected',
+                        }),
+                        className,
+                    )}
                     {...props}
                 >
                     {children}
@@ -102,11 +107,14 @@ const Button = forwardRef(
         } else {
             return (
                 <button
-                    className={buttonVariant({
-                        intent,
-                        size,
-                        variant: selected ? 'selected' : 'unselected',
-                    })}
+                    className={twMerge(
+                        buttonVariant({
+                            intent,
+                            size,
+                            variant: selected ? 'selected' : 'unselected',
+                        }),
+                        className,
+                    )}
                     onClick={onClick}
                     {...props}
                 >

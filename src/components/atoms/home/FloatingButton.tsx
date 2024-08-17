@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth } from '@/hooks/auth';
+import { useAuth } from '@/hooks';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';

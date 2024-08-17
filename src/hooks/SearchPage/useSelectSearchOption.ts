@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import useSelectRegion from '../useSelectRegion';
+import { useSelectRegion } from '../common/useSelectRegion';
 
 // 날짜
 export function useDateRange(searchParams: URLSearchParams) {
@@ -35,15 +35,16 @@ export function useLocationSelection(searchParams: URLSearchParams) {
 
     useEffect(() => {
         const location = searchParams.get('location') || null;
+
         if (location) {
             handleThirdLevelClick(location);
             console.log('여정 장소: ', location);
         } else {
-            console.log('여정 장소 안옴');
+            // console.error('여정 장소 안옴');
         }
     }, [searchParams, handleThirdLevelClick]);
 
-    return { handleThirdLevelClick, thirdLevelLocation };
+    return { thirdLevelLocation, handleThirdLevelClick };
 }
 
 // 성별

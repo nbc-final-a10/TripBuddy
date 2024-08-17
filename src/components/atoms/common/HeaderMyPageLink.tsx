@@ -1,9 +1,9 @@
 'use client';
 
-import { useAuth } from '@/hooks/auth';
 import Link from 'next/link';
 import React from 'react';
 import MyPageIcon from '../../../../public/svg/mypageicon.svg';
+import { useAuth } from '@/hooks';
 
 const HeaderMyPageLink: React.FC = () => {
     const { buddy, logOut } = useAuth();
