@@ -1,8 +1,11 @@
+'use client';
+
 import Image from 'next/image';
 import React from 'react';
 import { getTimeSinceUpload } from '@/utils/common/getTimeSinceUpload';
 import { Notification } from '@/types/Notification.types';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useNotificationMutation } from '@/hooks/queries';
 
 interface NotificationListItemProps {
     notification: Notification;
@@ -14,12 +17,17 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
     const timeSinceUpload = getTimeSinceUpload(
         notification.notification_created_at,
     );
+    const router = useRouter();
+
+    const { mutate: mutateNotification, error: notificationError } =
+        useNotificationMutation();
 
     const getNotificationUrl = (notification: Notification) => {
         switch (notification.notification_type) {
             case 'follow':
                 return `/profile/${notification.notification_origin_id}`;
             case 'bookmark':
+                return `/trips/${notification.notification_origin_id}`;
             case 'contract':
                 return `/trips/${notification.notification_origin_id}`;
             case 'like':
@@ -31,9 +39,23 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
 
     const url = getNotificationUrl(notification);
 
+    const handleClick = async () => {
+        if (!notification.notification_isRead) {
+            const updatedNotification = {
+                ...notification,
+                notification_isRead: true,
+            };
+            mutateNotification(updatedNotification);
+        }
+        router.push(url);
+    };
+
     return (
         <li>
-            <Link href={url} className="flex px-[20px] py-[12px] gap-[10px]">
+            <div
+                className="flex px-[20px] py-[12px] gap-[10px] cursor-pointer"
+                onClick={handleClick}
+            >
                 <div>
                     <Image
                         src={'/images/mascot_main.webp'}
@@ -50,7 +72,7 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
                         {timeSinceUpload}
                     </p>
                 </div>
-            </Link>
+            </div>
         </li>
     );
 };

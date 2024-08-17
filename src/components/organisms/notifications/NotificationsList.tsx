@@ -16,7 +16,11 @@ const NotificationsList = () => {
         ...notifications.contracts,
     ];
 
-    allNotifications.sort(
+    const unreadNotifications = allNotifications.filter(
+        notification => !notification.notification_isRead,
+    );
+
+    unreadNotifications.sort(
         (a, b) =>
             new Date(b.notification_created_at).getTime() -
             new Date(a.notification_created_at).getTime(),
@@ -24,7 +28,7 @@ const NotificationsList = () => {
 
     return (
         <ul>
-            {allNotifications.map(notification => (
+            {unreadNotifications.map(notification => (
                 <NotificationListItem
                     key={notification.notification_id}
                     notification={notification}
