@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 type DateSearchMainPageProps = {
     defaultStartDate: string;
@@ -53,8 +53,8 @@ const DateSearchButton: React.FC<DateSearchMainPageProps> = ({
     const handleClick = () => {
         // URLSearchParams로 쿼리 파라미터 구성
         const query = new URLSearchParams();
-        if (defaultStartDate) query.set('startDate', defaultStartDate);
-        if (defaultEndDate) query.set('endDate', defaultEndDate);
+        if (startDate) query.set('startDate', startDate);
+        if (endDate) query.set('endDate', endDate);
         router.push(`/search/date?${query.toString()}`);
     };
 

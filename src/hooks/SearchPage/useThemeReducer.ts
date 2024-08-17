@@ -30,21 +30,18 @@ export function useThemeReducer() {
         React.Reducer<ThemeState, ThemeAction>
     >(themeReducer, initialState);
 
-    const setSelectedThemes: React.Dispatch<
-        React.SetStateAction<string[]>
-    > = value => {
-        if (typeof value === 'function') {
-            // value가 함수일 때
-            dispatch({
-                type: 'SET_THEMES',
-                payload: (value as (prevState: string[]) => string[])(
-                    state.selectedThemes,
-                ),
-            });
-        } else {
-            // value가 배열일 때
-            dispatch({ type: 'RESET_THEMES' });
-        }
+    const setSelectedThemes = (
+        value: string[] | ((prevState: string[]) => string[]),
+    ) => {
+        dispatch({
+            type: 'SET_THEMES',
+            payload:
+                typeof value === 'function'
+                    ? (value as (prevState: string[]) => string[])(
+                          state.selectedThemes,
+                      )
+                    : value,
+        });
     };
 
     const resetThemes = () => {

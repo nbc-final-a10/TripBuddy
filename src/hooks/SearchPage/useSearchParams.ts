@@ -1,8 +1,9 @@
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export function useUrlParams() {
     const searchParams = useSearchParams();
+    const router = useRouter();
     const [params, setParams] = useState(
         new URLSearchParams(searchParams.toString()),
     );
@@ -11,7 +12,6 @@ export function useUrlParams() {
         setParams(new URLSearchParams(searchParams.toString()));
     }, [searchParams]);
 
-    // 파라미터 업데이트 함수
     const updateParams = (
         newParams: Record<string, string | number | null>,
     ) => {
@@ -36,5 +36,21 @@ export function useUrlParams() {
         return { params, updateParams };
     };
 
-    return { params, updateParams };
+    // url 쿼리 파라미터 업데이트
+    const updateQueryParams = (
+        params: Record<string, string | number | null | string[]>,
+    ) => {
+        const query = new URLSearchParams();
+        for (const key in params) {
+            const value = params[key];
+            if (Array.isArray(value)) {
+                value.forEach(i => query.append(key, i));
+            } else if (value != null) {
+                query.set(key, String(value));
+            }
+        }
+        router.push(`/search?${query.toString()}`);
+    };
+
+    return { params, updateParams, updateQueryParams };
 }

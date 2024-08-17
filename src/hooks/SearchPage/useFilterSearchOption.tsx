@@ -1,3 +1,5 @@
+'use client';
+
 import { TripWithContract } from '@/types/Trips.types';
 import {
     filterAndSortTrips,
@@ -38,8 +40,6 @@ export function useFilteredTrips(initialFilters: {
             const allData = data as TripWithContract[];
             let filteredItems = [...allData];
 
-            console.log('필터 전 데이터: ', filteredItems);
-
             // 검색어
             if (filters.searchInput) {
                 filteredItems = filteredItems.filter(
@@ -68,6 +68,7 @@ export function useFilteredTrips(initialFilters: {
                         );
                     },
                 );
+                console.log('날짜: ', filteredItems);
             }
 
             // 장소
