@@ -12,6 +12,7 @@ export type ClassifiedNotification = {
     follows: Notification[];
     bookmarks: Notification[];
     contracts: Notification[];
+    [key: string]: Notification[];
 };
 
 export type Notification = Tables<'notifications'>;

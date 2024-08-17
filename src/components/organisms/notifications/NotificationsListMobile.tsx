@@ -4,7 +4,7 @@ import NotificationListItem from '@/components/molecules/notifications/Notificat
 import { NotificationContext } from '@/contexts/notification.context';
 import { ClassifiedNotification } from '@/types/Notification.types';
 
-const NotificationsList = () => {
+const NotificationsListMobile = () => {
     const { notifications } = useContext(NotificationContext) as {
         notifications: ClassifiedNotification;
     };
@@ -34,4 +34,4 @@ const NotificationsList = () => {
     );
 };
 
-export default NotificationsList;
+export default NotificationsListMobile;
