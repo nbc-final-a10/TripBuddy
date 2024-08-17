@@ -42,7 +42,7 @@ const HomePageContainer = () => {
     // if (queries.some(query => query.isPending)) return <DefaultLoader />;
 
     return (
-        <div className="rounded-t-[32px] bg-white p-4 z-10 relative">
+        <div className="rounded-t-[32px] bg-white px-5 py-4 z-10 relative">
             <HomePageSearchBar />
             <div className="mt-4 mb-2 relative z-10">
                 <HomePageTitle
@@ -109,7 +109,7 @@ const HomePageContainer = () => {
                 )}
             </div>
 
-            <div className="mt-4 mb-5 relative z-10">
+            <div className="mt-4 mb-5 relative z-10 h-fit">
                 <HomePageTitle
                     title="지금 모집중인 여정"
                     buttonText="전체보기"
@@ -117,7 +117,7 @@ const HomePageContainer = () => {
                     href="/trips"
                 />
                 <div
-                    className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
+                    className="relative h-fit overflow-x-scroll scrollbar-hidden flex gap-[10px] min-h-[215px] px-[1px]"
                     ref={tripsRef}
                 >
                     {upcomingTrips.length > 0 && (

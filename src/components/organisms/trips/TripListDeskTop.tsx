@@ -67,7 +67,7 @@ const TripListDesktop: React.FC = () => {
     if (!tripsData) return <div>No trips</div>;
 
     return (
-        <section className="w-full flex flex-col justify-center items-center h-[calc(100dvh-57px-76px)] pt-4 mb-10 xl:h-[calc(100dvh-100px)] xl:pt-0 xl:mb-0 xl:gap-6">
+        <section className="w-full flex flex-col justify-center items-center h-[calc(100dvh-57px-76px)] pt-4 mb-10 xl:h-[calc(100dvh-100px)] xl:pt-0 xl:mb-0 xl:gap-8">
             <div className="w-full justify-end items-center hidden xl:flex">
                 <button className="flex justify-between items-center border-1 border-black rounded-md p-1">
                     <select
