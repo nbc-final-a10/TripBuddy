@@ -12,6 +12,7 @@ import { useModal } from '@/contexts/modal.context';
 import { getTrip } from '@/api-services/trips';
 import { TripWithContract } from '@/types/Trips.types';
 import Link from 'next/link';
+import NotificationButton from '@/components/atoms/common/NotificationButton';
 
 const MobileHeader: React.FC = () => {
     const pathname = usePathname();
@@ -132,10 +133,12 @@ const MobileHeader: React.FC = () => {
                     />
                 )}
                 {isTrips && (
-                    <Notification
+                    <div
                         onClick={() => router.push('/notifications')}
-                        className="cursor-pointer"
-                    />
+                        className="cursor-pointer relative"
+                    >
+                        <NotificationButton />
+                    </div>
                 )}
                 {isProfile && uuid && (
                     <MobileHeaderSettingsButton uuid={uuid} />

@@ -1,10 +1,10 @@
 import { Tables } from './supabase';
-export type Notification = Tables<'notifications'>;
 
 export type PartialNotification = Partial<Notification>;
 
 export type NotificationContextType = {
     notifications: ClassifiedNotification | [];
+    hasNotification: boolean;
 };
 
 export type ClassifiedNotification = {
@@ -13,3 +13,5 @@ export type ClassifiedNotification = {
     bookmarks: Notification[];
     contracts: Notification[];
 };
+
+export type Notification = Tables<'notifications'>;
