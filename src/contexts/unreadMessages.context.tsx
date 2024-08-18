@@ -42,7 +42,7 @@ export const UnreadMessagesProvider: React.FC<{
                 console.error('Error fetching unread counts:', error);
                 return;
             }
-            console.log('data ====>', data);
+            // console.log('data ====>', data);
 
             const unreadCounts: UnreadCount[] = data || [];
             let updatedUnreadCounts: Record<string, number> = {};
@@ -73,7 +73,7 @@ export const UnreadMessagesProvider: React.FC<{
                 'postgres_changes',
                 { event: '*', schema: 'public', table: 'messages' },
                 payload => {
-                    console.log('payload ====>', payload);
+                    // console.log('payload ====>', payload);
                     fetchUnreadCounts();
                 },
             )
