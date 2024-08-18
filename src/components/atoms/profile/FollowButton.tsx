@@ -172,8 +172,6 @@ export default function FollowButton() {
         }
     };
 
-    console.log('isFollowing', isFollowing);
-
     return isLoading || isFollowing === null ? (
         <div className="text-sm bg-gray-200 rounded-full px-4 py-1 mt-10 animate-pulse h-7 w-24" />
     ) : (
