@@ -21,9 +21,6 @@ function TripCardSkeleton() {
 function BookmarkedTrips({ currentUserId }: BookmarkedTripsProps) {
     const { data, isPending } = useMyBookMarksQuery(currentUserId);
 
-    console.log('currentUserId', currentUserId);
-    console.log('bookmarkedTrips', data);
-
     return (
         <div>
             {isPending ? (
