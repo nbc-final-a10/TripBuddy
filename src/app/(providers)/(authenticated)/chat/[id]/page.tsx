@@ -11,7 +11,7 @@ const ChattingPage = () => {
     const { id } = params as { id: string };
 
     return (
-        <div className="bg-white">
+        <div className="bg-white xl:w-2/3 relative">
             <ChattingTitle id={id} />
             <ChatMessageList currentBuddy={currentBuddy} id={id} />
             <ChatMessageSend currentBuddy={currentBuddy} id={id} />

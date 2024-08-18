@@ -153,7 +153,7 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
         handleReadMessages();
     }, [messages, currentBuddy, id, isPageVisible]);
 
-    // Scroll to the bottom when messages change
+    // 스크롤 다운
     useEffect(() => {
         const scrollContainer = scrollRef.current;
         if (scrollContainer) {
@@ -172,7 +172,7 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
 
     return (
         <div
-            className="px-6 pb-12 h-[calc(100vh-150px)] overflow-y-auto scrollbar-hidden"
+            className="px-6 pt-4 pb-12 h-[calc(100vh-115px)] xl:h-[calc(100vh-157px)] overflow-y-auto scrollbar-hidden"
             ref={scrollRef}
         >
             {messages.map((message, index) => {

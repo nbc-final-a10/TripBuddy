@@ -27,7 +27,7 @@ const TapMenuButton: React.FC<TapMenuButtonProps> = ({
 
     return (
         <Link href={href}>
-            <button className="flex flex-col items-center justify-center w-full p-4 focus:outline-none relative">
+            <button className="flex flex-col items-center justify-center w-full h-full focus:outline-none relative">
                 {iconName === 'Home' && (
                     <Home
                         className={twMerge(

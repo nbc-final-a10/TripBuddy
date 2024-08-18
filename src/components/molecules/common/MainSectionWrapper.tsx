@@ -26,7 +26,7 @@ const MainSectionWrapper = ({ children }: MainSectionWrapperProps) => {
     return (
         <main
             className={twMerge(
-                'bg-slate-50 xl:bg-slate-50 h-auto min-h-dvh overflow-hidden xl:min-h-[calc(100dvh-100px)] xl:h-auto',
+                'bg-grayscale-color-50 xl:bg-grayscale-color-50 h-auto min-h-dvh overflow-hidden xl:min-h-[calc(100dvh-100px)] xl:h-auto',
                 pathname === '/tutorial' &&
                     'bg-white xl:bg-white xl:min-h-[calc(100dvh-100px)]',
                 pathname.startsWith('/stories/') &&
@@ -45,6 +45,7 @@ const MainSectionWrapper = ({ children }: MainSectionWrapperProps) => {
                         'xl:min-h-[calc(100dvh-100px)] xl:h-[calc(100dvh-100px)]',
                     pathname.startsWith('/stories/') &&
                         'xl:min-h-[calc(100dvh-100px)] xl:h-[calc(100dvh-100px)]',
+                    pathname.startsWith('/chat') && 'min-h-0',
                 )}
             >
                 {children}

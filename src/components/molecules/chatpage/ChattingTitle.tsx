@@ -35,9 +35,9 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
         fetchTripData();
     }, [id]);
     return (
-        <section className="relative">
-            <div className="border-y-[1px] border-gray-200 px-6 py-2 mb-4">
-                <div className="flex items-center">
+        <section className="relative border-y-[1px] h-[57px]">
+            <div className="border-gray-200 px-6 h-full">
+                <div className="h-full flex items-center">
                     <div className="w-[40px] h-[40px] overflow-hidden flex justify-center">
                         {tripData?.trip_thumbnail ? (
                             <Image
@@ -51,7 +51,7 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
                             <div className="w-[40px] h-[40px] bg-gray-200"></div>
                         )}
                     </div>
-                    <div className="h-[40px] px-3 flex flex-col justify-between">
+                    <div className="px-3 flex flex-col justify-between">
                         <p className="text-[16px] font-semibold text-grayscale-color-700">
                             {tripData?.trip_title}
                         </p>
