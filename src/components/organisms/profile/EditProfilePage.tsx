@@ -121,7 +121,10 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                     <button className="mt-2" onClick={handleDelete}>
                         프로필 사진 삭제
                     </button>
-                    <button className="mt-2" onClick={handleSubmit}>
+                    <button
+                        className="mt-2 bg-main-color text-white px-4 py-2 rounded-full"
+                        onClick={handleSubmit}
+                    >
                         프로필 사진 변경
                     </button>
                 </div>
