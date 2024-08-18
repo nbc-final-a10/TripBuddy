@@ -17,15 +17,6 @@ export async function GET(req: NextRequest) {
         );
     }
 
-    if (followingId === followerId) {
-        return NextResponse.json(
-            { message: '자기 자신은 팔로우 할 수 없습니다.' },
-            {
-                status: 200,
-            },
-        );
-    }
-
     const supabase = createClient();
 
     try {
@@ -66,6 +57,15 @@ export async function POST(req: NextRequest) {
     if (!followingId || !followerId) {
         return NextResponse.json(
             { message: '팔로잉 또는 팔로워 id가 조회되지 않았습니다.' },
+            {
+                status: 400,
+            },
+        );
+    }
+
+    if (followingId === followerId) {
+        return NextResponse.json(
+            { message: '자기 자신은 팔로우 할 수 없습니다.' },
             {
                 status: 400,
             },
