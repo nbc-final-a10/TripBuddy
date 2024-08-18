@@ -16,6 +16,7 @@ import Loading from '../loading';
 import { getBuddyTripStory } from '@/api-services/home';
 import { getUserFromHeader } from '@/utils/auth/getUserFromHeader';
 import { getContract } from '@/api-services/contracts';
+import FloatingButton from '@/components/atoms/home/FloatingButton';
 
 const HomePage: React.FC = async () => {
     const userId = getUserFromHeader();
@@ -46,6 +47,7 @@ const HomePage: React.FC = async () => {
                 <HydrationBoundary state={dehydratedState}>
                     <HomePageBanner />
                     <HomePageContainer />
+                    <FloatingButton />
                 </HydrationBoundary>
             </Suspense>
         </main>
