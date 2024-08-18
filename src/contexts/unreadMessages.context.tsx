@@ -13,6 +13,7 @@ import { UnreadCount } from '@/types/UnreadCount.types';
 
 type UnreadMessagesContextType = {
     contractUnreadCounts: Record<string, number>;
+    allUnreadCounts: number;
     fetchUnreadCounts: () => void;
 };
 
@@ -25,6 +26,7 @@ export const UnreadMessagesProvider: React.FC<{
 }> = ({ children }) => {
     const { buddy: currentBuddy } = useAuth();
     const { setUnreadCount } = useChatStore();
+    const [allUnreadCounts, setAllUnreadCounts] = useState<number>(0);
     const [contractUnreadCounts, setContractUnreadCounts] = useState<
         Record<string, number>
     >({});
@@ -40,7 +42,7 @@ export const UnreadMessagesProvider: React.FC<{
                 console.error('Error fetching unread counts:', error);
                 return;
             }
-            // console.log('data ====>', data);
+            console.log('data ====>', data);
 
             const unreadCounts: UnreadCount[] = data || [];
             let updatedUnreadCounts: Record<string, number> = {};
@@ -51,6 +53,12 @@ export const UnreadMessagesProvider: React.FC<{
 
             // console.log('updatedUnreadCounts ====>', updatedUnreadCounts);
             setContractUnreadCounts(updatedUnreadCounts);
+
+            const totalUnreadCount = Object.values(updatedUnreadCounts).reduce(
+                (a, b) => a + b,
+                0,
+            );
+            setAllUnreadCounts(totalUnreadCount);
         } catch (error) {
             console.error('Error fetching unread counts:', error);
         }
@@ -64,7 +72,8 @@ export const UnreadMessagesProvider: React.FC<{
             .on(
                 'postgres_changes',
                 { event: '*', schema: 'public', table: 'messages' },
-                () => {
+                payload => {
+                    console.log('payload ====>', payload);
                     fetchUnreadCounts();
                 },
             )
@@ -93,7 +102,11 @@ export const UnreadMessagesProvider: React.FC<{
 
     return (
         <UnreadMessagesContext.Provider
-            value={{ contractUnreadCounts, fetchUnreadCounts }}
+            value={{
+                contractUnreadCounts,
+                allUnreadCounts,
+                fetchUnreadCounts,
+            }}
         >
             {children}
         </UnreadMessagesContext.Provider>

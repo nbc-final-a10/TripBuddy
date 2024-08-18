@@ -10,7 +10,7 @@ import {
 import { getTimeSinceUpload } from '@/utils/common/getTimeSinceUpload';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -32,6 +32,7 @@ const StoryCard: React.FC<StoryCardProps> = ({
     isMain = false,
 }) => {
     const pathname = usePathname();
+    const router = useRouter();
 
     return (
         <div
@@ -79,6 +80,9 @@ const StoryCard: React.FC<StoryCardProps> = ({
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="rounded-full object-cover"
+                    onClick={() =>
+                        router.push(`/profile/${story.buddies.buddy_id}`)
+                    }
                 />
                 {mode === 'my' && <AddButtonSmall />}
             </div>
