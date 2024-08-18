@@ -42,6 +42,7 @@ const MobileHeader: React.FC = () => {
     const isLocation = pathname === '/search/location';
     const isDate = pathname === '/search/date';
     const isNotification = pathname === '/notifications';
+    const isRanking = pathname === '/rank';
 
     // const { data: trip } = useTripQuery(isTripDetail && uuid ? uuid : null);
 
@@ -64,7 +65,8 @@ const MobileHeader: React.FC = () => {
         (isChat && '여정채팅') ||
         (isNotification && '알림') ||
         (isRecover && '비밀번호 찾기') ||
-        (isEditTrips && '');
+        (isEditTrips && '') ||
+        (isRanking && '버디즈');
 
     const isShow =
         isTrips ||
@@ -83,6 +85,7 @@ const MobileHeader: React.FC = () => {
         isChat ||
         isNotification ||
         isRecover ||
+        isRanking ||
         isEditTrips;
 
     const handleBack = () => {

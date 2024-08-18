@@ -96,7 +96,7 @@ function FollowHeartButton({
         <>
             {hasRank && !isOwnCard && (
                 <button
-                    className="absolute top-0 right-0 text-xl mr-1 mt-1"
+                    className="absolute top-0 right-0 text-xl mr-2 mt-1"
                     onClick={handleFollowToggle}
                     disabled={isButtonDisabled}
                 >

@@ -42,7 +42,7 @@ export default function BuddyProfile({
             )}
         >
             <div
-                className={`flex items-center ${!currentBuddy && mode === 'default' && 'blur-sm'}`}
+                className={`flex items-center gap-4 ${!currentBuddy && mode === 'default' && 'blur-sm'}`}
             >
                 <div className="flex flex-col items-center">
                     <Image

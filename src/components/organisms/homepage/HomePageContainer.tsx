@@ -53,7 +53,7 @@ const HomePageContainer = () => {
                     href="/rank"
                 />
                 <div
-                    className="relative overflow-x-scroll scrollbar-hidden flex gap-[10px] h-[60%]"
+                    className="relative overflow-x-scroll scrollbar-hidden flex gap-[16px] h-[60%]"
                     ref={buddiesRef}
                 >
                     {buddies.data?.buddies && (
@@ -88,7 +88,7 @@ const HomePageContainer = () => {
                     href="/stories"
                 />
                 <div
-                    className="overflow-x-scroll scrollbar-hidden relative flex gap-[10px] z-10"
+                    className="overflow-x-scroll scrollbar-hidden relative flex gap-[16px] z-10"
                     ref={storiesRef}
                 >
                     {stories.data?.stories && (
@@ -121,7 +121,7 @@ const HomePageContainer = () => {
                     className="relative mt-0 mb-0 h-[25%]"
                 />
                 <div
-                    className="relative overflow-x-scroll scrollbar-hidden flex gap-[10px] min-h-[215px] px-[1px] h-[75%]"
+                    className="relative overflow-x-scroll scrollbar-hidden flex gap-[16px] min-h-[215px] px-[1px] h-[75%]"
                     ref={tripsRef}
                 >
                     {upcomingTrips.length > 0 && (
