@@ -57,19 +57,20 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
         <section className="relative border-y-[1px] h-[57px] bg-white">
             <div className="border-gray-200 px-6 h-full">
                 <div className="h-full flex items-center">
-                    <div className="w-[40px] h-[40px] overflow-hidden flex justify-center">
+                    <div className="w-[40px] h-[40px] xl:w-auto xl:h-[40px] xl:min-w-[40px] flex justify-center overflow-hidden">
                         {tripData?.trip_thumbnail ? (
                             <Image
                                 src={tripData.trip_thumbnail}
                                 width={40}
                                 height={40}
                                 alt="Trip Thumbnail"
-                                className="object-cover"
+                                className="object-cover xl:w-auto xl:h-full"
                             />
                         ) : (
                             <div className="w-[40px] h-[40px] bg-gray-200"></div>
                         )}
                     </div>
+
                     <div className="px-3 flex flex-col justify-between">
                         <p className="text-[16px] font-semibold text-grayscale-color-700">
                             {tripData?.trip_title}
