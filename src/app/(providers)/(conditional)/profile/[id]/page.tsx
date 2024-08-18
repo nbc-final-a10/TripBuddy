@@ -9,7 +9,6 @@ import { useBuddyProfile } from '@/hooks/queries';
 import { useFollowCountQuery } from '@/hooks/queries/buddy/useGetFollowCounts';
 import { ProfilePageProps } from '@/types/ProfileParams.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 

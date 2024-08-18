@@ -9,7 +9,7 @@ import WelcomePage from '@/components/organisms/write/WelcomePage';
 import React, { useEffect, useState } from 'react';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import WriteTrip from '@/components/organisms/write/WriteTrip';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { validateStep } from '@/utils/write/validateStep';
 import SuccessNotificationPage from '@/components/organisms/write/SuccessNotificationPage';
 import { twMerge } from 'tailwind-merge';
@@ -45,6 +45,7 @@ const WriteMain: React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
     const [isMini, setIsMini] = useState<boolean>(false);
+    const searchParams = useSearchParams();
 
     const {
         mutateAsync: postTrip,
@@ -81,7 +82,7 @@ const WriteMain: React.FC = () => {
     const { startAge, endAge, handleStartAge, handleEndAge } = useSelectAges();
     const { meetPlace, SelectMeetPlaceButton } = useSelectMeetPlace();
 
-    const { NextButton, step } = useNextButton({
+    const { NextButton, step, setStep } = useNextButton({
         buttonText: buttonText[stepToDisplay],
         limit: 6,
         validateStep: () =>
@@ -179,6 +180,18 @@ const WriteMain: React.FC = () => {
             showAlert('error', postTripError.message);
         }
     }, [postTripError]);
+
+    useEffect(() => {
+        if (step === stepToDisplay && step <= 5) {
+            router.push(`/write?funnel=${step}`);
+            setStepToDisplay(step);
+        }
+    }, [step, router, stepToDisplay]);
+
+    useEffect(() => {
+        const funnel = searchParams.get('funnel');
+        if (funnel) setStep(Number(funnel));
+    }, [searchParams, setStep]);
 
     return (
         <div
