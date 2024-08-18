@@ -57,6 +57,7 @@ function ProfilePage({ params }: ProfilePageProps) {
                 />
             </section>
 
+            {/* TODO: 팔로잉, 팔로워 깜빡임 제거 : 로딩 스켈레톤 또는 프리페칭 처리 */}
             <section className="w-full h-full flex justify-center items-center my-4">
                 <div className="flex flex-row items-center mx-4 space-x-4 w-full">
                     <span className="flex-1">
