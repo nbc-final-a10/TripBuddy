@@ -12,6 +12,7 @@ export * from './trip/useTripMutation';
 export * from './buddy/useBuddyProfile';
 export * from './buddy/useBuddyQueries';
 export * from './buddy/useBuddyQuery';
+export * from './buddy/useGetFollowCounts';
 export * from './buddy/useRecommendBuddiesQuery';
 export * from './buddy/useSpecificBuddyQuery';
 export * from './story/useDeleteStoryMutation';

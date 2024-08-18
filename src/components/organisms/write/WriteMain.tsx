@@ -23,10 +23,10 @@ import {
     useSelectMeetPlace,
     useSelectRegion,
     useSelectSex,
-    useTripWrite,
 } from '@/hooks';
 import { useTripMutation } from '@/hooks/queries';
 import { PartialTrip, TripMutationData } from '@/types/Trips.types';
+import { useTripWrite } from '@/hooks/MyPage/useTripWrite';
 
 // 버튼 라벨 배열
 const buttonText = [
