@@ -39,6 +39,8 @@ const MobileHeader: React.FC = () => {
     const isProfile = pathname.startsWith('/profile/');
     const isEditTrips = pathname.startsWith('/edit/trips');
     const isStoryWrite = pathname === '/write/story';
+    const isLocation = pathname === '/search/location';
+    const isDate = pathname === '/search/date';
     const isNotification = pathname === '/notifications';
 
     // const { data: trip } = useTripQuery(isTripDetail && uuid ? uuid : null);
@@ -50,6 +52,8 @@ const MobileHeader: React.FC = () => {
         (isLogin && '') ||
         (isSignup && '') ||
         (isSearch && '검색') ||
+        (isLocation && '위치 검색') ||
+        (isDate && '날짜 선택') ||
         (isOnboarding && !isOboardingEdit && '온보딩') ||
         (isOnboarding && isOboardingEdit && '프로필 수정') ||
         (isProfile && isMyProfile && '마이페이지') ||
@@ -68,6 +72,8 @@ const MobileHeader: React.FC = () => {
         isLogin ||
         isSignup ||
         isSearch ||
+        isLocation ||
+        isDate ||
         isWrite ||
         isOnboarding ||
         isProfile ||

@@ -8,8 +8,9 @@ import { twMerge } from 'tailwind-merge';
 
 type ThirdLevelSectionProps = {
     selectedSecondLevelLocations: ThirdLevel[];
+    // setThirdLevelLocation: (loc: string) => void;
+    thirdLevelLocation?: string | null;
     secondLevelLocation: string | null;
-    thirdLevelLocation?: string;
     handleClick: (loc: string) => void;
 };
 

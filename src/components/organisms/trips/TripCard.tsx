@@ -357,7 +357,7 @@ const TripCard: React.FC<TripCardProps> = ({
                 return '수정완료';
             }
         }
-        const isBuddyParticipating = trip.contract.find(
+        const isBuddyParticipating = trip.contract?.find(
             contract => contract.contract_buddy_id === buddy?.buddy_id,
         );
         if (isBuddyParticipating && isBuddyParticipating.contract_isPending) {

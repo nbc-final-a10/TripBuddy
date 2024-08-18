@@ -1,15 +1,16 @@
 import React from 'react';
 import { Gender } from '@/types/Gender.types';
 import Chip from '@/components/atoms/common/Chip';
+import SearchPageTitle from '@/components/atoms/search/SearchPageTitle';
 
-const genderOptions: Gender[] = ['여자만', '남자만', '상관없음'];
+const genderOptions: Gender[] = ['여성', '남성', '성별무관'];
 
-type GenderChipGroupProps = {
+type GenderSelectionProps = {
     selectedGender: string | null;
     setSelectedGender: (gender: string | null) => void;
 };
 
-const GenderChipGroup: React.FC<GenderChipGroupProps> = ({
+const GenderSelection: React.FC<GenderSelectionProps> = ({
     selectedGender,
     setSelectedGender,
 }) => {
@@ -21,20 +22,22 @@ const GenderChipGroup: React.FC<GenderChipGroupProps> = ({
     };
 
     return (
-        <div className="grid grid-cols-3 gap-2">
-            {genderOptions.map(gender => (
-                <Chip
-                    key={gender}
-                    intent="natural"
-                    selected={selectedGender === gender}
-                    onClick={() => handleGenderClick(gender)}
-                    // className="w-1/3"
-                >
-                    {gender}
-                </Chip>
-            ))}
-        </div>
+        <>
+            <SearchPageTitle title="성별" description="" />
+            <div className="grid grid-cols-3 gap-2 xl:w-3/4">
+                {genderOptions.map(gender => (
+                    <Chip
+                        key={gender}
+                        intent="natural"
+                        selected={selectedGender === gender}
+                        onClick={() => handleGenderClick(gender)}
+                    >
+                        {gender}
+                    </Chip>
+                ))}
+            </div>
+        </>
     );
 };
 
-export default GenderChipGroup;
+export default GenderSelection;
