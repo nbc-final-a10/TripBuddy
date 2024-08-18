@@ -16,7 +16,7 @@ const chipVariants = cva(
         'border',
         'rounded-full',
         'px-2.5',
-        'py-2',
+        'py-2.5',
         'transition-opacity',
         'whitespace-nowrap',
         'cursor-pointer',

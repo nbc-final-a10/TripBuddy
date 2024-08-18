@@ -362,7 +362,7 @@ const TripCard: React.FC<TripCardProps> = ({
                 return '수정완료';
             }
         }
-        const isBuddyParticipating = trip.contract.find(
+        const isBuddyParticipating = trip.contract?.find(
             contract => contract.contract_buddy_id === buddy?.buddy_id,
         );
         if (isBuddyParticipating && isBuddyParticipating.contract_isPending) {
@@ -430,7 +430,7 @@ const TripCard: React.FC<TripCardProps> = ({
             {isBookMarkMutationPending && <DefaultLoader />}
             <div
                 className={clsx(
-                    'bg-white box-border shadow-xl xl:shadow-none',
+                    'bg-white box-border shadow-xl xl:shadow-md',
                     mode === 'detail' && 'h-fit p-4 xl:w-[60%]',
                     mode === 'list' && 'w-[90%] h-fit rounded-lg xl:w-full',
                     mode === 'card' &&

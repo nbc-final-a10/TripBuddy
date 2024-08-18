@@ -9,9 +9,11 @@ import Link from 'next/link';
 import { useAuth } from '@/hooks';
 import { getTimeSinceUpload } from '@/utils/common/getTimeSinceUpload';
 import { getTimeIfDateIsToday } from '@/utils/common/getTimeIfDateIsToday';
+import { Buddy } from '@/types/Auth.types';
 
 const ChatList = () => {
-    const { buddy: currentBuddy } = useAuth();
+    const { buddy } = useAuth();
+    const currentBuddy = buddy as Buddy;
     const [chatData, setChatData] = useState<ContractData[]>([]);
     const [contractsExist, setContractsExist] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
@@ -27,7 +29,7 @@ const ChatList = () => {
                     await supabase
                         .from('contract')
                         .select(
-                            'contract_id, contract_trip_id, contract_last_message_read',
+                            'contract_id, contract_trip_id, contract_last_message_read, contract_validate_date',
                         )
                         .eq('contract_buddy_id', currentBuddy.buddy_id)
                         .eq('contract_isValidate', true);
@@ -103,7 +105,11 @@ const ChatList = () => {
                 const contractDataMap = new Map<string, ContractData>();
 
                 contracts.forEach(contract => {
-                    const { contract_id, contract_trip_id } = contract;
+                    const {
+                        contract_id,
+                        contract_trip_id,
+                        contract_validate_date,
+                    } = contract;
                     const buddyIds = Array.from(
                         buddiesByTrip[contract_trip_id] || [],
                     );
@@ -120,6 +126,7 @@ const ChatList = () => {
                         last_message_time: '',
                         unread_count:
                             contractUnreadCounts[contract_trip_id] || 0,
+                        validate_date: contract_validate_date,
                     });
                 });
 
@@ -130,15 +137,24 @@ const ChatList = () => {
                     >();
 
                     for (const tripId of tripIds) {
+                        const { validate_date } =
+                            Array.from(contractDataMap.values()).find(
+                                c => c.contract_trip_id === tripId,
+                            ) || {};
+
+                        const query = supabase
+                            .from('messages')
+                            .select('message_content, message_created_at')
+                            .eq('message_trip_id', tripId)
+                            .order('message_created_at', { ascending: false })
+                            .limit(1);
+
+                        if (validate_date) {
+                            query.gt('message_created_at', validate_date);
+                        }
+
                         const { data: lastMessages, error: lastMessagesError } =
-                            await supabase
-                                .from('messages')
-                                .select('message_content, message_created_at')
-                                .eq('message_trip_id', tripId)
-                                .order('message_created_at', {
-                                    ascending: false,
-                                })
-                                .limit(1);
+                            await query;
 
                         if (lastMessagesError) {
                             console.error(
@@ -203,7 +219,7 @@ const ChatList = () => {
         return <DefaultLoader />;
     } else if (!contractsExist) {
         return (
-            <div className="text-center h-full font-bold text-lg flex flex-col justify-center text-grayscale-color-600">
+            <div className="bg-white xl:bg-grayscale-color-50 text-center h-[calc(100vh-57px-54px)] xl:h-[calc(100vh-100px-57px)] font-bold text-lg flex flex-col justify-center text-grayscale-color-600 overflow-y-auto scrollbar-hidden">
                 <h1 className="text-2xl">아직 참여한 여정이 없습니다!</h1>
                 <br />
                 <Link
@@ -217,7 +233,7 @@ const ChatList = () => {
         );
     } else {
         return (
-            <div className="flex flex-col p-4">
+            <div className="bg-white xl:bg-grayscale-color-50 h-[calc(100vh-57px-54px)] xl:h-[calc(100vh-100px-57px)] flex flex-col p-4 xl:w-full overflow-y-auto scrollbar-hidden">
                 {chatData.map(chat => {
                     const lastMessageTime = chat.last_message_time
                         ? getTimeIfDateIsToday(chat.last_message_time) ||

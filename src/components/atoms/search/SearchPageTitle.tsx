@@ -10,10 +10,10 @@ const SearchPageTitle: React.FC<SearchPageTitleProps> = ({
     description,
 }) => {
     return (
-        <header className="mt-2 mb-3">
-            <h2 className="text-lg font-semibold">{title}</h2>
-            <p className="text-sm text-gray-500">{description}</p>
-        </header>
+        <section className="mt-2 mb-3">
+            <h2 className="text-xl font-semibold">{title}</h2>
+            <p className="text-base text-gray-500">{description}</p>
+        </section>
     );
 };
 

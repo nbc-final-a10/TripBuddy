@@ -10,10 +10,10 @@ const SearchPageChipsTitle: React.FC<SearchPageChipsTitleProps> = ({
     limit,
 }) => {
     return (
-        <header>
+        <section>
             <h2 className="text-base font-semibold">{title}</h2>
             <p className="text-sm text-gray-500">{limit}</p>
-        </header>
+        </section>
     );
 };
 

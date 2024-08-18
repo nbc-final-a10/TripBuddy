@@ -35,7 +35,7 @@ const ChatListItem: React.FC<ContractData> = ({
                         alt="Profile"
                         width={23}
                         height={23}
-                        className="object-cover"
+                        className="object-cover w-auto h-auto"
                     />
                 )}
             </div>

@@ -8,6 +8,7 @@ import { getAgeFromBirthDate } from '@/utils/common/getAgeFromBirthDate';
 import { useAuth } from '@/hooks';
 import { useRouter } from 'next/navigation';
 import FollowHeartButton from '../profile/FollowHeartButton';
+import { twMerge } from 'tailwind-merge';
 
 function HomePageRecommendBuddiesList({
     buddies,
@@ -29,7 +30,10 @@ function HomePageRecommendBuddiesList({
                 ? buddies.map((buddy: Buddy, index: number) => (
                       <div
                           key={index}
-                          className={`relative h-[75px] px-2 mx-1 rounded border border-gray-200 cursor-pointer flex items-center ${className}`}
+                          className={twMerge(
+                              'relative h-[89px] px-2 mx-1 rounded-[8px] border border-gray-200 cursor-pointer flex items-center',
+                              className,
+                          )}
                           onClick={() => handleCardClick(buddy.buddy_id)}
                       >
                           <div className="flex items-center justify-center w-full h-full relative">
@@ -53,13 +57,13 @@ function HomePageRecommendBuddiesList({
                                           ? `#${buddy.buddy_preferred_buddy1} #${buddy.buddy_preferred_buddy2}`
                                           : '#태그없음'}
                                   </span>
-                                  <div className="text-m font-bold whitespace-nowrap overflow-hidden text-ellipsis w-full">
+                                  <div className="text-m font-bold whitespace-nowrap overflow-hidden text-ellipsis w-full max-w-[152px]">
                                       <span className="block truncate">
                                           {buddy.buddy_nickname}
                                           {typeof buddy.buddy_birth === 'string'
                                               ? ` / ${getAgeFromBirthDate(
                                                     buddy.buddy_birth,
-                                                )} 세`
+                                                )}세`
                                               : null}
                                       </span>
                                   </div>

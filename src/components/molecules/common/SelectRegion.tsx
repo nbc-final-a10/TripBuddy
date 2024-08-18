@@ -16,7 +16,7 @@ type SelectRegionProps = {
         firstLevelLocation: string;
         secondLevelLocation: string | null;
         selectedSecondLevelLocations: ThirdLevel[];
-        thirdLevelLocation: string;
+        thirdLevelLocation: string | null;
         secondLevelLocations: SecondLevel[];
     };
     className?: string;

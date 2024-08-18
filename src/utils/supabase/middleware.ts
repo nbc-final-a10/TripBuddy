@@ -59,6 +59,8 @@ export async function updateSession(request: NextRequest) {
         request.nextUrl.pathname !== '/signup' &&
         request.nextUrl.pathname !== '/recover' &&
         request.nextUrl.pathname !== '/search' &&
+        request.nextUrl.pathname !== '/search/location' &&
+        request.nextUrl.pathname !== '/search/date' &&
         request.nextUrl.pathname !== '/loading' &&
         request.nextUrl.pathname !== '/tutorial' &&
         !request.nextUrl.pathname.startsWith('/api') &&
