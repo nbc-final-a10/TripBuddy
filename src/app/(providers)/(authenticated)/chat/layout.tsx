@@ -12,7 +12,7 @@ export const metadata: Metadata = defaultMetaData;
 
 const ChatPageLayout: React.FC<ChatPageLayoutProps> = ({ children }) => {
     return (
-        <div className="xl:flex">
+        <div className="xl:flex xl:justify-center">
             <div className="hidden xl:block xl:w-1/3">
                 <ChatLayoutHeader />
                 <ChatList />

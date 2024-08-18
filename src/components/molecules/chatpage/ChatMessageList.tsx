@@ -118,7 +118,11 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                                 await supabase
                                     .from('contract')
                                     .select('contract_id')
-                                    .eq('contract_trip_id', id);
+                                    .eq('contract_trip_id', id)
+                                    .eq(
+                                        'contract_buddy_id',
+                                        currentBuddy?.buddy_id,
+                                    );
 
                             if (contractsError) {
                                 console.error(
