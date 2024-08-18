@@ -54,7 +54,7 @@ const StoryCard: React.FC<StoryCardProps> = ({
             )}
             <Link
                 className="w-full h-full absolute aspect-auto flex justify-center items-center"
-                href={`/stories/${story.buddies.buddy_nickname}?id=${id}`}
+                href={`/stories/${id}`}
             >
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black/80 rounded-lg z-10"></div>
 

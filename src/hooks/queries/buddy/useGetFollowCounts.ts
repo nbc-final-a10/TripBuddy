@@ -5,18 +5,10 @@ import { fetchFollowData } from '@/api-services/auth/client';
 import { Follow } from '@/types/Follow.types';
 
 export function useFollowCountQuery(clickedBuddyId: string) {
-    const [enabled, setEnabled] = useState<boolean>(false);
-
-    useEffect(() => {
-        if (clickedBuddyId) {
-            setEnabled(true);
-        }
-    }, [clickedBuddyId]);
-
     return useQuery<Follow[] | null, Error>({
         queryKey: [QUERY_KEY_FOLLOW_COUNT, clickedBuddyId],
         queryFn: () => fetchFollowData(clickedBuddyId),
         staleTime: 0,
-        enabled,
+        enabled: !!clickedBuddyId,
     });
 }

@@ -50,7 +50,7 @@ const SelectRegions = forwardRef<HTMLElement, SelectRegionProps>(
         return (
             <div className={twMerge('relative', className)}>
                 {/* 국내/해외 스위치 버튼 */}
-                <section className="relative h-[10%]">
+                <section className="relative h-[10%] xl:pb-6">
                     <LocationToggleButton
                         firstLabel="국내"
                         secondLabel="해외"
@@ -63,7 +63,7 @@ const SelectRegions = forwardRef<HTMLElement, SelectRegionProps>(
                 {/* 도시/대륙 선택 */}
                 <section
                     className={twMerge(
-                        'overflow-x-scroll scrollbar-hidden flex gap-[10px] xl:h-[10%]',
+                        'overflow-x-scroll scrollbar-hidden flex gap-[10px] xl:h-[10%] xl:pb-6',
                         innerHeight && innerHeight < 659 && 'h-[42px]',
                     )}
                     ref={ref}

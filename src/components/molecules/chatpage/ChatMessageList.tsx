@@ -3,6 +3,7 @@ import React, { useState, useEffect, MutableRefObject, useRef } from 'react';
 import { Message } from '@/types/Chat.types';
 import supabase from '@/utils/supabase/client';
 import Image from 'next/image';
+import { useUnreadMessagesContext } from '@/contexts/unreadMessages.context';
 
 type ChatMessageListProps = {
     currentBuddy: any;
@@ -20,8 +21,8 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
         })[]
     >([]);
     const [isPageVisible, setIsPageVisible] = useState(true);
+    const { fetchUnreadCounts } = useUnreadMessagesContext();
 
-    // Fetch messages on mount
     useEffect(() => {
         const fetchMessages = async () => {
             const { data, error } = await supabase
@@ -48,7 +49,6 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
         fetchMessages();
     }, [id]);
 
-    // Handle new messages via Realtime
     useEffect(() => {
         const channel = supabase
             .channel('chat-room')
@@ -58,61 +58,59 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                 async payload => {
                     const newMessage = payload.new as Message;
 
+                    const { data: buddyData, error: senderError } =
+                        await supabase
+                            .from('buddies')
+                            .select('buddy_profile_pic, buddy_nickname')
+                            .eq('buddy_id', newMessage.message_sender_id)
+                            .single();
+
+                    if (senderError) {
+                        console.error(
+                            'Error fetching sender info:',
+                            senderError,
+                        );
+                        return;
+                    }
+
+                    const newMessageWithBuddy = {
+                        ...newMessage,
+                        buddy: buddyData,
+                    };
+
                     if (newMessage.message_trip_id === id) {
-                        // Fetch sender info
-                        const { data: buddyData, error: senderError } =
-                            await supabase
-                                .from('buddies')
-                                .select('buddy_profile_pic, buddy_nickname')
-                                .eq('buddy_id', newMessage.message_sender_id)
-                                .single();
-
-                        if (senderError) {
-                            console.error(
-                                'Error fetching sender info:',
-                                senderError,
-                            );
-                            return;
-                        }
-
-                        const newMessageWithBuddy = {
-                            ...newMessage,
-                            buddy: buddyData,
-                        };
-
                         setMessages(prevMessages => [
                             ...prevMessages,
                             newMessageWithBuddy,
                         ]);
+                    }
 
-                        if (isPageVisible) {
-                            // Update all users' last message read status if the page is visible
-                            const { data: contracts, error: contractsError } =
-                                await supabase
-                                    .from('contract')
-                                    .select('contract_id')
-                                    .eq('contract_trip_id', id);
+                    if (isPageVisible) {
+                        const { data: contracts, error: contractsError } =
+                            await supabase
+                                .from('contract')
+                                .select('contract_id')
+                                .eq('contract_trip_id', id);
 
-                            if (contractsError) {
-                                console.error(
-                                    'Error fetching contracts:',
-                                    contractsError,
-                                );
-                                return;
-                            }
-
-                            const updates = contracts.map(contract =>
-                                supabase
-                                    .from('contract')
-                                    .update({
-                                        contract_last_message_read:
-                                            newMessage.message_id,
-                                    })
-                                    .eq('contract_id', contract.contract_id),
+                        if (contractsError) {
+                            console.error(
+                                'Error fetching contracts:',
+                                contractsError,
                             );
-
-                            await Promise.all(updates);
+                            return;
                         }
+
+                        const updates = contracts.map(contract =>
+                            supabase
+                                .from('contract')
+                                .update({
+                                    contract_last_message_read:
+                                        newMessage.message_id,
+                                })
+                                .eq('contract_id', contract.contract_id),
+                        );
+
+                        await Promise.all(updates);
                     }
                 },
             )
@@ -123,7 +121,6 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
         };
     }, [id, isPageVisible]);
 
-    // Handle visibility change
     useEffect(() => {
         const handleVisibilityChange = () => {
             setIsPageVisible(document.visibilityState === 'visible');
@@ -139,7 +136,6 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
         };
     }, []);
 
-    // Update read status for current user's last message
     useEffect(() => {
         const handleReadMessages = async () => {
             if (messages.length > 0 && isPageVisible) {
@@ -166,6 +162,10 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
             scrollContainer.scrollTop = scrollContainer.scrollHeight;
         }
     }, [messages]);
+
+    useEffect(() => {
+        fetchUnreadCounts();
+    }, [fetchUnreadCounts]);
 
     const formatDate = (dateString: string) => {
         const options: Intl.DateTimeFormatOptions = {
@@ -215,7 +215,7 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                                         alt="Profile Image"
                                         width={40}
                                         height={40}
-                                        className="object-cover"
+                                        className="object-cover w-auto h-auto"
                                     />
                                 </div>
                             )}
