@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { QUERY_KEY_FOLLOW_COUNT } from '@/constants/query.constants';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 
 export default function FollowButton() {
     const { buddy } = useAuth();
@@ -16,6 +16,7 @@ export default function FollowButton() {
 
     const queryClient = useQueryClient();
     const { id: currentBuddyId } = useParams();
+    const pathname = usePathname();
 
     useEffect(() => {
         const getCurrentBuddyId = buddy?.buddy_id;
@@ -99,16 +100,16 @@ export default function FollowButton() {
             );
         };
 
-        if (window.location.pathname.includes('trips')) {
+        if (pathname.includes('trips')) {
             setIsLoading(true);
             handleTripsLogic();
             setIsLoading(false);
-        } else if (window.location.pathname.includes('profile')) {
+        } else if (pathname.includes('profile')) {
             setIsLoading(true);
             handleProfileLogic();
             setIsLoading(false);
         }
-    }, [buddy, currentBuddyId]);
+    }, [buddy, currentBuddyId, pathname]);
 
     const handleFollow = async () => {
         if (isLoading) return;
@@ -173,8 +174,8 @@ export default function FollowButton() {
     };
 
     return isLoading || isFollowing === null ? (
-        <div className="relative h-7 w-24"></div>
-    ) : isFollowing ? (
+        <div className="relative h-7 w-24 mt-10"></div>
+    ) : (
         <button
             className={`text-sm text-white bg-main-color rounded-full px-4 py-1 mt-10 ${
                 isLoading ? 'opacity-50 cursor-not-allowed' : ''
@@ -184,7 +185,5 @@ export default function FollowButton() {
         >
             {isFollowing ? '팔로우 취소' : '팔로우 하기'}
         </button>
-    ) : (
-        <div className="text-sm bg-gray-200 rounded-full px-4 py-1 mt-10 animate-pulse h-7 w-24" />
     );
 }

@@ -44,7 +44,7 @@ function HomePageRecommendBuddiesList({
                                           alt="profile"
                                           width={60}
                                           height={60}
-                                          className="rounded-lg w-[60px] h-[60px]"
+                                          className="rounded-lg w-[60px] h-[60px] object-cover"
                                       />
                                   ) : (
                                       <MascotImage intent="happy" />

@@ -28,10 +28,12 @@ const TripsPage: React.FC = async () => {
         },
         queryFn: getInfiniteTrips,
         pages: 1,
+        staleTime: 1000 * 60 * 5,
     });
     await queryClient.prefetchQuery({
         queryKey: [QUERY_KEY_TRIPS],
         queryFn: () => getTrips(),
+        staleTime: 1000 * 60 * 5,
     });
     const dehydratedState = dehydrate(queryClient);
 

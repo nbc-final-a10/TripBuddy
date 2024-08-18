@@ -58,7 +58,7 @@ const HomePageContainer = () => {
                 >
                     {buddies.data?.buddies && (
                         <HomePageRecommendBuddiesList
-                            className="min-w-[243px] mx-0 border-none shadow-lg"
+                            className="min-w-[243px] mx-0 border-none shadow-lg xl:min-w-[258px]"
                             buddies={buddies.data?.buddies}
                         />
                     )}
