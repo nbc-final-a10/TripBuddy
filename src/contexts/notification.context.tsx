@@ -32,6 +32,7 @@ type NotificationProviderProps = {
 
 const initialValue: NotificationContextType = {
     notifications: [],
+    hasNotification: false,
 };
 
 export const NotificationContext =
@@ -69,10 +70,22 @@ export const NotificationProvider = ({
                 ) || [],
         } || [],
     );
+
     const { buddy } = useAuth();
     const modal = useModal();
     const prevNotificationsRef = useRef(notifications);
     const hasFetchedOnceRef = useRef(false);
+    const [hasNotification, setHasNotification] = useState(false);
+
+    useEffect(() => {
+        const hasUnreadNotifications =
+            notifications.storyLikes.length > 0 ||
+            notifications.follows.length > 0 ||
+            notifications.bookmarks.length > 0 ||
+            notifications.contracts.length > 0;
+
+        setHasNotification(hasUnreadNotifications);
+    }, [notifications]);
 
     const queries = useContractQueries(
         notifications.contracts
@@ -275,7 +288,9 @@ export const NotificationProvider = ({
     }, [modal, queries, notifications, isPending]);
 
     return (
-        <NotificationContext.Provider value={{ notifications }}>
+        <NotificationContext.Provider
+            value={{ notifications, hasNotification }}
+        >
             {children}
         </NotificationContext.Provider>
     );
