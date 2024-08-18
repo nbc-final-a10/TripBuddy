@@ -23,10 +23,10 @@ import {
     useSelectMeetPlace,
     useSelectRegion,
     useSelectSex,
-    useTripWrite,
 } from '@/hooks';
 import { useTripMutation } from '@/hooks/queries';
 import { PartialTrip, TripMutationData } from '@/types/Trips.types';
+import { useTripWrite } from '@/hooks/MyPage/useTripWrite';
 
 // 버튼 라벨 배열
 const buttonText = [
@@ -188,7 +188,7 @@ const WriteMain: React.FC = () => {
             )}
         >
             <ProgressIndicator
-                className="pt-0 h-[2%] xl:h-[5%]"
+                className="pt-1.5 h-[2%] xl:h-[5%]"
                 step={step}
                 counts={7}
             />

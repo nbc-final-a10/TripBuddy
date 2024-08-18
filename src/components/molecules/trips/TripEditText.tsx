@@ -2,7 +2,7 @@ import Button from '@/components/atoms/common/Button';
 import TripEditModalWrapper from '@/components/atoms/trips/TripEditModalWrapper';
 import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 import { useModal } from '@/contexts/modal.context';
-import { useTripWrite } from '@/hooks';
+import { useTripWrite } from '@/hooks/MyPage/useTripWrite';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import React, { useEffect } from 'react';
 

@@ -19,7 +19,7 @@ export function useStoryLikesMutation(id: string) {
                 QUERY_KEY_STORY_LIKES,
                 id,
             ]);
-            console.log('data ====>', data);
+            // console.log('data ====>', data);
             if (!data.isLiked) {
                 queryClient.setQueryData<PartialStoryLikes[]>(
                     [QUERY_KEY_STORY_LIKES, id],

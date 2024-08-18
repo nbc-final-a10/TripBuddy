@@ -40,7 +40,7 @@ const StoryList: React.FC = () => {
             {sortedStories.map(story => (
                 <StoryCard
                     key={story.buddyId}
-                    id={story.buddyId}
+                    id={story.stories[0].story_id}
                     mode={
                         buddy?.buddy_id === story.stories[0].buddies.buddy_id
                             ? 'my'

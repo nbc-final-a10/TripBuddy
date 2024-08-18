@@ -11,7 +11,7 @@ import {
 import React, { Suspense } from 'react';
 
 type StoryPageProps = {
-    params: { nickname: string };
+    params: { id: string };
     searchParams: { [key: string]: string | undefined };
 };
 
@@ -19,10 +19,7 @@ const StoryPage: React.FC<StoryPageProps> = async ({
     params,
     searchParams,
 }) => {
-    const { nickname } = params;
-    const { id } = searchParams;
-
-    if (!id) return <div>아이디가 없습니다.</div>;
+    const { id } = params;
 
     const queryClient = new QueryClient();
     await queryClient.prefetchQuery({
@@ -44,8 +41,7 @@ const StoryPage: React.FC<StoryPageProps> = async ({
     return (
         <Suspense fallback={<Loading />}>
             <HydrationBoundary state={dehydratedState}>
-                {/* <StoryDetail nickname={nickname} id={storyId} stories={mapped} /> */}
-                <StoryDetail nickname={nickname} id={id} stories={stories} />
+                <StoryDetail id={id} stories={stories} />
             </HydrationBoundary>
         </Suspense>
     );

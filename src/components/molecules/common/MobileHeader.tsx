@@ -90,9 +90,9 @@ const MobileHeader: React.FC = () => {
         } else if (isChatId) {
             // 채팅방에서 뒤로 가면 새로고침 임시로..
             router.back();
-            setTimeout(() => {
-                window.location.reload();
-            }, 100);
+            // setTimeout(() => {
+            //     window.location.reload();
+            // }, 100);
         } else {
             router.back();
         }

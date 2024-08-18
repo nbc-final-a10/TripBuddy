@@ -28,7 +28,11 @@ export default function SelectRegionPage({
             </div>
 
             <div className="h-full w-full xl:w-[60%]">
-                <SelectRegions states={states} actions={actions} />
+                <SelectRegions
+                    states={states}
+                    actions={actions}
+                    className="px-2"
+                />
             </div>
         </div>
     );

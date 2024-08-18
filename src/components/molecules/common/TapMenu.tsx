@@ -5,18 +5,18 @@ import TapMenuButton from '@/components/atoms/common/TapMenuButton';
 import { usePathname } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 import { useAuth } from '@/hooks';
-import { useNotification } from '@/hooks/notification/useNotification';
+// import { useNotification } from '@/hooks/notification/useNotification';
 
 const TapMenu: React.FC = () => {
     const { buddy } = useAuth();
     const pathname = usePathname();
     const buddy_id = buddy ? buddy.buddy_id : '';
 
-    const { notifications } = useNotification();
+    // const { notifications } = useNotification();
 
-    useEffect(() => {
-        console.log('하단바에서 notifications 변경사항 ====>', notifications);
-    }, [notifications]);
+    // useEffect(() => {
+    //     console.log('하단바에서 notifications 변경사항 ====>', notifications);
+    // }, [notifications]);
 
     const hidden =
         pathname.startsWith('/chat/') ||

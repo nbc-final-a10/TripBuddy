@@ -28,7 +28,7 @@ const ThirdLevelSection: React.FC<ThirdLevelSectionProps> = memo(
                 <section
                     id="third-level-section"
                     className={twMerge(
-                        'relative h-[74%] overflow-y-auto xl:h-[53vh]',
+                        'relative h-[74%] overflow-y-auto xl:h-[53vh] xl:grid xl:grid-cols-2 xl:content-start',
                         pathname === '/search' && 'h-[300px]',
                         pathname === '/write' && 'h-[40vh]',
                         pathname.startsWith('/edit') && 'h-[70%] xl:h-[450px]',
@@ -42,13 +42,19 @@ const ThirdLevelSection: React.FC<ThirdLevelSectionProps> = memo(
                         <div
                             key={loc.name}
                             className={twMerge(
-                                'flex mx-2 border-b cursor-pointer hover:bg-main-color items-center',
+                                'flex mx-2 border-b cursor-pointer hover:bg-main-color items-center xl:mx-0 xl:border-none xl:hover:bg-transparent',
                                 thirdLevelLocation === loc.name &&
-                                    'bg-main-color',
+                                    'bg-main-color xl:bg-transparent xl:text-primary-color-400',
                             )}
                             onClick={() => handleClick(loc.name)}
                         >
-                            <div className="text-sm text-gray-500 xl:text-base flex items-center p-1.5">
+                            <div
+                                className={twMerge(
+                                    'text-sm text-gray-500 xl:text-base flex items-center p-1.5 xl:hover:text-primary-color-400',
+                                    thirdLevelLocation === loc.name &&
+                                        'xl:text-primary-color-400',
+                                )}
+                            >
                                 <div>
                                     <p className="font-bold">{loc.name}</p>
                                     <p>{secondLevelLocation}</p>
@@ -58,7 +64,7 @@ const ThirdLevelSection: React.FC<ThirdLevelSectionProps> = memo(
                     ))}
                 </section>
 
-                <section className="relative h-[6%] flex items-center justify-center xl:h-[10%]">
+                <section className="relative h-[6%] flex items-center justify-center xl:h-[10%] xl:pt-3">
                     {thirdLevelLocation && (
                         <SelectedResultRealtimeText
                             selectedData={thirdLevelLocation}

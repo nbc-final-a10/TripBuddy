@@ -47,7 +47,8 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
             };
             mutateNotification(updatedNotification);
         }
-        window.location.href = url; // 알림 누르면 unread 반영되기 위해 새로고침 되도록 임시 설정
+        router.push(url);
+        // window.location.href = url; // 알림 누르면 unread 반영되기 위해 새로고침 되도록 임시 설정
     };
 
     return (
@@ -62,6 +63,7 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
                         alt={'mascot_main'}
                         width={45}
                         height={45}
+                        className="relative w-auto h-auto"
                     />
                 </div>
                 <div>

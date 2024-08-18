@@ -2,9 +2,10 @@
 
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import React, { useEffect, useState } from 'react';
-import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
+import { QUERY_KEY_FOLLOW_COUNT } from '@/constants/query.constants';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks';
+import { useParams } from 'next/navigation';
 
 export default function FollowButton() {
     const { buddy } = useAuth();
@@ -14,6 +15,7 @@ export default function FollowButton() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const queryClient = useQueryClient();
+    const { id: currentBuddyId } = useParams();
 
     useEffect(() => {
         const getCurrentBuddyId = buddy?.buddy_id;
@@ -21,9 +23,8 @@ export default function FollowButton() {
 
         const fetchTripMasterId = async () => {
             try {
-                const urlTripId = window.location.pathname.split('/').pop();
                 const tripMasterIdResponse = await fetch(
-                    `/api/contract/trip/masterId?trip_id=${urlTripId}`,
+                    `/api/contract/trip/masterId?trip_id=${currentBuddyId}`,
                     {
                         method: 'GET',
                     },
@@ -85,9 +86,17 @@ export default function FollowButton() {
         };
 
         const handleProfileLogic = async () => {
-            const urlBuddyId = window.location.pathname.split('/').pop();
-            setFollowingId(urlBuddyId || '');
-            await checkFollowStatus(urlBuddyId || '', getCurrentBuddyId || '');
+            setFollowingId(
+                Array.isArray(currentBuddyId)
+                    ? currentBuddyId[0]
+                    : currentBuddyId || '',
+            );
+            await checkFollowStatus(
+                Array.isArray(currentBuddyId)
+                    ? currentBuddyId[0]
+                    : currentBuddyId || '',
+                getCurrentBuddyId || '',
+            );
         };
 
         if (window.location.pathname.includes('trips')) {
@@ -99,7 +108,7 @@ export default function FollowButton() {
             handleProfileLogic();
             setIsLoading(false);
         }
-    }, [buddy]);
+    }, [buddy, currentBuddyId]);
 
     const handleFollow = async () => {
         if (isLoading) return;
@@ -128,7 +137,7 @@ export default function FollowButton() {
             showAlert('success', '팔로우 성공했습니다.');
             setIsFollowing(true);
             queryClient.invalidateQueries({
-                queryKey: [QUERY_KEY_BUDDY, followingId],
+                queryKey: [QUERY_KEY_FOLLOW_COUNT, currentBuddyId],
             });
         } finally {
             setIsLoading(false);
@@ -156,17 +165,17 @@ export default function FollowButton() {
             showAlert('success', '팔로우가 취소되었습니다.');
             setIsFollowing(false);
             queryClient.invalidateQueries({
-                queryKey: [QUERY_KEY_BUDDY, followingId],
+                queryKey: [QUERY_KEY_FOLLOW_COUNT, currentBuddyId],
             });
         } finally {
             setIsLoading(false);
         }
     };
 
-    return isLoading ? (
-        <div className="text-sm bg-gray-200 rounded-full px-4 py-1 mt-10 animate-pulse h-7 w-24"></div>
-    ) : isFollowing === null ? (
-        <div className="rounded-full px-4 py-1 mt-10 h-7 w-24"></div>
+    console.log('isFollowing', isFollowing);
+
+    return isLoading || isFollowing === null ? (
+        <div className="text-sm bg-gray-200 rounded-full px-4 py-1 mt-10 animate-pulse h-7 w-24" />
     ) : (
         <button
             className={`text-sm text-white bg-main-color rounded-full px-4 py-1 mt-10 ${

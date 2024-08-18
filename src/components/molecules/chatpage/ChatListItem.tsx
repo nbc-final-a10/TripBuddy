@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ContractData } from '@/types/Chat.types';
 import useChatStore from '@/zustand/chat.store';
+import { useUnreadMessagesContext } from '@/contexts/unreadMessages.context';
 
 const ChatListItem: React.FC<ContractData> = ({
     contract_trip_id,
@@ -12,9 +13,15 @@ const ChatListItem: React.FC<ContractData> = ({
     last_message_content,
     last_message_time,
 }) => {
-    const unread_count = useChatStore(state =>
-        state.getUnreadCount(contract_trip_id),
-    );
+    // const unread_count = useChatStore(state =>
+    //     state.getUnreadCount(contract_trip_id),
+    // );
+
+    const { contractUnreadCounts } = useUnreadMessagesContext();
+
+    const unread_count = contractUnreadCounts[contract_trip_id];
+
+    // console.log('unread_count ====>', unread_count);
 
     const renderProfilePictures = () => {
         return contract_buddies_profiles.map((profilePic, index) => (
