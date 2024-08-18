@@ -4,9 +4,14 @@ import Link from 'next/link';
 import HeaderMyPageLink from './HeaderMyPageLink';
 import { twMerge } from 'tailwind-merge';
 import { usePathname } from 'next/navigation';
+import useChatStore from '@/zustand/chat.store';
+import UnreadMessages from '../chatpage/UnreadMessages';
+import { relative } from 'path';
 
 export default function Header() {
     const pathname = usePathname();
+
+    const totalUnreadCount = useChatStore(state => state.getTotalUnreadCount());
 
     return (
         <header
@@ -50,17 +55,25 @@ export default function Header() {
                         </Link>
                         <Link
                             href="/chat"
-                            className={
-                                pathname === '/chat'
-                                    ? 'text-primary-color-400 underline'
-                                    : 'text-black'
-                            }
+                            className={`relative
+                                ${
+                                    pathname === '/chat'
+                                        ? 'text-primary-color-400 underline'
+                                        : 'text-black'
+                                }
+                            `}
                         >
-                            채팅
+                            여정채팅
+                            {totalUnreadCount > 0 && (
+                                <div className="absolute top-[-2px] right-[-28px] z-100 scale-[0.8]">
+                                    <UnreadMessages
+                                        unread_count={totalUnreadCount}
+                                    />
+                                </div>
+                            )}
                         </Link>
                     </div>
                 </div>
-
                 <HeaderMyPageLink />
             </div>
         </header>

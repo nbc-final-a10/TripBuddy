@@ -19,7 +19,7 @@ const HomePageTitle: React.FC<HomePageTitleProps> = ({
     className,
 }) => {
     return (
-        <div className={twMerge('mb-4', className)}>
+        <div className={twMerge('mb-4 mt-12', className)}>
             <div className="flex justify-between">
                 <p className="text-grayscale-color-800 text-[22px] font-extrabold">
                     {title}

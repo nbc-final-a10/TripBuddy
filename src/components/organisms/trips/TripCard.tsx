@@ -29,7 +29,6 @@ import {
     useContractMutation,
 } from '@/hooks/queries';
 import { useAuth, useSelectBuddyCounts } from '@/hooks';
-import Input from '@/components/atoms/common/Input';
 import TripStartDate from '@/components/atoms/trips/TripStartDate';
 import { useModal } from '@/contexts/modal.context';
 import TripEditSelectRegion from '../../molecules/trips/TripEditSelectRegion';
@@ -41,12 +40,15 @@ import TripEditText from '../../molecules/trips/TripEditText';
 import { deleteTrip } from '@/utils/trips/deleteTrip';
 import { useQueryClient } from '@tanstack/react-query';
 import {
+    QUERY_KEY_CONTRACT,
     QUERY_KEY_TRIP,
     QUERY_KEY_TRIP_INFINITE,
+    QUERY_KEY_TRIPS,
 } from '@/constants/query.constants';
 import getIsOverseas from '@/utils/common/getIsOverseas';
 import remainDaysNumber from '@/utils/common/getRemainDaysNumber';
 import { leaveTrip } from '@/utils/trips/leaveTrip';
+import supabase from '@/utils/supabase/client';
 
 type TripCardProps = {
     trip: TripWithContract;
@@ -206,7 +208,13 @@ const TripCard: React.FC<TripCardProps> = ({
                         showAlert('success', '삭제되었습니다.', {
                             onConfirm: () => {
                                 queryClient.invalidateQueries({
+                                    queryKey: [QUERY_KEY_TRIP, trip.trip_id],
+                                });
+                                queryClient.invalidateQueries({
                                     queryKey: [QUERY_KEY_TRIP_INFINITE],
+                                });
+                                queryClient.invalidateQueries({
+                                    queryKey: [QUERY_KEY_TRIPS],
                                 });
                                 router.push('/trips');
                             },
@@ -235,7 +243,16 @@ const TripCard: React.FC<TripCardProps> = ({
                             showAlert('success', '여정에서 나가셨습니다.', {
                                 onConfirm: () => {
                                     queryClient.invalidateQueries({
-                                        queryKey: [QUERY_KEY_TRIP],
+                                        queryKey: [
+                                            QUERY_KEY_TRIP,
+                                            trip.trip_id,
+                                        ],
+                                    });
+                                    queryClient.invalidateQueries({
+                                        queryKey: [QUERY_KEY_TRIP_INFINITE],
+                                    });
+                                    queryClient.invalidateQueries({
+                                        queryKey: [QUERY_KEY_TRIPS],
                                     });
                                     router.push(`/trips/${trip.trip_id}`);
                                 },
@@ -343,7 +360,12 @@ const TripCard: React.FC<TripCardProps> = ({
         const isBuddyParticipating = trip.contract?.find(
             contract => contract.contract_buddy_id === buddy?.buddy_id,
         );
-        if (isBuddyParticipating) {
+        if (isBuddyParticipating && isBuddyParticipating.contract_isPending) {
+            return '대기중';
+        } else if (
+            isBuddyParticipating &&
+            !isBuddyParticipating.contract_isPending
+        ) {
             return '나가기';
         }
         return '참여하기';
@@ -370,100 +392,129 @@ const TripCard: React.FC<TripCardProps> = ({
         }
     }, [isContractMutationSuccess]);
 
+    useEffect(() => {
+        const contractSubscription = supabase
+            .channel('schema-changes')
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'contract',
+                },
+                payload => {
+                    console.log('payload ====>', payload);
+                    queryClient.invalidateQueries({
+                        queryKey: [QUERY_KEY_CONTRACT, trip.trip_id],
+                    });
+                    queryClient.invalidateQueries({
+                        queryKey: [QUERY_KEY_TRIP, trip.trip_id],
+                    });
+                },
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(contractSubscription);
+        };
+    }, [trip.trip_id, queryClient]);
+
     return (
         <>
             {isContractMutationPending && <DefaultLoader />}
             {isBookMarkMutationPending && <DefaultLoader />}
             <div
                 className={clsx(
-                    'bg-white box-border h-fit shadow-xl',
-                    mode === 'detail' && 'p-4',
-                    mode === 'list' && 'w-[90%] rounded-lg xl:w-full',
+                    'bg-white box-border shadow-xl xl:shadow-none',
+                    mode === 'detail' && 'h-fit p-4 xl:w-[60%]',
+                    mode === 'list' && 'w-[90%] h-fit rounded-lg xl:w-full',
                     mode === 'card' &&
-                        'h-[215px] rounded-lg min-w-[250px] xl:min-w-[254px]',
+                        'h-[215px] min-h-[215px] rounded-lg min-w-[211px] xl:min-w-[252px]',
                 )}
             >
                 <div
                     className={clsx(
-                        'bg-white p-2 rounded-lg box-border h-auto w-full',
+                        'relative bg-white p-2 rounded-lg box-border h-[84%] w-full xl:py-0 xl:px-2',
                         mode === 'detail' && 'bg-white rounded-none',
                         mode === 'list' && 'bg-gray-200 rounded-b-none',
                         mode === 'card' && 'rounded-b-none',
                     )}
                 >
-                    <div className="flex flex-col gap-3">
-                        <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-4 xl:pb-3">
+                        <div className="flex flex-col gap-5 xl:gap-3">
                             <div className="flex flex-row gap-2 justify-between">
                                 {mode === 'card' && (
-                                    <div className="flex flex-row gap-1 min-h-[22px]">
-                                        {getIsOverseas(
-                                            trip.trip_final_destination,
-                                        ) ? (
-                                            <Chip
-                                                selected={false}
-                                                intent="rounded"
-                                            >
-                                                해외
-                                            </Chip>
-                                        ) : (
-                                            <Chip
-                                                selected={false}
-                                                intent="rounded_yellow"
-                                            >
-                                                국내
-                                            </Chip>
-                                        )}
-                                        {remainDaysNumber(
-                                            trip.trip_start_date,
-                                        ) <= 20 && (
-                                            <Chip
-                                                selected={false}
-                                                intent="rounded_blue"
-                                            >
-                                                HOT
-                                            </Chip>
-                                        )}
-                                    </div>
-                                )}
-
-                                {mode === 'card' && (
-                                    <div className="flex flex-row gap-2 text-sm">
-                                        <span className="font-bold text-md leading-none">
-                                            {`${remainDays(trip.trip_start_date)}`}
-                                        </span>
-                                        <span className="text-xs leading-none">
-                                            {new Date(
+                                    <>
+                                        <div className="flex flex-row gap-1 min-h-[22px]">
+                                            {getIsOverseas(
+                                                trip.trip_final_destination,
+                                            ) ? (
+                                                <Chip
+                                                    selected={false}
+                                                    intent="rounded"
+                                                >
+                                                    해외
+                                                </Chip>
+                                            ) : (
+                                                <Chip
+                                                    selected={false}
+                                                    intent="rounded_yellow"
+                                                >
+                                                    국내
+                                                </Chip>
+                                            )}
+                                            {remainDaysNumber(
                                                 trip.trip_start_date,
-                                            ).toLocaleDateString()}
-                                        </span>
-                                    </div>
+                                            ) <= 20 && (
+                                                <Chip
+                                                    selected={false}
+                                                    intent="rounded_blue"
+                                                >
+                                                    HOT
+                                                </Chip>
+                                            )}
+                                        </div>
+
+                                        <div className="flex flex-row gap-2">
+                                            <span className="font-bold text-md leading-none text-[16px]">
+                                                {`${remainDays(trip.trip_start_date)}`}
+                                            </span>
+                                            <span className="text-xs leading-none text-[14px]">
+                                                {new Date(
+                                                    trip.trip_start_date,
+                                                ).toLocaleDateString()}
+                                            </span>
+                                        </div>
+                                    </>
                                 )}
                             </div>
-
-                            {mode === 'card' && (
-                                <h2 className="text-xl font-bold leading-none pt-1">
-                                    {trip.trip_final_destination}
-                                </h2>
-                            )}
-                            {!isEdit ? (
-                                <h3
-                                    className={clsx(
-                                        'text-lg font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap',
-                                        mode === 'list' && 'text-black text-xl',
-                                        mode === 'card' && 'text-gray-600',
-                                    )}
-                                >
-                                    {trip.trip_title}
-                                </h3>
-                            ) : (
-                                <button
-                                    className="text-lg font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap animate-pulse text-left"
-                                    onClick={handleClickTripTitle}
-                                >
-                                    {tripTitleContent?.tripTitle ??
-                                        trip.trip_title}
-                                </button>
-                            )}
+                            <div className="flex flex-col gap-2">
+                                {mode === 'card' && (
+                                    <h2 className="text-[18px] font-bold leading-none pt-1">
+                                        {trip.trip_final_destination}
+                                    </h2>
+                                )}
+                                {!isEdit ? (
+                                    <h3
+                                        className={clsx(
+                                            'text-[16px] font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap xl:text-[26px] xl:font-semibold',
+                                            mode === 'list' &&
+                                                'text-black text-xl',
+                                            mode === 'card' && 'text-gray-600',
+                                        )}
+                                    >
+                                        {trip.trip_title}
+                                    </h3>
+                                ) : (
+                                    <button
+                                        className="text-lg font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap animate-pulse text-left"
+                                        onClick={handleClickTripTitle}
+                                    >
+                                        {tripTitleContent?.tripTitle ??
+                                            trip.trip_title}
+                                    </button>
+                                )}
+                            </div>
 
                             <div className="flex flex-row justify-between">
                                 <div className="flex gap-1">
@@ -602,8 +653,8 @@ const TripCard: React.FC<TripCardProps> = ({
                         {mode === 'card' && (
                             <div className="flex flex-col gap-1">
                                 <div className="flex flex-row">
-                                    <p className="text-sm leading-none">
-                                        {`신청`}
+                                    <p className="text-[12px] leading-none">
+                                        {`신청 `}
                                         <span className="text-gray-5000">{`${(trip.contract as Contract[]).length}`}</span>
                                         <span className="text-gray-500">{`/${trip.trip_max_buddies_counts}`}</span>
                                     </p>
@@ -639,7 +690,7 @@ const TripCard: React.FC<TripCardProps> = ({
 
                 <div
                     className={clsx(
-                        'flex w-full text-white rounded-lg h-[16%]',
+                        'relative flex w-full text-white rounded-lg h-[16%]',
                         mode === 'detail' &&
                             'bg-white text-gray-950 rounded-none justify-center gap-2',
                         mode === 'list' && 'justify-between',
@@ -678,7 +729,7 @@ const TripCard: React.FC<TripCardProps> = ({
                         )}
                         scroll={false}
                     >
-                        <button className="flex justify-center items-center w-full h-full">
+                        <button className="flex justify-center items-center w-full h-full text-[14px]">
                             상세보기
                         </button>
                     </Link>

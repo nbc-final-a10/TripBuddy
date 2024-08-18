@@ -33,7 +33,10 @@ const TripEditSelectRegion = forwardRef<Partial<SelectRegionPageProps>>(
                 </div>
                 <SelectRegions
                     className="xl:w-[70%] w-[90%] h-[78%] mx-auto"
-                    states={states}
+                    states={{
+                        ...states,
+                        thirdLevelLocation: states.thirdLevelLocation || '',
+                    }}
                     actions={actions}
                 />
                 <Button

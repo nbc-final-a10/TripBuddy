@@ -1,4 +1,4 @@
-import { emailRegex } from '../common/regexs';
+import { emailRegex, passwordRegex } from '../common/regexs';
 import { showAlert } from '../ui/openCustomAlert';
 export const validateWhiteSpace = (inputs: (string | undefined)[]) =>
     inputs?.some(input => input !== undefined && /\s/.test(input));
@@ -38,9 +38,19 @@ export const authValidation = (
         }
     }
 
-    if (passwordConfirm !== undefined) {
+    if (passwordConfirm !== undefined && password !== undefined) {
         if (!passwordConfirm) {
             showAlert('caution', '비밀번호 확인을 입력해주세요');
+            return false;
+        }
+        if (
+            !passwordRegex.test(passwordConfirm) ||
+            !passwordRegex.test(password)
+        ) {
+            showAlert(
+                'caution',
+                '비밀번호는 영문자, 숫자, 특수문자를 포함해야 합니다!',
+            );
             return false;
         }
     }

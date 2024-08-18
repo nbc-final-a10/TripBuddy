@@ -36,11 +36,11 @@ const StoryList: React.FC = () => {
     // console.log(sortedStories);
 
     return (
-        <section className="w-[92%] py-2 grid grid-cols-2 place-items-center gap-y-3 overflow-hidden xl:grid-cols-4 mx-auto xl:w-full">
+        <section className="w-[92%] py-2 grid grid-cols-2 place-items-center gap-y-3 overflow-hidden xl:grid-cols-4 mx-auto xl:w-full xl:px-2">
             {sortedStories.map(story => (
                 <StoryCard
                     key={story.buddyId}
-                    id={story.buddyId}
+                    id={story.stories[0].story_id}
                     mode={
                         buddy?.buddy_id === story.stories[0].buddies.buddy_id
                             ? 'my'

@@ -1,24 +1,28 @@
+import React from 'react';
+import UnreadMessages from '@/components/atoms/chatpage/UnreadMessages';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import { ContractData } from '@/types/Chat.types';
+import useChatStore from '@/zustand/chat.store';
+import { useUnreadMessagesContext } from '@/contexts/unreadMessages.context';
 
-type ChatListItemProps = {
-    contract_id: string;
-    contract_trip_id: string;
-    trip_title: string;
-    contract_buddies_profiles?: string[];
-    last_message_content?: string;
-    last_message_time?: string;
-};
-
-const ChatListItem: React.FC<ChatListItemProps> = ({
-    contract_id,
+const ChatListItem: React.FC<ContractData> = ({
     contract_trip_id,
     trip_title,
     contract_buddies_profiles = [],
     last_message_content,
     last_message_time,
 }) => {
+    // const unread_count = useChatStore(state =>
+    //     state.getUnreadCount(contract_trip_id),
+    // );
+
+    const { contractUnreadCounts } = useUnreadMessagesContext();
+
+    const unread_count = contractUnreadCounts[contract_trip_id];
+
+    // console.log('unread_count ====>', unread_count);
+
     const renderProfilePictures = () => {
         return contract_buddies_profiles.map((profilePic, index) => (
             <div
@@ -49,14 +53,16 @@ const ChatListItem: React.FC<ChatListItemProps> = ({
                         {trip_title}
                     </p>
                     <p className="text-[14px] font-medium text-grayscale-color-500">
-                        {last_message_content || 'No messages yet'}
+                        {last_message_content || '채팅을 시작해보세요'}
                     </p>
                 </div>
                 <div className="flex flex-col justify-between">
                     <span className="text-center text-[14px] font-medium text-grayscale-color-600">
                         {last_message_time}
                     </span>
-                    {/* <span className="text-center text-[12px] font-semibold text-white bg-secondary-color-300 rounded-[40px] px-[7px] py-[4px]">{`+300`}</span> */}
+                    {unread_count > 0 && (
+                        <UnreadMessages unread_count={unread_count} />
+                    )}
                 </div>
             </div>
         </Link>

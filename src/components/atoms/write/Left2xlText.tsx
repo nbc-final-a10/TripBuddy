@@ -14,7 +14,7 @@ export default function Left2xlBoldText({
         <div>
             <p
                 className={twMerge(
-                    'text-2xl mt-2 ml-2 xl:text-4xl xl:mt-8 xl:ml-2 font-bold',
+                    'text-2xl mt-2 ml-2 xl:mt-8 font-bold',
                     className,
                 )}
             >

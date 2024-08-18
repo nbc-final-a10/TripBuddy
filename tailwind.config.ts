@@ -71,6 +71,18 @@ const config: Config = {
             scrollbar: ['hidden'],
         },
     },
-    plugins: [nextui()],
+    plugins: [
+        nextui({
+            themes: {
+                light: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#ffaf05',
+                        },
+                    },
+                },
+            },
+        }),
+    ],
 };
 export default config;

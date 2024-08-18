@@ -104,7 +104,7 @@ export type Database = {
                     contract_end_date: string;
                     contract_id?: string;
                     contract_isLeader: boolean;
-                    contract_isPending: boolean;
+                    contract_isPending?: boolean;
                     contract_isValidate: boolean;
                     contract_last_message_read?: string | null;
                     contract_start_date: string;
@@ -176,7 +176,7 @@ export type Database = {
                         referencedColumns: ['buddy_id'];
                     },
                     {
-                        foreignKeyName: 'follow_follow_following_id_foreign';
+                        foreignKeyName: 'follow_follow_following_id_fkey';
                         columns: ['follow_following_id'];
                         isOneToOne: false;
                         referencedRelation: 'buddies';
@@ -232,6 +232,7 @@ export type Database = {
                     notification_created_at: string;
                     notification_id: string;
                     notification_isRead: boolean;
+                    notification_origin_id: string | null;
                     notification_receiver: string;
                     notification_sender: string;
                     notification_type: string;
@@ -241,6 +242,7 @@ export type Database = {
                     notification_created_at?: string;
                     notification_id?: string;
                     notification_isRead?: boolean;
+                    notification_origin_id?: string | null;
                     notification_receiver: string;
                     notification_sender: string;
                     notification_type: string;
@@ -250,6 +252,7 @@ export type Database = {
                     notification_created_at?: string;
                     notification_id?: string;
                     notification_isRead?: boolean;
+                    notification_origin_id?: string | null;
                     notification_receiver?: string;
                     notification_sender?: string;
                     notification_type?: string;
