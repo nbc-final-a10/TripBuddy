@@ -4,15 +4,14 @@ import HomePageSearchBar from './HomePageSearchBar';
 import HomePageStories from '@/components/molecules/homepage/HomePageStories';
 import HomePageTrips from '@/components/molecules/homepage/HomePageTrips';
 import React, { useEffect, useMemo, useRef } from 'react';
-import useTapScroll from '@/hooks/useTapScroll';
 import HomePageTitle from '@/components/molecules/homepage/HomePageTitle';
 import HomePageRecommendBuddiesList from './HomePageRecommendBuddiesList';
-import { useAuth } from '@/hooks/auth';
 import Navigate from '@/components/atoms/common/Navigate';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import useHomeQueries from '@/hooks/queries/useHomeQueries';
 import filterOldTrips from '@/utils/trips/filterOldTrips';
 import { TripWithContract } from '@/types/Trips.types';
+import { useHomeQueries } from '@/hooks/queries';
+import { useAuth, useTapScroll } from '@/hooks';
 
 const HomePageContainer = () => {
     const buddiesRef = useRef<HTMLDivElement>(null);
@@ -43,21 +42,23 @@ const HomePageContainer = () => {
     // if (queries.some(query => query.isPending)) return <DefaultLoader />;
 
     return (
-        <div className="rounded-t-[32px] bg-white p-4 z-10 relative">
+        <div className="rounded-t-[32px] bg-white px-5 pt-4 pb-0 z-10 relative">
             <HomePageSearchBar />
-            <div className="mt-4 mb-2 relative z-10">
+            <div className="mt-12 pb-2 relative z-10 min-h-[200px] h-[200px]">
                 <HomePageTitle
+                    className="relative mt-0 mb-0 h-[40%]"
                     title="추천 인기 버디즈"
                     buttonText="전체보기"
                     description="버디즈에게 가장 인기있는 버디즈예요!"
-                    href="/profile/rank"
+                    href="/rank"
                 />
                 <div
-                    className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
+                    className="relative overflow-x-scroll scrollbar-hidden flex gap-[10px] h-[60%]"
                     ref={buddiesRef}
                 >
                     {buddies.data?.buddies && (
                         <HomePageRecommendBuddiesList
+                            className="min-w-[243px] mx-0 border-none shadow-lg"
                             buddies={buddies.data?.buddies}
                         />
                     )}
@@ -83,6 +84,7 @@ const HomePageContainer = () => {
                     title="인기 스토리"
                     buttonText="전체보기"
                     description="버디즈의 스토리를 확인하세요!"
+                    className="mt-0"
                     href="/stories"
                 />
                 <div
@@ -110,15 +112,16 @@ const HomePageContainer = () => {
                 )}
             </div>
 
-            <div className="mt-4 mb-5 relative z-10">
+            <div className="mt-12 mb-0 relative z-10 min-h-[300px] h-[320px]">
                 <HomePageTitle
                     title="지금 모집중인 여정"
                     buttonText="전체보기"
                     description="함께 여행할 버디즈를 찾아보세요!"
                     href="/trips"
+                    className="relative mt-0 mb-0 h-[25%]"
                 />
                 <div
-                    className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
+                    className="relative overflow-x-scroll scrollbar-hidden flex gap-[10px] min-h-[215px] px-[1px] h-[75%]"
                     ref={tripsRef}
                 >
                     {upcomingTrips.length > 0 && (

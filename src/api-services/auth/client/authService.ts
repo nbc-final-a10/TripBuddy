@@ -5,6 +5,7 @@ import {
     LogInData,
     PartialBuddy,
 } from '@/types/Auth.types';
+import { Follow } from '@/types/Follow.types';
 import fetchWrapper from '@/utils/api/fetchWrapper';
 import { OAuthResponse } from '@supabase/supabase-js';
 
@@ -191,6 +192,54 @@ export async function getRecommendBuddies(): Promise<{
         });
         return data;
     } catch (error: any) {
+        throw error;
+    }
+}
+
+export async function fetchFollowData(
+    clickedBuddyId: string,
+): Promise<Follow[]> {
+    const url = `/api/buddyProfile/follow/followList?current_buddy_id=${clickedBuddyId}`;
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (res.ok) {
+            return data.originFollow as Follow[];
+        } else {
+            console.error(data.message);
+            return [];
+        }
+    } catch (error) {
+        console.error(
+            '팔로잉 데이터를 가져오는 중 오류가 발생했습니다:',
+            error,
+        );
+        return [];
+    }
+}
+
+export async function updateBuddyTemperature(buddyId: string): Promise<number> {
+    if (!buddyId) {
+        throw new Error('유효한 버디 아이디가 없습니다.');
+    }
+
+    try {
+        const data = await fetchWrapper<{
+            buddy_temperature: number;
+        }>('/api/buddyProfile/temperature', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                currentBuddyId: buddyId,
+            }),
+        });
+
+        return data.buddy_temperature;
+    } catch (error) {
+        console.error('버디즈 지수 증가 중 오류:', error);
         throw error;
     }
 }

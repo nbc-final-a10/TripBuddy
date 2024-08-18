@@ -1,4 +1,4 @@
-import { StoryWithBuddies } from '@/types/Story.types';
+import { Story, StoryWithBuddies } from '@/types/Story.types';
 import { createClient } from '@/utils/supabase/server';
 import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
@@ -14,14 +14,11 @@ export async function GET(
     const {
         data: story,
         error: storyError,
-    }: {
-        data: StoryWithBuddies[] | null;
-        error: PostgrestError | null;
-    } = await supabase
+    }: { data: Story | null; error: PostgrestError | null } = await supabase
         .from('stories')
-        .select('*, buddies:story_created_by (*)')
-        .eq('story_created_by', id)
-        .order('story_created_at', { ascending: false });
+        .select('*')
+        .eq('story_id', id)
+        .maybeSingle();
 
     if (storyError) {
         console.error(storyError);
@@ -31,11 +28,31 @@ export async function GET(
         );
     }
 
-    if (!story) {
+    const {
+        data: stories,
+        error: storiesError,
+    }: {
+        data: StoryWithBuddies[] | null;
+        error: PostgrestError | null;
+    } = await supabase
+        .from('stories')
+        .select('*, buddies:story_created_by (*)')
+        .eq('story_created_by', story?.story_created_by)
+        .order('story_created_at', { ascending: false });
+
+    if (storiesError) {
+        console.error(storyError);
+        return NextResponse.json(
+            { error: storiesError?.message },
+            { status: 401 },
+        );
+    }
+
+    if (!stories) {
         return NextResponse.json({ error: 'Story not found' }, { status: 404 });
     }
 
-    return NextResponse.json(story, { status: 200 });
+    return NextResponse.json(stories, { status: 200 });
 }
 
 export async function DELETE(

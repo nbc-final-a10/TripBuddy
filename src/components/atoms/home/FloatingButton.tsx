@@ -1,12 +1,13 @@
 'use client';
 
-import { useAuth } from '@/hooks/auth';
+import { useAuth } from '@/hooks';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import WriteIcon from '../../../../public/svg/WriteIcon.svg';
 
 export default function FloatingButton() {
-    const [opacity, setOpacity] = useState(1);
+    // const [opacity, setOpacity] = useState(1);
     const { buddy } = useAuth();
     const router = useRouter();
 
@@ -21,37 +22,24 @@ export default function FloatingButton() {
         }
     };
 
-    useEffect(() => {
-        const handleScroll = () => {
-            const scrollY = window.scrollY;
-            const newOpacity = Math.max(0.2, 1 - scrollY / 200); // 최소 투명도 0.2로 설정
-            setOpacity(newOpacity);
-        };
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         const scrollY = window.scrollY;
+    //         const newOpacity = Math.max(0.2, 1 - scrollY / 200); // 최소 투명도 0.2로 설정
+    //         setOpacity(newOpacity);
+    //     };
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    //     window.addEventListener('scroll', handleScroll);
+    //     return () => window.removeEventListener('scroll', handleScroll);
+    // }, []);
 
     return (
         <button
-            className="fixed bottom-16 right-1/2 transform translate-x-[49vw] sm:translate-x-[213px] xl:right-auto xl:left-1/2 xl:transform xl:translate-x-[830%] xl:bottom-2 bg-main-color text-white rounded-full p-4 shadow-lg z-[999]"
-            style={{ opacity }}
+            className="fixed bottom-14 right-1/2 transform translate-x-[49vw] sm:translate-x-[213px] xl:right-auto xl:left-1/2 xl:transform xl:translate-x-[495px] xl:bottom-2 bg-white text-white rounded-full p-[11px] shadow-lg z-[999]"
+            // style={{ opacity }}
             onClick={handleClick}
         >
-            <svg
-                className="w-6 h-6 mx-auto"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M16 4l4 4-8 8H8v-4l8-8z"
-                ></path>
-            </svg>
+            <WriteIcon />
         </button>
     );
 }

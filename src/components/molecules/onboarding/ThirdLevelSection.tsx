@@ -8,8 +8,9 @@ import { twMerge } from 'tailwind-merge';
 
 type ThirdLevelSectionProps = {
     selectedSecondLevelLocations: ThirdLevel[];
+    // setThirdLevelLocation: (loc: string) => void;
+    thirdLevelLocation?: string | null;
     secondLevelLocation: string | null;
-    thirdLevelLocation?: string;
     handleClick: (loc: string) => void;
 };
 
@@ -28,23 +29,33 @@ const ThirdLevelSection: React.FC<ThirdLevelSectionProps> = memo(
                 <section
                     id="third-level-section"
                     className={twMerge(
-                        'relative h-[70%] overflow-y-auto xl:h-[70%]',
+                        'relative h-[74%] overflow-y-auto xl:h-[53vh] xl:grid xl:grid-cols-2 xl:content-start',
                         pathname === '/search' && 'h-[300px]',
                         pathname === '/write' && 'h-[40vh]',
-                        !secondLevelLocation && 'hidden',
+                        pathname.startsWith('/edit') && 'h-[70%] xl:h-[450px]',
+                        pathname.startsWith('/onboarding') &&
+                            'h-[44vh] xl:h-[450px]',
+                        !secondLevelLocation &&
+                            'hidden xl:flex xl:min-h-[50vh] xl:h-[50vh]',
                     )}
                 >
                     {selectedSecondLevelLocations.map(loc => (
                         <div
                             key={loc.name}
                             className={twMerge(
-                                'flex mx-2 border-b cursor-pointer hover:bg-main-color items-center',
+                                'flex mx-2 border-b cursor-pointer hover:bg-main-color items-center xl:mx-0 xl:border-none xl:hover:bg-transparent',
                                 thirdLevelLocation === loc.name &&
-                                    'bg-main-color',
+                                    'bg-main-color xl:bg-transparent xl:text-primary-color-400',
                             )}
                             onClick={() => handleClick(loc.name)}
                         >
-                            <div className="text-sm text-gray-500 xl:text-base flex items-center p-1.5">
+                            <div
+                                className={twMerge(
+                                    'text-sm text-gray-500 xl:text-base flex items-center p-1.5 xl:hover:text-primary-color-400',
+                                    thirdLevelLocation === loc.name &&
+                                        'xl:text-primary-color-400',
+                                )}
+                            >
                                 <div>
                                     <p className="font-bold">{loc.name}</p>
                                     <p>{secondLevelLocation}</p>
@@ -54,7 +65,7 @@ const ThirdLevelSection: React.FC<ThirdLevelSectionProps> = memo(
                     ))}
                 </section>
 
-                <section className="relative h-[10%] flex items-center justify-center">
+                <section className="relative h-[6%] flex items-center justify-center xl:h-[10%] xl:pt-3">
                     {thirdLevelLocation && (
                         <SelectedResultRealtimeText
                             selectedData={thirdLevelLocation}

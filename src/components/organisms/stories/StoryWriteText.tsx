@@ -4,12 +4,12 @@ import React, { useState } from 'react';
 import DraggableInput from './DraggableInput';
 import Image from 'next/image';
 import clsx from 'clsx';
-import useStoryMutation from '@/hooks/queries/useStoryMutation';
 import { StoryData, StoryFilter, StoryOverlay } from '@/types/Story.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/hooks/auth';
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
+import { useStoryMutation } from '@/hooks/queries';
+import { useAuth } from '@/hooks';
 
 type StoryWriteTextProps = {
     imageFile: File;
@@ -57,7 +57,7 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
     };
 
     return (
-        <section className="relative flex flex-col gap-4 w-full h-[calc(100dvh-57px-56px)] max-h-dvh overflow-hidden aspect-auto xl:min-w-[320px] xl:max-w-[430px] xl:mx-auto bg-gray-600">
+        <section className="relative flex flex-col gap-4 w-full h-[calc(100dvh-57px-54px)] max-h-dvh overflow-hidden aspect-auto xl:min-w-[320px] xl:max-w-[430px] xl:mx-auto bg-gray-600">
             {isPending && <DefaultLoader />}
             {error && (
                 <div className="z-10 text-white font-bold">

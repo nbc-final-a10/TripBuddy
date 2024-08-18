@@ -1,27 +1,28 @@
 'use client';
 
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
-import useTapScroll from '@/hooks/useTapScroll';
 import { StoryOverlay, StoryWithBuddies } from '@/types/Story.types';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { MouseEvent, useRef, useState, useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Close from '../../../../public/svg/Close.svg';
-import { useAuth } from '@/hooks/auth';
-import useDeleteStoryMutation from '@/hooks/queries/useDeleteStoryMutation';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import useSpecificStoriesQuery from '@/hooks/queries/useSpecificStoriesQuery';
 import LikesButton from '@/components/atoms/stories/LikesButton';
-import useStoryLikesQuery from '@/hooks/queries/useStoryLikesQuery';
+import {
+    useDeleteStoryMutation,
+    useSpecificStoryQuery,
+    useStoryLikesQuery,
+} from '@/hooks/queries';
+import { useAuth, useTapScroll } from '@/hooks';
 
 type StoryDetailProps = {
-    nickname: string;
+    // nickname: string;
     id: string;
     stories: StoryWithBuddies[];
 };
 
-const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
+const StoryDetail: React.FC<StoryDetailProps> = ({ id, stories }) => {
     const { buddy } = useAuth();
     const router = useRouter();
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -31,7 +32,7 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
         data: queryStories,
         isPending,
         error: selectedStoriesError,
-    } = useSpecificStoriesQuery(id);
+    } = useSpecificStoryQuery(id);
     const {
         mutate: deleteStory,
         isPending: isDeleting,
@@ -75,7 +76,7 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
     const handleSelectStory = (story: StoryWithBuddies, index: number) => {
         setSelectedStory(story);
         setSelectedIndex(index);
-        router.push(`/stories/${nickname}?id=${story.buddies.buddy_id}`);
+        router.push(`/stories/${story.buddies.buddy_id}`);
     };
 
     const handleDeleteStory = () => {
@@ -109,11 +110,9 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
     useEffect(() => {
         if (queryStories) {
             setSelectedStory(queryStories[0]);
-            router.push(
-                `/stories/${nickname}?id=${queryStories[0].buddies.buddy_id}`,
-            );
+            router.push(`/stories/${queryStories[0].story_id}`);
         }
-    }, [queryStories, router, nickname]);
+    }, [queryStories, router]);
 
     useEffect(() => {
         if (isLikesPending || isDeleting || isPending) {
@@ -125,11 +124,12 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
 
     const storyOverlay = selectedStory?.story_overlay as StoryOverlay[];
 
-    if (isLoading) return <DefaultLoader />;
+    // if (isLoading) return <DefaultLoader />;
 
     return (
         <>
-            <section className="relative w-full h-[calc(100dvh-57px-56px)] bg-gray-800 aspect-auto xl:h-[calc(100dvh-100px)] xl:w-[430px] xl:mx-auto overflow-hidden">
+            <section className="relative w-full h-[calc(100dvh-57px-54px)] bg-gray-800 aspect-auto xl:h-[calc(100dvh-100px)] xl:w-[430px] xl:mx-auto overflow-hidden">
+                {isLoading && <DefaultLoader />}
                 <div className="absolute top-0 left-0 w-full h-full z-20 flex flex-row">
                     <div
                         data-next="before"

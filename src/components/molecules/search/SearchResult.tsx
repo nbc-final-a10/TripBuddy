@@ -1,13 +1,10 @@
-import React, { useRef } from 'react';
-import SearchPageTitle from './SearchPageTitle';
-import { Tables } from '@/types/supabase';
+import React, { useEffect, useRef } from 'react';
+import SearchPageTitle from '../../atoms/search/SearchPageTitle';
 import HomePageTrips from '../homepage/HomePageTrips';
-import useTapScroll from '@/hooks/useTapScroll';
-import { Trip, TripWithContract } from '@/types/Trips.types';
+import { TripWithContract } from '@/types/Trips.types';
 import Image from 'next/image';
 import MascotImage from '@/components/atoms/common/MascotImage';
-
-// type Trip = Tables<'trips'>;
+import { useTapScroll } from '@/hooks';
 
 type SearchResultProps = {
     items: TripWithContract[];
@@ -44,21 +41,23 @@ const SearchResult: React.FC<SearchResultProps> = ({
             );
         });
 
-    // console.log('filteredItems: ', filteredItems);
-    // console.log('sortItems: ', sortItems);
+    console.log('filteredItems: ', filteredItems);
+    console.log('sortItems: ', sortItems);
 
     return (
         <>
             <section className="my-10 mt-20">
                 {filteredItems.length === 0 ? (
                     <div className="flex flex-col justify-center items-center mx-auto">
-                        <Image
-                            src={'/images/mascot_sad.webp'}
-                            alt="profile"
-                            width={100}
-                            height={100}
-                            className="mb-10"
-                        />
+                        <div className="relative w-[100px] h-[100px] mb-10">
+                            <Image
+                                src={'/images/mascot_sad.webp'}
+                                alt="profile"
+                                width={100}
+                                height={100}
+                                className="object-contain h-[100px] w-[100px]"
+                            />
+                        </div>
                         <p className="flex justify-center items-center mx-auto">
                             아쉽게도 일치하는 여정 결과가 없어요
                         </p>
@@ -86,68 +85,70 @@ const SearchResult: React.FC<SearchResultProps> = ({
                 )}
             </section>
 
-            <section className="mt-16 xl:mt-24">
-                <SearchPageTitle
-                    title="여행자님, 이런 여정은 어떠세요?"
-                    description="모집 마감이 얼마 남지 않은 여정들이에요"
-                />
+            {sortItems.length > 0 && (
+                <section className="mt-16 xl:mt-24">
+                    <SearchPageTitle
+                        title="여행자님, 이런 여정은 어떠세요?"
+                        description="모집 마감이 얼마 남지 않은 여정들이에요"
+                    />
 
-                <ul className="grid grid-cols-1 gap-1 mt-8 xl:grid-cols-3 xl:gap-2 xl:w-full">
-                    {sortItems
-                        .slice(0, visibleSecondItems)
-                        .map((item, index) => (
-                            <li
-                                key={index}
-                                className="shadow-md w-[335px] h-[93px] rounded-[11px] mx-auto mb-6 xl:mx-0 xl:w-full xl:h-[120px] p-3"
-                            >
-                                <div className="cursor-pointer flex items-center h-full">
-                                    <div className="bg-gray-200 rounded-lg w-[60px] h-[60px]">
-                                        {item.trip_thumbnail ? (
-                                            <Image
-                                                src={item.trip_thumbnail}
-                                                alt={
-                                                    item.trip_title ||
-                                                    'Thumnail'
-                                                }
-                                                width={60}
-                                                height={60}
-                                                className="w-[60px] h-[60px] rounded-lg object-cover"
-                                            />
-                                        ) : (
-                                            <MascotImage intent="happy" />
-                                        )}
-                                    </div>
-                                    <div className="flex flex-col justify-between w-[218px] ml-8">
-                                        <span className="text-xs font-bold text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis">
-                                            {item.trip_theme1 &&
-                                            item.trip_theme2 &&
-                                            item.trip_theme3
-                                                ? `#${item.trip_theme1} #${item.trip_theme2} #${item.trip_theme3}`
-                                                : '#태그없음'}
-                                        </span>
-                                        <p className="font-semibold truncate mt-1 mb-2.5">
-                                            {item.trip_title}
-                                        </p>
-                                        <div className="flex items-center justify-between w-full mb-1">
-                                            <p className="truncate max-w-[calc(100%-70px)]">
-                                                {item.trip_content}
+                    <ul className="grid grid-cols-1 gap-1 mt-8 xl:grid-cols-3 xl:gap-2 xl:w-full">
+                        {sortItems
+                            .slice(0, visibleSecondItems)
+                            .map((item, index) => (
+                                <li
+                                    key={index}
+                                    className="shadow-md w-[335px] h-[93px] rounded-[11px] mx-auto mb-6 xl:mx-0 xl:w-full xl:h-[120px] p-3"
+                                >
+                                    <div className="cursor-pointer flex items-center h-full">
+                                        <div className="bg-grayscale-color-85 rounded-lg w-[60px] h-[60px]">
+                                            {item.trip_thumbnail ? (
+                                                <Image
+                                                    src={item.trip_thumbnail}
+                                                    alt={
+                                                        item.trip_title ||
+                                                        'Thumnail'
+                                                    }
+                                                    width={60}
+                                                    height={60}
+                                                    className="w-[60px] h-[60px] rounded-lg object-cover"
+                                                />
+                                            ) : (
+                                                <MascotImage intent="happy" />
+                                            )}
+                                        </div>
+                                        <div className="flex flex-col justify-between w-[218px] ml-8">
+                                            <span className="text-xs font-bold text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis">
+                                                {item.trip_theme1 &&
+                                                item.trip_theme2 &&
+                                                item.trip_theme3
+                                                    ? `#${item.trip_theme1} #${item.trip_theme2} #${item.trip_theme3}`
+                                                    : '#태그없음'}
+                                            </span>
+                                            <p className="font-semibold truncate mt-1 mb-2.5">
+                                                {item.trip_title}
                                             </p>
-                                            <span>{`${item.trip_max_buddies_counts}/4`}</span>
+                                            <div className="flex items-center justify-between w-full mb-1">
+                                                <p className="truncate max-w-[calc(100%-70px)]">
+                                                    {item.trip_content}
+                                                </p>
+                                                <span>{`${item.trip_max_buddies_counts}/4`}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
-                        ))}
-                </ul>
-                {visibleSecondItems < sortItems.length && (
-                    <button
-                        className="mt-4 px-4 py-2 bg-main-color text-white rounded-2xl text-sm mx-auto block"
-                        onClick={loadMoreSecondItems}
-                    >
-                        더보기
-                    </button>
-                )}
-            </section>
+                                </li>
+                            ))}
+                    </ul>
+                    {visibleSecondItems < sortItems.length && (
+                        <button
+                            className="mt-4 px-4 py-2 bg-main-color text-white rounded-2xl text-sm mx-auto block"
+                            onClick={loadMoreSecondItems}
+                        >
+                            더보기
+                        </button>
+                    )}
+                </section>
+            )}
         </>
     );
 };

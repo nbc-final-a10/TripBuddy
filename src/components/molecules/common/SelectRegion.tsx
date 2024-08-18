@@ -1,10 +1,10 @@
 import LocationList from '@/components/atoms/write/LocationList';
 import LocationToggleButton from '@/components/atoms/write/LocationToggleButton';
-import locationData from '@/data/location';
 import { SecondLevel, ThirdLevel } from '@/types/Location.types';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import ThirdLevelSection from '../onboarding/ThirdLevelSection';
+import { useTapScroll } from '@/hooks';
 
 type SelectRegionProps = {
     actions: {
@@ -16,9 +16,10 @@ type SelectRegionProps = {
         firstLevelLocation: string;
         secondLevelLocation: string | null;
         selectedSecondLevelLocations: ThirdLevel[];
-        thirdLevelLocation: string;
+        thirdLevelLocation: string | null;
         secondLevelLocations: SecondLevel[];
     };
+    className?: string;
 } & React.RefAttributes<HTMLElement>;
 
 const SelectRegions = forwardRef<HTMLElement, SelectRegionProps>(
@@ -36,6 +37,7 @@ const SelectRegions = forwardRef<HTMLElement, SelectRegionProps>(
                 selectedSecondLevelLocations,
                 secondLevelLocations,
             },
+            className,
         },
         ref,
     ) => {
@@ -46,9 +48,9 @@ const SelectRegions = forwardRef<HTMLElement, SelectRegionProps>(
         }, []);
 
         return (
-            <>
+            <div className={twMerge('relative', className)}>
                 {/* 국내/해외 스위치 버튼 */}
-                <section className="relative h-[10%]">
+                <section className="relative h-[10%] xl:pb-6">
                     <LocationToggleButton
                         firstLabel="국내"
                         secondLabel="해외"
@@ -61,7 +63,7 @@ const SelectRegions = forwardRef<HTMLElement, SelectRegionProps>(
                 {/* 도시/대륙 선택 */}
                 <section
                     className={twMerge(
-                        'overflow-x-scroll scrollbar-hidden flex gap-[10px] xl:h-[10%]',
+                        'overflow-x-scroll scrollbar-hidden flex gap-[10px] xl:h-[10%] xl:pb-6',
                         innerHeight && innerHeight < 659 && 'h-[42px]',
                     )}
                     ref={ref}
@@ -82,7 +84,7 @@ const SelectRegions = forwardRef<HTMLElement, SelectRegionProps>(
                     secondLevelLocation={secondLevelLocation}
                     thirdLevelLocation={thirdLevelLocation}
                 />
-            </>
+            </div>
         );
     },
 );

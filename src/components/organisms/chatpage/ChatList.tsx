@@ -1,19 +1,24 @@
 'use client';
-
 import React, { useEffect, useState } from 'react';
-import ChatListItem from '@/components/molecules/chatpage/ChatListItem';
 import supabase from '@/utils/supabase/client';
-import { useAuth } from '@/hooks/auth';
 import { ContractData } from '@/types/Chat.types';
-import { useRouter } from 'next/navigation';
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
+import { useUnreadMessagesContext } from '@/contexts/unreadMessages.context';
+import ChatListItem from '@/components/molecules/chatpage/ChatListItem';
+import Link from 'next/link';
+import { useAuth } from '@/hooks';
+import { getTimeSinceUpload } from '@/utils/common/getTimeSinceUpload';
+import { getTimeIfDateIsToday } from '@/utils/common/getTimeIfDateIsToday';
+import { Buddy } from '@/types/Auth.types';
 
 const ChatList = () => {
-    const { buddy: currentBuddy } = useAuth();
+    const { buddy } = useAuth();
+    const currentBuddy = buddy as Buddy;
     const [chatData, setChatData] = useState<ContractData[]>([]);
-    const router = useRouter();
     const [contractsExist, setContractsExist] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
+    const { contractUnreadCounts, fetchUnreadCounts } =
+        useUnreadMessagesContext();
 
     useEffect(() => {
         const fetchChatData = async () => {
@@ -23,21 +28,20 @@ const ChatList = () => {
                 const { data: contracts, error: contractsError } =
                     await supabase
                         .from('contract')
-                        .select('contract_id, contract_trip_id')
+                        .select(
+                            'contract_id, contract_trip_id, contract_last_message_read, contract_validate_date',
+                        )
                         .eq('contract_buddy_id', currentBuddy.buddy_id)
-                        // .eq('contract_isPending', false)
                         .eq('contract_isValidate', true);
 
                 if (contractsError) throw contractsError;
 
                 if (!contracts || contracts.length === 0) {
                     setContractsExist(false);
+                    setIsLoading(false);
                     return;
                 }
 
-                const contractIds = contracts.map(
-                    contract => contract.contract_id,
-                );
                 const tripIds = contracts.map(
                     contract => contract.contract_trip_id,
                 );
@@ -101,8 +105,11 @@ const ChatList = () => {
                 const contractDataMap = new Map<string, ContractData>();
 
                 contracts.forEach(contract => {
-                    const { contract_id, contract_trip_id } = contract;
-
+                    const {
+                        contract_id,
+                        contract_trip_id,
+                        contract_validate_date,
+                    } = contract;
                     const buddyIds = Array.from(
                         buddiesByTrip[contract_trip_id] || [],
                     );
@@ -115,8 +122,11 @@ const ChatList = () => {
                         contract_trip_id,
                         trip_title: tripTitleMap[contract_trip_id] || '',
                         contract_buddies_profiles: buddyProfiles,
-                        last_message_content: '채팅을 시작해보세요',
+                        last_message_content: '',
                         last_message_time: '',
+                        unread_count:
+                            contractUnreadCounts[contract_trip_id] || 0,
+                        validate_date: contract_validate_date,
                     });
                 });
 
@@ -127,15 +137,24 @@ const ChatList = () => {
                     >();
 
                     for (const tripId of tripIds) {
+                        const { validate_date } =
+                            Array.from(contractDataMap.values()).find(
+                                c => c.contract_trip_id === tripId,
+                            ) || {};
+
+                        const query = supabase
+                            .from('messages')
+                            .select('message_content, message_created_at')
+                            .eq('message_trip_id', tripId)
+                            .order('message_created_at', { ascending: false })
+                            .limit(1);
+
+                        if (validate_date) {
+                            query.gt('message_created_at', validate_date);
+                        }
+
                         const { data: lastMessages, error: lastMessagesError } =
-                            await supabase
-                                .from('messages')
-                                .select('message_content, message_created_at')
-                                .eq('message_trip_id', tripId)
-                                .order('message_created_at', {
-                                    ascending: false,
-                                })
-                                .limit(1);
+                            await query;
 
                         if (lastMessagesError) {
                             console.error(
@@ -162,19 +181,27 @@ const ChatList = () => {
                         if (contractData) {
                             contractData.last_message_content =
                                 message.message_content;
-                            contractData.last_message_time = new Date(
-                                message.message_created_at,
-                            ).toLocaleTimeString('en-GB', {
-                                hour: '2-digit',
-                                minute: '2-digit',
-                            });
+                            contractData.last_message_time =
+                                message.message_created_at;
                         }
                     });
 
-                    setChatData(Array.from(contractDataMap.values()));
+                    setChatData(
+                        Array.from(contractDataMap.values()).sort((a, b) => {
+                            const dateA = new Date(
+                                a.last_message_time || '1970-01-01T00:00:00Z',
+                            ).getTime();
+                            const dateB = new Date(
+                                b.last_message_time || '1970-01-01T00:00:00Z',
+                            ).getTime();
+                            return dateB - dateA;
+                        }),
+                    );
                 };
 
-                fetchLastMessages();
+                await fetchLastMessages();
+
+                setIsLoading(false);
             } catch (error) {
                 console.error('Error fetching chat data:', error);
                 setIsLoading(false);
@@ -182,79 +209,51 @@ const ChatList = () => {
         };
 
         fetchChatData();
-        const messageSubscription = supabase
-            .channel('chat-room')
-            .on(
-                'postgres_changes',
-                { event: 'INSERT', schema: 'public', table: 'messages' },
-                payload => {
-                    const newMessage = payload.new as {
-                        message_trip_id: string;
-                        message_content: string;
-                        message_created_at: string;
-                    };
-
-                    setChatData(prevData =>
-                        prevData.map(chat => {
-                            if (
-                                chat.contract_trip_id ===
-                                newMessage.message_trip_id
-                            ) {
-                                return {
-                                    ...chat,
-                                    last_message_content:
-                                        newMessage.message_content,
-                                    last_message_time: new Date(
-                                        newMessage.message_created_at,
-                                    ).toLocaleTimeString('en-GB', {
-                                        hour: '2-digit',
-                                        minute: '2-digit',
-                                    }),
-                                };
-                            }
-                            return chat;
-                        }),
-                    );
-                },
-            )
-            .subscribe();
-
-        return () => {
-            messageSubscription.unsubscribe();
-        };
-    }, [currentBuddy]);
-
-    // 로딩 추가 (병준)
-    useEffect(() => {
-        if (chatData.length > 0) {
-            setIsLoading(false);
-        }
-    }, [chatData]);
+    }, [currentBuddy, contractUnreadCounts]);
 
     useEffect(() => {
-        if (!contractsExist) {
-            router.push('/trips');
-        }
-    }, [contractsExist, router]);
+        fetchUnreadCounts();
+    }, [fetchUnreadCounts]);
 
     if (isLoading) {
         return <DefaultLoader />;
+    } else if (!contractsExist) {
+        return (
+            <div className="bg-white xl:bg-grayscale-color-50 text-center h-[calc(100vh-57px-54px)] xl:h-[calc(100vh-100px-57px)] font-bold text-lg flex flex-col justify-center text-grayscale-color-600 overflow-y-auto scrollbar-hidden">
+                <h1 className="text-2xl">아직 참여한 여정이 없습니다!</h1>
+                <br />
+                <Link
+                    href="/trips"
+                    className="text-center font-bold text-xl hover:text-primary-color-400"
+                >
+                    <h2>트립버디즈와 함께</h2>
+                    <h2>즐거운 여행을 시작해 볼까요?</h2>
+                </Link>
+            </div>
+        );
     } else {
         return (
-            <div className="flex flex-col p-4">
-                {chatData.map(chat => (
-                    <ChatListItem
-                        key={chat.contract_id}
-                        contract_id={chat.contract_id}
-                        contract_trip_id={chat.contract_trip_id}
-                        trip_title={chat.trip_title}
-                        contract_buddies_profiles={
-                            chat.contract_buddies_profiles
-                        }
-                        last_message_content={chat.last_message_content}
-                        last_message_time={chat.last_message_time}
-                    />
-                ))}
+            <div className="bg-white xl:bg-grayscale-color-50 h-[calc(100vh-57px-54px)] xl:h-[calc(100vh-100px-57px)] flex flex-col p-4 xl:w-full overflow-y-auto scrollbar-hidden">
+                {chatData.map(chat => {
+                    const lastMessageTime = chat.last_message_time
+                        ? getTimeIfDateIsToday(chat.last_message_time) ||
+                          getTimeSinceUpload(chat.last_message_time)
+                        : '';
+
+                    return (
+                        <ChatListItem
+                            key={chat.contract_id}
+                            contract_id={chat.contract_id}
+                            contract_trip_id={chat.contract_trip_id}
+                            trip_title={chat.trip_title}
+                            contract_buddies_profiles={
+                                chat.contract_buddies_profiles
+                            }
+                            last_message_content={chat.last_message_content}
+                            last_message_time={lastMessageTime}
+                        />
+                    );
+                })}
             </div>
         );
     }

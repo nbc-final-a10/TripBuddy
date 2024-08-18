@@ -1,3 +1,4 @@
+'use client';
 import Title from '@/components/atoms/common/Title';
 import OnBoardingInnerWrapper from '@/components/atoms/onboarding/OnBoardinginnerWrapper';
 import OnBoardingWrapper from '@/components/atoms/onboarding/OnBoardingWrapper';
@@ -82,7 +83,7 @@ const OnBoardingCalender = ({
             <OnBoardingInnerWrapper>
                 <Calendar
                     aria-label="Date (Show Month and Year Picker Controlled)"
-                    className="w-[90%] flex justify-center items-center"
+                    className="w-[90%] flex justify-center items-center bg-white"
                     showMonthAndYearPickers
                     classNames={{
                         gridBody: 'bg-white w-full',

@@ -69,8 +69,25 @@ const config: Config = {
                 'symentic-red-color-50': '#FFC2AF',
             },
             scrollbar: ['hidden'],
+            boxShadow: {
+                'header-mobile': '0px 5px 14px 0px rgba(0, 0, 0, 0.04)',
+                'header-web': '0px 2px 3.8px 0px rgba(0, 0, 0, 0.06)',
+                'tap-menu': '0px -1px 5.3px 0px rgba(0, 0, 0, 0.11)',
+            },
         },
     },
-    plugins: [nextui()],
+    plugins: [
+        nextui({
+            themes: {
+                light: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#ffaf05',
+                        },
+                    },
+                },
+            },
+        }),
+    ],
 };
 export default config;

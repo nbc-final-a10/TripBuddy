@@ -10,6 +10,7 @@ import {
 import { getTimeSinceUpload } from '@/utils/common/getTimeSinceUpload';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -19,6 +20,7 @@ type StoryCardProps = {
     story: StoryWithBuddies;
     overlay: StoryOverlay[];
     likes: StoryLikes[];
+    isMain?: boolean;
 };
 
 const StoryCard: React.FC<StoryCardProps> = ({
@@ -27,22 +29,33 @@ const StoryCard: React.FC<StoryCardProps> = ({
     story,
     overlay,
     likes,
+    isMain = false,
 }) => {
+    const pathname = usePathname();
+    const router = useRouter();
+
     return (
-        <div className="relative flex flex-col justify-center items-center min-w-[139px] w-[139px] h-[190px] bg-gray-3000 rounded-lg gap-2 aspect-auto xl:min-w-[254px]">
-            <div className="absolute top-0.5 right-1 w-full flex flex-row justify-end z-[99]">
-                <button className="relative focus:outline-none">
-                    <LikesButton
-                        storyId={story.story_id}
-                        likesCount={story.story_likes_counts}
-                        mode="card"
-                        likes={likes}
-                    />
-                </button>
-            </div>
+        <div
+            className={twMerge(
+                'relative flex flex-col justify-center items-center min-w-[163px] w-[163px] h-[223px] rounded-lg gap-2 aspect-auto xl:min-w-[252px]',
+                pathname === '/' && 'min-w-[139px] w-[139px] h-[190px]',
+            )}
+        >
+            {!isMain && (
+                <div className="absolute top-0.5 right-1 w-full flex flex-row justify-end z-[99]">
+                    <button className="relative focus:outline-none">
+                        <LikesButton
+                            storyId={story.story_id}
+                            likesCount={story.story_likes_counts}
+                            mode="card"
+                            likes={likes}
+                        />
+                    </button>
+                </div>
+            )}
             <Link
                 className="w-full h-full absolute aspect-auto flex justify-center items-center"
-                href={`/stories/${story.buddies.buddy_nickname}?id=${id}`}
+                href={`/stories/${id}`}
             >
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black/80 rounded-lg z-10"></div>
 
@@ -67,6 +80,9 @@ const StoryCard: React.FC<StoryCardProps> = ({
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="rounded-full object-cover"
+                    onClick={() =>
+                        router.push(`/profile/${story.buddies.buddy_id}`)
+                    }
                 />
                 {mode === 'my' && <AddButtonSmall />}
             </div>

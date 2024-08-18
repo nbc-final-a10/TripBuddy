@@ -1,33 +1,20 @@
-'use client';
-
-import React, { useState, useEffect } from 'react';
-import NextImage from 'next/image';
-import DefaultLoader from '../common/DefaultLoader';
+import React from 'react';
+// import DefaultLoader from '../common/DefaultLoader';
+import Image from 'next/image';
 
 type TutoProps = {
     step: number;
 };
+
 const content = [
     {
-        src: '/images/tuto0.webp',
+        src: '/images/tutorial_01.webp',
         alt: '첫 번째 튜토리얼 페이지에서 사용되는 이미지',
-        title: (
-            <>
-                각자의 성향대로
-                <br />
-                즐기는 여행!
-            </>
-        ),
-        description: (
-            <>
-                트립버디즈가 나에 대해 알아가는
-                <br />
-                맞춤형 온보딩!
-            </>
-        ),
+        title: <>각자의 성향대로 즐기는 여행!</>,
+        description: <>트립버디즈가 나에 대해 알아가는 맞춤형 온보딩!</>,
     },
     {
-        src: '/images/tuto1.webp',
+        src: '/images/tutorial_02.webp',
         alt: '두 번째 튜토리얼 페이지에서 사용되는 이미지',
         title: (
             <>
@@ -36,33 +23,16 @@ const content = [
                 버디즈와 함께!
             </>
         ),
-        description: (
-            <>
-                평소 여행 스타일, 유형을 통한
-                <br />
-                맞춤형 추천 서비스!
-            </>
-        ),
+        description: <>평소 여행 스타일, 유형을 통한 맞춤형 추천 서비스!</>,
     },
     {
-        src: '/images/tuto2.webp',
+        src: '/images/tutorial_03.webp',
         alt: '세 번째 튜토리얼 페이지에서 사용되는 이미지',
-        title: (
-            <>
-                채팅을 통한 버디즈와
-                <br />
-                편리한 소통!
-            </>
-        ),
-        description: (
-            <>
-                여정 계획, 맛집 공유 등<br />
-                다양한 대화를 나눠봐요!
-            </>
-        ),
+        title: <>채팅을 통한 버디즈와 편리한 소통!</>,
+        description: <>여정 계획, 맛집 공유 등 다양한 대화를 나눠봐요!</>,
     },
     {
-        src: '/images/tuto3.webp',
+        src: '/images/tutorial_04.webp',
         alt: '네 번째 튜토리얼 페이지에서 사용되는 이미지',
         title: (
             <>
@@ -71,16 +41,10 @@ const content = [
                 수락 여부 결정!
             </>
         ),
-        description: (
-            <>
-                나와 딱 맞는 버디즈를
-                <br />
-                직접 골라 여정을 함께해요!
-            </>
-        ),
+        description: <>나와 딱 맞는 버디즈를 직접 골라 여정을 함께해요!</>,
     },
     {
-        src: '/images/tuto4.webp',
+        src: '/images/tutorial_05.webp',
         alt: '다섯 번째 튜토리얼 페이지에서 사용되는 이미지',
         title: (
             <>
@@ -89,49 +53,48 @@ const content = [
                 즐거운 여정을 시작해요!
             </>
         ),
-        description: (
-            <>
-                새로운 친구들과 함께
-                <br />
-                여행을 즐겨보세요!
-            </>
-        ),
     },
     // 필요한 만큼 추가
 ];
-const Tuto: React.FC<TutoProps> = ({ step }) => {
-    const [isImageLoaded, setIsImageLoaded] = useState(false);
 
-    useEffect(() => {
-        setIsImageLoaded(false);
-        const img = new Image();
-        img.src = content[step].src;
-        img.onload = () => {
-            setIsImageLoaded(true);
-        };
-        img.onerror = () => {
-            setIsImageLoaded(false);
-        };
-    }, [step]);
+const Tuto: React.FC<TutoProps> = ({ step }) => {
+    // const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+    // useEffect(() => {
+    //     setIsImageLoaded(false);
+    //     const img = new Image();
+    //     img.src = content[step].src;
+    //     img.onload = () => {
+    //         setIsImageLoaded(true);
+    //     };
+    //     img.onerror = () => {
+    //         setIsImageLoaded(false);
+    //     };
+    // }, [step]);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-[75dvh] bg-white xl:p-4 xl:min-h-full">
-            {!isImageLoaded && <DefaultLoader />}
-            <h1 className="text-center font-bold text-2xl md:text-3xl mt-4 xl:mt-2 xl:mb-2">
-                {content[step].title}
-            </h1>
-            <p className="text-center text-lg md:text-xl text-gray-600 mb-4 xl:mb-8">
-                {content[step].description}
-            </p>
-            <div className="relative w-full h-[300px] max-h-[60vh] min-h-[300px] aspect-[3/4] xl:h-[350px] xl:max-h-[80vh] xl:min-h-[350px] xl:aspect-[3/4] transition-opacity duration-500">
-                <NextImage
-                    src={content[step].src}
-                    alt={content[step].alt}
-                    fill
-                    priority
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-contain min-h-[300px] max-h-[100%]"
-                />
+        <div className="relative h-full bg-white pt-[8px]">
+            {/* {!isImageLoaded && <DefaultLoader />} */}
+            <div className="relative h-[18%] flex flex-col justify-start items-center xl:h-[23%]">
+                <h1 className="text-center font-bold text-2xl md:text-3xl ">
+                    {content[step].title}
+                </h1>
+                <p className="text-center text-lg md:text-xl text-gray-600 mb-2 xl:mb-4">
+                    {content[step].description}
+                </p>
+            </div>
+            <div className="relative flex justify-center items-start h-[80%] xl:h-[76%]">
+                <div className="relative w-[324px] h-[426px] aspect-auto">
+                    <Image
+                        src={content[step].src}
+                        alt={content[step].alt}
+                        fill
+                        priority
+                        loading="eager"
+                        sizes="(max-width: 768px) 100%, (max-width: 1200px) 30%, 33%"
+                        className="object-contain min-h-[324px] max-h-[426] w-[100%]  "
+                    />
+                </div>
             </div>
         </div>
     );

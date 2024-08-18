@@ -6,8 +6,11 @@ import {
 } from '@tanstack/react-query';
 import React, { PropsWithChildren, Suspense } from 'react';
 import Loading from './loading';
-import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
-import Header from '@/components/atoms/common/Header';
+import {
+    QUERY_KEY_BUDDY,
+    QUERY_KEY_NOTIFICATION,
+} from '@/constants/query.constants';
+import Header from '@/components/molecules/common/Header';
 import { getBuddyServer } from '@/api-services/auth/server';
 import { getUserFromHeader } from '@/utils/auth/getUserFromHeader';
 import MainSectionWrapper from '@/components/molecules/common/MainSectionWrapper';
@@ -17,7 +20,10 @@ import { Metadata } from 'next';
 import { defaultMetaData } from '@/data/defaultMetaData';
 import { ModalProviderSetter } from '@/providers/ModalProvider';
 import { ModalProviderDefault } from '@/contexts/modal.context';
-import { getPathnameServer } from '@/utils/common/getPathnameServer';
+import { UnreadMessagesProvider } from '@/contexts/unreadMessages.context';
+import { NotificationProvider } from '@/contexts/notification.context';
+import { getNotifications } from '@/api-services/notification';
+import { Notification } from '@/types/Notification.types';
 
 export const metadata: Metadata = defaultMetaData;
 
@@ -31,21 +37,39 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
         queryKey: [QUERY_KEY_BUDDY],
         queryFn: () => getBuddyServer(userId),
     });
+    await queryClient.prefetchQuery({
+        queryKey: [QUERY_KEY_NOTIFICATION],
+        queryFn: () => getNotifications(),
+    });
     const dehydratedState = dehydrate(queryClient);
+
+    const notifications = await queryClient.getQueryData<Notification[]>([
+        QUERY_KEY_NOTIFICATION,
+    ]);
+
+    const filteredNotifications = notifications?.filter(
+        notification => notification.notification_receiver === userId,
+    );
 
     return (
         <Suspense fallback={<Loading />}>
             <HydrationBoundary state={dehydratedState}>
                 <ModalProviderDefault>
                     <AuthProvider>
-                        <Header />
-                        <MainSectionWrapper>
-                            <ModalProviderSetter>
-                                <MobileHeader />
-                                {children}
-                                <TapMenu />
-                            </ModalProviderSetter>
-                        </MainSectionWrapper>
+                        <NotificationProvider
+                            initialNotifications={filteredNotifications}
+                        >
+                            <UnreadMessagesProvider>
+                                <Header />
+                                <MainSectionWrapper>
+                                    <ModalProviderSetter>
+                                        <MobileHeader />
+                                        {children}
+                                        <TapMenu />
+                                    </ModalProviderSetter>
+                                </MainSectionWrapper>
+                            </UnreadMessagesProvider>
+                        </NotificationProvider>
                     </AuthProvider>
                 </ModalProviderDefault>
             </HydrationBoundary>

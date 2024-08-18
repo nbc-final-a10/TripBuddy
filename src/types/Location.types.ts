@@ -40,3 +40,19 @@ export type ThirdLevel =
     LocationDataType[number]['subLocations'][number]['subLocations'][number];
 
 export type SecondLevel = LocationDataType[number]['subLocations'][number];
+
+export type SelectRegionPageProps = {
+    isMini?: boolean;
+    states: {
+        firstLevelLocation: string;
+        secondLevelLocation: string | null;
+        thirdLevelLocation: string | null;
+        selectedSecondLevelLocations: ThirdLevel[];
+        secondLevelLocations: SecondLevel[];
+    };
+    actions: {
+        handleLocationTypeClick: (isKoreaSelected: boolean) => void;
+        handleChipClick: (name: string) => void;
+        handleThirdLevelClick: (locName: string) => void;
+    };
+};

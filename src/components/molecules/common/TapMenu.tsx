@@ -1,15 +1,22 @@
 'use client';
 
-import React from 'react';
-import { useAuth } from '@/hooks/auth';
+import React, { useEffect } from 'react';
 import TapMenuButton from '@/components/atoms/common/TapMenuButton';
 import { usePathname } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
+import { useAuth } from '@/hooks';
+// import { useNotification } from '@/hooks/notification/useNotification';
 
 const TapMenu: React.FC = () => {
     const { buddy } = useAuth();
     const pathname = usePathname();
     const buddy_id = buddy ? buddy.buddy_id : '';
+
+    // const { notifications } = useNotification();
+
+    // useEffect(() => {
+    //     console.log('하단바에서 notifications 변경사항 ====>', notifications);
+    // }, [notifications]);
 
     const hidden =
         pathname.startsWith('/chat/') ||
@@ -22,7 +29,7 @@ const TapMenu: React.FC = () => {
     return (
         <div
             className={twMerge(
-                'z-[99] fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[430px] min-w-[375px] bg-white border-t-2 border-gray-200 grid grid-cols-4 xl:hidden',
+                'z-[99] fixed bottom-0 left-1/2 transform -translate-x-1/2 h-[54px] w-full max-w-[430px] min-w-[375px] bg-white shadow-tap-menu border-gray-200 grid grid-cols-4 xl:hidden',
                 hidden && 'hidden',
             )} // 변경 필요
         >

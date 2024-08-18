@@ -7,7 +7,7 @@ export function setModalContext(context: ModalContextType) {
 }
 
 export const showAlert = (
-    title: 'success' | 'caution' | 'error',
+    mode: 'success' | 'caution' | 'error',
     description: string,
     options: AlertProps = {},
 ): void => {
@@ -19,7 +19,7 @@ export const showAlert = (
     }
 
     modalContext.open({
-        title,
+        mode,
         description,
         options,
     });

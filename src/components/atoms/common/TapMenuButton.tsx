@@ -8,6 +8,9 @@ import Chat from '../../../../public/svg/Chat.svg';
 import Mypage from '../../../../public/svg/Mypage.svg';
 import { usePathname } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
+import useChatStore from '@/zustand/chat.store';
+import UnreadMessages from '../chatpage/UnreadMessages';
+import { useUnreadMessagesContext } from '@/contexts/unreadMessages.context';
 interface TapMenuButtonProps {
     iconName: string;
     href: string;
@@ -21,9 +24,15 @@ const TapMenuButton: React.FC<TapMenuButtonProps> = ({
 }) => {
     const pathname = usePathname();
 
+    // const totalUnreadCount = useChatStore(state => state.getTotalUnreadCount());
+
+    const { allUnreadCounts } = useUnreadMessagesContext();
+
+    // const totalUnreadCount = contractUnreadCounts[contract_trip_id];
+
     return (
         <Link href={href}>
-            <button className="flex flex-col items-center justify-center w-full p-4 focus:outline-none">
+            <button className="flex flex-col items-center justify-center w-full h-full focus:outline-none relative">
                 {iconName === 'Home' && (
                     <Home
                         className={twMerge(
@@ -63,6 +72,11 @@ const TapMenuButton: React.FC<TapMenuButtonProps> = ({
                                 : 'text-grayscale-color-300',
                         )}
                     />
+                )}
+                {iconName === 'Chat' && allUnreadCounts > 0 && (
+                    <div className="absolute top-[4px] right-[14px] z-100">
+                        <UnreadMessages unread_count={allUnreadCounts} />
+                    </div>
                 )}
                 <span
                     className={twMerge(

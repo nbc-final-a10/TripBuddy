@@ -2,6 +2,8 @@ import { PostgrestError } from '@supabase/supabase-js';
 import { Contract, PartialContract } from '@/types/Contract.types';
 import { createClient } from '@/utils/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
+import { PartialBuddy } from '@/types/Auth.types';
+import { Trip } from '@/types/Trips.types';
 
 export async function POST(req: NextRequest) {
     const supabase = createClient();
@@ -10,7 +12,10 @@ export async function POST(req: NextRequest) {
         const payload: PartialContract = await req.json();
 
         // trip 데이터를 가져오기 위해 Supabase에서 trips 테이블을 조회
-        const { data: trip, error: tripError } = await supabase
+        const {
+            data: trip,
+            error: tripError,
+        }: { data: Trip | null; error: PostgrestError | null } = await supabase
             .from('trips')
             .select('*')
             .eq('trip_id', payload.contract_trip_id)
@@ -54,16 +59,18 @@ export async function POST(req: NextRequest) {
             const isLeader = existingContracts.some(
                 contract => contract.contract_isLeader,
             );
-            if (isLeader) {
+            if (isLeader && payload.contract_isPending) {
                 return NextResponse.json(
                     { error: '자신의 여정에는 참여를 신청할 수 없습니다' },
                     { status: 400 },
                 );
             }
-            return NextResponse.json(
-                { error: '해당 여정에는 이미 참여하셨습니다.' },
-                { status: 400 },
-            );
+            if (payload.contract_isPending) {
+                return NextResponse.json(
+                    { error: '해당 여정에는 이미 참여하셨습니다.' },
+                    { status: 400 },
+                );
+            }
         }
 
         // 현재 여정의 contract가 생성된 수를 확인
@@ -95,16 +102,22 @@ export async function POST(req: NextRequest) {
         const tripEndDate = new Date(trip.trip_end_date);
         const isValidate = today <= tripEndDate;
 
-        const contractData = {
-            contract_trip_id: payload.contract_trip_id,
-            contract_buddy_id: payload.contract_buddy_id,
-            contract_start_date: trip.trip_start_date,
-            contract_end_date: trip.trip_end_date,
-            contract_isLeader: false,
-            contract_isPending: true,
-            contract_isValidate: isValidate,
-            contract_created_at: new Date().toISOString(),
-        };
+        let contractData: PartialContract;
+        if (payload.contract_isPending) {
+            contractData = {
+                contract_trip_id: payload.contract_trip_id,
+                contract_buddy_id: payload.contract_buddy_id,
+                contract_start_date: trip.trip_start_date,
+                contract_end_date: trip.trip_end_date,
+                contract_isLeader: false,
+                contract_isPending: payload.contract_isPending ?? false, // 다른사람이 참여할 경우에는 펜딩상태를 토글가능하게
+                contract_isValidate: isValidate,
+                contract_created_at: new Date().toISOString(),
+            };
+        } else {
+            contractData = payload;
+            console.log('contractData ====>', contractData);
+        }
 
         // 'contract' 테이블에 contract 데이터를 삽입
         const {
@@ -113,7 +126,7 @@ export async function POST(req: NextRequest) {
         }: { data: Contract | null; error: PostgrestError | null } =
             await supabase
                 .from('contract')
-                .insert(contractData)
+                .upsert([{ ...contractData }], { ignoreDuplicates: false })
                 .select()
                 .single();
 
@@ -130,6 +143,51 @@ export async function POST(req: NextRequest) {
                 { contract: null, error: '컨트랙트 생성 중 오류 발생' },
                 { status: 500 },
             );
+        }
+
+        const {
+            data: buddy,
+            error: buddyError,
+        }: { data: PartialBuddy | null; error: PostgrestError | null } =
+            await supabase
+                .from('buddies')
+                .select('buddy_nickname')
+                .eq('buddy_id', payload.contract_buddy_id)
+                .single();
+
+        if (buddyError) {
+            return NextResponse.json(
+                { error: buddyError.message },
+                { status: 401 },
+            );
+        }
+
+        // 참여 요청이면 알림 생성 / contract_isPending 이 true인 경우(최초신청시)
+        if (payload.contract_isPending) {
+            const {
+                data: notification,
+                error: notificationError,
+            }: { data: Notification | null; error: PostgrestError | null } =
+                await supabase
+                    .from('notifications')
+                    .upsert([
+                        {
+                            notification_type: 'contract',
+                            notification_sender: payload.contract_buddy_id,
+                            notification_receiver: trip.trip_master_id,
+                            notification_content: `${buddy?.buddy_nickname}님이 참가 요청을 보냈어요!`,
+                            notification_origin_id: payload.contract_trip_id,
+                        },
+                    ])
+                    .select()
+                    .single();
+
+            if (notificationError) {
+                return NextResponse.json(
+                    { error: notificationError.message },
+                    { status: 401 },
+                );
+            }
         }
 
         return NextResponse.json(contract, { status: 200 });
