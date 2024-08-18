@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useMyBookMarksQuery } from '@/hooks/queries/trip/useMyBookMarksQuery';
@@ -14,7 +16,6 @@ function MyBookmarksPage() {
     } = useMyBookMarksQuery(
         Array.isArray(clickedBuddyId) ? clickedBuddyId[0] : clickedBuddyId,
     );
-    console.log('id', clickedBuddyId);
 
     return (
         <>

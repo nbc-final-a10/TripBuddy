@@ -5,8 +5,8 @@ import { useParams } from 'next/navigation';
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import FollowingList from '@/components/molecules/profile/followList/FollowingList';
 import FollowerList from '@/components/molecules/profile/followList/FollowerList';
-import useFollowListToggle from '@/hooks/MyPage/useFollowListToggle';
 import { useFollowCountQuery } from '@/hooks/queries';
+import useFollowListToggle from '@/hooks/myPage/useFollowListToggle';
 
 function FollowPage() {
     const { activeButton, FollowListToggleButton } = useFollowListToggle();
