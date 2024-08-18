@@ -101,10 +101,12 @@ export default function FollowButton() {
         };
 
         if (pathname.includes('trips')) {
+            console.log('trips들어가냐?');
             setIsLoading(true);
             handleTripsLogic();
             setIsLoading(false);
         } else if (pathname.includes('profile')) {
+            console.log('profile들어가냐?');
             setIsLoading(true);
             handleProfileLogic();
             setIsLoading(false);

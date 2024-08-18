@@ -37,10 +37,10 @@ function ProfilePage({ params }: ProfilePageProps) {
         setFollowerList(newFollowerList);
     }, [followList, clickedBuddy?.buddy_id]);
 
-    const handleLogOut = () => {
-        logOut();
-        showAlert('success', '로그아웃 완료되었습니다.');
-    };
+    // const handleLogOut = () => {
+    //     logOut();
+    //     showAlert('success', '로그아웃 완료되었습니다.');
+    // };
 
     if (error) {
         return <div>버디 프로필을 가져오는 중 오류가 발생했습니다.</div>;
@@ -128,7 +128,7 @@ function ProfilePage({ params }: ProfilePageProps) {
                         <section className="mt-16 mx-8">
                             <button
                                 className="bg-main-color text-white font-bold h-10 w-full rounded-xl"
-                                onClick={handleLogOut}
+                                onClick={logOut}
                             >
                                 로그아웃
                             </button>

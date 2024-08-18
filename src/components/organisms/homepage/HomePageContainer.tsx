@@ -81,7 +81,7 @@ const HomePageContainer = () => {
 
             <div className="mt-4 mb-2 relative z-10">
                 <HomePageTitle
-                    title="인기 스토리"
+                    title="버디즈 스토리"
                     buttonText="전체보기"
                     description="버디즈의 스토리를 확인하세요!"
                     className="mt-0"

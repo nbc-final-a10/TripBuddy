@@ -27,7 +27,7 @@ const MobileHeader: React.FC = () => {
     const isOboardingEdit = searchParams.get('mode') === 'edit';
     const isTrips = pathname === '/trips';
     const isTripDetail = pathname.startsWith('/trips/');
-    const isStory = pathname.startsWith('/stories/');
+    const isStory = pathname.startsWith('/stories');
     const isChatId = pathname.startsWith('/chat/');
     const isChat = pathname === '/chat';
     const isLogin = pathname === '/login';
