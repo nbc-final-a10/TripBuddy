@@ -29,7 +29,6 @@ import {
     useContractMutation,
 } from '@/hooks/queries';
 import { useAuth, useSelectBuddyCounts } from '@/hooks';
-import Input from '@/components/atoms/common/Input';
 import TripStartDate from '@/components/atoms/trips/TripStartDate';
 import { useModal } from '@/contexts/modal.context';
 import TripEditSelectRegion from '../../molecules/trips/TripEditSelectRegion';
@@ -41,12 +40,15 @@ import TripEditText from '../../molecules/trips/TripEditText';
 import { deleteTrip } from '@/utils/trips/deleteTrip';
 import { useQueryClient } from '@tanstack/react-query';
 import {
+    QUERY_KEY_CONTRACT,
     QUERY_KEY_TRIP,
     QUERY_KEY_TRIP_INFINITE,
+    QUERY_KEY_TRIPS,
 } from '@/constants/query.constants';
 import getIsOverseas from '@/utils/common/getIsOverseas';
 import remainDaysNumber from '@/utils/common/getRemainDaysNumber';
 import { leaveTrip } from '@/utils/trips/leaveTrip';
+import supabase from '@/utils/supabase/client';
 
 type TripCardProps = {
     trip: TripWithContract;
@@ -206,7 +208,13 @@ const TripCard: React.FC<TripCardProps> = ({
                         showAlert('success', '삭제되었습니다.', {
                             onConfirm: () => {
                                 queryClient.invalidateQueries({
+                                    queryKey: [QUERY_KEY_TRIP, trip.trip_id],
+                                });
+                                queryClient.invalidateQueries({
                                     queryKey: [QUERY_KEY_TRIP_INFINITE],
+                                });
+                                queryClient.invalidateQueries({
+                                    queryKey: [QUERY_KEY_TRIPS],
                                 });
                                 router.push('/trips');
                             },
@@ -235,7 +243,16 @@ const TripCard: React.FC<TripCardProps> = ({
                             showAlert('success', '여정에서 나가셨습니다.', {
                                 onConfirm: () => {
                                     queryClient.invalidateQueries({
-                                        queryKey: [QUERY_KEY_TRIP],
+                                        queryKey: [
+                                            QUERY_KEY_TRIP,
+                                            trip.trip_id,
+                                        ],
+                                    });
+                                    queryClient.invalidateQueries({
+                                        queryKey: [QUERY_KEY_TRIP_INFINITE],
+                                    });
+                                    queryClient.invalidateQueries({
+                                        queryKey: [QUERY_KEY_TRIPS],
                                     });
                                     router.push(`/trips/${trip.trip_id}`);
                                 },
@@ -343,7 +360,12 @@ const TripCard: React.FC<TripCardProps> = ({
         const isBuddyParticipating = trip.contract.find(
             contract => contract.contract_buddy_id === buddy?.buddy_id,
         );
-        if (isBuddyParticipating) {
+        if (isBuddyParticipating && isBuddyParticipating.contract_isPending) {
+            return '대기중';
+        } else if (
+            isBuddyParticipating &&
+            !isBuddyParticipating.contract_isPending
+        ) {
             return '나가기';
         }
         return '참여하기';
@@ -369,6 +391,33 @@ const TripCard: React.FC<TripCardProps> = ({
             showAlert('success', '버디장에게 참여 요청이 전달되었습니다.');
         }
     }, [isContractMutationSuccess]);
+
+    useEffect(() => {
+        const contractSubscription = supabase
+            .channel('schema-changes')
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'contract',
+                },
+                payload => {
+                    console.log('payload ====>', payload);
+                    queryClient.invalidateQueries({
+                        queryKey: [QUERY_KEY_CONTRACT, trip.trip_id],
+                    });
+                    queryClient.invalidateQueries({
+                        queryKey: [QUERY_KEY_TRIP, trip.trip_id],
+                    });
+                },
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(contractSubscription);
+        };
+    }, [trip.trip_id, queryClient]);
 
     return (
         <>

@@ -15,7 +15,8 @@ const ChatList = () => {
     const [chatData, setChatData] = useState<ContractData[]>([]);
     const [contractsExist, setContractsExist] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
-    const { contractUnreadCounts } = useUnreadMessagesContext();
+    const { contractUnreadCounts, fetchUnreadCounts } =
+        useUnreadMessagesContext();
 
     useEffect(() => {
         const fetchChatData = async () => {
@@ -193,6 +194,10 @@ const ChatList = () => {
 
         fetchChatData();
     }, [currentBuddy, contractUnreadCounts]);
+
+    useEffect(() => {
+        fetchUnreadCounts();
+    }, [fetchUnreadCounts]);
 
     if (isLoading) {
         return <DefaultLoader />;

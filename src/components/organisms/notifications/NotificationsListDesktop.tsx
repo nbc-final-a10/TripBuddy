@@ -1,15 +1,12 @@
 'use client';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import NotificationListItem from '@/components/molecules/notifications/NotificationListItem';
-import { NotificationContext } from '@/contexts/notification.context';
-import { ClassifiedNotification } from '@/types/Notification.types';
 import { RxTriangleLeft, RxTriangleRight } from 'react-icons/rx';
 import { twMerge } from 'tailwind-merge';
+import { useNotification } from '@/hooks/notification/useNotification';
 
 const NotificationsListDesktop = () => {
-    const { notifications } = useContext(NotificationContext) as {
-        notifications: ClassifiedNotification;
-    };
+    const { notifications } = useNotification();
 
     const allNotifications = [
         ...notifications.storyLikes,

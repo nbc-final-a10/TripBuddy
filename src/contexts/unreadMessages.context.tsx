@@ -40,6 +40,7 @@ export const UnreadMessagesProvider: React.FC<{
                 console.error('Error fetching unread counts:', error);
                 return;
             }
+            // console.log('data ====>', data);
 
             const unreadCounts: UnreadCount[] = data || [];
             let updatedUnreadCounts: Record<string, number> = {};
@@ -48,6 +49,7 @@ export const UnreadMessagesProvider: React.FC<{
                 updatedUnreadCounts[contract_trip_id] = unread_count;
             });
 
+            // console.log('updatedUnreadCounts ====>', updatedUnreadCounts);
             setContractUnreadCounts(updatedUnreadCounts);
         } catch (error) {
             console.error('Error fetching unread counts:', error);
@@ -67,26 +69,26 @@ export const UnreadMessagesProvider: React.FC<{
                 },
             )
             // contract 변경이 실시간 감지가 안 돼서.. 채팅방에서 나가면 새로고침 하는 거로 임시로 작성
-            // .on(
-            //     'postgres_changes',
-            //     {
-            //         event: 'UPDATE',
-            //         schema: 'public',
-            //         table: 'contract',
-            //     },
-            //     payload => {
-            //         if (
-            //             payload.new.contract_last_message_read !==
-            //             payload.old.contract_last_message_read
-            //         ) {
-            //             fetchUnreadCounts();
-            //         }
-            //     },
-            // )
+            .on(
+                'postgres_changes',
+                {
+                    event: 'UPDATE',
+                    schema: 'public',
+                    table: 'contract',
+                },
+                payload => {
+                    if (
+                        payload.new.contract_last_message_read !==
+                        payload.old.contract_last_message_read
+                    ) {
+                        fetchUnreadCounts();
+                    }
+                },
+            )
             .subscribe();
 
         return () => {
-            messagesSubscription.unsubscribe();
+            supabase.removeChannel(messagesSubscription);
         };
     }, [fetchUnreadCounts]);
 

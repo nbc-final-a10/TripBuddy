@@ -1,13 +1,9 @@
 'use client';
-import { useContext } from 'react';
 import NotificationListItem from '@/components/molecules/notifications/NotificationListItem';
-import { NotificationContext } from '@/contexts/notification.context';
-import { ClassifiedNotification } from '@/types/Notification.types';
+import { useNotification } from '@/hooks/notification/useNotification';
 
 const NotificationsListMobile = () => {
-    const { notifications } = useContext(NotificationContext) as {
-        notifications: ClassifiedNotification;
-    };
+    const { notifications } = useNotification();
 
     const allNotifications = [
         ...notifications.storyLikes,

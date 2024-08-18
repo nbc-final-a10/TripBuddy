@@ -3,6 +3,7 @@ import React, { useState, useEffect, MutableRefObject, useRef } from 'react';
 import { Message } from '@/types/Chat.types';
 import supabase from '@/utils/supabase/client';
 import Image from 'next/image';
+import { useUnreadMessagesContext } from '@/contexts/unreadMessages.context';
 
 type ChatMessageListProps = {
     currentBuddy: any;
@@ -20,6 +21,7 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
         })[]
     >([]);
     const [isPageVisible, setIsPageVisible] = useState(true);
+    const { fetchUnreadCounts } = useUnreadMessagesContext();
 
     useEffect(() => {
         const fetchMessages = async () => {
@@ -161,6 +163,10 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
         }
     }, [messages]);
 
+    useEffect(() => {
+        fetchUnreadCounts();
+    }, [fetchUnreadCounts]);
+
     const formatDate = (dateString: string) => {
         const options: Intl.DateTimeFormatOptions = {
             year: 'numeric',
@@ -209,7 +215,7 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                                         alt="Profile Image"
                                         width={40}
                                         height={40}
-                                        className="object-cover"
+                                        className="object-cover w-auto h-auto"
                                     />
                                 </div>
                             )}

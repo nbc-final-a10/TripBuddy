@@ -17,12 +17,12 @@ import {
 import { useAuth, useTapScroll } from '@/hooks';
 
 type StoryDetailProps = {
-    nickname: string;
+    // nickname: string;
     id: string;
     stories: StoryWithBuddies[];
 };
 
-const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
+const StoryDetail: React.FC<StoryDetailProps> = ({ id, stories }) => {
     const { buddy } = useAuth();
     const router = useRouter();
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -76,7 +76,7 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
     const handleSelectStory = (story: StoryWithBuddies, index: number) => {
         setSelectedStory(story);
         setSelectedIndex(index);
-        router.push(`/stories/${nickname}?id=${story.buddies.buddy_id}`);
+        router.push(`/stories/${story.buddies.buddy_id}`);
     };
 
     const handleDeleteStory = () => {
@@ -110,11 +110,9 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
     useEffect(() => {
         if (queryStories) {
             setSelectedStory(queryStories[0]);
-            router.push(
-                `/stories/${nickname}?id=${queryStories[0].buddies.buddy_id}`,
-            );
+            router.push(`/stories/${queryStories[0].story_id}`);
         }
-    }, [queryStories, router, nickname]);
+    }, [queryStories, router]);
 
     useEffect(() => {
         if (isLikesPending || isDeleting || isPending) {
