@@ -11,4 +11,5 @@ export type ContractData = {
     last_message_time?: string;
     contract_last_message_read?: string;
     unread_count?: number;
+    validate_date?: string;
 };

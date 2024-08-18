@@ -23,68 +23,89 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
     const [isPageVisible, setIsPageVisible] = useState(true);
     const { fetchUnreadCounts } = useUnreadMessagesContext();
 
+    // Fetch messages initially and set up the Realtime subscription
     useEffect(() => {
         const fetchMessages = async () => {
-            const { data, error } = await supabase
-                .from('messages')
-                .select(
-                    `
-                    *,
-                    buddy:message_sender_id (
-                        buddy_profile_pic,
-                        buddy_nickname
-                    )
-                `,
-                )
-                .eq('message_trip_id', id)
-                .order('message_created_at', { ascending: true });
+            try {
+                // Fetch contract validate date
+                const { data: contractData, error: contractError } = await supabase
+                    .from('contract')
+                    .select('contract_validate_date')
+                    .eq('contract_trip_id', id)
+                    .eq('contract_buddy_id', currentBuddy?.buddy_id)
+                    .single();
 
-            if (error) {
-                console.error('Error fetching messages:', error);
-            } else {
-                setMessages(data);
+                if (contractError) {
+                    console.error('Error fetching contract data:', contractError);
+                    return;
+                }
+
+                const validateDate = contractData?.contract_validate_date;
+
+                let query = supabase
+                    .from('messages')
+                    .select(
+                        `
+                        *,
+                        buddy:message_sender_id (
+                            buddy_profile_pic,
+                            buddy_nickname
+                        )
+                    `)
+                    .eq('message_trip_id', id)
+                    .order('message_created_at', { ascending: true });
+
+                if (validateDate !== null) {
+                    query = query.gt('message_created_at', validateDate);
+                }
+
+                const { data, error } = await query;
+
+                if (error) {
+                    console.error('Error fetching messages:', error);
+                } else {
+                    setMessages(data);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
             }
         };
 
         fetchMessages();
-    }, [id]);
 
-    useEffect(() => {
+        // Realtime subscription
         const channel = supabase
-            .channel('chat-room')
+            .channel(`realtime:messages:trip_${id}`)
             .on(
                 'postgres_changes',
-                { event: 'INSERT', schema: 'public', table: 'messages' },
-                async payload => {
-                    const newMessage = payload.new as Message;
+                { event: 'INSERT', schema: 'public', table: 'messages' }, async (payload) => {
+                const newMessage = payload.new as Message;
 
-                    const { data: buddyData, error: senderError } =
-                        await supabase
-                            .from('buddies')
-                            .select('buddy_profile_pic, buddy_nickname')
-                            .eq('buddy_id', newMessage.message_sender_id)
-                            .single();
+                // Fetch buddy details for the new message
+                const { data: buddyData, error: senderError } =
+                    await supabase
+                        .from('buddies')
+                        .select('buddy_profile_pic, buddy_nickname')
+                        .eq('buddy_id', newMessage.message_sender_id)
+                        .single();
 
-                    if (senderError) {
-                        console.error(
-                            'Error fetching sender info:',
-                            senderError,
-                        );
-                        return;
-                    }
+                if (senderError) {
+                    console.error('Error fetching sender info:', senderError);
+                    return;
+                }
 
-                    const newMessageWithBuddy = {
-                        ...newMessage,
-                        buddy: buddyData,
-                    };
+                const newMessageWithBuddy = {
+                    ...newMessage,
+                    buddy: buddyData,
+                };
 
-                    if (newMessage.message_trip_id === id) {
-                        setMessages(prevMessages => [
-                            ...prevMessages,
-                            newMessageWithBuddy,
-                        ]);
-                    }
+                if (newMessage.message_trip_id === id) {
+                    setMessages(prevMessages => [
+                        ...prevMessages,
+                        newMessageWithBuddy,
+                    ]);
 
+                    // Update last message read if the page is visible
                     if (isPageVisible) {
                         const { data: contracts, error: contractsError } =
                             await supabase
@@ -93,10 +114,7 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                                 .eq('contract_trip_id', id);
 
                         if (contractsError) {
-                            console.error(
-                                'Error fetching contracts:',
-                                contractsError,
-                            );
+                            console.error('Error fetching contracts:', contractsError);
                             return;
                         }
 
@@ -104,22 +122,21 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                             supabase
                                 .from('contract')
                                 .update({
-                                    contract_last_message_read:
-                                        newMessage.message_id,
+                                    contract_last_message_read: newMessage.message_id,
                                 })
                                 .eq('contract_id', contract.contract_id),
                         );
 
                         await Promise.all(updates);
                     }
-                },
-            )
+                }
+            })
             .subscribe();
 
         return () => {
             channel.unsubscribe();
         };
-    }, [id, isPageVisible]);
+    }, [id, currentBuddy, isPageVisible]);
 
     useEffect(() => {
         const handleVisibilityChange = () => {
@@ -155,7 +172,7 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
         handleReadMessages();
     }, [messages, currentBuddy, id, isPageVisible]);
 
-    // 스크롤 다운
+    // Scroll to bottom when new messages are added
     useEffect(() => {
         const scrollContainer = scrollRef.current;
         if (scrollContainer) {

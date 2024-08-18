@@ -27,7 +27,7 @@ const ChatList = () => {
                     await supabase
                         .from('contract')
                         .select(
-                            'contract_id, contract_trip_id, contract_last_message_read',
+                            'contract_id, contract_trip_id, contract_last_message_read, contract_validate_date',
                         )
                         .eq('contract_buddy_id', currentBuddy.buddy_id)
                         .eq('contract_isValidate', true);
@@ -103,7 +103,7 @@ const ChatList = () => {
                 const contractDataMap = new Map<string, ContractData>();
 
                 contracts.forEach(contract => {
-                    const { contract_id, contract_trip_id } = contract;
+                    const { contract_id, contract_trip_id, contract_validate_date } = contract;
                     const buddyIds = Array.from(
                         buddiesByTrip[contract_trip_id] || [],
                     );
@@ -120,6 +120,7 @@ const ChatList = () => {
                         last_message_time: '',
                         unread_count:
                             contractUnreadCounts[contract_trip_id] || 0,
+                        validate_date: contract_validate_date,
                     });
                 });
 
@@ -130,15 +131,23 @@ const ChatList = () => {
                     >();
 
                     for (const tripId of tripIds) {
+                        const { validate_date } = Array.from(
+                            contractDataMap.values(),
+                        ).find(c => c.contract_trip_id === tripId) || {};
+
+                        const query = supabase
+                            .from('messages')
+                            .select('message_content, message_created_at')
+                            .eq('message_trip_id', tripId)
+                            .order('message_created_at', { ascending: false })
+                            .limit(1);
+
+                        if (validate_date) {
+                            query.gt('message_created_at', validate_date);
+                        }
+
                         const { data: lastMessages, error: lastMessagesError } =
-                            await supabase
-                                .from('messages')
-                                .select('message_content, message_created_at')
-                                .eq('message_trip_id', tripId)
-                                .order('message_created_at', {
-                                    ascending: false,
-                                })
-                                .limit(1);
+                            await query;
 
                         if (lastMessagesError) {
                             console.error(
