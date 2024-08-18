@@ -16,7 +16,7 @@ export default function Header() {
     return (
         <header
             className={twMerge(
-                'hidden xl:flex relative w-full h-[100px] items-center bg-white justify-between z-50',
+                'hidden xl:flex relative w-full h-[100px] items-center bg-white shadow-header-web justify-between z-50',
                 pathname === '/tutorial' && 'xl:hidden',
             )}
         >

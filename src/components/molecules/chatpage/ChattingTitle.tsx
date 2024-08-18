@@ -35,7 +35,7 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
         fetchTripData();
     }, [id]);
     return (
-        <section className="relative border-y-[1px] h-[57px]">
+        <section className="relative border-y-[1px] h-[57px] bg-white">
             <div className="border-gray-200 px-6 h-full">
                 <div className="h-full flex items-center">
                     <div className="w-[40px] h-[40px] overflow-hidden flex justify-center">

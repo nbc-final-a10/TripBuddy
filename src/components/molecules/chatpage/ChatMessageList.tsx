@@ -172,7 +172,7 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
 
     return (
         <div
-            className="px-6 pt-4 pb-12 h-[calc(100vh-115px)] xl:h-[calc(100vh-157px)] overflow-y-auto scrollbar-hidden"
+            className="px-6 pt-4 pb-12 h-[calc(100vh-57px-54px)] xl:h-[calc(100vh-100px-57px)] overflow-y-auto scrollbar-hidden"
             ref={scrollRef}
         >
             {messages.map((message, index) => {

@@ -57,7 +57,7 @@ const ChatMessageSend: React.FC<ChatMessageSendProps> = ({
     };
 
     return (
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full min-w-[375px] bg-white border-gray-200 flex justify-center items-center p-2">
+        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full min-w-[375px] h-[54px] bg-white xl:bg-grayscale-color-50 shadow-tap-menu border-gray-200 flex justify-around items-center">
             {/* 이미지 첨부 버튼 MVP 이후 추가 예정 */}
             {/* <button className="w-[28px] h-[28px] flex items-center justify-center">
                 <Image src="/svg/Plus.svg" alt="Plus" width="20" height="20" />
@@ -68,10 +68,10 @@ const ChatMessageSend: React.FC<ChatMessageSendProps> = ({
                 value={inputText}
                 onChange={handleChange}
                 onKeyPress={handleKeyPress}
-                className="text-[14] font-medium text-grayscale-color-500 outline-none w-[80%] h-[37px] bg-grayscale-color-70 rounded-[8px] p-[8px]"
+                className="text-[14] font-medium text-grayscale-color-500 outline-none w-full h-[37px] ml-[18px] bg-grayscale-color-70 rounded-[8px] p-[8px]"
             />
             <button
-                className="w-[28px] h-[28px] flex items-center justify-center"
+                className="w-[56px] h-[28px] flex items-center justify-center"
                 onClick={handleSend}
             >
                 <Image src="/svg/Send.svg" alt="Send" width="20" height="20" />

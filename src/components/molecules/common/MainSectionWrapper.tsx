@@ -33,11 +33,12 @@ const MainSectionWrapper = ({ children }: MainSectionWrapperProps) => {
                     'xl:max-h-[calc(100dvh-100px)]',
                 pathname === '/trips' && 'xl:max-h-[calc(100dvh-100px)]',
                 pathname === '/stories' && 'xl:max-h-[calc(100dvh-100px)]',
+                pathname.startsWith('/chat') && 'xl:min-h-0',
             )}
         >
             <section
                 className={twMerge(
-                    'relative max-w-[430px] min-w-[320px] mx-auto min-h-dvh pb-[76px] xl:pb-0 xl:w-[1080px] xl:max-w-[1280px]',
+                    'relative max-w-[430px] min-w-[320px] mx-auto min-h-dvh pb-[54px] xl:pb-0 xl:w-[1080px] xl:max-w-[1280px]',
                     pathname === '/tutorial' &&
                         'bg-white xl:bg-white xl:min-h-[calc(100dvh-100px)]',
                     isHidePaddingBottom && 'pb-0',
@@ -45,7 +46,7 @@ const MainSectionWrapper = ({ children }: MainSectionWrapperProps) => {
                         'xl:min-h-[calc(100dvh-100px)] xl:h-[calc(100dvh-100px)]',
                     pathname.startsWith('/stories/') &&
                         'xl:min-h-[calc(100dvh-100px)] xl:h-[calc(100dvh-100px)]',
-                    pathname.startsWith('/chat') && 'min-h-0',
+                    pathname.startsWith('/chat') && 'xl:min-h-0',
                 )}
             >
                 {children}

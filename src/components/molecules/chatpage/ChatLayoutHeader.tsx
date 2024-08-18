@@ -8,7 +8,7 @@ const ChatLayoutHeader = () => {
         router.back();
     };
     return (
-        <div className="relative h-[57px] w-full flex flex-row items-center px-5 bg-white">
+        <div className="relative h-[57px] w-full flex flex-row items-center px-5 bg-white xl:bg-grayscale-color-50 shadow-header-web">
             <div className="w-[calc(100%/3)] flex justify-start items-center">
                 <Arrow_Back onClick={handleBack} className="cursor-pointer" />
             </div>

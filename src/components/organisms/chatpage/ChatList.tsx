@@ -198,7 +198,7 @@ const ChatList = () => {
         return <DefaultLoader />;
     } else if (!contractsExist) {
         return (
-            <div className="bg-white xl:bg-grayscale-color-50 text-center h-[calc(100vh-131px)] xl:h-[calc(100vh-157px)] font-bold text-lg flex flex-col justify-center text-grayscale-color-600 overflow-y-auto scrollbar-hidden">
+            <div className="bg-white xl:bg-grayscale-color-50 text-center h-[calc(100vh-57px-54px)] xl:h-[calc(100vh-100px-57px)] font-bold text-lg flex flex-col justify-center text-grayscale-color-600 overflow-y-auto scrollbar-hidden">
                 <h1 className="text-2xl">아직 참여한 여정이 없습니다!</h1>
                 <br />
                 <Link
@@ -212,7 +212,7 @@ const ChatList = () => {
         );
     } else {
         return (
-            <div className="bg-white xl:bg-grayscale-color-50 h-[calc(100vh-131px)] flex flex-col p-4 xl:w-full">
+            <div className="bg-white xl:bg-grayscale-color-50 h-[calc(100vh-57px-54px)] xl:h-[calc(100vh-100px-57px)] flex flex-col p-4 xl:w-full overflow-y-auto scrollbar-hidden">
                 {chatData.map(chat => {
                     const lastMessageTime = chat.last_message_time
                         ? getTimeIfDateIsToday(chat.last_message_time) ||
