@@ -3,15 +3,15 @@
 import LocationSearchButton from '@/components/atoms/search/LocationSearchButton';
 import SearchPageTitle from '@/components/atoms/search/SearchPageTitle';
 import SelectRegions from '@/components/molecules/common/SelectRegion';
-import SelectRegionPage from '@/components/organisms/write/SelectRegionPage';
+import { useLocation } from '@/contexts/locationSearch.context';
 import { useSelectRegion } from '@/hooks';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export default function LocationSearchPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [location, setLocation] = useState<string | null>(null);
+    const { setLocation } = useLocation();
 
     const {
         actions: {
@@ -32,9 +32,12 @@ export default function LocationSearchPage() {
         const locationFromParams = searchParams.get('location');
         if (locationFromParams) {
             setLocation(locationFromParams);
-            console.log('위치 ', locationFromParams);
         }
-    }, [searchParams]);
+    }, [searchParams, setLocation]);
+
+    useEffect(() => {
+        setLocation(thirdLevelLocation || null);
+    }, [thirdLevelLocation, setLocation]);
 
     const handleSelectClick = () => {
         if (thirdLevelLocation) {
@@ -44,8 +47,6 @@ export default function LocationSearchPage() {
 
             // 문자열로 변환 후 url에 포함시킴
             router.push(`/search?${query.toString()}`);
-
-            // console.log(thirdLevelLocation);
         }
     };
 

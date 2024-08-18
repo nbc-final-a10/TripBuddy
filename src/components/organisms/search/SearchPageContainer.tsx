@@ -118,31 +118,31 @@ export default function SearchPageContainer() {
 
         console.log('filters: ', filters);
 
-        // // 필터 리셋
-        // setSearchInput('');
-        // setStartDateTimestamp('');
-        // setEndDateTimestamp('');
-        // handleThirdLevelClick('');
-        // setSelectedGender(null);
-        // setStartAge(20);
-        // setEndAge(70);
-        // setSelectedMeetingPlace(null);
-        // setSelectedTripThemes([]);
-        // setSelectedBuddyThemes([]);
+        // 필터 리셋
+        setSearchInput('');
+        setStartDateTimestamp('');
+        setEndDateTimestamp('');
+        handleThirdLevelClick('');
+        setSelectedGender(null);
+        setStartAge(20);
+        setEndAge(70);
+        setSelectedMeetingPlace(null);
+        setSelectedTripThemes([]);
+        setSelectedBuddyThemes([]);
 
-        // // 쿼리 파라미터 업데이트
-        // updateQueryParams({
-        //     searchInput: '',
-        //     gender: null,
-        //     startAge: 20,
-        //     endAge: 70,
-        //     meetingPlace: null,
-        //     location: null,
-        //     startDate: '',
-        //     endDate: '',
-        //     themes: [],
-        //     buddyThemes: [],
-        // });
+        // 쿼리 파라미터 업데이트
+        updateQueryParams({
+            searchInput: '',
+            gender: null,
+            startAge: 20,
+            endAge: 70,
+            meetingPlace: null,
+            location: null,
+            startDate: '',
+            endDate: '',
+            themes: [],
+            buddyThemes: [],
+        });
     };
 
     // enter 누르면 검색 결과 보여주기

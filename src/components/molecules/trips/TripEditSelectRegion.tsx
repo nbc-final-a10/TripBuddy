@@ -14,7 +14,12 @@ const TripEditSelectRegion = forwardRef<Partial<SelectRegionPageProps>>(
     (props, ref) => {
         const { states, actions } = useSelectRegion();
         const modal = useModal();
-        React.useImperativeHandle(ref, () => ({ states }));
+        React.useImperativeHandle(ref, () => ({
+            states: {
+                ...states,
+                thirdLevelLocation: states.thirdLevelLocation || '',
+            },
+        }));
 
         const handleClose = () => {
             if (

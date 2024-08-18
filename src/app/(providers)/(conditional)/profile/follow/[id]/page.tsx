@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import FollowingList from '@/components/molecules/profile/followList/FollowingList';
 import FollowerList from '@/components/molecules/profile/followList/FollowerList';
 import { useFollowCountQuery } from '@/hooks/queries/buddy/useGetFollowCounts';
 import useFollowListToggle from '@/hooks/MyPage/useFollowListToggle';
+import { useParams } from 'next/navigation';
 
 function FollowPage() {
     const { activeButton, FollowListToggleButton } = useFollowListToggle();
