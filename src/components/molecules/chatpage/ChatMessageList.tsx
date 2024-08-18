@@ -29,15 +29,19 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
     useEffect(() => {
         const fetchMessages = async () => {
             try {
-                const { data: contractData, error: contractError } = await supabase
-                    .from('contract')
-                    .select('contract_validate_date')
-                    .eq('contract_trip_id', id)
-                    .eq('contract_buddy_id', currentBuddy?.buddy_id)
-                    .single();
+                const { data: contractData, error: contractError } =
+                    await supabase
+                        .from('contract')
+                        .select('contract_validate_date')
+                        .eq('contract_trip_id', id)
+                        .eq('contract_buddy_id', currentBuddy?.buddy_id)
+                        .single();
 
                 if (contractError) {
-                    console.error('Error fetching contract data:', contractError);
+                    console.error(
+                        'Error fetching contract data:',
+                        contractError,
+                    );
                     return;
                 }
 
@@ -52,7 +56,8 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                             buddy_profile_pic,
                             buddy_nickname
                         )
-                    `)
+                    `,
+                    )
                     .eq('message_trip_id', id)
                     .order('message_created_at', { ascending: true });
 
@@ -78,57 +83,66 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
             .channel(`realtime:messages:trip_${id}`)
             .on(
                 'postgres_changes',
-                { event: 'INSERT', schema: 'public', table: 'messages' }, async (payload) => {
-                const newMessage = payload.new as Message;
+                { event: 'INSERT', schema: 'public', table: 'messages' },
+                async payload => {
+                    const newMessage = payload.new as Message;
 
-                const { data: buddyData, error: senderError } =
-                    await supabase
-                        .from('buddies')
-                        .select('buddy_profile_pic, buddy_nickname')
-                        .eq('buddy_id', newMessage.message_sender_id)
-                        .single();
+                    const { data: buddyData, error: senderError } =
+                        await supabase
+                            .from('buddies')
+                            .select('buddy_profile_pic, buddy_nickname')
+                            .eq('buddy_id', newMessage.message_sender_id)
+                            .single();
 
-                if (senderError) {
-                    console.error('Error fetching sender info:', senderError);
-                    return;
-                }
-
-                const newMessageWithBuddy = {
-                    ...newMessage,
-                    buddy: buddyData,
-                };
-
-                if (newMessage.message_trip_id === id) {
-                    setMessages(prevMessages => [
-                        ...prevMessages,
-                        newMessageWithBuddy,
-                    ]);
-
-                    if (isPageVisible) {
-                        const { data: contracts, error: contractsError } =
-                            await supabase
-                                .from('contract')
-                                .select('contract_id')
-                                .eq('contract_trip_id', id);
-
-                        if (contractsError) {
-                            console.error('Error fetching contracts:', contractsError);
-                            return;
-                        }
-
-                        const updates = contracts.map(contract =>
-                            supabase
-                                .from('contract')
-                                .update({
-                                    contract_last_message_read: newMessage.message_id,
-                                })
-                                .eq('contract_id', contract.contract_id),
+                    if (senderError) {
+                        console.error(
+                            'Error fetching sender info:',
+                            senderError,
                         );
-
-                        await Promise.all(updates);
+                        return;
                     }
-                }
-            })
+
+                    const newMessageWithBuddy = {
+                        ...newMessage,
+                        buddy: buddyData,
+                    };
+
+                    if (newMessage.message_trip_id === id) {
+                        setMessages(prevMessages => [
+                            ...prevMessages,
+                            newMessageWithBuddy,
+                        ]);
+
+                        if (isPageVisible) {
+                            const { data: contracts, error: contractsError } =
+                                await supabase
+                                    .from('contract')
+                                    .select('contract_id')
+                                    .eq('contract_trip_id', id);
+
+                            if (contractsError) {
+                                console.error(
+                                    'Error fetching contracts:',
+                                    contractsError,
+                                );
+                                return;
+                            }
+
+                            const updates = contracts.map(contract =>
+                                supabase
+                                    .from('contract')
+                                    .update({
+                                        contract_last_message_read:
+                                            newMessage.message_id,
+                                    })
+                                    .eq('contract_id', contract.contract_id),
+                            );
+
+                            await Promise.all(updates);
+                        }
+                    }
+                },
+            )
             .subscribe();
 
         return () => {

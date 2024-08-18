@@ -105,7 +105,11 @@ const ChatList = () => {
                 const contractDataMap = new Map<string, ContractData>();
 
                 contracts.forEach(contract => {
-                    const { contract_id, contract_trip_id, contract_validate_date } = contract;
+                    const {
+                        contract_id,
+                        contract_trip_id,
+                        contract_validate_date,
+                    } = contract;
                     const buddyIds = Array.from(
                         buddiesByTrip[contract_trip_id] || [],
                     );
@@ -133,9 +137,10 @@ const ChatList = () => {
                     >();
 
                     for (const tripId of tripIds) {
-                        const { validate_date } = Array.from(
-                            contractDataMap.values(),
-                        ).find(c => c.contract_trip_id === tripId) || {};
+                        const { validate_date } =
+                            Array.from(contractDataMap.values()).find(
+                                c => c.contract_trip_id === tripId,
+                            ) || {};
 
                         const query = supabase
                             .from('messages')

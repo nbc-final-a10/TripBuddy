@@ -58,7 +58,10 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
         <section className="relative border-y-[1px] h-[57px] bg-white">
             <div className="border-gray-200 px-6 h-full">
                 <div className="h-full flex items-center">
-                    <Link href={`/trips/${id}`} className="w-[40px] h-[40px] xl:w-auto xl:h-[40px] xl:min-w-[40px] flex justify-center overflow-hidden">
+                    <Link
+                        href={`/trips/${id}`}
+                        className="w-[40px] h-[40px] xl:w-auto xl:h-[40px] xl:min-w-[40px] flex justify-center overflow-hidden"
+                    >
                         {tripData?.trip_thumbnail ? (
                             <Image
                                 src={tripData.trip_thumbnail}

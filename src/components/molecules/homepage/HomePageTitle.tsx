@@ -9,7 +9,7 @@ type HomePageTitleProps = {
     description: string;
     href: string;
     className?: string;
-}
+};
 
 const HomePageTitle: React.FC<HomePageTitleProps> = ({
     title,
