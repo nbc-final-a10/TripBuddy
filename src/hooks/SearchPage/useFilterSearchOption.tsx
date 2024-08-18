@@ -41,7 +41,7 @@ export function useFilteredTrips(initialFilters: {
             let filteredItems = [...allData];
 
             // 검색어
-            if (filters.searchInput) {
+            if (filters.searchInput && filters.searchInput.trim() !== '') {
                 filteredItems = filteredItems.filter(
                     (item: TripWithContract) =>
                         item.trip_title
@@ -51,6 +51,7 @@ export function useFilteredTrips(initialFilters: {
                             .toLowerCase()
                             .includes(filters.searchInput.toLowerCase()),
                 );
+                console.log('input: ', filteredItems);
             }
 
             // 날짜
@@ -68,7 +69,6 @@ export function useFilteredTrips(initialFilters: {
                         );
                     },
                 );
-                console.log('날짜: ', filteredItems);
             }
 
             // 장소

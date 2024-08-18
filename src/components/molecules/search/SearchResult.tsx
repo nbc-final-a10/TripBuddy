@@ -30,11 +30,6 @@ const SearchResult: React.FC<SearchResultProps> = ({
 
     const filteredItems = items.slice(0, visibleFirstItems);
 
-    // useEffect(() => {
-    //     console.log('결과 items:', items);
-    //     console.log('결과 allTrips:', allTrips);
-    // }, [items, allTrips]);
-
     // 시작 날짜 기준으로 빠른 순으로 정렬
     // 검색 결과 여정은 제외
     const sortItems = [...allTrips]

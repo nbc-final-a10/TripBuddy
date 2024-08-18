@@ -77,8 +77,6 @@ export default function SearchPageContainer() {
         selectedBuddyThemes: selectedBuddyThemes,
     };
 
-    console.log('filters: ', filters);
-
     const { resultItems: filteredResultItems, allItems: filteredAllItems } =
         useFilteredTrips(filters);
 
@@ -92,8 +90,6 @@ export default function SearchPageContainer() {
         const handleResize = () => {
             const xl = window.matchMedia('(min-width: 1280px').matches;
             setIsXL(xl);
-            // 화면 크기에 따라 보여지는 여정 수 설정
-            setVisibleFirstItems(xl ? 8 : resultItems.length);
         };
 
         handleResize();
@@ -105,32 +101,6 @@ export default function SearchPageContainer() {
     }, [resultItems.length]);
 
     const handleShowResult = async () => {
-        // 필터 리셋
-        setSearchInput('');
-        setStartDateTimestamp('');
-        setEndDateTimestamp('');
-        handleThirdLevelClick('');
-        setSelectedGender(null);
-        setStartAge(20);
-        setEndAge(70);
-        setSelectedMeetingPlace(null);
-        setSelectedTripThemes([]);
-        setSelectedBuddyThemes([]);
-
-        // 쿼리 파라미터 업데이트
-        updateQueryParams({
-            searchInput: '',
-            gender: null,
-            startAge: 20,
-            endAge: 70,
-            meetingPlace: null,
-            location: null,
-            startDate: '',
-            endDate: '',
-            themes: [],
-            buddyThemes: [],
-        });
-
         setShowResult(true);
 
         // 속도 지연
@@ -145,6 +115,34 @@ export default function SearchPageContainer() {
                 window.scrollTo({ top, behavior: 'smooth' });
             }
         }, 100);
+
+        console.log('filters: ', filters);
+
+        // // 필터 리셋
+        // setSearchInput('');
+        // setStartDateTimestamp('');
+        // setEndDateTimestamp('');
+        // handleThirdLevelClick('');
+        // setSelectedGender(null);
+        // setStartAge(20);
+        // setEndAge(70);
+        // setSelectedMeetingPlace(null);
+        // setSelectedTripThemes([]);
+        // setSelectedBuddyThemes([]);
+
+        // // 쿼리 파라미터 업데이트
+        // updateQueryParams({
+        //     searchInput: '',
+        //     gender: null,
+        //     startAge: 20,
+        //     endAge: 70,
+        //     meetingPlace: null,
+        //     location: null,
+        //     startDate: '',
+        //     endDate: '',
+        //     themes: [],
+        //     buddyThemes: [],
+        // });
     };
 
     // enter 누르면 검색 결과 보여주기
@@ -160,6 +158,17 @@ export default function SearchPageContainer() {
 
     const loadMoreSecondItems = () => {
         setVisibleSecondItems(prev => prev + 6);
+    };
+
+    const VisibleItems = () => {
+        if (showResult) {
+            if (isXL) {
+                return resultItems.slice(0, visibleFirstItems);
+            } else {
+                return resultItems;
+            }
+        }
+        return [];
     };
 
     return (
@@ -233,7 +242,7 @@ export default function SearchPageContainer() {
             {showResult && (
                 <div ref={resultRef}>
                     <SearchResult
-                        items={resultItems}
+                        items={VisibleItems()}
                         allTrips={allItems}
                         visibleFirstItems={visibleFirstItems}
                         visibleSecondItems={visibleSecondItems}
