@@ -39,6 +39,7 @@ const HomePage: React.FC = async () => {
     await queryClient.prefetchQuery({
         queryKey: [QUERY_KEY_TRIP_BY_CONTRACT, userId],
         queryFn: () => getContract(true, userId || ''),
+        staleTime: 1000 * 60 * 5,
     });
     const dehydratedState = dehydrate(queryClient);
     return (

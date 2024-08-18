@@ -53,12 +53,12 @@ const HomePageContainer = () => {
                     href="/rank"
                 />
                 <div
-                    className="relative overflow-x-scroll scrollbar-hidden flex gap-[10px] h-[60%]"
+                    className="relative overflow-x-scroll scrollbar-hidden flex gap-[16px] h-[60%]"
                     ref={buddiesRef}
                 >
                     {buddies.data?.buddies && (
                         <HomePageRecommendBuddiesList
-                            className="min-w-[243px] mx-0 border-none shadow-lg"
+                            className="min-w-[243px] mx-0 border-none shadow-lg xl:min-w-[258px]"
                             buddies={buddies.data?.buddies}
                         />
                     )}
@@ -81,14 +81,14 @@ const HomePageContainer = () => {
 
             <div className="mt-4 mb-2 relative z-10">
                 <HomePageTitle
-                    title="인기 스토리"
+                    title="버디즈 스토리"
                     buttonText="전체보기"
                     description="버디즈의 스토리를 확인하세요!"
                     className="mt-0"
                     href="/stories"
                 />
                 <div
-                    className="overflow-x-scroll scrollbar-hidden relative flex gap-[10px] z-10"
+                    className="overflow-x-scroll scrollbar-hidden relative flex gap-[16px] z-10"
                     ref={storiesRef}
                 >
                     {stories.data?.stories && (
@@ -121,7 +121,7 @@ const HomePageContainer = () => {
                     className="relative mt-0 mb-0 h-[25%]"
                 />
                 <div
-                    className="relative overflow-x-scroll scrollbar-hidden flex gap-[10px] min-h-[215px] px-[1px] h-[75%]"
+                    className="relative overflow-x-scroll scrollbar-hidden flex gap-[16px] min-h-[215px] px-[1px] h-[75%]"
                     ref={tripsRef}
                 >
                     {upcomingTrips.length > 0 && (

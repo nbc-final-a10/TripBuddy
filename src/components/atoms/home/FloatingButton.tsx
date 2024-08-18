@@ -35,7 +35,7 @@ export default function FloatingButton() {
 
     return (
         <button
-            className="fixed bottom-14 right-1/2 transform translate-x-[49vw] sm:translate-x-[213px] xl:right-auto xl:left-1/2 xl:transform xl:translate-x-[495px] xl:bottom-2 bg-white text-white rounded-full p-[11px] shadow-lg z-[999]"
+            className="fixed bottom-16 right-1/2 transform translate-x-[49vw] sm:translate-x-[213px] xl:right-auto xl:left-1/2 xl:transform xl:translate-x-[495px] xl:bottom-2 bg-white text-white rounded-full p-[11px] shadow-lg z-[999]"
             // style={{ opacity }}
             onClick={handleClick}
         >

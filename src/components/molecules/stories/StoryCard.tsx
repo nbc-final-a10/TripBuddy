@@ -87,7 +87,7 @@ const StoryCard: React.FC<StoryCardProps> = ({
                 {mode === 'my' && <AddButtonSmall />}
             </div>
 
-            <div className="flex flex-col gap-[2px] text-center text-white z-10">
+            <div className="flex flex-col gap-[2px] text-center text-grayscale-color-70 z-10">
                 <p className="text-sm">{story.buddies.buddy_nickname}</p>
                 <p className="text-xs">
                     {mode === 'my'

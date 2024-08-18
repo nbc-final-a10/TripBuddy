@@ -1,13 +1,16 @@
 import Image from 'next/image';
+import { twMerge } from 'tailwind-merge';
 
 type BuddyTemperatureProps = {
     temperature: number;
     isLabel?: boolean;
     isTempText?: boolean;
+    className?: string;
 };
 
 const BuddyTemperature = ({
     temperature,
+    className,
     isLabel = true,
     isTempText = true,
 }: BuddyTemperatureProps) => {
@@ -31,7 +34,7 @@ const BuddyTemperature = ({
     );
 
     return (
-        <div className="flex flex-col w-full">
+        <div className={twMerge('flex flex-col w-full', className)}>
             {isLabel && (
                 <div className="flex w-full justify-between">
                     <span className="block text-left xl:text-xl">
