@@ -12,6 +12,7 @@ export const QUERY_KEY_TRIPS = 'trips';
 export const QUERY_KEY_TRIP_INFINITE = 'tripInfinite';
 export const QUERY_KEY_TRIP_BY_CONTRACT = 'tripByContract';
 export const QUERY_KEY_TRIP_BY_BOOKMARK = 'tripByBookmark';
+export const QUERY_KEY_MY_BOOKMARKS = 'myBookmarks';
 
 // messages 테이블 관련
 

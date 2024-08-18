@@ -86,6 +86,21 @@ export async function getBookMark(
     }
 }
 
+export async function getAllBookmarks(
+    clickedBuddyId: string,
+): Promise<BookMark | null> {
+    const url = `/api/trips/bookmarks?bookmark_buddy_id=${clickedBuddyId}`;
+    try {
+        const data = await fetchWrapper<BookMark | null>(url, {
+            method: 'GET',
+            cache: 'no-store',
+        });
+        return data;
+    } catch (error: any) {
+        throw error;
+    }
+}
+
 export async function postTrip({
     newTrip,
     id,

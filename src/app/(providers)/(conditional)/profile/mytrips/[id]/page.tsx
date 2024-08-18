@@ -6,15 +6,17 @@ import { MyTripsAndContracts } from '@/types/Contract.types';
 import CreatedTrips from '@/components/molecules/profile/myTrips/CreatedTrips';
 import ParticipatedTrips from '@/components/molecules/profile/myTrips/ParticipatedTrips';
 import { useParams } from 'next/navigation';
+import BookmarkedTrips from '@/components/molecules/profile/myTrips/BookmarkedTrips';
 
 export default function MyTrips() {
-    const { id } = useParams();
+    const { id } = useParams<{ id: string }>();
     const [trips, setTrips] = useState<MyTripsAndContracts>({
         created: [],
         participated: [],
+        bookmarked: [],
     });
 
-    console.log('id', id);
+    const [view, setView] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchTrips = async () => {
@@ -34,18 +36,22 @@ export default function MyTrips() {
         if (id) {
             fetchTrips();
         }
-    }, [id]);
 
-    const queryParams = new URLSearchParams(window.location.search);
-    const view = queryParams.get('view');
+        const queryParams = new URLSearchParams(window.location.search);
+        const viewParam = queryParams.get('view');
+        setView(viewParam);
+    }, [id]);
 
     return (
         <>
-            {/* TODO: 아래 두 카드 반복되는 컴포넌트라 재사용 가능하게 리팩토링 */}
+            {/* TODO: BookmarkedTrips는 최초 와이어프레임에 없던 지라 MyTripsAndContracts에서
+            대응하지 못해 데이터를 직접 하달하고 있는데 리팩토링 필요함 */}
             {view === 'created' ? (
                 <CreatedTrips created={trips.created} />
             ) : view === 'participated' ? (
                 <ParticipatedTrips participated={trips.participated} />
+            ) : view === 'bookmarked' ? (
+                <BookmarkedTrips currentUserId={id as string} />
             ) : null}
         </>
     );
