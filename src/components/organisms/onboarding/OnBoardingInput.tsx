@@ -24,9 +24,10 @@ const OnBoardingInput = forwardRef(
                 )}
                 {mode === 'nickname' && isEdit === false && (
                     <Title className="text-2xl py-4">안녕하세요!</Title>
-                )}{' '}
+                )}
                 <OnBoardingInnerWrapper align="start">
                     <Title align="left">{text}</Title>
+
                     <Input
                         type={mode === 'age' ? 'number' : 'text'}
                         placeholder={mode === 'age' ? '나이' : '이름'}
@@ -34,6 +35,9 @@ const OnBoardingInput = forwardRef(
                         className="w-[90%] h-[80px] border-none bg-gray-200"
                         ref={ref as React.LegacyRef<HTMLInputElement>}
                     />
+                    <p className="text-sm text-gray-500">
+                        실명으로 작성해 주세요
+                    </p>
                 </OnBoardingInnerWrapper>
             </OnBoardingWrapper>
         );
