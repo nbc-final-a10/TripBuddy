@@ -41,6 +41,7 @@ import { deleteTrip } from '@/utils/trips/deleteTrip';
 import { useQueryClient } from '@tanstack/react-query';
 import {
     QUERY_KEY_CONTRACT,
+    QUERY_KEY_MY_BOOKMARKS,
     QUERY_KEY_TRIP,
     QUERY_KEY_TRIP_INFINITE,
     QUERY_KEY_TRIPS,
@@ -284,6 +285,10 @@ const TripCard: React.FC<TripCardProps> = ({
                 bookmark_buddy_id: buddy.buddy_id,
                 is_bookmarked: bookMark ? true : false,
             };
+
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEY_MY_BOOKMARKS, buddy.buddy_id],
+            });
 
             createBookMark(newBookMark);
             if (bookMark) {

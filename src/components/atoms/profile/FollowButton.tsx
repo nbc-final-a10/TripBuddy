@@ -172,8 +172,6 @@ export default function FollowButton() {
         }
     };
 
-    // console.log('isFollowing', isFollowing);
-
     return isLoading || isFollowing === null ? (
         <div className="relative h-7 w-24"></div>
     ) : isFollowing ? (
