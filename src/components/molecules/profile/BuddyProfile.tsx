@@ -131,10 +131,10 @@ export default function BuddyProfile({
                         {/* 선호하는 버디 chips */}
                         {clickedBuddy?.buddy_preferred_buddy1 ? (
                             <div className="mt-4">
-                                <span className="bg-[#fff0d1] rounded-full px-3 py-1 text-sm font-semibold text-main-color mr-2">
+                                <span className="bg-[#fff0d1] rounded-full px-3 py-1 text-sm font-semibold text-main-color mr-1">
                                     {clickedBuddy?.buddy_preferred_buddy1}
                                 </span>
-                                <span className="bg-[#fff0d1] rounded-full px-3 py-1 text-sm font-semibold text-main-color mr-2">
+                                <span className="bg-[#fff0d1] rounded-full px-3 py-1 text-sm font-semibold text-main-color mr-1">
                                     {clickedBuddy?.buddy_preferred_buddy2}
                                 </span>
                                 <span className="bg-[#fff0d1] rounded-full px-3 py-1 text-sm font-semibold text-main-color">

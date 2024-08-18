@@ -150,7 +150,7 @@ const MobileHeader: React.FC = () => {
                         <span>수정</span>
                     </Link>
                 )}
-                {(isSearch || isWrite) && (
+                {(isSearch || isWrite || isProfile) && (
                     <Close
                         onClick={() => router.push('/trips')}
                         className="cursor-pointer fill-black"
