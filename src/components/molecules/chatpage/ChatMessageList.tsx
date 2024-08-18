@@ -1,8 +1,10 @@
 'use client';
+
 import React, { useState, useEffect, MutableRefObject, useRef } from 'react';
 import { Message } from '@/types/Chat.types';
 import supabase from '@/utils/supabase/client';
 import Image from 'next/image';
+import Link from 'next/link'; // Link를 import 합니다.
 import { useUnreadMessagesContext } from '@/contexts/unreadMessages.context';
 
 type ChatMessageListProps = {
@@ -23,11 +25,9 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
     const [isPageVisible, setIsPageVisible] = useState(true);
     const { fetchUnreadCounts } = useUnreadMessagesContext();
 
-    // Fetch messages initially and set up the Realtime subscription
     useEffect(() => {
         const fetchMessages = async () => {
             try {
-                // Fetch contract validate date
                 const { data: contractData, error: contractError } = await supabase
                     .from('contract')
                     .select('contract_validate_date')
@@ -73,7 +73,6 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
 
         fetchMessages();
 
-        // Realtime subscription
         const channel = supabase
             .channel(`realtime:messages:trip_${id}`)
             .on(
@@ -81,7 +80,6 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                 { event: 'INSERT', schema: 'public', table: 'messages' }, async (payload) => {
                 const newMessage = payload.new as Message;
 
-                // Fetch buddy details for the new message
                 const { data: buddyData, error: senderError } =
                     await supabase
                         .from('buddies')
@@ -105,7 +103,6 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                         newMessageWithBuddy,
                     ]);
 
-                    // Update last message read if the page is visible
                     if (isPageVisible) {
                         const { data: contracts, error: contractsError } =
                             await supabase
@@ -172,7 +169,6 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
         handleReadMessages();
     }, [messages, currentBuddy, id, isPageVisible]);
 
-    // Scroll to bottom when new messages are added
     useEffect(() => {
         const scrollContainer = scrollRef.current;
         if (scrollContainer) {
@@ -226,7 +222,10 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                             className={`py-2 flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}
                         >
                             {!isCurrentUser && (
-                                <div className="bg-grayscale-color-300 w-[40px] h-[40px] rounded-full overflow-hidden flex justify-center items-center">
+                                <Link
+                                    href={`/profile/${message.message_sender_id}`}
+                                    className="bg-grayscale-color-300 w-[40px] h-[40px] rounded-full overflow-hidden flex justify-center items-center"
+                                >
                                     <Image
                                         src={message.buddy?.buddy_profile_pic}
                                         alt="Profile Image"
@@ -234,7 +233,7 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                                         height={40}
                                         className="object-cover w-auto h-auto"
                                     />
-                                </div>
+                                </Link>
                             )}
                             <div
                                 className={`p-2 pt-4 items-end flex ${isCurrentUser ? 'flex-row-reverse' : ''}`}

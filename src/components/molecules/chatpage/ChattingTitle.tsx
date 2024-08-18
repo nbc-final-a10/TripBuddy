@@ -5,6 +5,7 @@ import supabase from '@/utils/supabase/client';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import convertDateToStringWithWeekDay from '@/utils/common/convertDateToStringWithWeekDay';
+import Link from 'next/link';
 
 type ChattingTitleProps = {
     id: string;
@@ -57,7 +58,7 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
         <section className="relative border-y-[1px] h-[57px] bg-white">
             <div className="border-gray-200 px-6 h-full">
                 <div className="h-full flex items-center">
-                    <div className="w-[40px] h-[40px] xl:w-auto xl:h-[40px] xl:min-w-[40px] flex justify-center overflow-hidden">
+                    <Link href={`/trips/${id}`} className="w-[40px] h-[40px] xl:w-auto xl:h-[40px] xl:min-w-[40px] flex justify-center overflow-hidden">
                         {tripData?.trip_thumbnail ? (
                             <Image
                                 src={tripData.trip_thumbnail}
@@ -69,7 +70,7 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
                         ) : (
                             <div className="w-[40px] h-[40px] bg-gray-200"></div>
                         )}
-                    </div>
+                    </Link>
 
                     <div className="px-3 flex flex-col justify-between">
                         <p className="text-[16px] font-semibold text-grayscale-color-700">
