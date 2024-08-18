@@ -17,15 +17,6 @@ export async function GET(req: NextRequest) {
         );
     }
 
-    if (followingId === followerId) {
-        return NextResponse.json(
-            { message: '자기 자신은 팔로우 할 수 없습니다.' },
-            {
-                status: 200,
-            },
-        );
-    }
-
     const supabase = createClient();
 
     try {
@@ -66,6 +57,15 @@ export async function POST(req: NextRequest) {
     if (!followingId || !followerId) {
         return NextResponse.json(
             { message: '팔로잉 또는 팔로워 id가 조회되지 않았습니다.' },
+            {
+                status: 400,
+            },
+        );
+    }
+
+    if (followingId === followerId) {
+        return NextResponse.json(
+            { message: '자기 자신은 팔로우 할 수 없습니다.' },
             {
                 status: 400,
             },
@@ -115,6 +115,7 @@ export async function POST(req: NextRequest) {
                         notification_type: 'follow',
                         notification_sender: buddy?.buddy_id,
                         notification_receiver: followingId,
+                        notification_origin_id: followingId,
                         notification_content: `${buddy?.buddy_nickname}님이 팔로우 하셨습니다.`,
                     },
                 ])
@@ -178,6 +179,7 @@ export async function DELETE(req: NextRequest) {
                 .delete()
                 .eq('notification_sender', followerId)
                 .eq('notification_receiver', followingId)
+                .eq('notification_origin_id', followingId)
                 .eq('notification_type', 'follow');
 
         if (notificationError) {

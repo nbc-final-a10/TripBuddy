@@ -1,7 +1,6 @@
 'use client';
 
 import { useAuth } from '@/hooks';
-import { useNotificationMutation, useNotificationQuery } from '@/hooks/queries';
 import {
     ClassifiedNotification,
     Notification,
@@ -11,6 +10,7 @@ import supabase from '@/utils/supabase/client';
 import {
     RealtimePostgresDeletePayload,
     RealtimePostgresInsertPayload,
+    RealtimePostgresUpdatePayload,
 } from '@supabase/supabase-js';
 import {
     createContext,
@@ -25,13 +25,20 @@ import ContractModal from '@/components/organisms/contract/ContractModal';
 import fetchWrapper from '@/utils/api/fetchWrapper';
 import { Buddy } from '@/types/Auth.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
+import { useContractQueries } from '@/hooks/queries';
 
 type NotificationProviderProps = {
     initialNotifications: Notification[] | undefined;
 };
 
 const initialValue: NotificationContextType = {
-    notifications: [],
+    notifications: {
+        storyLikes: [],
+        follows: [],
+        bookmarks: [],
+        contracts: [],
+    },
+    hasNotification: false,
 };
 
 export const NotificationContext =
@@ -41,66 +48,104 @@ export const NotificationProvider = ({
     children,
     initialNotifications,
 }: PropsWithChildren<NotificationProviderProps>) => {
-    const [notifications, setNotifications] = useState<ClassifiedNotification>(
-        {
-            storyLikes:
-                initialNotifications?.filter(
-                    notification =>
-                        notification.notification_type === 'like' &&
-                        notification.notification_isRead === false,
-                ) || [],
-            follows:
-                initialNotifications?.filter(
-                    notification =>
-                        notification.notification_type === 'follow' &&
-                        notification.notification_isRead === false,
-                ) || [],
-            bookmarks:
-                initialNotifications?.filter(
-                    notification =>
-                        notification.notification_type === 'bookmark' &&
-                        notification.notification_isRead === false,
-                ) || [],
-            contracts:
-                initialNotifications?.filter(
-                    notification =>
-                        notification.notification_type === 'contract' &&
-                        notification.notification_isRead === false,
-                ) || [],
-        } || [],
-    );
     const { buddy } = useAuth();
-    const { mutate } = useNotificationMutation();
+
+    const [notifications, setNotifications] = useState<ClassifiedNotification>({
+        storyLikes:
+            initialNotifications?.filter(
+                notification =>
+                    notification.notification_type === 'like' &&
+                    notification.notification_isRead === false &&
+                    notification.notification_sender !== buddy?.buddy_id,
+            ) || [],
+        follows:
+            initialNotifications?.filter(
+                notification =>
+                    notification.notification_type === 'follow' &&
+                    notification.notification_isRead === false &&
+                    notification.notification_sender !== buddy?.buddy_id,
+            ) || [],
+        bookmarks:
+            initialNotifications?.filter(
+                notification =>
+                    notification.notification_type === 'bookmark' &&
+                    notification.notification_isRead === false &&
+                    notification.notification_sender !== buddy?.buddy_id,
+            ) || [],
+        contracts:
+            initialNotifications?.filter(
+                notification =>
+                    notification.notification_type === 'contract' &&
+                    notification.notification_isRead === false &&
+                    notification.notification_sender !== buddy?.buddy_id,
+            ) || [],
+    });
+
     const modal = useModal();
     const prevNotificationsRef = useRef(notifications);
     const hasFetchedOnceRef = useRef(false);
+    const [hasNotification, setHasNotification] = useState(false);
 
-    const handleRealTimePostsUpdate = useCallback(
-        (payload: RealtimePostgresInsertPayload<Notification>) => {
-            if (payload.new.notification_receiver === buddy?.buddy_id) {
+    const queries = useContractQueries(
+        notifications.contracts
+            .map(notification => notification.notification_origin_id)
+            .filter((id): id is string => id !== null),
+    );
+
+    const handleRealTimePostsInsertUpdate = useCallback(
+        (
+            payload:
+                | RealtimePostgresInsertPayload<Notification>
+                | RealtimePostgresUpdatePayload<Notification>,
+        ) => {
+            if (
+                payload.new.notification_receiver === buddy?.buddy_id &&
+                payload.new.notification_sender !== buddy?.buddy_id
+            ) {
                 if (payload.new.notification_type === 'like') {
-                    setNotifications(prev => ({
-                        ...prev,
-                        storyLikes: [...prev.storyLikes, payload.new],
-                    }));
+                    setNotifications(prev => {
+                        // notification_isRead 값이 false인 경우만 추가
+                        if (payload.new.notification_isRead === false) {
+                            return {
+                                ...prev,
+                                storyLikes: [...prev.storyLikes, payload.new],
+                            };
+                        } else {
+                            return prev;
+                        }
+                    });
                 }
                 if (payload.new.notification_type === 'follow') {
-                    setNotifications(prev => ({
-                        ...prev,
-                        follows: [...prev.follows, payload.new],
-                    }));
+                    setNotifications(prev => {
+                        if (payload.new.notification_isRead === false) {
+                            return {
+                                ...prev,
+                                follows: [...prev.follows, payload.new],
+                            };
+                        } else {
+                            return prev;
+                        }
+                    });
                 }
                 if (payload.new.notification_type === 'bookmark') {
-                    setNotifications(prev => ({
-                        ...prev,
-                        bookmarks: [...prev.bookmarks, payload.new],
-                    }));
+                    setNotifications(prev => {
+                        if (payload.new.notification_isRead === false) {
+                            return {
+                                ...prev,
+                                bookmarks: [...prev.bookmarks, payload.new],
+                            };
+                        } else {
+                            return prev;
+                        }
+                    });
                 }
                 if (payload.new.notification_type === 'contract') {
-                    setNotifications(prev => ({
-                        ...prev,
-                        contracts: [...prev.contracts, payload.new],
-                    }));
+                    setNotifications(prev => {
+                        return {
+                            ...prev,
+                            contracts: [...prev.contracts, payload.new],
+                        };
+                    });
                 }
             }
         },
@@ -177,16 +222,15 @@ export const NotificationProvider = ({
 
     useEffect(() => {
         const allChanges = supabase
-            .channel('realtime-posts')
+            .channel('schema-db-changes')
             .on(
                 'postgres_changes',
                 {
                     event: 'INSERT',
                     schema: 'public',
                     table: 'notifications',
-                    filter: `notification_isRead=eq.false`,
                 },
-                handleRealTimePostsUpdate,
+                handleRealTimePostsInsertUpdate,
             )
             .on(
                 'postgres_changes',
@@ -194,72 +238,125 @@ export const NotificationProvider = ({
                     event: 'DELETE',
                     schema: 'public',
                     table: 'notifications',
-                    filter: `notification_isRead=eq.false`,
+                    // filter: `notification_isRead=eq.false`,
                 },
                 handleRealTimePostsDelete,
+            )
+            .on(
+                'postgres_changes',
+                {
+                    event: 'UPDATE',
+                    schema: 'public',
+                    table: 'notifications',
+                },
+                handleRealTimePostsInsertUpdate,
             )
             .subscribe();
 
         return () => {
             supabase.removeChannel(allChanges);
         };
-    }, [buddy, handleRealTimePostsDelete, handleRealTimePostsUpdate]);
+    }, [buddy, handleRealTimePostsDelete, handleRealTimePostsInsertUpdate]);
 
-    // useEffect(() => {
-    //     const prevNotifications = prevNotificationsRef.current;
-    //     async function fetchSpecificBuddy() {
-    //         const promises = notifications.contracts.map(async notification => {
-    //             const url = `/api/buddyProfile/buddy?id=${notification.notification_sender}`;
-    //             const promise = fetchWrapper<Buddy>(url, { method: 'GET' });
-    //             return promise;
-    //         });
-    //         const data = await Promise.all(promises);
-    //         return data;
-    //     }
-    //     // 최초 실행 또는 notifications가 변경된 경우에만 실행
-    //     if (
-    //         !hasFetchedOnceRef.current ||
-    //         !prevNotifications ||
-    //         prevNotifications.contracts.length !==
-    //             notifications.contracts.length ||
-    //         JSON.stringify(prevNotifications.contracts) !==
-    //             JSON.stringify(notifications.contracts)
-    //     ) {
-    //         prevNotificationsRef.current = notifications;
-    //         hasFetchedOnceRef.current = true; // 최초 실행 여부를 기록
+    const isPending = queries.some(query => query.isPending);
 
-    //         if (!modal) return;
+    useEffect(() => {
+        if (isPending) return;
+        if (queries.length === 0) return;
 
-    //         fetchSpecificBuddy()
-    //             .then(data => {
-    //                 console.log('data ====>', data);
-    //                 showAlert(
-    //                     'caution',
-    //                     `새로운 참여 요청이 ${data.length}건 있습니다.`,
-    //                     {
-    //                         onConfirm: () => {
-    //                             modal.openModal({
-    //                                 component: () => (
-    //                                     <ContractModal
-    //                                         buddies={data}
-    //                                         mode="notification"
-    //                                     />
-    //                                 ),
-    //                             });
-    //                         },
-    //                     },
-    //                 );
-    //             })
-    //             .catch(error => {
-    //                 console.error('error ====>', error);
-    //             });
+        const prevNotifications = prevNotificationsRef.current;
+        async function fetchSpecificBuddy() {
+            const notIsReadContracts = notifications.contracts.filter(
+                notification => notification.notification_isRead === false,
+            );
+            const promises = notIsReadContracts.map(async notification => {
+                const url = `/api/buddyProfile/buddy?id=${notification.notification_sender}`;
+                const promise = fetchWrapper<Buddy>(url, { method: 'GET' });
+                return promise;
+            });
+            const data = await Promise.all(promises);
+            return data;
+        }
 
-    //         console.log('notifications 상태 변경 ====>', notifications);
-    //     }
-    // }, [notifications, modal]);
+        // 최초 실행 또는 notifications가 변경된 경우에만 실행
+        if (
+            !hasFetchedOnceRef.current ||
+            !prevNotifications ||
+            prevNotifications.contracts.length !==
+                notifications.contracts.length ||
+            JSON.stringify(prevNotifications.contracts) !==
+                JSON.stringify(notifications.contracts)
+        ) {
+            prevNotificationsRef.current = notifications;
+            hasFetchedOnceRef.current = true; // 최초 실행 여부를 기록
+
+            if (!modal) return;
+
+            fetchSpecificBuddy()
+                .then(data => {
+                    if (data.length > 0) {
+                        showAlert(
+                            'caution',
+                            `새로운 참여 요청이 ${data.length}건 있습니다.`,
+                            {
+                                onConfirm: () => {
+                                    modal.openModal({
+                                        component: () => (
+                                            <ContractModal
+                                                queries={queries}
+                                                notifications={
+                                                    notifications.contracts
+                                                }
+                                                buddies={data}
+                                                mode="notification"
+                                            />
+                                        ),
+                                    });
+                                },
+                            },
+                        );
+                    }
+                })
+                .catch(error => {
+                    console.error('error ====>', error);
+                });
+        }
+    }, [modal, queries, notifications, isPending]);
+
+    useEffect(() => {
+        if (!buddy) return;
+        const hasUnreadNotifications =
+            (notifications.storyLikes.length > 0 &&
+                notifications.storyLikes.some(
+                    notification =>
+                        notification.notification_sender !== buddy?.buddy_id,
+                )) ||
+            (notifications.follows.length > 0 &&
+                notifications.follows.some(
+                    notification =>
+                        notification.notification_sender !== buddy?.buddy_id,
+                )) ||
+            (notifications.bookmarks.length > 0 &&
+                notifications.bookmarks.some(
+                    notification =>
+                        notification.notification_sender !== buddy?.buddy_id,
+                )) ||
+            (notifications.contracts.length > 0 &&
+                notifications.contracts.some(
+                    notification =>
+                        notification.notification_sender !== buddy?.buddy_id,
+                ));
+        setHasNotification(hasUnreadNotifications);
+    }, [notifications, buddy]);
+
+    useEffect(() => {
+        console.log('notifications 상태 변경 ====>', notifications);
+    }, [notifications]);
 
     return (
-        <NotificationContext.Provider value={{ notifications }}>
+        <NotificationContext.Provider
+            value={{ notifications, hasNotification }}
+        >
             {children}
         </NotificationContext.Provider>
     );

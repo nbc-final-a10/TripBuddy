@@ -64,7 +64,7 @@ const StoryFilterImage: React.FC<StoryFilterImageProps> = ({
             </div>
 
             <div
-                className="relative flex flex-row bottom-0 overflow-x-scroll scrollbar-hidden gap-2 p-2 h-[20%] items-center justify-center"
+                className="relative flex flex-row bottom-0 overflow-x-scroll scrollbar-hidden gap-2 pt-1 pb-2 h-[20%] items-center justify-center"
                 ref={filterRef}
             >
                 {filterImage.map(filter => (
@@ -87,7 +87,7 @@ const StoryFilterImage: React.FC<StoryFilterImageProps> = ({
                                 alt={filter.name}
                                 fill
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                className="relative object-contain w-full h-full"
+                                className="relative object-cover w-full h-full rounded-2xl"
                             />
                         </button>
                     </div>

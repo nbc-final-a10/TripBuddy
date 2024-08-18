@@ -10,4 +10,3 @@ export * from './common/useSelectSex';
 export * from './common/useTapScroll';
 export * from './common/useSelectRegion';
 export * from './auth/useAuth';
-export * from './MyPage/useTripWrite';

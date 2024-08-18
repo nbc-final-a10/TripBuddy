@@ -90,7 +90,8 @@ export async function POST(req: NextRequest) {
                 .delete()
                 .eq('notification_sender', bookmark_buddy_id)
                 .eq('notification_receiver', trip?.trip_master_id)
-                .eq('notification_type', 'bookmark');
+                .eq('notification_type', 'bookmark')
+                .eq('notification_origin_id', bookmark_trip_id);
 
         if (notificationError) {
             return NextResponse.json(
@@ -137,6 +138,7 @@ export async function POST(req: NextRequest) {
                         notification_sender: bookmark_buddy_id,
                         notification_receiver: trip?.trip_master_id,
                         notification_content: `${buddy?.buddy_nickname}님이 여행을 찜하셨습니다.`,
+                        notification_origin_id: bookmark_trip_id,
                     },
                 ])
                 .select()

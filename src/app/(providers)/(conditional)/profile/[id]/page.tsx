@@ -1,19 +1,42 @@
 'use client';
 
 import BuddyTemperature from '@/components/atoms/profile/BuddyTemperature';
-import MyTrips from '@/components/atoms/profile/MyTrips';
+import MyTripsButton from '@/components/atoms/profile/MyTripsButton';
 import BuddyFollow from '@/components/molecules/profile/BuddyFollow';
 import BuddyProfile from '@/components/molecules/profile/BuddyProfile';
 import { useAuth } from '@/hooks';
 import { useBuddyProfile } from '@/hooks/queries';
+import { useFollowCountQuery } from '@/hooks/queries/buddy/useGetFollowCounts';
 import { ProfilePageProps } from '@/types/ProfileParams.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
 
 function ProfilePage({ params }: ProfilePageProps) {
+    const [followingList, setFollowingList] = useState<string[]>([]);
+    const [followerList, setFollowerList] = useState<string[]>([]);
     const { buddy, logOut } = useAuth();
-
     const { data: clickedBuddy, isLoading, error } = useBuddyProfile(params.id);
+
+    const { data: followList } = useFollowCountQuery(
+        clickedBuddy?.buddy_id || '',
+    );
+
+    useEffect(() => {
+        if (!followList || !clickedBuddy?.buddy_id) return;
+
+        const newFollowerList = followList
+            .filter(data => data.follow_following_id === clickedBuddy.buddy_id)
+            .map(data => data.follow_follower_id);
+
+        const newFollowingList = followList
+            .filter(data => data.follow_follower_id === clickedBuddy.buddy_id)
+            .map(data => data.follow_following_id);
+
+        setFollowingList(newFollowingList);
+        setFollowerList(newFollowerList);
+    }, [followList, clickedBuddy?.buddy_id]);
 
     const handleLogOut = () => {
         logOut();
@@ -38,19 +61,27 @@ function ProfilePage({ params }: ProfilePageProps) {
             <section className="w-full h-full flex justify-center items-center my-4">
                 <div className="flex flex-row items-center mx-4 space-x-4 w-full">
                     <span className="flex-1">
-                        <BuddyFollow
-                            id={params.id}
-                            type="팔로잉"
-                            count={clickedBuddy?.buddy_following_counts || 0}
-                        />
+                        <Link
+                            href={`/profile/follow/${params.id}?view=following`}
+                        >
+                            <BuddyFollow
+                                id={params.id}
+                                type="팔로잉"
+                                count={followingList.length}
+                            />
+                        </Link>
                     </span>
                     <span className="border-l border-gray-300 h-10 mx-2" />
                     <span className="flex-1">
-                        <BuddyFollow
-                            id={params.id}
-                            type="팔로워"
-                            count={clickedBuddy?.buddy_follower_counts || 0}
-                        />
+                        <Link
+                            href={`/profile/follow/${params.id}?view=follower`}
+                        >
+                            <BuddyFollow
+                                id={params.id}
+                                type="팔로워"
+                                count={followerList.length}
+                            />
+                        </Link>
                     </span>
                 </div>
                 <div className="flex flex-col items-center mr-8 w-full">
@@ -62,8 +93,23 @@ function ProfilePage({ params }: ProfilePageProps) {
                 </div>
             </section>
 
-            <section className="mt-16 mx-8">
-                <MyTrips id={params.id} />
+            <section className="mt-16 mx-8 bg-gray-100">
+                <div className="flex flex-col">
+                    {['created', 'bookmarked', 'participated'].map(view => (
+                        <MyTripsButton
+                            key={view}
+                            view={
+                                view as
+                                    | 'created'
+                                    | 'bookmarked'
+                                    | 'participated'
+                            }
+                            src={`/svg/Mytrips_${view}.svg`}
+                            alt={`내가 ${view === 'created' ? '만든' : view === 'bookmarked' ? '찜한' : '참여한'} 여정`}
+                            id={params.id}
+                        />
+                    ))}
+                </div>
             </section>
 
             {buddy?.buddy_id === clickedBuddy?.buddy_id && (

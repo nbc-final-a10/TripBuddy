@@ -32,6 +32,7 @@ const MainSectionWrapper = ({ children }: MainSectionWrapperProps) => {
                 pathname.startsWith('/stories/') &&
                     'xl:max-h-[calc(100dvh-100px)]',
                 pathname === '/trips' && 'xl:max-h-[calc(100dvh-100px)]',
+                pathname === '/stories' && 'xl:max-h-[calc(100dvh-100px)]',
             )}
         >
             <section
@@ -41,6 +42,8 @@ const MainSectionWrapper = ({ children }: MainSectionWrapperProps) => {
                         'bg-white xl:bg-white xl:min-h-[calc(100dvh-100px)]',
                     isHidePaddingBottom && 'pb-0',
                     pathname.startsWith('/write') &&
+                        'xl:min-h-[calc(100dvh-100px)] xl:h-[calc(100dvh-100px)]',
+                    pathname.startsWith('/stories/') &&
                         'xl:min-h-[calc(100dvh-100px)] xl:h-[calc(100dvh-100px)]',
                 )}
             >

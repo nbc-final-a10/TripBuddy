@@ -170,12 +170,12 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
 
     // 마스터 아이디로 유저 찾아오는 로직 추가할 것
     return (
-        <div className="flex flex-col gap-2 bg-gray-100 h-full mb-20">
+        <div className="flex flex-col gap-2 bg-white h-full pb-20">
             {postTripPending && <DefaultLoader />}
             {/** 이미지 + 여행정보 묶음 영역 */}
-            <div className="relative h-full flex flex-col">
+            <div className="relative h-full flex flex-col xl:flex-row">
                 {/** 이미지 영역 */}
-                <div className="h-[217px] w-full bg-gray-40 relative aspect-auto">
+                <div className="h-[217px] w-full bg-white xl:w-[40%] xl:min-h-[324px] flex justify-center items-center">
                     {mode === 'edit' && (
                         <div className="absolute h-full w-full top-0 right-0 bg-black/55 z-10 flex justify-center items-center">
                             <button className="bg-grayscale-color-500/70 rounded p-1">
@@ -194,14 +194,16 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
                             </button>
                         </div>
                     )}
-                    <Image
-                        src={tripImage}
-                        alt="trip image"
-                        fill
-                        priority
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 33vw"
-                        className="object-cover xl:object-contain"
-                    />
+                    <div className="relative aspect-auto w-full h-full xl:w-[90%] xl:h-[90%] flex justify-center items-center">
+                        <Image
+                            src={tripImage}
+                            alt="trip image"
+                            fill
+                            priority
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 33vw"
+                            className="object-cover xl:object-contain"
+                        />
+                    </div>
                 </div>
                 {/** 여행 정보 영역 */}
                 {queries.length > 0 && (
@@ -217,10 +219,22 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
                 )}
             </div>
 
+            {mode === 'detail' && (
+                <div className="w-full flex justify-center items-center h-[4px] py-6">
+                    <hr className="hidden xl:block w-[85%] py-0.5 bg-grayscale-color-100/85 border-none mx-auto" />
+                </div>
+            )}
+
             {/** 글쓴이 정보 영역 */}
-            <div className="flex items-center bg-white gap-2 h-[217px]">
+            <div className="flex items-center bg-white gap-2 h-[217px] xl:w-[90%] mx-auto">
                 <BuddyProfile clickedBuddy={buddy} loading={false} />
             </div>
+
+            {mode === 'detail' && (
+                <div className="w-full flex justify-center items-center h-[4px] py-10">
+                    <hr className="hidden xl:block w-[85%] py-0.5 bg-grayscale-color-100/85 border-none mx-auto" />
+                </div>
+            )}
 
             {/** 글 내용 */}
             <div className="flex flex-col bg-white gap-2 h-[217px] p-4">
@@ -240,7 +254,7 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
             </div>
 
             {/** 추천인기 버디즈 */}
-            <div className="relative z-10 bg-white">
+            <div className="relative z-10 bg-white xl:w-[86%] mx-auto">
                 <HomePageTitle
                     title="추천 인기 버디즈"
                     buttonText="전체보기"
@@ -262,12 +276,12 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
                         <Navigate
                             mode="before"
                             onClick={createScrollLeft(buddiesRef)}
-                            className="top-[71%]"
+                            className="top-[70%]"
                         />
                         <Navigate
                             mode="after"
                             onClick={createScrollRight(buddiesRef)}
-                            className="top-[71%]"
+                            className="top-[70%]"
                         />
                     </>
                 )}

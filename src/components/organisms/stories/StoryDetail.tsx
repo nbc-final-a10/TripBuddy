@@ -17,12 +17,12 @@ import {
 import { useAuth, useTapScroll } from '@/hooks';
 
 type StoryDetailProps = {
-    nickname: string;
+    // nickname: string;
     id: string;
     stories: StoryWithBuddies[];
 };
 
-const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
+const StoryDetail: React.FC<StoryDetailProps> = ({ id, stories }) => {
     const { buddy } = useAuth();
     const router = useRouter();
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -76,7 +76,7 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
     const handleSelectStory = (story: StoryWithBuddies, index: number) => {
         setSelectedStory(story);
         setSelectedIndex(index);
-        router.push(`/stories/${nickname}?id=${story.buddies.buddy_id}`);
+        router.push(`/stories/${story.buddies.buddy_id}`);
     };
 
     const handleDeleteStory = () => {
@@ -110,11 +110,9 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
     useEffect(() => {
         if (queryStories) {
             setSelectedStory(queryStories[0]);
-            router.push(
-                `/stories/${nickname}?id=${queryStories[0].buddies.buddy_id}`,
-            );
+            router.push(`/stories/${queryStories[0].story_id}`);
         }
-    }, [queryStories, router, nickname]);
+    }, [queryStories, router]);
 
     useEffect(() => {
         if (isLikesPending || isDeleting || isPending) {
@@ -126,11 +124,12 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ nickname, id, stories }) => {
 
     const storyOverlay = selectedStory?.story_overlay as StoryOverlay[];
 
-    if (isLoading) return <DefaultLoader />;
+    // if (isLoading) return <DefaultLoader />;
 
     return (
         <>
             <section className="relative w-full h-[calc(100dvh-57px-76px)] bg-gray-800 aspect-auto xl:h-[calc(100dvh-100px)] xl:w-[430px] xl:mx-auto overflow-hidden">
+                {isLoading && <DefaultLoader />}
                 <div className="absolute top-0 left-0 w-full h-full z-20 flex flex-row">
                     <div
                         data-next="before"
