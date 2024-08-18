@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import Arrow_Back from '../../../../public/svg/Arrow_back.svg';
 import Close from '../../../../public/svg/Close.svg';
-import Notification from '../../../../public/svg/Alarm.svg';
 import Search from '../../../../public/svg/HomeSearch.svg';
 import MobileHeaderSettingsButton from '@/components/atoms/common/MobileHeaderSettingsButton';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -12,6 +11,7 @@ import { useModal } from '@/contexts/modal.context';
 import { getTrip } from '@/api-services/trips';
 import { TripWithContract } from '@/types/Trips.types';
 import Link from 'next/link';
+import NotificationButton from '@/components/atoms/common/NotificationButton';
 
 const MobileHeader: React.FC = () => {
     const pathname = usePathname();
@@ -131,12 +131,7 @@ const MobileHeader: React.FC = () => {
                         className="cursor-pointer"
                     />
                 )}
-                {isTrips && (
-                    <Notification
-                        onClick={() => router.push('/notifications')}
-                        className="cursor-pointer"
-                    />
-                )}
+                {isTrips && <NotificationButton />}
                 {isProfile && uuid && (
                     <MobileHeaderSettingsButton uuid={uuid} />
                 )}
