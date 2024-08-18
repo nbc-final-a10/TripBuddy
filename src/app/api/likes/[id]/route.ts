@@ -110,6 +110,7 @@ export async function POST(request: NextRequest) {
                 .delete()
                 .eq('notification_sender', buddy_id)
                 .eq('notification_receiver', story?.story_created_by)
+                .eq('notification_origin_id', story_id)
                 .eq('notification_type', 'like');
 
         if (notificationError) {

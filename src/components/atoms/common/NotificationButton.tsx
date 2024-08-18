@@ -1,11 +1,11 @@
 'use client';
-import React, { useContext } from 'react';
+import React from 'react';
 import Alarm from '../../../../public/svg/Alarm.svg';
-import { NotificationContext } from '@/contexts/notification.context';
 import Link from 'next/link';
+import { useNotification } from '@/hooks/notification/useNotification';
 
 const NotificationButton = () => {
-    const { hasNotification } = useContext(NotificationContext);
+    const { hasNotification } = useNotification();
 
     return (
         <Link href="/notifications" className="relative cursor-pointer">

@@ -17,7 +17,7 @@ export function useSelectMeetPlace() {
                     <button
                         key={index}
                         onClick={() => setMeetPlace(value)}
-                        className={`text-lg ${meetPlace === value ? 'bg-main-color text-white' : 'bg-gray-100'} w-full mx-2 px-4 py-1 xl:py-2 rounded-full`}
+                        className={`text-lg xl:text-base ${meetPlace === value ? 'bg-main-color text-white' : 'bg-gray-200 text-gray-500 border-gray-200'} w-full mx-2 px-4 py-1 xl:py-2 rounded-full`}
                     >
                         {value}
                     </button>

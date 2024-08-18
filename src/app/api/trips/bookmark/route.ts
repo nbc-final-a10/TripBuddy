@@ -90,7 +90,8 @@ export async function POST(req: NextRequest) {
                 .delete()
                 .eq('notification_sender', bookmark_buddy_id)
                 .eq('notification_receiver', trip?.trip_master_id)
-                .eq('notification_type', 'bookmark');
+                .eq('notification_type', 'bookmark')
+                .eq('notification_origin_id', bookmark_trip_id);
 
         if (notificationError) {
             return NextResponse.json(

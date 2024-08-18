@@ -116,6 +116,7 @@ export async function POST(req: NextRequest) {
             };
         } else {
             contractData = payload;
+            console.log('contractData ====>', contractData);
         }
 
         // 'contract' 테이블에 contract 데이터를 삽입
@@ -169,7 +170,7 @@ export async function POST(req: NextRequest) {
             }: { data: Notification | null; error: PostgrestError | null } =
                 await supabase
                     .from('notifications')
-                    .insert([
+                    .upsert([
                         {
                             notification_type: 'contract',
                             notification_sender: payload.contract_buddy_id,

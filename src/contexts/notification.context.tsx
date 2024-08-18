@@ -10,6 +10,7 @@ import supabase from '@/utils/supabase/client';
 import {
     RealtimePostgresDeletePayload,
     RealtimePostgresInsertPayload,
+    RealtimePostgresUpdatePayload,
 } from '@supabase/supabase-js';
 import {
     createContext,
@@ -31,7 +32,12 @@ type NotificationProviderProps = {
 };
 
 const initialValue: NotificationContextType = {
-    notifications: [],
+    notifications: {
+        storyLikes: [],
+        follows: [],
+        bookmarks: [],
+        contracts: [],
+    },
     hasNotification: false,
 };
 
@@ -42,50 +48,43 @@ export const NotificationProvider = ({
     children,
     initialNotifications,
 }: PropsWithChildren<NotificationProviderProps>) => {
-    const [notifications, setNotifications] = useState<ClassifiedNotification>(
-        {
-            storyLikes:
-                initialNotifications?.filter(
-                    notification =>
-                        notification.notification_type === 'like' &&
-                        notification.notification_isRead === false,
-                ) || [],
-            follows:
-                initialNotifications?.filter(
-                    notification =>
-                        notification.notification_type === 'follow' &&
-                        notification.notification_isRead === false,
-                ) || [],
-            bookmarks:
-                initialNotifications?.filter(
-                    notification =>
-                        notification.notification_type === 'bookmark' &&
-                        notification.notification_isRead === false,
-                ) || [],
-            contracts:
-                initialNotifications?.filter(
-                    notification =>
-                        notification.notification_type === 'contract' &&
-                        notification.notification_isRead === false,
-                ) || [],
-        } || [],
-    );
-
     const { buddy } = useAuth();
+
+    const [notifications, setNotifications] = useState<ClassifiedNotification>({
+        storyLikes:
+            initialNotifications?.filter(
+                notification =>
+                    notification.notification_type === 'like' &&
+                    notification.notification_isRead === false &&
+                    notification.notification_sender !== buddy?.buddy_id,
+            ) || [],
+        follows:
+            initialNotifications?.filter(
+                notification =>
+                    notification.notification_type === 'follow' &&
+                    notification.notification_isRead === false &&
+                    notification.notification_sender !== buddy?.buddy_id,
+            ) || [],
+        bookmarks:
+            initialNotifications?.filter(
+                notification =>
+                    notification.notification_type === 'bookmark' &&
+                    notification.notification_isRead === false &&
+                    notification.notification_sender !== buddy?.buddy_id,
+            ) || [],
+        contracts:
+            initialNotifications?.filter(
+                notification =>
+                    notification.notification_type === 'contract' &&
+                    notification.notification_isRead === false &&
+                    notification.notification_sender !== buddy?.buddy_id,
+            ) || [],
+    });
+
     const modal = useModal();
     const prevNotificationsRef = useRef(notifications);
     const hasFetchedOnceRef = useRef(false);
     const [hasNotification, setHasNotification] = useState(false);
-
-    useEffect(() => {
-        const hasUnreadNotifications =
-            notifications.storyLikes.length > 0 ||
-            notifications.follows.length > 0 ||
-            notifications.bookmarks.length > 0 ||
-            notifications.contracts.length > 0;
-
-        setHasNotification(hasUnreadNotifications);
-    }, [notifications]);
 
     const queries = useContractQueries(
         notifications.contracts
@@ -93,32 +92,60 @@ export const NotificationProvider = ({
             .filter((id): id is string => id !== null),
     );
 
-    const handleRealTimePostsUpdate = useCallback(
-        (payload: RealtimePostgresInsertPayload<Notification>) => {
-            if (payload.new.notification_receiver === buddy?.buddy_id) {
+    const handleRealTimePostsInsertUpdate = useCallback(
+        (
+            payload:
+                | RealtimePostgresInsertPayload<Notification>
+                | RealtimePostgresUpdatePayload<Notification>,
+        ) => {
+            if (
+                payload.new.notification_receiver === buddy?.buddy_id &&
+                payload.new.notification_sender !== buddy?.buddy_id
+            ) {
                 if (payload.new.notification_type === 'like') {
-                    setNotifications(prev => ({
-                        ...prev,
-                        storyLikes: [...prev.storyLikes, payload.new],
-                    }));
+                    setNotifications(prev => {
+                        // notification_isRead 값이 false인 경우만 추가
+                        if (payload.new.notification_isRead === false) {
+                            return {
+                                ...prev,
+                                storyLikes: [...prev.storyLikes, payload.new],
+                            };
+                        } else {
+                            return prev;
+                        }
+                    });
                 }
                 if (payload.new.notification_type === 'follow') {
-                    setNotifications(prev => ({
-                        ...prev,
-                        follows: [...prev.follows, payload.new],
-                    }));
+                    setNotifications(prev => {
+                        if (payload.new.notification_isRead === false) {
+                            return {
+                                ...prev,
+                                follows: [...prev.follows, payload.new],
+                            };
+                        } else {
+                            return prev;
+                        }
+                    });
                 }
                 if (payload.new.notification_type === 'bookmark') {
-                    setNotifications(prev => ({
-                        ...prev,
-                        bookmarks: [...prev.bookmarks, payload.new],
-                    }));
+                    setNotifications(prev => {
+                        if (payload.new.notification_isRead === false) {
+                            return {
+                                ...prev,
+                                bookmarks: [...prev.bookmarks, payload.new],
+                            };
+                        } else {
+                            return prev;
+                        }
+                    });
                 }
                 if (payload.new.notification_type === 'contract') {
-                    setNotifications(prev => ({
-                        ...prev,
-                        contracts: [...prev.contracts, payload.new],
-                    }));
+                    setNotifications(prev => {
+                        return {
+                            ...prev,
+                            contracts: [...prev.contracts, payload.new],
+                        };
+                    });
                 }
             }
         },
@@ -195,16 +222,15 @@ export const NotificationProvider = ({
 
     useEffect(() => {
         const allChanges = supabase
-            .channel('realtime-posts')
+            .channel('schema-db-changes')
             .on(
                 'postgres_changes',
                 {
                     event: 'INSERT',
                     schema: 'public',
                     table: 'notifications',
-                    filter: `notification_isRead=eq.false`,
                 },
-                handleRealTimePostsUpdate,
+                handleRealTimePostsInsertUpdate,
             )
             .on(
                 'postgres_changes',
@@ -212,16 +238,25 @@ export const NotificationProvider = ({
                     event: 'DELETE',
                     schema: 'public',
                     table: 'notifications',
-                    filter: `notification_isRead=eq.false`,
+                    // filter: `notification_isRead=eq.false`,
                 },
                 handleRealTimePostsDelete,
+            )
+            .on(
+                'postgres_changes',
+                {
+                    event: 'UPDATE',
+                    schema: 'public',
+                    table: 'notifications',
+                },
+                handleRealTimePostsInsertUpdate,
             )
             .subscribe();
 
         return () => {
             supabase.removeChannel(allChanges);
         };
-    }, [buddy, handleRealTimePostsDelete, handleRealTimePostsUpdate]);
+    }, [buddy, handleRealTimePostsDelete, handleRealTimePostsInsertUpdate]);
 
     const isPending = queries.some(query => query.isPending);
 
@@ -231,7 +266,10 @@ export const NotificationProvider = ({
 
         const prevNotifications = prevNotificationsRef.current;
         async function fetchSpecificBuddy() {
-            const promises = notifications.contracts.map(async notification => {
+            const notIsReadContracts = notifications.contracts.filter(
+                notification => notification.notification_isRead === false,
+            );
+            const promises = notIsReadContracts.map(async notification => {
                 const url = `/api/buddyProfile/buddy?id=${notification.notification_sender}`;
                 const promise = fetchWrapper<Buddy>(url, { method: 'GET' });
                 return promise;
@@ -282,10 +320,38 @@ export const NotificationProvider = ({
                 .catch(error => {
                     console.error('error ====>', error);
                 });
-
-            console.log('notifications 상태 변경 ====>', notifications);
         }
     }, [modal, queries, notifications, isPending]);
+
+    useEffect(() => {
+        if (!buddy) return;
+        const hasUnreadNotifications =
+            (notifications.storyLikes.length > 0 &&
+                notifications.storyLikes.some(
+                    notification =>
+                        notification.notification_sender !== buddy?.buddy_id,
+                )) ||
+            (notifications.follows.length > 0 &&
+                notifications.follows.some(
+                    notification =>
+                        notification.notification_sender !== buddy?.buddy_id,
+                )) ||
+            (notifications.bookmarks.length > 0 &&
+                notifications.bookmarks.some(
+                    notification =>
+                        notification.notification_sender !== buddy?.buddy_id,
+                )) ||
+            (notifications.contracts.length > 0 &&
+                notifications.contracts.some(
+                    notification =>
+                        notification.notification_sender !== buddy?.buddy_id,
+                ));
+        setHasNotification(hasUnreadNotifications);
+    }, [notifications, buddy]);
+
+    useEffect(() => {
+        console.log('notifications 상태 변경 ====>', notifications);
+    }, [notifications]);
 
     return (
         <NotificationContext.Provider

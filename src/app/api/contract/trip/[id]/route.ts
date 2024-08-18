@@ -128,6 +128,24 @@ export async function DELETE(
             );
         }
 
+        // 여정이 삭제되면 컨트랙트 알림도 삭제
+        const {
+            data: notification,
+            error: notificationError,
+        }: { data: Notification | null; error: PostgrestError | null } =
+            await supabase
+                .from('notifications')
+                .delete()
+                .eq('notification_type', 'contract')
+                .eq('notification_origin_id', tripId);
+
+        if (notificationError) {
+            return NextResponse.json(
+                { error: notificationError.message },
+                { status: 401 },
+            );
+        }
+
         return NextResponse.json(
             { message: '여정이 삭제되었습니다.' },
             { status: 200 },

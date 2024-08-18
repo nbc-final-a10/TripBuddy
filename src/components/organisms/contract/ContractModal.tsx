@@ -28,6 +28,8 @@ const ContractModal: React.FC<ContractModalProps> = ({
     const [index, setIndex] = useState(0);
     const modal = useModal();
 
+    console.log('queries ====>', queries);
+
     const { mutate: mutateNotification, error: notificationError } =
         useNotificationMutation();
     const { mutate: mutateContract, error: contractError } =
@@ -43,22 +45,29 @@ const ContractModal: React.FC<ContractModalProps> = ({
         if (index === notifications.length - 1) modal.closeModal();
     };
 
-    const handleClose = () => {
+    const handleOk = () => {
         // 컨트랙트 isPending 을 false로 변경
         // 노티피케이션 isRead 를 true로 변경
 
         try {
-            const currentContracts = queries[index].data?.contracts.find(
+            const currentContracts = queries[index].data?.contracts.filter(
                 contract =>
                     contract.contract_trip_id ===
-                    notifications[index].notification_origin_id,
+                        notifications[index].notification_origin_id &&
+                    contract.contract_isPending,
             );
+
+            currentContracts?.sort(
+                (a, b) =>
+                    new Date(b.contract_created_at).getTime() -
+                    new Date(a.contract_created_at).getTime(),
+            );
+
             if (currentContracts) {
-                currentContracts.contract_isPending = false;
-                currentContracts.contract_validate_date =
+                currentContracts[index].contract_isPending = false;
+                currentContracts[index].contract_validate_date =
                     new Date().toISOString();
-                // console.log('currentContracts ====>', currentContracts);
-                mutateContract(currentContracts);
+                mutateContract(currentContracts[index]);
             }
             const newNotification = notifications[index];
             newNotification.notification_isRead = true;
@@ -125,7 +134,7 @@ const ContractModal: React.FC<ContractModalProps> = ({
 
                                 <button
                                     className="bg-primary-color-400 text-white border-primary-color-400 rounded-xl border w-[48%] py-2 px-8"
-                                    onClick={handleClose}
+                                    onClick={handleOk}
                                 >
                                     수락하기
                                 </button>
