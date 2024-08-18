@@ -46,6 +46,7 @@ export default function MyTrips() {
         <>
             {/* TODO: BookmarkedTrips는 최초 와이어프레임에 없던 지라 MyTripsAndContracts에서
             대응하지 못해 데이터를 직접 하달하고 있는데 리팩토링 필요함 */}
+            {/* TODO: CreatedTrips, ParticipatedTrips 스켈레톤 처리 */}
             {view === 'created' ? (
                 <CreatedTrips created={trips.created} />
             ) : view === 'participated' ? (
