@@ -9,9 +9,11 @@ import Link from 'next/link';
 import { useAuth } from '@/hooks';
 import { getTimeSinceUpload } from '@/utils/common/getTimeSinceUpload';
 import { getTimeIfDateIsToday } from '@/utils/common/getTimeIfDateIsToday';
+import { Buddy } from '@/types/Auth.types';
 
 const ChatList = () => {
-    const { buddy: currentBuddy } = useAuth();
+    const { buddy } = useAuth();
+    const currentBuddy = buddy as Buddy;
     const [chatData, setChatData] = useState<ContractData[]>([]);
     const [contractsExist, setContractsExist] = useState(true);
     const [isLoading, setIsLoading] = useState(true);

@@ -6,9 +6,10 @@ import supabase from '@/utils/supabase/client';
 import Image from 'next/image';
 import Link from 'next/link'; // Link를 import 합니다.
 import { useUnreadMessagesContext } from '@/contexts/unreadMessages.context';
+import { Buddy } from '@/types/Auth.types';
 
 type ChatMessageListProps = {
-    currentBuddy: any;
+    currentBuddy: Buddy;
     id: string;
 };
 
