@@ -502,7 +502,7 @@ const TripCard: React.FC<TripCardProps> = ({
                                 {!isEdit ? (
                                     <h3
                                         className={clsx(
-                                            'text-[16px] font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap xl:text-[26px] xl:font-semibold',
+                                            'text-[16px] font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap xl:font-semibold xl:pb-6',
                                             mode === 'list' &&
                                                 'text-black text-xl',
                                             mode === 'card' && 'text-gray-600',
