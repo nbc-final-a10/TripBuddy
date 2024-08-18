@@ -12,6 +12,7 @@ type ChattingTitleProps = {
 
 const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
     const [tripData, setTripData] = useState<Trip | null>(null);
+    const [contractCount, setContractCount] = useState<number>(0);
 
     useEffect(() => {
         const fetchTripData = async () => {
@@ -32,7 +33,25 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
                 // console.log(error);
             }
         };
+
+        const fetchContractCount = async () => {
+            try {
+                const { count, error } = await supabase
+                    .from('contract')
+                    .select('contract_id', { count: 'exact' })
+                    .eq('contract_trip_id', id)
+                    .eq('contract_isValidate', true);
+
+                if (error) {
+                    throw error;
+                }
+
+                setContractCount(count || 0);
+            } catch (error) {}
+        };
+
         fetchTripData();
+        fetchContractCount();
     }, [id]);
     return (
         <section className="relative border-y-[1px] h-[57px] bg-white">
@@ -64,7 +83,7 @@ const ChattingTitle: React.FC<ChattingTitleProps> = ({ id }) => {
                                       )
                                     : null}
                             </span>
-                            <span className="text-grayscale-color-500">{`n/${tripData?.trip_max_buddies_counts}명`}</span>
+                            <span className="text-grayscale-color-500">{`${contractCount}/${tripData?.trip_max_buddies_counts}명`}</span>
                         </div>
                     </div>
                 </div>
