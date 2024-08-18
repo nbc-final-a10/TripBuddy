@@ -4,7 +4,7 @@ import React, { useState, useEffect, MutableRefObject, useRef } from 'react';
 import { Message } from '@/types/Chat.types';
 import supabase from '@/utils/supabase/client';
 import Image from 'next/image';
-import Link from 'next/link'; // Link를 import 합니다.
+import Link from 'next/link';
 import { useUnreadMessagesContext } from '@/contexts/unreadMessages.context';
 import { Buddy } from '@/types/Auth.types';
 
