@@ -1,12 +1,15 @@
 'use client';
+
 import React, { useState, useEffect, MutableRefObject, useRef } from 'react';
 import { Message } from '@/types/Chat.types';
 import supabase from '@/utils/supabase/client';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useUnreadMessagesContext } from '@/contexts/unreadMessages.context';
+import { Buddy } from '@/types/Auth.types';
 
 type ChatMessageListProps = {
-    currentBuddy: any;
+    currentBuddy: Buddy;
     id: string;
 };
 
@@ -25,33 +28,59 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
 
     useEffect(() => {
         const fetchMessages = async () => {
-            const { data, error } = await supabase
-                .from('messages')
-                .select(
-                    `
-                    *,
-                    buddy:message_sender_id (
-                        buddy_profile_pic,
-                        buddy_nickname
-                    )
-                `,
-                )
-                .eq('message_trip_id', id)
-                .order('message_created_at', { ascending: true });
+            try {
+                const { data: contractData, error: contractError } =
+                    await supabase
+                        .from('contract')
+                        .select('contract_validate_date')
+                        .eq('contract_trip_id', id)
+                        .eq('contract_buddy_id', currentBuddy?.buddy_id)
+                        .single();
 
-            if (error) {
-                console.error('Error fetching messages:', error);
-            } else {
-                setMessages(data);
+                if (contractError) {
+                    console.error(
+                        'Error fetching contract data:',
+                        contractError,
+                    );
+                    return;
+                }
+
+                const validateDate = contractData?.contract_validate_date;
+
+                let query = supabase
+                    .from('messages')
+                    .select(
+                        `
+                        *,
+                        buddy:message_sender_id (
+                            buddy_profile_pic,
+                            buddy_nickname
+                        )
+                    `,
+                    )
+                    .eq('message_trip_id', id)
+                    .order('message_created_at', { ascending: true });
+
+                if (validateDate !== null) {
+                    query = query.gt('message_created_at', validateDate);
+                }
+
+                const { data, error } = await query;
+
+                if (error) {
+                    console.error('Error fetching messages:', error);
+                } else {
+                    setMessages(data);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
             }
         };
 
         fetchMessages();
-    }, [id]);
 
-    useEffect(() => {
         const channel = supabase
-            .channel('chat-room')
+            .channel(`realtime:messages:trip_${id}`)
             .on(
                 'postgres_changes',
                 { event: 'INSERT', schema: 'public', table: 'messages' },
@@ -83,34 +112,34 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                             ...prevMessages,
                             newMessageWithBuddy,
                         ]);
-                    }
 
-                    if (isPageVisible) {
-                        const { data: contracts, error: contractsError } =
-                            await supabase
-                                .from('contract')
-                                .select('contract_id')
-                                .eq('contract_trip_id', id);
+                        if (isPageVisible) {
+                            const { data: contracts, error: contractsError } =
+                                await supabase
+                                    .from('contract')
+                                    .select('contract_id')
+                                    .eq('contract_trip_id', id);
 
-                        if (contractsError) {
-                            console.error(
-                                'Error fetching contracts:',
-                                contractsError,
+                            if (contractsError) {
+                                console.error(
+                                    'Error fetching contracts:',
+                                    contractsError,
+                                );
+                                return;
+                            }
+
+                            const updates = contracts.map(contract =>
+                                supabase
+                                    .from('contract')
+                                    .update({
+                                        contract_last_message_read:
+                                            newMessage.message_id,
+                                    })
+                                    .eq('contract_id', contract.contract_id),
                             );
-                            return;
+
+                            await Promise.all(updates);
                         }
-
-                        const updates = contracts.map(contract =>
-                            supabase
-                                .from('contract')
-                                .update({
-                                    contract_last_message_read:
-                                        newMessage.message_id,
-                                })
-                                .eq('contract_id', contract.contract_id),
-                        );
-
-                        await Promise.all(updates);
                     }
                 },
             )
@@ -119,7 +148,7 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
         return () => {
             channel.unsubscribe();
         };
-    }, [id, isPageVisible]);
+    }, [id, currentBuddy, isPageVisible]);
 
     useEffect(() => {
         const handleVisibilityChange = () => {
@@ -155,7 +184,6 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
         handleReadMessages();
     }, [messages, currentBuddy, id, isPageVisible]);
 
-    // Scroll to the bottom when messages change
     useEffect(() => {
         const scrollContainer = scrollRef.current;
         if (scrollContainer) {
@@ -178,7 +206,7 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
 
     return (
         <div
-            className="px-6 pb-12 h-[calc(100vh-150px)] overflow-y-auto scrollbar-hidden"
+            className="px-6 pt-4 pb-12 h-[calc(100vh-57px-54px)] xl:h-[calc(100vh-100px-57px)] overflow-y-auto scrollbar-hidden"
             ref={scrollRef}
         >
             {messages.map((message, index) => {
@@ -209,7 +237,10 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                             className={`py-2 flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}
                         >
                             {!isCurrentUser && (
-                                <div className="bg-grayscale-color-300 w-[40px] h-[40px] rounded-full overflow-hidden flex justify-center items-center">
+                                <Link
+                                    href={`/profile/${message.message_sender_id}`}
+                                    className="bg-grayscale-color-300 w-[40px] h-[40px] rounded-full overflow-hidden flex justify-center items-center"
+                                >
                                     <Image
                                         src={message.buddy?.buddy_profile_pic}
                                         alt="Profile Image"
@@ -217,7 +248,7 @@ const ChatMessageList: React.FC<ChatMessageListProps> = ({
                                         height={40}
                                         className="object-cover w-auto h-auto"
                                     />
-                                </div>
+                                </Link>
                             )}
                             <div
                                 className={`p-2 pt-4 items-end flex ${isCurrentUser ? 'flex-row-reverse' : ''}`}

@@ -307,7 +307,7 @@ const OnBoarding: React.FC = () => {
     }, [isEdit, step]);
 
     return (
-        <section className="w-full flex flex-col h-[calc(100dvh-57px-76px)] xl:w-[720px] xl:mx-auto xl:h-[calc(100dvh-100px)]">
+        <section className="w-full flex flex-col h-[calc(100dvh-57px-54px)] xl:w-[720px] xl:mx-auto xl:h-[calc(100dvh-100px)]">
             <div className="relative w-full h-full flex flex-col justify-center xl:justify-start">
                 <ProgressIndicator
                     step={step}

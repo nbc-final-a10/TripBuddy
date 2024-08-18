@@ -183,7 +183,7 @@ const WriteMain: React.FC = () => {
     return (
         <div
             className={twMerge(
-                'relative h-[calc(100dvh-56px-76px)] xl:h-[calc(100dvh-100px)]',
+                'relative h-[calc(100dvh-56px-54px)] xl:h-[calc(100dvh-100px)]',
                 step === 5 && 'xl:h-[calc(100dvh-100px)]',
             )}
         >

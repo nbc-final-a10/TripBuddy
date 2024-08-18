@@ -1,11 +1,11 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import HeaderMyPageLink from './HeaderMyPageLink';
+import HeaderMyPageLink from '../../atoms/common/HeaderMyPageLink';
 import { twMerge } from 'tailwind-merge';
 import { usePathname } from 'next/navigation';
 import useChatStore from '@/zustand/chat.store';
-import UnreadMessages from '../chatpage/UnreadMessages';
+import UnreadMessages from '../../atoms/chatpage/UnreadMessages';
 import { relative } from 'path';
 
 export default function Header() {
@@ -16,7 +16,7 @@ export default function Header() {
     return (
         <header
             className={twMerge(
-                'hidden xl:flex relative w-full h-[100px] items-center bg-white justify-between z-50',
+                'hidden xl:flex relative w-full h-[100px] items-center bg-white shadow-header-web justify-between z-50',
                 pathname === '/tutorial' && 'xl:hidden',
             )}
         >
