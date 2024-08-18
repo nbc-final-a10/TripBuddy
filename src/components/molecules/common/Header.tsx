@@ -1,11 +1,11 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import HeaderMyPageLink from './HeaderMyPageLink';
+import HeaderMyPageLink from '../../atoms/common/HeaderMyPageLink';
 import { twMerge } from 'tailwind-merge';
 import { usePathname } from 'next/navigation';
 import useChatStore from '@/zustand/chat.store';
-import UnreadMessages from '../chatpage/UnreadMessages';
+import UnreadMessages from '../../atoms/chatpage/UnreadMessages';
 import { relative } from 'path';
 
 export default function Header() {
