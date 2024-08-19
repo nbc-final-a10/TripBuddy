@@ -19,6 +19,7 @@ export default function FollowButton() {
     const pathname = usePathname();
 
     useEffect(() => {
+        if (!buddy) return;
         const getCurrentBuddyId = buddy?.buddy_id;
         setFollowerId(getCurrentBuddyId);
 
@@ -101,12 +102,12 @@ export default function FollowButton() {
         };
 
         if (pathname.includes('trips')) {
-            console.log('trips들어가냐?');
+            // console.log('trips들어가냐?');
             setIsLoading(true);
             handleTripsLogic();
             setIsLoading(false);
         } else if (pathname.includes('profile')) {
-            console.log('profile들어가냐?');
+            // console.log('profile들어가냐?');
             setIsLoading(true);
             handleProfileLogic();
             setIsLoading(false);
