@@ -342,6 +342,7 @@ const TripCard: React.FC<TripCardProps> = ({
                 component: () => (
                     <TripEditText
                         handleTripTitleChange={handleTripTitleChange}
+                        trip={trip}
                     />
                 ),
             });

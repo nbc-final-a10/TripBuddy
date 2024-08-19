@@ -78,7 +78,7 @@ const WriteMain: React.FC = () => {
         handleTitleChange,
         handleContentChange,
         handleImageChange,
-    } = useTripWrite();
+    } = useTripWrite({});
     const { wantedSex, SelectWantedSexButton } = useSelectSex();
     const { startAge, endAge, handleStartAge, handleEndAge } = useSelectAges();
     const { meetPlace, SelectMeetPlaceButton } = useSelectMeetPlace();
