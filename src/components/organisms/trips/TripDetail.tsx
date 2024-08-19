@@ -13,12 +13,12 @@ import {
     useTripQuery,
 } from '@/hooks/queries';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import SelectImage from '../../../../public/svg/SelectImage.svg';
 import { useTapScroll } from '@/hooks';
 import Navigate from '@/components/atoms/common/Navigate';
 import { useModal } from '@/contexts/modal.context';
-import { PartialTrip } from '@/types/Trips.types';
+import { PartialTrip, TripWithContract } from '@/types/Trips.types';
 import TripEditText from '@/components/molecules/trips/TripEditText';
 import Input from '@/components/atoms/common/Input';
 import HomePageTitle from '@/components/molecules/homepage/HomePageTitle';
@@ -39,6 +39,7 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const buddiesRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
+    const pathname = usePathname();
     const modal = useModal();
 
     const [tripTitleContent, setTripTitleContent] = useState<{
@@ -101,7 +102,10 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
         if (mode !== 'edit') return;
         return modal.openModal({
             component: () => (
-                <TripEditText handleTripTitleChange={handleTripTitleChange} />
+                <TripEditText
+                    handleTripTitleChange={handleTripTitleChange}
+                    trip={trip as TripWithContract}
+                />
             ),
         });
     };
@@ -155,6 +159,11 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
         window.scrollTo(0, 0);
     }, []);
 
+    useEffect(() => {
+        if (pathname === `/trips/${id}`) {
+            setTripImage(trip?.trip_thumbnail as string);
+        }
+    }, [pathname, id, trip]);
     // useEffect(() => {
     //     console.log('trip 변경될때 마다 ===>', trip);
     //     if (trip) setTripImage(trip.trip_thumbnail);
@@ -177,7 +186,7 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
                 {/** 이미지 영역 */}
                 <div className="h-[217px] w-full bg-white xl:w-[40%] xl:min-h-[324px] flex justify-center items-center">
                     {mode === 'edit' && (
-                        <div className="absolute h-full w-full top-0 right-0 bg-black/55 z-10 flex justify-center items-center">
+                        <div className="absolute h-[217px] xl:w-[40%] xl:min-h-[324px] w-full top-0 left-0 bg-black/55 z-10 flex justify-center items-center">
                             <button className="bg-grayscale-color-500/70 rounded p-1">
                                 <Input
                                     type="file"
@@ -200,7 +209,7 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
                             alt="trip image"
                             fill
                             priority
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 33vw"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="object-cover xl:object-contain"
                         />
                     </div>

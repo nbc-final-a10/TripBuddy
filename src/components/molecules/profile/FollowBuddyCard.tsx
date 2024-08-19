@@ -15,7 +15,7 @@ interface BuddyCardProps {
 
 const BuddyCardSkeleton: React.FC = () => {
     return (
-        <div className="min-w-[200px] h-[75px] mx-1 rounded border border-gray-200 flex items-center p-2 animate-pulse mb-4">
+        <div className="min-w-[200px] h-[75px] mx-1 rounded-lg shadow-md flex items-center p-2 animate-pulse mb-4 xl:w-[335px] xl:mx-auto">
             <div className="flex-shrink-0 w-[65px] h-[65px] bg-gray-300 rounded-lg"></div>
             <div className="mx-1 flex flex-col w-full">
                 <div className="h-4 bg-gray-300 rounded w-1/3 mb-2"></div>
@@ -78,7 +78,7 @@ function BuddyCard({ followList, activeButton }: BuddyCardProps) {
                     ))}
                 </>
             ) : buddies.length === 0 ? (
-                <div className="flex flex-col items-center justify-center mt-10">
+                <div className="flex flex-col items-center justify-center mt-10 mx-auto">
                     <Image
                         src="/images/mascot_sad.webp"
                         alt="sad mascot image"
@@ -95,7 +95,7 @@ function BuddyCard({ followList, activeButton }: BuddyCardProps) {
                 buddies.map((buddy: Buddy, index: number) => (
                     <div
                         key={index}
-                        className={`relative h-[75px] px-2 mx-1 mb-4 rounded border border-gray-200 cursor-pointer flex items-center`}
+                        className="relative h-[75px] px-2 mx-1 mb-4 rounded-lg shadow-md cursor-pointer flex items-center xl:w-[335px] xl:mx-auto"
                         onClick={() => handleCardClick(buddy.buddy_id)}
                     >
                         <div className="flex items-center justify-center w-full h-full relative">

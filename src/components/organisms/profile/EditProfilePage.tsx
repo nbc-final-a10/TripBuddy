@@ -9,12 +9,10 @@ import { useUpdateBuddyMutation } from '@/hooks/queries';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY_BUDDY } from '@/constants/query.constants';
+import { useAuth } from '@/hooks';
 
-type EditProfilePageProps = {
-    buddy: Buddy;
-};
-
-function EditProfilePage({ buddy }: EditProfilePageProps) {
+function EditProfilePage({ provider }: { provider: string | null }) {
+    const { buddy } = useAuth();
     const profileImageRef = useRef<HTMLInputElement>(null);
     const [selectedMedia, setSelectedMedia] = useState<string>('');
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -52,7 +50,7 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
             onConfirm: async () => {
                 try {
                     const response = await fetch(
-                        `/api/buddyProfile/profilePicture?buddy_id=${buddy.buddy_id}`,
+                        `/api/buddyProfile/profilePicture?buddy_id=${buddy?.buddy_id}`,
                         {
                             method: 'DELETE',
                         },
@@ -68,7 +66,7 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                     }
 
                     queryClient.invalidateQueries({
-                        queryKey: [QUERY_KEY_BUDDY, buddy.buddy_id],
+                        queryKey: [QUERY_KEY_BUDDY, buddy?.buddy_id],
                     });
                     showAlert('success', data.message);
                 } catch (err: any) {
@@ -235,12 +233,14 @@ function EditProfilePage({ buddy }: EditProfilePageProps) {
                         )}
                     </div>
 
-                    <div className="flex justify-between py-2 cursor-pointer">
-                        <span className="w-1/2 text-gray-600 font-bold">
-                            비밀번호 변경
-                        </span>
-                        <LinkButton href="/recover" />
-                    </div>
+                    {provider === 'email' && (
+                        <div className="flex justify-between py-2 cursor-pointer">
+                            <span className="w-1/2 text-gray-600 font-bold">
+                                비밀번호 변경
+                            </span>
+                            <LinkButton href="/recover" />
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
