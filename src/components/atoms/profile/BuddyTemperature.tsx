@@ -1,22 +1,25 @@
 import Image from 'next/image';
+import { twMerge } from 'tailwind-merge';
 
 type BuddyTemperatureProps = {
     temperature: number;
     isLabel?: boolean;
     isTempText?: boolean;
+    className?: string;
 };
 
 const BuddyTemperature = ({
     temperature,
+    className,
     isLabel = true,
     isTempText = true,
 }: BuddyTemperatureProps) => {
     const smileIcons = [
-        '/svg/smile1.svg',
-        '/svg/smile2.svg',
-        '/svg/smile3.svg',
-        '/svg/smile4.svg',
-        '/svg/smile5.svg',
+        '/svg/Smile1.svg',
+        '/svg/Smile2.svg',
+        '/svg/Smile3.svg',
+        '/svg/Smile4.svg',
+        '/svg/Smile5.svg',
     ];
 
     // 각 아이콘이 활성화될 임계 온도
@@ -31,7 +34,7 @@ const BuddyTemperature = ({
     );
 
     return (
-        <div className="flex flex-col w-full">
+        <div className={twMerge('flex flex-col w-full', className)}>
             {isLabel && (
                 <div className="flex w-full justify-between">
                     <span className="block text-left xl:text-xl">
@@ -52,6 +55,7 @@ const BuddyTemperature = ({
                         alt={`smile icon ${index + 1}`}
                         width={8}
                         height={8}
+                        priority
                         // className="xl:w-4 xl:h-4"
                         style={{
                             // opacity: temperature >= thresholds[index] ? 1 : 0.3,

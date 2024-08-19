@@ -16,6 +16,7 @@ import Loading from '../loading';
 import { getBuddyTripStory } from '@/api-services/home';
 import { getUserFromHeader } from '@/utils/auth/getUserFromHeader';
 import { getContract } from '@/api-services/contracts';
+import FloatingButton from '@/components/atoms/home/FloatingButton';
 
 const HomePage: React.FC = async () => {
     const userId = getUserFromHeader();
@@ -38,6 +39,7 @@ const HomePage: React.FC = async () => {
     await queryClient.prefetchQuery({
         queryKey: [QUERY_KEY_TRIP_BY_CONTRACT, userId],
         queryFn: () => getContract(true, userId || ''),
+        staleTime: 1000 * 60 * 5,
     });
     const dehydratedState = dehydrate(queryClient);
     return (
@@ -46,6 +48,7 @@ const HomePage: React.FC = async () => {
                 <HydrationBoundary state={dehydratedState}>
                     <HomePageBanner />
                     <HomePageContainer />
+                    <FloatingButton />
                 </HydrationBoundary>
             </Suspense>
         </main>

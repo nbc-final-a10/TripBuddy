@@ -254,7 +254,7 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
             </div>
 
             {/** 추천인기 버디즈 */}
-            <div className="relative z-10 bg-white xl:w-[86%] mx-auto">
+            <div className="relative z-10 bg-white w-[90%] xl:px-5 xl:w-full mx-auto">
                 <HomePageTitle
                     title="추천 인기 버디즈"
                     buttonText="전체보기"
@@ -264,11 +264,12 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
                 />
 
                 <div
-                    className="overflow-x-scroll scrollbar-hidden flex gap-[10px]"
+                    className="overflow-x-scroll scrollbar-hidden flex gap-[16px] min-h-[100px]"
                     ref={buddiesRef}
                 >
                     <HomePageRecommendBuddiesList
                         buddies={recommendBuddies.buddies}
+                        className="min-w-[243px] border-none shadow-md"
                     />
                 </div>
                 {createScrollLeft && createScrollRight && (

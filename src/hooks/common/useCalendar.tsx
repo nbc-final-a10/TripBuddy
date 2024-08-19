@@ -4,6 +4,10 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { RangeCalendar } from '@nextui-org/calendar';
 import { today, getLocalTimeZone, CalendarDate } from '@internationalized/date';
 
+// export default function useCalendar() {
+//     const initialStartDate = today(getLocalTimeZone());
+//     const initialEndDate = initialStartDate.add({ weeks: 1 });
+
 export function useCalendar() {
     const [value, setValue] = useState({
         start: today(getLocalTimeZone()),

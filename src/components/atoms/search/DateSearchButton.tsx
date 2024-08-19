@@ -1,33 +1,79 @@
 'use client';
 
-import React from 'react';
+import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 
 type DateSearchMainPageProps = {
-    onClick: () => void;
+    defaultStartDate: string;
+    defaultEndDate: string;
+    setDateChange: (start: string, end: string) => void;
 };
 
-const DateSearchButton: React.FC<DateSearchMainPageProps> = ({ onClick }) => {
-    // 현재 날짜, 다음날 가져오기
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
+const DateSearchButton: React.FC<DateSearchMainPageProps> = ({
+    defaultStartDate,
+    defaultEndDate,
+    setDateChange,
+}) => {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const [startDate, setStartDate] = useState<string>(defaultStartDate);
+    const [endDate, setEndDate] = useState<string>(defaultEndDate);
 
-    const formatDate = (date: Date) => {
+    // 날짜 포맷 함수 ('00.00.00(요일)' 형식)
+    const formatDate = (dateStr: string): string => {
+        const date = new Date(dateStr);
+        if (isNaN(date.getTime())) return '00.00.00(일)';
+
         const week = ['일', '월', '화', '수', '목', '금', '토'];
-        const dayOfWeek = week[today.getDay()];
-        return `${today.getFullYear().toString().slice(-2)}.${(today.getMonth() + 1).toString().padStart(2, '0')}.${today.getDate().toString().padStart(2, '0')}(${dayOfWeek})`;
+        const dayOfWeek = week[date.getDay()];
+        return `${date.getFullYear().toString().slice(-2)}.${(
+            date.getMonth() + 1
+        )
+            .toString()
+            .padStart(
+                2,
+                '0',
+            )}.${date.getDate().toString().padStart(2, '0')} (${dayOfWeek})`;
     };
 
-    const formattedToday = formatDate(today);
-    const formattedTomorrow = formatDate(tomorrow);
+    // searchParams 변경될 시 startDate, endDate를 업데이트
+    useEffect(() => {
+        const startDateParam = searchParams.get('startDate');
+        const endDateParam = searchParams.get('endDate');
+
+        // 새로운 날짜 들어오면 업데이트, setDateChange 호출
+        if (startDateParam && endDateParam) {
+            setStartDate(startDateParam);
+            setEndDate(endDateParam);
+            setDateChange(startDateParam, endDateParam);
+        }
+    }, [searchParams, setDateChange]);
+
+    const handleClick = () => {
+        // URLSearchParams로 쿼리 파라미터 구성
+        const query = new URLSearchParams();
+        if (startDate) query.set('startDate', startDate);
+        if (endDate) query.set('endDate', endDate);
+        router.push(`/search/date?${query.toString()}`);
+    };
 
     return (
-        <button
-            className="w-full bg-gray-100 p-2 rounded-xl text-left"
-            onClick={onClick}
-        >
-            {formattedToday} ~ {formattedTomorrow}
-        </button>
+        <div className="xl:w-[300px] bg-grayscale-color-85 py-1.5 pl-10 rounded-2xl flex box-border">
+            <button onClick={handleClick}>
+                <div className="absolute left-8 top-[227px] xl:top-[64px] transform -translate-y-1/2 xl:top-[164px] xl:left-3 xl:left-[643px]">
+                    <Image
+                        src="/svg/Date.svg"
+                        alt="Place"
+                        width={20}
+                        height={20}
+                    />
+                </div>
+                <span>
+                    {formatDate(startDate)} ~ {formatDate(endDate)}
+                </span>
+            </button>
+        </div>
     );
 };
 

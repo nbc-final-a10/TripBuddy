@@ -10,6 +10,7 @@ import { usePathname } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 import useChatStore from '@/zustand/chat.store';
 import UnreadMessages from '../chatpage/UnreadMessages';
+import { useUnreadMessagesContext } from '@/contexts/unreadMessages.context';
 interface TapMenuButtonProps {
     iconName: string;
     href: string;
@@ -23,7 +24,11 @@ const TapMenuButton: React.FC<TapMenuButtonProps> = ({
 }) => {
     const pathname = usePathname();
 
-    const totalUnreadCount = useChatStore(state => state.getTotalUnreadCount());
+    // const totalUnreadCount = useChatStore(state => state.getTotalUnreadCount());
+
+    const { allUnreadCounts } = useUnreadMessagesContext();
+
+    // const totalUnreadCount = contractUnreadCounts[contract_trip_id];
 
     return (
         <Link href={href}>
@@ -68,9 +73,9 @@ const TapMenuButton: React.FC<TapMenuButtonProps> = ({
                         )}
                     />
                 )}
-                {iconName === 'Chat' && totalUnreadCount > 0 && (
+                {iconName === 'Chat' && allUnreadCounts > 0 && (
                     <div className="absolute top-[4px] right-[14px] z-100">
-                        <UnreadMessages unread_count={totalUnreadCount} />
+                        <UnreadMessages unread_count={allUnreadCounts} />
                     </div>
                 )}
                 <span

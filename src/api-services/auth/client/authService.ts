@@ -218,3 +218,28 @@ export async function fetchFollowData(
         return [];
     }
 }
+
+export async function updateBuddyTemperature(buddyId: string): Promise<number> {
+    if (!buddyId) {
+        throw new Error('유효한 버디 아이디가 없습니다.');
+    }
+
+    try {
+        const data = await fetchWrapper<{
+            buddy_temperature: number;
+        }>('/api/buddyProfile/temperature', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                currentBuddyId: buddyId,
+            }),
+        });
+
+        return data.buddy_temperature;
+    } catch (error) {
+        console.error('버디즈 지수 증가 중 오류:', error);
+        throw error;
+    }
+}

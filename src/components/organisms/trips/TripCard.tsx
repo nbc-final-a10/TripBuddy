@@ -41,6 +41,7 @@ import { deleteTrip } from '@/utils/trips/deleteTrip';
 import { useQueryClient } from '@tanstack/react-query';
 import {
     QUERY_KEY_CONTRACT,
+    QUERY_KEY_MY_BOOKMARKS,
     QUERY_KEY_TRIP,
     QUERY_KEY_TRIP_INFINITE,
     QUERY_KEY_TRIPS,
@@ -285,6 +286,10 @@ const TripCard: React.FC<TripCardProps> = ({
                 is_bookmarked: bookMark ? true : false,
             };
 
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEY_MY_BOOKMARKS, buddy.buddy_id],
+            });
+
             createBookMark(newBookMark);
             if (bookMark) {
                 return showAlert('success', '찜하기 취소가 완료되었습니다.');
@@ -357,7 +362,7 @@ const TripCard: React.FC<TripCardProps> = ({
                 return '수정완료';
             }
         }
-        const isBuddyParticipating = trip.contract.find(
+        const isBuddyParticipating = trip.contract?.find(
             contract => contract.contract_buddy_id === buddy?.buddy_id,
         );
         if (isBuddyParticipating && isBuddyParticipating.contract_isPending) {
@@ -425,7 +430,7 @@ const TripCard: React.FC<TripCardProps> = ({
             {isBookMarkMutationPending && <DefaultLoader />}
             <div
                 className={clsx(
-                    'bg-white box-border shadow-xl xl:shadow-none',
+                    'bg-white box-border shadow-xl xl:shadow-md',
                     mode === 'detail' && 'h-fit p-4 xl:w-[60%]',
                     mode === 'list' && 'w-[90%] h-fit rounded-lg xl:w-full',
                     mode === 'card' &&
@@ -497,7 +502,7 @@ const TripCard: React.FC<TripCardProps> = ({
                                 {!isEdit ? (
                                     <h3
                                         className={clsx(
-                                            'text-[16px] font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap xl:text-[26px] xl:font-semibold',
+                                            'text-[16px] font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap xl:font-semibold xl:pb-6',
                                             mode === 'list' &&
                                                 'text-black text-xl',
                                             mode === 'card' && 'text-gray-600',

@@ -27,7 +27,7 @@ const MobileHeader: React.FC = () => {
     const isOboardingEdit = searchParams.get('mode') === 'edit';
     const isTrips = pathname === '/trips';
     const isTripDetail = pathname.startsWith('/trips/');
-    const isStory = pathname.startsWith('/stories/');
+    const isStory = pathname.startsWith('/stories');
     const isChatId = pathname.startsWith('/chat/');
     const isChat = pathname === '/chat';
     const isLogin = pathname === '/login';
@@ -39,7 +39,10 @@ const MobileHeader: React.FC = () => {
     const isProfile = pathname.startsWith('/profile/');
     const isEditTrips = pathname.startsWith('/edit/trips');
     const isStoryWrite = pathname === '/write/story';
+    const isLocation = pathname === '/search/location';
+    const isDate = pathname === '/search/date';
     const isNotification = pathname === '/notifications';
+    const isRanking = pathname === '/rank';
 
     // const { data: trip } = useTripQuery(isTripDetail && uuid ? uuid : null);
 
@@ -50,6 +53,8 @@ const MobileHeader: React.FC = () => {
         (isLogin && '') ||
         (isSignup && '') ||
         (isSearch && '검색') ||
+        (isLocation && '위치 검색') ||
+        (isDate && '날짜 선택') ||
         (isOnboarding && !isOboardingEdit && '온보딩') ||
         (isOnboarding && isOboardingEdit && '프로필 수정') ||
         (isProfile && isMyProfile && '마이페이지') ||
@@ -60,7 +65,8 @@ const MobileHeader: React.FC = () => {
         (isChat && '여정채팅') ||
         (isNotification && '알림') ||
         (isRecover && '비밀번호 찾기') ||
-        (isEditTrips && '');
+        (isEditTrips && '') ||
+        (isRanking && '버디즈');
 
     const isShow =
         isTrips ||
@@ -68,6 +74,8 @@ const MobileHeader: React.FC = () => {
         isLogin ||
         isSignup ||
         isSearch ||
+        isLocation ||
+        isDate ||
         isWrite ||
         isOnboarding ||
         isProfile ||
@@ -77,6 +85,7 @@ const MobileHeader: React.FC = () => {
         isChat ||
         isNotification ||
         isRecover ||
+        isRanking ||
         isEditTrips;
 
     const handleBack = () => {
@@ -141,7 +150,7 @@ const MobileHeader: React.FC = () => {
                         <span>수정</span>
                     </Link>
                 )}
-                {(isSearch || isWrite) && (
+                {(isSearch || isWrite || isProfile) && (
                     <Close
                         onClick={() => router.push('/trips')}
                         className="cursor-pointer fill-black"

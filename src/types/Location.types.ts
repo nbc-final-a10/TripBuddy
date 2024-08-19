@@ -46,7 +46,7 @@ export type SelectRegionPageProps = {
     states: {
         firstLevelLocation: string;
         secondLevelLocation: string | null;
-        thirdLevelLocation: string;
+        thirdLevelLocation: string | null;
         selectedSecondLevelLocations: ThirdLevel[];
         secondLevelLocations: SecondLevel[];
     };

@@ -14,15 +14,26 @@ function MyTripsButton({ view, src, alt, id }: MyTripsButtonProps) {
         <div>
             <Link
                 href={`/profile/mytrips/${id}?view=${view}`}
-                className="flex items-center p-4 hover:bg-gray-100"
+                className="flex items-center p-4 hover:bg-gray-1000"
             >
-                <Image src={src} alt={alt} width={24} height={24} />
+                <div className="relative aspect-auto flex w-[20px] justify-center items-center">
+                    <Image
+                        src={src}
+                        alt={alt}
+                        width={24}
+                        height={24}
+                        priority
+                        className="object-contain w-auto h-auto"
+                    />
+                </div>
                 <span className="mx-auto">{alt}</span>
                 <Image
                     src="/svg/navigate_next.svg"
                     alt="다음"
+                    priority
                     width={12}
                     height={12}
+                    className="object-contain w-auto h-auto"
                 />
             </Link>
         </div>

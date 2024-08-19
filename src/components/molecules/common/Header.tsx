@@ -4,14 +4,14 @@ import Link from 'next/link';
 import HeaderMyPageLink from '../../atoms/common/HeaderMyPageLink';
 import { twMerge } from 'tailwind-merge';
 import { usePathname } from 'next/navigation';
-import useChatStore from '@/zustand/chat.store';
 import UnreadMessages from '../../atoms/chatpage/UnreadMessages';
-import { relative } from 'path';
+import { useUnreadMessagesContext } from '@/contexts/unreadMessages.context';
 
 export default function Header() {
     const pathname = usePathname();
 
-    const totalUnreadCount = useChatStore(state => state.getTotalUnreadCount());
+    // const totalUnreadCount = useChatStore(state => state.getTotalUnreadCount());\
+    const { allUnreadCounts } = useUnreadMessagesContext();
 
     return (
         <header
@@ -64,10 +64,10 @@ export default function Header() {
                             `}
                         >
                             여정채팅
-                            {totalUnreadCount > 0 && (
+                            {allUnreadCounts > 0 && (
                                 <div className="absolute top-[-2px] right-[-28px] z-100 scale-[0.8]">
                                     <UnreadMessages
-                                        unread_count={totalUnreadCount}
+                                        unread_count={allUnreadCounts}
                                     />
                                 </div>
                             )}

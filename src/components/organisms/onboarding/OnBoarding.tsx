@@ -351,7 +351,7 @@ const OnBoarding: React.FC = () => {
                     {showComponent && step === 4 && (
                         <OnBoardingSelectLocationMbti
                             mode="location"
-                            selected={states.thirdLevelLocation}
+                            selected={states.thirdLevelLocation || ''}
                             states={states}
                             actions={actions}
                         />

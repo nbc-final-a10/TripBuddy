@@ -21,4 +21,5 @@ export type TripsAndContracts = {
 export type MyTripsAndContracts = {
     created: TripWithContract[];
     participated: TripWithContract[];
+    bookmarked: TripWithContract[];
 };
