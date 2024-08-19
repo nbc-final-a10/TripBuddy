@@ -3,6 +3,7 @@ import TripEditModalWrapper from '@/components/atoms/trips/TripEditModalWrapper'
 import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 import { useModal } from '@/contexts/modal.context';
 import { useTripWrite } from '@/hooks/mypage/useTripWrite';
+import { TripWithContract } from '@/types/Trips.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import React, { useEffect } from 'react';
 
@@ -11,11 +12,12 @@ type TripEditTextProps = {
         tripTitle: string;
         tripContent: string;
     }) => void;
+    trip: TripWithContract;
 };
 
-const TripEditText = ({ handleTripTitleChange }: TripEditTextProps) => {
+const TripEditText = ({ handleTripTitleChange, trip }: TripEditTextProps) => {
     const { tripTitle, tripContent, handleTitleChange, handleContentChange } =
-        useTripWrite();
+        useTripWrite({ trip });
 
     const modal = useModal();
 

@@ -13,6 +13,7 @@ export default function useFollowListToggle() {
             setActiveButton('팔로잉');
         }
     }, [searchParams, setActiveButton]);
+
     const handleClick = (button: string) => {
         setActiveButton(button);
     };

@@ -108,7 +108,9 @@ const MobileHeader: React.FC = () => {
     };
 
     useEffect(() => {
-        if (!buddy || !isTripDetail) return;
+        if (!buddy) return;
+        if (!uuid) return;
+        if (!isTripDetail) return setTrip(null);
         async function fetchTrip() {
             if (uuid) {
                 const trip = await getTrip(uuid);
@@ -117,8 +119,8 @@ const MobileHeader: React.FC = () => {
                 }
             }
         }
-        if (!isProfile) fetchTrip();
-    }, [uuid, isProfile, buddy, isTripDetail]);
+        fetchTrip();
+    }, [uuid, buddy, isTripDetail]);
 
     if (!isShow) return null;
 
@@ -144,7 +146,6 @@ const MobileHeader: React.FC = () => {
                 {isProfile && uuid && (
                     <MobileHeaderSettingsButton uuid={uuid} />
                 )}
-                {/** 수정페이지 구현하면 수정으로 가게 추후 수정 요망 */}
                 {trip && (
                     <Link href={`/edit/trips/${trip.trip_id}`}>
                         <span>수정</span>
@@ -156,12 +157,6 @@ const MobileHeader: React.FC = () => {
                         className="cursor-pointer fill-black"
                     />
                 )}
-                {/* {isEditTrips && (
-                    <Close
-                        onClick={() => modal.closeModal()}
-                        className="cursor-pointer fill-black"
-                    />
-                )} */}
             </div>
         </header>
     );

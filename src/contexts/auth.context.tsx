@@ -271,9 +271,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
         );
     }, [isBuddyPending, isLogInPending, isSignUpPending, isNaverLogInPending]);
 
-    useEffect(() => {
-        console.log('buddy ====>', buddy);
-    }, [buddy]);
+    // useEffect(() => {
+    //     console.log('buddy ====>', buddy);
+    // }, [buddy]);
 
     useEffect(() => {
         if (error) showAlert('error', error.message);
