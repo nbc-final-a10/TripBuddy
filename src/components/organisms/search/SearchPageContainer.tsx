@@ -129,10 +129,6 @@ export default function SearchPageContainer() {
         useFilteredTrips(filters);
 
     useEffect(() => {
-        console.log('filters change: ', filters);
-    }, [filters]);
-
-    useEffect(() => {
         const handleResize = () => {
             const xl = window.matchMedia('(min-width: 1280px').matches;
             setIsXL(xl);
@@ -146,44 +142,19 @@ export default function SearchPageContainer() {
         };
     }, []);
 
-    // const resetFilters = useCallback(() => {
-    //     setSearchInput('');
-    //     setStartDateTimestamp('');
-    //     setEndDateTimestamp('');
-    //     handleThirdLevelClick('');
-    //     setSelectedGender(null);
-    //     setStartAge(20);
-    //     setEndAge(70);
-    //     setSelectedMeetingPlace(null);
-    //     setSelectedTripThemes([]);
-    //     setSelectedBuddyThemes([]);
-
-    //     // 쿼리 파라미터 업데이트
-    //     updateQueryParams({
-    //         searchInput: '',
-    //         gender: null,
-    //         startAge: 20,
-    //         endAge: 70,
-    //         meetingPlace: null,
-    //         location: null,
-    //         startDate: '',
-    //         endDate: '',
-    //         themes: [],
-    //         buddyThemes: [],
-    //     });
-    // }, [
-    //     setSearchInput,
-    //     setStartDateTimestamp,
-    //     setEndDateTimestamp,
-    //     handleThirdLevelClick,
-    //     setSelectedGender,
-    //     setStartAge,
-    //     setEndAge,
-    //     setSelectedMeetingPlace,
-    //     setSelectedTripThemes,
-    //     setSelectedBuddyThemes,
-    //     updateQueryParams,
-    // ]);
+    // 쿼리 파라미터 업데이트
+    updateQueryParams({
+        searchInput: '',
+        gender: null,
+        startAge: 20,
+        endAge: 70,
+        meetingPlace: null,
+        location: null,
+        startDate: '',
+        endDate: '',
+        themes: [],
+        buddyThemes: [],
+    });
 
     useEffect(() => {
         setSelectedThemes(selectedTripPreferTheme, 'SET_TRIP_THEMES');

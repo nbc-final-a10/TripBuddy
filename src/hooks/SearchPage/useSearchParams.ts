@@ -33,7 +33,6 @@ export function useUrlParams() {
             window.history.replaceState({}, '', `?${updatedParams.toString()}`);
             setParams(updatedParams);
         }
-        return { params, updateParams };
     };
 
     // url 쿼리 파라미터 업데이트
