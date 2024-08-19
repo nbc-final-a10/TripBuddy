@@ -24,6 +24,7 @@ import { UnreadMessagesProvider } from '@/contexts/unreadMessages.context';
 import { NotificationProvider } from '@/contexts/notification.context';
 import { getNotifications } from '@/api-services/notification';
 import { Notification } from '@/types/Notification.types';
+import { LocationProvider } from '@/contexts/locationSearch.context';
 
 export const metadata: Metadata = defaultMetaData;
 
@@ -64,7 +65,9 @@ const ProvidersLayout: React.FC<PropsWithChildren> = async ({ children }) => {
                                 <MainSectionWrapper>
                                     <ModalProviderSetter>
                                         <MobileHeader />
-                                        {children}
+                                        <LocationProvider>
+                                            {children}
+                                        </LocationProvider>
                                         <TapMenu />
                                     </ModalProviderSetter>
                                 </MainSectionWrapper>

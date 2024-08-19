@@ -14,7 +14,12 @@ const TripEditSelectRegion = forwardRef<Partial<SelectRegionPageProps>>(
     (props, ref) => {
         const { states, actions } = useSelectRegion();
         const modal = useModal();
-        React.useImperativeHandle(ref, () => ({ states }));
+        React.useImperativeHandle(ref, () => ({
+            states: {
+                ...states,
+                thirdLevelLocation: states.thirdLevelLocation || '',
+            },
+        }));
 
         const handleClose = () => {
             if (
@@ -33,7 +38,10 @@ const TripEditSelectRegion = forwardRef<Partial<SelectRegionPageProps>>(
                 </div>
                 <SelectRegions
                     className="xl:w-[70%] w-[90%] h-[78%] mx-auto"
-                    states={states}
+                    states={{
+                        ...states,
+                        thirdLevelLocation: states.thirdLevelLocation || '',
+                    }}
                     actions={actions}
                 />
                 <Button
