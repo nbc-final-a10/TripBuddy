@@ -14,7 +14,6 @@ import OnBoardingSelectGender from './OnBoardingSelectGender';
 import OnBoardingInput from './OnBoardingInput';
 import OnBoardingSelectLocationMbti from './OnBoardingSelectLocationMbti';
 import OnBoardingSelectPrefer from './OnBoardingSelectPrefer';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { onBoardingValidation } from '@/utils/onboarding/onBoardingValidation';
 import { Buddy, PartialBuddy } from '@/types/Auth.types';
 import OnBoardingCalender from './OnBoardingCalender';
@@ -30,6 +29,7 @@ import {
     useSelectRegion,
 } from '@/hooks';
 import redirectPermanently from '@/utils/onboarding/redirectPermanently';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const buttonText = [
     '다음',
