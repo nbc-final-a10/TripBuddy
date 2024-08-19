@@ -31,6 +31,7 @@ const GenderSelection: React.FC<GenderSelectionProps> = ({
                         intent="natural"
                         selected={selectedGender === gender}
                         onClick={() => handleGenderClick(gender)}
+                        className="text-[14px]"
                     >
                         {gender}
                     </Chip>

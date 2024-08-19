@@ -65,16 +65,11 @@ const DateSearchButton: React.FC<DateSearchMainPageProps> = ({
     };
 
     return (
-        <div className="xl:w-[300px] bg-grayscale-color-85 py-1.5 pl-10 rounded-2xl flex box-border">
+        <div className="xl:w-[300px] bg-grayscale-color-85 py-1.5 rounded-2xl pl-3 flex flex-row box-border gap-2">
+            <div className="relative flex items-center">
+                <Image src="/svg/Date.svg" alt="Place" width={20} height={20} />
+            </div>
             <button onClick={handleClick}>
-                <div className="absolute left-8 top-[227px] transform -translate-y-1/2 xl:top-[164px] xl:left-[643px]">
-                    <Image
-                        src="/svg/Date.svg"
-                        alt="Place"
-                        width={20}
-                        height={20}
-                    />
-                </div>
                 <span>
                     {formatDate(startDate)} ~ {formatDate(endDate)}
                 </span>

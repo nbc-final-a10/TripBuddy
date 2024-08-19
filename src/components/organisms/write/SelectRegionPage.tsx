@@ -4,8 +4,8 @@ import Left2xlBoldText from '@/components/atoms/write/Left2xlText';
 import LeftSmGrayText from '@/components/atoms/write/LeftSmGrayText';
 import SelectRegions from '@/components/molecules/common/SelectRegion';
 import { SelectRegionPageProps } from '@/types/Location.types';
-import clsx from 'clsx';
 import React from 'react';
+import { twMerge } from 'tailwind-merge';
 
 export default function SelectRegionPage({
     isMini,
@@ -15,9 +15,9 @@ export default function SelectRegionPage({
     return (
         <div className="h-full w-full flex flex-col xl:flex-row">
             <div
-                className={clsx(
-                    'mt-2 mb-5 xl:mt-10 xl:w-[40%]',
-                    isMini && 'mb-0.5',
+                className={twMerge(
+                    'mt-2 mb-3 xl:mt-10 xl:w-[40%]',
+                    isMini && 'mb-0 pb-0.5',
                 )}
             >
                 <Left2xlBoldText
@@ -31,7 +31,7 @@ export default function SelectRegionPage({
                 <SelectRegions
                     states={states}
                     actions={actions}
-                    className="px-2"
+                    className="px-2 h-full"
                 />
             </div>
         </div>

@@ -316,14 +316,14 @@ export default function SearchPageContainer({
                     title="여정 테마"
                     description="3가지를 선택해주세요."
                 />
-                <PreferTripTheme className="some-class" />
+                <PreferTripTheme className="text-[14px]" />
             </div>
             <div className="my-10">
                 <SearchPageTitle
                     title="버디즈 성향"
                     description="3가지를 선택해주세요."
                 />
-                <PreferBuddyTheme className="some-class" />
+                <PreferBuddyTheme className="text-[14px]" />
             </div>
 
             <button

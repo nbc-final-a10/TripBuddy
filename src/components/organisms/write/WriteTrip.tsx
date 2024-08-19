@@ -27,7 +27,7 @@ const WriteTrip: React.FC<WriteTripProps> = ({
     const isMini = window.innerHeight < 659;
     return (
         <div className="relative px-2 flex flex-col xl:flex-row">
-            <div className="mb-5 w-full xl:w-[40%]">
+            <div className="mb-5 w-full xl:w-[40%] pb-2">
                 <Left2xlBoldText text="모집 글을 작성해봐요!" />
                 <p className="hidden xl:block text-gray-500 text-sm whitespace-pre-wrap">
                     내용이 구체적일 수록 원하는 버디즈와 <br />
