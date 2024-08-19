@@ -15,6 +15,7 @@ type UnreadMessagesContextType = {
     contractUnreadCounts: Record<string, number>;
     allUnreadCounts: number;
     fetchUnreadCounts: () => void;
+    setAllUnreadCounts: (count: number) => void;
 };
 
 const UnreadMessagesContext = createContext<
@@ -100,12 +101,17 @@ export const UnreadMessagesProvider: React.FC<{
         };
     }, [fetchUnreadCounts]);
 
+    useEffect(() => {
+        if (!currentBuddy) setAllUnreadCounts(0);
+    }, [currentBuddy]);
+
     return (
         <UnreadMessagesContext.Provider
             value={{
                 contractUnreadCounts,
                 allUnreadCounts,
                 fetchUnreadCounts,
+                setAllUnreadCounts,
             }}
         >
             {children}
