@@ -9,7 +9,7 @@ import WelcomePage from '@/components/organisms/write/WelcomePage';
 import React, { useEffect, useState } from 'react';
 import { showAlert } from '@/utils/ui/openCustomAlert';
 import WriteTrip from '@/components/organisms/write/WriteTrip';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { validateStep } from '@/utils/write/validateStep';
 import SuccessNotificationPage from '@/components/organisms/write/SuccessNotificationPage';
 import { twMerge } from 'tailwind-merge';
@@ -23,10 +23,11 @@ import {
     useSelectMeetPlace,
     useSelectRegion,
     useSelectSex,
-    useTripWrite,
 } from '@/hooks';
 import { useTripMutation } from '@/hooks/queries';
 import { PartialTrip, TripMutationData } from '@/types/Trips.types';
+import { useTripWrite } from '@/hooks/mypage/useTripWrite';
+import { updateBuddyTemperature } from '@/api-services/auth/client';
 
 // 버튼 라벨 배열
 const buttonText = [
@@ -45,6 +46,7 @@ const WriteMain: React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
     const [isMini, setIsMini] = useState<boolean>(false);
+    const searchParams = useSearchParams();
 
     const {
         mutateAsync: postTrip,
@@ -81,7 +83,7 @@ const WriteMain: React.FC = () => {
     const { startAge, endAge, handleStartAge, handleEndAge } = useSelectAges();
     const { meetPlace, SelectMeetPlaceButton } = useSelectMeetPlace();
 
-    const { NextButton, step } = useNextButton({
+    const { NextButton, step, setStep } = useNextButton({
         buttonText: buttonText[stepToDisplay],
         limit: 6,
         validateStep: () =>
@@ -148,6 +150,9 @@ const WriteMain: React.FC = () => {
                 mode: 'new',
             };
             const data = await postTrip(payload);
+
+            await updateBuddyTemperature(buddy.buddy_id);
+
             setTripId(data.trip_id);
             setIsLoading(false);
             setIsSuccess(true);
@@ -180,10 +185,22 @@ const WriteMain: React.FC = () => {
         }
     }, [postTripError]);
 
+    useEffect(() => {
+        if (step === stepToDisplay && step <= 5) {
+            router.push(`/write?funnel=${step}`);
+            setStepToDisplay(step);
+        }
+    }, [step, router, stepToDisplay]);
+
+    useEffect(() => {
+        const funnel = searchParams.get('funnel');
+        if (funnel) setStep(Number(funnel));
+    }, [searchParams, setStep]);
+
     return (
         <div
             className={twMerge(
-                'relative h-[calc(100dvh-56px-76px)] xl:h-[calc(100dvh-100px)]',
+                'relative h-[calc(100dvh-56px-54px)] xl:h-[calc(100dvh-100px)]',
                 step === 5 && 'xl:h-[calc(100dvh-100px)]',
             )}
         >

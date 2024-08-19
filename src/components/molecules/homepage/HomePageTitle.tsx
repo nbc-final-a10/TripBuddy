@@ -3,13 +3,13 @@ import React from 'react';
 import { twMerge } from 'tailwind-merge';
 import ArrowRight from '../../../../public/svg/ArrowRight.svg';
 
-interface HomePageTitleProps {
+type HomePageTitleProps = {
     title: string;
     buttonText: string;
     description: string;
     href: string;
     className?: string;
-}
+};
 
 const HomePageTitle: React.FC<HomePageTitleProps> = ({
     title,

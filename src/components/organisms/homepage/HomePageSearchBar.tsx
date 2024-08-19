@@ -1,4 +1,4 @@
-import SearchBar from '@/components/atoms/common/M_SearchBar';
+import SearchBar from '@/components/atoms/common/SearchBar';
 import Image from 'next/image';
 import Link from 'next/link';
 

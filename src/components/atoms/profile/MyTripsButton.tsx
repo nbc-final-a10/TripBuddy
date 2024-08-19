@@ -21,8 +21,10 @@ function MyTripsButton({ view, src, alt, id }: MyTripsButtonProps) {
                 <Image
                     src="/svg/navigate_next.svg"
                     alt="다음"
+                    priority
                     width={12}
                     height={12}
+                    className="object-contain w-auto h-auto"
                 />
             </Link>
         </div>

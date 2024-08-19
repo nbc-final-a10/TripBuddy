@@ -38,9 +38,6 @@ export function useLocationSelection(searchParams: URLSearchParams) {
 
         if (location) {
             handleThirdLevelClick(location);
-            console.log('여정 장소: ', location);
-        } else {
-            // console.error('여정 장소 안옴');
         }
     }, [searchParams, handleThirdLevelClick]);
 

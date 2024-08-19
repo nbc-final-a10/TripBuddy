@@ -10,7 +10,7 @@ import {
     QUERY_KEY_BUDDY,
     QUERY_KEY_NOTIFICATION,
 } from '@/constants/query.constants';
-import Header from '@/components/atoms/common/Header';
+import Header from '@/components/molecules/common/Header';
 import { getBuddyServer } from '@/api-services/auth/server';
 import { getUserFromHeader } from '@/utils/auth/getUserFromHeader';
 import MainSectionWrapper from '@/components/molecules/common/MainSectionWrapper';
