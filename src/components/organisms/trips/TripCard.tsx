@@ -408,7 +408,7 @@ const TripCard: React.FC<TripCardProps> = ({
                     table: 'contract',
                 },
                 payload => {
-                    console.log('payload ====>', payload);
+                    // console.log('payload ====>', payload);
                     queryClient.invalidateQueries({
                         queryKey: [QUERY_KEY_CONTRACT, trip.trip_id],
                     });
