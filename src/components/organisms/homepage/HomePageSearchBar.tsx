@@ -3,6 +3,23 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const HomePageSearchBar = () => {
+    const today = new Date();
+
+    const nextWeek = new Date(today);
+    nextWeek.setDate(today.getDate() + 7);
+
+    const formatDate = (date: Date): string => {
+        const year = String(date.getFullYear()).slice(2);
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'][
+            date.getDay()
+        ];
+        return `${year}.${month}.${day} (${dayOfWeek})`;
+    };
+
+    const formattedToday = formatDate(today);
+    const formattedNextWeek = formatDate(nextWeek);
     return (
         <div className="w-full flex justify-between items-center mt-4">
             <SearchBar />
@@ -28,7 +45,7 @@ const HomePageSearchBar = () => {
                         height={20}
                     />
                     <div className="bg-transparent text-xs px-2">
-                        24.07.20 (토) ~ 24.07.21 (일)
+                        {`${formattedToday} ~ ${formattedNextWeek}`}
                     </div>
                 </div>
             </Link>
