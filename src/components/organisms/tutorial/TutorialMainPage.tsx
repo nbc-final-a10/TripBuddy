@@ -43,8 +43,8 @@ const TutorialMainPage: React.FC = () => {
     }, [step, router]);
 
     return (
-        <div className="relative flex flex-col bg-white h-dvh py-2 xl:py-4">
-            <div className="flex justify-between items-center relative w-full px-[20px] h-[32px]">
+        <div className="relative flex flex-col bg-white h-dvh max-h-dvh pt-2 xl:py-4">
+            <div className="flex justify-between items-center relative w-full px-[20px] h-[5%]">
                 {step > 0 ? (
                     <ArrowBack
                         onClick={handleBack}
@@ -64,11 +64,11 @@ const TutorialMainPage: React.FC = () => {
                 )}
             </div>
 
-            <div className="flex flex-col items-center justify-start w-full flex-1 text-center">
+            <div className="flex flex-col items-center justify-start w-full h-[80%] text-center">
                 <Tuto step={step} />
             </div>
 
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center w-full h-[15%]">
                 <div className="flex justify-center items-center pt-2 pb-3">
                     <ProgressIndicator
                         className="flex justify-center items-center pt-0"

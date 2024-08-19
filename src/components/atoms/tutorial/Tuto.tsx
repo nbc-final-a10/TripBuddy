@@ -84,7 +84,7 @@ const Tuto: React.FC<TutoProps> = ({ step }) => {
                 </p>
             </div>
             <div className="relative flex justify-center items-start h-[80%] xl:h-[76%]">
-                <div className="relative w-[324px] h-[426px] aspect-auto">
+                <div className="relative w-[324px] h-full aspect-auto">
                     <Image
                         src={content[step].src}
                         alt={content[step].alt}

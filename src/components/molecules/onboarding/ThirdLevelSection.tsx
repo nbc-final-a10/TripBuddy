@@ -31,7 +31,7 @@ const ThirdLevelSection: React.FC<ThirdLevelSectionProps> = memo(
                     className={twMerge(
                         'relative h-[74%] overflow-y-auto xl:h-[53vh] xl:grid xl:grid-cols-2 xl:content-start',
                         pathname === '/search' && 'h-[300px]',
-                        pathname === '/write' && 'h-[40vh]',
+                        pathname === '/write' && 'h-[39vh]',
                         pathname.startsWith('/edit') && 'h-[70%] xl:h-[450px]',
                         pathname.startsWith('/onboarding') &&
                             'h-[44vh] xl:h-[450px]',

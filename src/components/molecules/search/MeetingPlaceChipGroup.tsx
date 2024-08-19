@@ -29,6 +29,7 @@ const MeetingPlaceChipGroup: React.FC<MeetingPlaceChipGroupProps> = ({
                     <Chip
                         key={place}
                         intent="natural"
+                        className="text-[14px]"
                         selected={selectedMeetingPlace === place}
                         onClick={e => {
                             e.preventDefault();

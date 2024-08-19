@@ -1,5 +1,5 @@
-import clsx from 'clsx';
 import React from 'react';
+import { twMerge } from 'tailwind-merge';
 
 export default function SelectedResultRealtimeText({
     firstLabel,
@@ -13,14 +13,17 @@ export default function SelectedResultRealtimeText({
     isMini?: boolean | null | 0;
 }) {
     return (
-        <div className="text-center">
+        <div className="text-center pt-2">
             <span
-                className={clsx('text-sm text-gray-500', isMini && 'text-xs')}
+                className={twMerge(
+                    'text-sm text-gray-500',
+                    isMini && 'text-xs',
+                )}
             >
                 {firstLabel}
             </span>
             <span
-                className={clsx(
+                className={twMerge(
                     'text-md font-bold text-main-color',
                     isMini && 'text-sm',
                 )}
@@ -28,7 +31,10 @@ export default function SelectedResultRealtimeText({
                 {selectedData}
             </span>
             <span
-                className={clsx('text-sm text-gray-500', isMini && 'text-xs')}
+                className={twMerge(
+                    'text-sm text-gray-500',
+                    isMini && 'text-xs',
+                )}
             >
                 {secondLabel}
             </span>

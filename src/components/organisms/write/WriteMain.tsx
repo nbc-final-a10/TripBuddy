@@ -205,14 +205,14 @@ const WriteMain: React.FC = () => {
             )}
         >
             <ProgressIndicator
-                className="pt-1.5 h-[2%] xl:h-[5%]"
+                className="pt-1.5 h-[4%] xl:h-[5%]"
                 step={step}
                 counts={7}
             />
-            <section className="h-[98%] xl:h-[95%] flex flex-col">
+            <section className="h-[96%] xl:h-[95%] flex flex-col">
                 <div
                     className={twMerge(
-                        'flex flex-col h-[92%] xl:h-[90%]',
+                        'flex flex-col h-[90%] xl:h-[90%]',
                         step === 0 && 'xl:mb-2',
                     )}
                 >
@@ -270,11 +270,11 @@ const WriteMain: React.FC = () => {
                         />
                     )}
                 </div>
-                <div className="relatvie h-[8%] w-[90%] xl:h-[10%] xl:w-[60%] mx-auto flex justify-center items-center">
+                <div className="relatvie h-[10%] w-[90%] xl:h-[10%] xl:w-[60%] mx-auto flex justify-center items-center">
                     <NextButton
                         className={twMerge(
                             'text-xl text-white leading-none bg-main-color font-bold py-3 px-4 my-0.5 xl:py-3 rounded-xl w-full hover:bg-main-color/80',
-                            isMini && 'mt-0.5 mb-10',
+                            isMini && 'mt-0.5 mb-0',
                         )}
                         onClick={async () => {
                             if (step === 5) {

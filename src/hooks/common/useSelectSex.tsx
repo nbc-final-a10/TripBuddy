@@ -20,7 +20,7 @@ export function useSelectSex() {
                         key={index}
                         onClick={() => setWantedSex(value)}
                         className={twMerge(
-                            'text-lg mx-2 px-4 py-1 xl:py-2 rounded-full',
+                            'text-lg mx-2 px-4 py-1 xl:py-2 rounded-full text-[12px]',
                             'xl:w-[100px]',
                             wantedSex === value
                                 ? 'bg-main-color text-white'
