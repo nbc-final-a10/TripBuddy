@@ -51,6 +51,7 @@ export async function GET(request: Request) {
             // 로그인 성공 후 일반적인 리다이렉트 처리
             return NextResponse.redirect(`${origin}${next}`);
         }
+        return NextResponse.redirect(`${origin}${next}`);
     }
 
     // return the user to an error page with instructions
