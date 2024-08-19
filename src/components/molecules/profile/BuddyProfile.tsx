@@ -18,6 +18,7 @@ type BuddyProfileProps = {
     buddy?: Buddy | null;
     urlId?: string;
     mode?: 'default' | 'notification';
+    className?: string;
 };
 
 export default function BuddyProfile({
@@ -26,6 +27,7 @@ export default function BuddyProfile({
     buddy = null,
     urlId = '',
     mode = 'default',
+    className,
 }: BuddyProfileProps) {
     const { buddy: currentBuddy } = useAuth();
     const pathname = usePathname();
@@ -38,6 +40,7 @@ export default function BuddyProfile({
         <div
             className={twMerge(
                 'relative flex flex-col items-center justify-center p-4 mt-4 xl:mt-8',
+                className,
                 mode === 'notification' && 'py-1 px-4 mt-0',
             )}
         >

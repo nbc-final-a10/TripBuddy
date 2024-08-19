@@ -115,12 +115,13 @@ const ContractModal: React.FC<ContractModalProps> = ({
                 </div>
 
                 <dialog open className="relative rounded-2xl z-50">
-                    <div className="bg-white w-full min-h-[250px] max-h-[250px] py-2 rounded-lg flex flex-col justify-center items-center gap-3 transition-all duration-300">
+                    <div className="bg-white w-full min-h-[250px] max-h-[250px] xl:min-h-[300px] xl:max-h-[300px] py-2 rounded-lg flex flex-col justify-center items-center gap-3 transition-all duration-300">
                         <div className="flex flex-col items-center gap-2 w-full">
                             <BuddyProfile
                                 clickedBuddy={buddies[index]}
                                 loading={false}
                                 mode={mode}
+                                className="xl:mt-0"
                             />
 
                             <div className="flex flex-row gap-3">
