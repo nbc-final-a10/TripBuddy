@@ -4,6 +4,7 @@ import localFont from 'next/font/local';
 import './globals.css';
 import React, { PropsWithChildren } from 'react';
 import { defaultMetaData } from '@/data/defaultMetaData';
+import { Analytics } from '@vercel/analytics/react';
 
 const pretendard = localFont({
     src: '../font/PretendardVariable.woff2',
@@ -28,6 +29,7 @@ const RootLayout: React.FC<PropsWithChildren> = ({ children }) => {
         <html lang="ko">
             <body className={pretendard.className}>
                 <QueryProvider>{children}</QueryProvider>
+                <Analytics />
             </body>
         </html>
     );
