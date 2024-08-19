@@ -26,6 +26,7 @@ const StoryPage: React.FC<StoryPageProps> = async ({
         queryKey: [QUERY_KEY_STORY, id],
         // queryFn: () => getStories(),
         queryFn: () => getSpecificStory(id),
+        staleTime: 1000 * 60 * 5,
     });
     const dehydratedState = dehydrate(queryClient);
 

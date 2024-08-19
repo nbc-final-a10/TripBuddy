@@ -342,6 +342,7 @@ const TripCard: React.FC<TripCardProps> = ({
                 component: () => (
                     <TripEditText
                         handleTripTitleChange={handleTripTitleChange}
+                        trip={trip}
                     />
                 ),
             });
@@ -408,7 +409,7 @@ const TripCard: React.FC<TripCardProps> = ({
                     table: 'contract',
                 },
                 payload => {
-                    console.log('payload ====>', payload);
+                    // console.log('payload ====>', payload);
                     queryClient.invalidateQueries({
                         queryKey: [QUERY_KEY_CONTRACT, trip.trip_id],
                     });
@@ -502,7 +503,7 @@ const TripCard: React.FC<TripCardProps> = ({
                                 {!isEdit ? (
                                     <h3
                                         className={clsx(
-                                            'text-[16px] font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap xl:text-[26px] xl:font-semibold',
+                                            'text-[16px] font-bold leading-none text-ellipsis overflow-hidden whitespace-nowrap xl:font-semibold xl:pb-6',
                                             mode === 'list' &&
                                                 'text-black text-xl',
                                             mode === 'card' && 'text-gray-600',

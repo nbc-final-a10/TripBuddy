@@ -14,6 +14,7 @@ const StoriesPage: React.FC = async () => {
     await queryClient.prefetchQuery({
         queryKey: [QUERY_KEY_STORY],
         queryFn: () => getStories(),
+        staleTime: 1000 * 60 * 5,
     });
     const dehydratedState = dehydrate(queryClient);
 

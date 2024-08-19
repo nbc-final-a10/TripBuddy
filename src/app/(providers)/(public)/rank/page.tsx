@@ -45,7 +45,7 @@ const RankPage: React.FC = () => {
 
     return (
         <div className="p-8 rounded-md w-full max-w-4xl mx-auto">
-            <div className="flex items-center justify-between pb-6">
+            {/* <div className="flex items-center justify-between pb-6">
                 <div>
                     <h1 className="text-4xl font-semibold text-gray-900">
                         버디즈 랭킹 TOP 10
@@ -54,17 +54,17 @@ const RankPage: React.FC = () => {
                         🥇 TripBuddies 온도지수 TOP 10 버디즈를 소개합니다!
                     </span>
                 </div>
-            </div>
+            </div> */}
 
             {loading ? (
                 Array.from({ length: 10 }, (_, index) => (
                     <Skeleton key={index} />
                 ))
             ) : (
-                <div className="mb-4">
+                <div className="mb-4 flex flex-col gap-4">
                     <HomePageRecommendBuddiesList
                         buddies={buddies}
-                        className="mb-4"
+                        className="mx-0 min-w-[335px] border-none shadow-md"
                     />
                 </div>
             )}

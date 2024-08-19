@@ -201,21 +201,14 @@ export async function fetchFollowData(
 ): Promise<Follow[]> {
     const url = `/api/buddyProfile/follow/followList?current_buddy_id=${clickedBuddyId}`;
     try {
-        const res = await fetch(url);
-        const data = await res.json();
+        const data = await fetchWrapper<{
+            originFollow: Follow[];
+            message: string;
+        }>(url, { method: 'GET' });
 
-        if (res.ok) {
-            return data.originFollow as Follow[];
-        } else {
-            console.error(data.message);
-            return [];
-        }
+        return data.originFollow;
     } catch (error) {
-        console.error(
-            '팔로잉 데이터를 가져오는 중 오류가 발생했습니다:',
-            error,
-        );
-        return [];
+        throw error;
     }
 }
 

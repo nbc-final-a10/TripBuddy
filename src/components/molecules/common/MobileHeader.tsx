@@ -27,7 +27,7 @@ const MobileHeader: React.FC = () => {
     const isOboardingEdit = searchParams.get('mode') === 'edit';
     const isTrips = pathname === '/trips';
     const isTripDetail = pathname.startsWith('/trips/');
-    const isStory = pathname.startsWith('/stories/');
+    const isStory = pathname.startsWith('/stories');
     const isChatId = pathname.startsWith('/chat/');
     const isChat = pathname === '/chat';
     const isLogin = pathname === '/login';
@@ -42,6 +42,7 @@ const MobileHeader: React.FC = () => {
     const isLocation = pathname === '/search/location';
     const isDate = pathname === '/search/date';
     const isNotification = pathname === '/notifications';
+    const isRanking = pathname === '/rank';
 
     // const { data: trip } = useTripQuery(isTripDetail && uuid ? uuid : null);
 
@@ -64,7 +65,8 @@ const MobileHeader: React.FC = () => {
         (isChat && '여정채팅') ||
         (isNotification && '알림') ||
         (isRecover && '비밀번호 찾기') ||
-        (isEditTrips && '');
+        (isEditTrips && '') ||
+        (isRanking && '버디즈');
 
     const isShow =
         isTrips ||
@@ -83,6 +85,7 @@ const MobileHeader: React.FC = () => {
         isChat ||
         isNotification ||
         isRecover ||
+        isRanking ||
         isEditTrips;
 
     const handleBack = () => {
@@ -105,7 +108,9 @@ const MobileHeader: React.FC = () => {
     };
 
     useEffect(() => {
-        if (!buddy || !isTripDetail) return;
+        if (!buddy) return;
+        if (!uuid) return;
+        if (!isTripDetail) return setTrip(null);
         async function fetchTrip() {
             if (uuid) {
                 const trip = await getTrip(uuid);
@@ -114,8 +119,8 @@ const MobileHeader: React.FC = () => {
                 }
             }
         }
-        if (!isProfile) fetchTrip();
-    }, [uuid, isProfile, buddy, isTripDetail]);
+        fetchTrip();
+    }, [uuid, buddy, isTripDetail]);
 
     if (!isShow) return null;
 
@@ -141,24 +146,17 @@ const MobileHeader: React.FC = () => {
                 {isProfile && uuid && (
                     <MobileHeaderSettingsButton uuid={uuid} />
                 )}
-                {/** 수정페이지 구현하면 수정으로 가게 추후 수정 요망 */}
                 {trip && (
                     <Link href={`/edit/trips/${trip.trip_id}`}>
                         <span>수정</span>
                     </Link>
                 )}
-                {(isSearch || isWrite) && (
+                {(isSearch || isWrite || isProfile) && (
                     <Close
                         onClick={() => router.push('/trips')}
                         className="cursor-pointer fill-black"
                     />
                 )}
-                {/* {isEditTrips && (
-                    <Close
-                        onClick={() => modal.closeModal()}
-                        className="cursor-pointer fill-black"
-                    />
-                )} */}
             </div>
         </header>
     );

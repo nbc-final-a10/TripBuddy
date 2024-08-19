@@ -18,6 +18,7 @@ type BuddyProfileProps = {
     buddy?: Buddy | null;
     urlId?: string;
     mode?: 'default' | 'notification';
+    className?: string;
 };
 
 export default function BuddyProfile({
@@ -26,19 +27,10 @@ export default function BuddyProfile({
     buddy = null,
     urlId = '',
     mode = 'default',
+    className,
 }: BuddyProfileProps) {
-    const [currentPathname, setCurrentPathname] = useState('');
-
     const { buddy: currentBuddy } = useAuth();
     const pathname = usePathname();
-
-    useEffect(() => {
-        if (pathname.includes('trips')) {
-            setCurrentPathname('trips');
-        } else if (pathname.includes('profile')) {
-            setCurrentPathname('profile');
-        }
-    }, [pathname]);
 
     if (loading) {
         return <BuddyProfileSkeleton />;
@@ -48,11 +40,12 @@ export default function BuddyProfile({
         <div
             className={twMerge(
                 'relative flex flex-col items-center justify-center p-4 mt-4 xl:mt-8',
+                className,
                 mode === 'notification' && 'py-1 px-4 mt-0',
             )}
         >
             <div
-                className={`flex items-center ${!currentBuddy && mode === 'default' && 'blur-sm'}`}
+                className={`flex items-center gap-4 ${!currentBuddy && mode === 'default' && 'blur-sm'}`}
             >
                 <div className="flex flex-col items-center">
                     <Image
@@ -63,11 +56,11 @@ export default function BuddyProfile({
                         alt="profile"
                         width={100}
                         height={100}
-                        className={`rounded-full ${currentPathname === 'trips' ? 'w-[80px] h-[80px]' : 'w-[100px] h-[100px]'}`}
+                        className={`rounded-full ${pathname.includes('trips') ? 'w-[80px] h-[80px]' : 'w-[100px] h-[100px]'}`}
                     />
                     {buddy?.buddy_id === urlId &&
                     // url에 'profile'이 포함되어 있으면 편집 버튼 보여주기
-                    currentPathname === 'profile' ? (
+                    pathname.includes('/profile') ? (
                         <Link href={`/edit/profile/${buddy?.buddy_id}`}>
                             <EditProfileButton />
                         </Link>
@@ -79,7 +72,7 @@ export default function BuddyProfile({
                     <div className="flex flex-col ">
                         <div className="flex items-center">
                             <span
-                                className={`font-bold ${currentPathname === 'trips' ? 'text-lg' : 'text-2xl'} ${currentPathname === 'profile' ? 'xl:text-xl' : 'xl:text-3xl'}`}
+                                className={`font-bold ${pathname.includes('/trips') ? 'text-lg' : 'text-2xl'} ${pathname.includes('/profile') ? 'xl:text-xl' : 'xl:text-3xl'}`}
                             >
                                 {clickedBuddy?.buddy_nickname}
                             </span>
@@ -97,14 +90,14 @@ export default function BuddyProfile({
                         {/* 나이와 성별 */}
                         {clickedBuddy?.buddy_birth ? (
                             <p
-                                className={`mt-2 text-gray-500 ${currentPathname === 'trips' ? 'text-sm' : 'text-base'}`}
+                                className={`mt-2 text-gray-500 ${pathname.includes('/trips') ? 'text-sm' : 'text-base'}`}
                             >
                                 {`${clickedBuddy?.buddy_birth?.split('-')[0]}
                                 년생 / ${clickedBuddy?.buddy_sex}`}
                             </p>
                         ) : (
                             <p
-                                className={`mt-2 text-gray-500 ${currentPathname === 'trips' ? 'text-sm' : 'text-base'}`}
+                                className={`mt-2 text-gray-500 ${pathname.includes('/trips') ? 'text-sm' : 'text-base'}`}
                             >
                                 생년월일 정보가 없습니다.
                             </p>
@@ -112,13 +105,13 @@ export default function BuddyProfile({
                         {/* 소개글 */}
                         {clickedBuddy?.buddy_introduction ? (
                             <p
-                                className={`text-gray-500 ${currentPathname === 'trips' ? 'text-sm' : 'text-base'}`}
+                                className={`text-gray-500 ${pathname.includes('/trips') ? 'text-sm' : 'text-base'}`}
                             >
                                 {clickedBuddy?.buddy_introduction}
                             </p>
                         ) : (
                             <p
-                                className={`text-gray-500 ${currentPathname === 'trips' ? 'text-sm' : 'text-base'}`}
+                                className={`text-gray-500 ${pathname.includes('/trips') ? 'text-sm' : 'text-base'}`}
                             >
                                 소개글이 없습니다.
                             </p>
@@ -126,13 +119,13 @@ export default function BuddyProfile({
                         {/* 지역 */}
                         {clickedBuddy?.buddy_region ? (
                             <p
-                                className={`mt-2 text-gray-500 font-bold ${currentPathname === 'trips' ? 'text-sm' : 'text-base'}`}
+                                className={`mt-2 text-gray-500 font-bold ${pathname.includes('/trips') ? 'text-sm' : 'text-base'}`}
                             >
                                 {clickedBuddy?.buddy_region} 거주
                             </p>
                         ) : (
                             <p
-                                className={`mt-2 text-gray-500 ${currentPathname === 'trips' ? 'text-sm' : 'text-base'}`}
+                                className={`mt-2 text-gray-500 ${pathname.includes('/trips') ? 'text-sm' : 'text-base'}`}
                             >
                                 지역 정보가 없습니다.
                             </p>
@@ -141,10 +134,10 @@ export default function BuddyProfile({
                         {/* 선호하는 버디 chips */}
                         {clickedBuddy?.buddy_preferred_buddy1 ? (
                             <div className="mt-4">
-                                <span className="bg-[#fff0d1] rounded-full px-3 py-1 text-sm font-semibold text-main-color mr-2">
+                                <span className="bg-[#fff0d1] rounded-full px-3 py-1 text-sm font-semibold text-main-color mr-1">
                                     {clickedBuddy?.buddy_preferred_buddy1}
                                 </span>
-                                <span className="bg-[#fff0d1] rounded-full px-3 py-1 text-sm font-semibold text-main-color mr-2">
+                                <span className="bg-[#fff0d1] rounded-full px-3 py-1 text-sm font-semibold text-main-color mr-1">
                                     {clickedBuddy?.buddy_preferred_buddy2}
                                 </span>
                                 <span className="bg-[#fff0d1] rounded-full px-3 py-1 text-sm font-semibold text-main-color">

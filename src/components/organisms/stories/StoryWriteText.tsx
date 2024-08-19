@@ -49,9 +49,7 @@ const StoryWriteText: React.FC<StoryWriteTextProps> = ({
         // console.log(data);
         showAlert('success', '스토리 생성이 완료되었습니다.', {
             onConfirm: () => {
-                router.push(
-                    `/stories/${buddy?.buddy_nickname}?id=${buddy?.buddy_id}`,
-                );
+                router.push(`/stories/${data?.story_id}`);
             },
         });
     };

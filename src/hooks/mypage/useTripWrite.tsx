@@ -2,9 +2,15 @@
 
 import React, { useState } from 'react';
 
-export function useTripWrite() {
-    const [tripTitle, setTripTitle] = useState('');
-    const [tripContent, setTripContent] = useState('');
+import { TripWithContract } from '@/types/Trips.types';
+
+type TripWriteProps = {
+    trip?: TripWithContract | null;
+};
+
+export function useTripWrite({ trip = null }: TripWriteProps) {
+    const [tripTitle, setTripTitle] = useState(trip?.trip_title || '');
+    const [tripContent, setTripContent] = useState(trip?.trip_content || '');
     const [tripImage, setTripImage] = useState(''); // 옵티미스틱용
     const [tripImageFile, setTripImageFile] = useState<File | null>(null); // 실제 업로드용
 
