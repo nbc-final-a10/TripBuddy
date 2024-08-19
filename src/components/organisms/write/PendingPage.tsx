@@ -21,6 +21,8 @@ export default function PendingPage({ isFile }: { isFile: boolean }) {
                         <LoaderOnly />
                         <p className="text-center font-bold text-white text-sm">
                             ...이미지 생성중...
+                            <br />
+                            이미지 생성에는 20초 정도의 시간이 소요됩니다
                         </p>
                     </div>
                 )}

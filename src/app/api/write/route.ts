@@ -88,9 +88,11 @@ export async function POST(req: NextRequest) {
             const response = await fetch(imageUrl);
             const blob = await response.blob();
 
-            const imageBuffer = await convertToWebP(blob, 1024);
-
+            // WebP 변환 및 파일 업로드를 병렬로 처리
+            const imageBufferPromise = convertToWebP(blob, 512);
             const filePath = `trips_${Date.now()}.webp`;
+
+            const [imageBuffer] = await Promise.all([imageBufferPromise]);
 
             if (!imageBuffer) {
                 return NextResponse.json(
