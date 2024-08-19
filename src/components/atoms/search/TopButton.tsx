@@ -2,7 +2,11 @@
 
 import { useEffect, useState } from 'react';
 
-export default function TopButton() {
+export default function TopButton({
+    setShowResult,
+}: {
+    setShowResult: (value: boolean | null) => void;
+}) {
     const [isVisible, setIsVisible] = useState(false);
 
     const handleScroll = () => {
@@ -14,6 +18,7 @@ export default function TopButton() {
     };
 
     const scrollToTop = () => {
+        setShowResult(false);
         window.scrollTo({
             top: 0,
             behavior: 'smooth',

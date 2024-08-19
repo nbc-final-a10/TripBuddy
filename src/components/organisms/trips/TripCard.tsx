@@ -206,24 +206,23 @@ const TripCard: React.FC<TripCardProps> = ({
                         buddy.buddy_id,
                     );
                     if (response && response.status === 200) {
-                        showAlert('success', '삭제되었습니다.', {
-                            onConfirm: () => {
-                                queryClient.invalidateQueries({
-                                    queryKey: [QUERY_KEY_TRIP, trip.trip_id],
-                                });
-                                queryClient.invalidateQueries({
-                                    queryKey: [QUERY_KEY_TRIP_INFINITE],
-                                });
-                                queryClient.invalidateQueries({
-                                    queryKey: [QUERY_KEY_TRIPS],
-                                });
-                                router.push('/trips');
-                            },
+                        console.log('response ====>', response);
+                        queryClient.invalidateQueries({
+                            queryKey: [QUERY_KEY_TRIP, trip.trip_id],
                         });
+                        queryClient.invalidateQueries({
+                            queryKey: [QUERY_KEY_TRIP_INFINITE],
+                        });
+                        queryClient.invalidateQueries({
+                            queryKey: [QUERY_KEY_TRIPS],
+                        });
+                        router.push('/trips');
                     }
                 },
-                isConfirm: true,
             });
+            // showAlert('success', '삭제되었습니다.', {
+            //     onConfirm: () => router.push('/trips'),
+            // });
         } else {
             showAlert('error', '오류가 발생했습니다.');
         }
@@ -409,13 +408,18 @@ const TripCard: React.FC<TripCardProps> = ({
                     table: 'contract',
                 },
                 payload => {
-                    // console.log('payload ====>', payload);
-                    queryClient.invalidateQueries({
-                        queryKey: [QUERY_KEY_CONTRACT, trip.trip_id],
-                    });
-                    queryClient.invalidateQueries({
-                        queryKey: [QUERY_KEY_TRIP, trip.trip_id],
-                    });
+                    // 이벤트 타입에 따라 필터링
+                    if (
+                        payload.eventType === 'INSERT' ||
+                        payload.eventType === 'UPDATE'
+                    ) {
+                        queryClient.invalidateQueries({
+                            queryKey: [QUERY_KEY_CONTRACT, trip.trip_id],
+                        });
+                        queryClient.invalidateQueries({
+                            queryKey: [QUERY_KEY_TRIP, trip.trip_id],
+                        });
+                    }
                 },
             )
             .subscribe();
