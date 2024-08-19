@@ -125,7 +125,7 @@ export default function BuddyProfile({
                             </p>
                         ) : (
                             <p
-                                className={`mt-2 text-gray-50 ${pathname.includes('/trips') ? 'text-sm' : 'text-base'}`}
+                                className={`mt-2 text-gray-500 ${pathname.includes('/trips') ? 'text-sm' : 'text-base'}`}
                             >
                                 지역 정보가 없습니다.
                             </p>

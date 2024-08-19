@@ -1,16 +1,24 @@
-'use client';
-
 import EditProfilePage from '@/components/organisms/profile/EditProfilePage';
-import { useAuth } from '@/hooks';
+import { createClient } from '@/utils/supabase/server';
 
-function EditBuddyProfilePage() {
-    const { buddy } = useAuth();
+async function EditBuddyProfilePage() {
+    const supabase = createClient();
+    const {
+        data: { user },
+        error,
+    } = await supabase.auth.getUser();
 
-    return (
-        <div>
-            {buddy ? <EditProfilePage buddy={buddy} /> : <div>Loading...</div>}
-        </div>
-    );
+    if (error) {
+        throw new Error('유저 정보를 가져오는 데 실패했습니다.');
+    }
+
+    if (!user) {
+        throw new Error('유저 정보를 가져오는 데 실패했습니다.');
+    }
+
+    const provider = user.app_metadata.provider;
+
+    return <EditProfilePage provider={provider ? provider : null} />;
 }
 
 export default EditBuddyProfilePage;
