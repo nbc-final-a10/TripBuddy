@@ -17,8 +17,6 @@ import React, {
     useState,
 } from 'react';
 
-// (AllTripTheme | AllBuddyTheme)[];
-
 type UsePreferThemeProps = {
     mode: 'trip' | 'buddy';
     isLabel?: boolean;
@@ -43,7 +41,6 @@ export const usePreferTheme = ({
 
     const handleThemeChange = (e: MouseEvent<HTMLSpanElement>) => {
         const target = e.currentTarget;
-        // console.log('Clicked theme: ', target.innerText);
         const mutableThemes = themeRef.current?.map(theme => theme.ko);
         handleChipClick(target, mutableThemes, selectedTheme, setSelectedTheme);
     };

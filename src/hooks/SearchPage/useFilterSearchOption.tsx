@@ -8,7 +8,7 @@ import {
 import supabase from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 
-type Filters = {
+export type Filters = {
     searchInput: string;
     startDateTimestamp: string;
     endDateTimestamp: string;
@@ -23,7 +23,6 @@ type Filters = {
 
 const applyFilters = (trips: TripWithContract[], filters: Filters) => {
     let filteredItems = [...trips];
-
     // 검색어
     if (filters.searchInput && filters.searchInput.trim() !== '') {
         filteredItems = filteredItems.filter(
@@ -35,7 +34,6 @@ const applyFilters = (trips: TripWithContract[], filters: Filters) => {
                     .toLowerCase()
                     .includes(filters.searchInput.toLowerCase()),
         );
-        console.log('input: ', filteredItems);
     }
 
     // 날짜
@@ -105,7 +103,6 @@ const applyFilters = (trips: TripWithContract[], filters: Filters) => {
 };
 
 export function useFilteredTrips(initialFilters: Filters) {
-    const [filters, setFilters] = useState(initialFilters);
     const [resultItems, setResultItems] = useState<TripWithContract[]>([]);
     const [allItems, setAllItems] = useState<TripWithContract[]>([]);
     const [showAllItems, setShowAllItems] = useState(false);
@@ -124,7 +121,7 @@ export function useFilteredTrips(initialFilters: Filters) {
 
             const allData = data as TripWithContract[];
 
-            const filteredItems = applyFilters(allData, filters);
+            const filteredItems = applyFilters(allData, initialFilters);
 
             setResultItems(
                 filteredItems.length === 0 ? allData : filteredItems,
@@ -132,9 +129,9 @@ export function useFilteredTrips(initialFilters: Filters) {
             setAllItems(allData);
             setShowAllItems(filteredItems.length === 0);
         };
-
         fetchFilteredTrips();
-    }, [filters]);
+    }, [initialFilters]);
 
-    return { resultItems, allItems, setFilters, showAllItems };
+    // console.log('z', initialFilters);
+    return { resultItems, allItems, showAllItems };
 }

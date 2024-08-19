@@ -3,6 +3,17 @@
 import { useEffect, useState } from 'react';
 import { useSelectRegion } from '../common/useSelectRegion';
 
+// 검색어
+export function useSearchInput(searchParams: URLSearchParams) {
+    const [searchInput, setSearchInput] = useState<string>('');
+
+    useEffect(() => {
+        const input = searchParams.get('searchInput') || '';
+        setSearchInput(input);
+    }, [searchParams]);
+    return { searchInput, setSearchInput };
+}
+
 // 날짜
 export function useDateRange(searchParams: URLSearchParams) {
     const [startDateTimestamp, setStartDateTimestamp] = useState<string>('');
