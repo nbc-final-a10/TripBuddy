@@ -18,9 +18,7 @@ export async function GET(
     }: {
         data: TripWithContract[] | null;
         error: PostgrestError | null;
-    } = await supabase
-        .from('trips')
-        .select('*, contract:contract!contract_contract_trip_id_foreign (*)');
+    } = await supabase.from('trips').select('*, contract (*)');
 
     if (allTripsError) {
         console.error(allTripsError);

@@ -87,7 +87,7 @@ export async function GET(req: NextRequest) {
         error: PostgrestError | null;
     } = await supabase
         .from('trips')
-        .select('*, contract:contract!contract_contract_trip_id_foreign (*)')
+        .select('*, contract (*)')
         .order('trip_created_at', { ascending: false });
 
     if (tripError) {

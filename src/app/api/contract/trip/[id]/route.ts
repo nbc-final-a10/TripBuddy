@@ -91,6 +91,7 @@ export async function DELETE(
 
         const buddyId = token;
 
+        // 여정 정보 가져오기
         const {
             data: tripData,
             error: tripError,
@@ -108,11 +109,73 @@ export async function DELETE(
             );
         }
 
+        // 본인이 작성한 여정인지 확인
         if (tripData.trip_master_id !== buddyId) {
             return NextResponse.json(
                 { error: '본인이 작성한 여정 모집이 아닙니다.' },
                 { status: 403 },
             );
+        }
+
+        // 트랜잭션 시작 (Supabase는 트랜잭션 지원)
+        const { data: contractData, error: contractError } = await supabase
+            .from('contract')
+            .select('*')
+            .eq('contract_trip_id', tripId);
+
+        if (contractError) {
+            console.error('컨트랙트 오류 발생:', contractError);
+            return NextResponse.json(
+                { error: contractError?.message },
+                { status: 500 },
+            );
+        }
+
+        if (contractData.length > 0) {
+            const { error: deleteContractError } = await supabase
+                .from('contract')
+                .delete()
+                .eq('contract_trip_id', tripId);
+
+            if (deleteContractError) {
+                console.error('컨트랙트 삭제 오류 발생:', deleteContractError);
+                return NextResponse.json(
+                    { error: deleteContractError?.message },
+                    { status: 500 },
+                );
+            }
+        }
+
+        // 여정 북마크 삭제
+        const { data: bookingData, error: bookingError } = await supabase
+            .from('tripbookmarks')
+            .select('*')
+            .eq('bookmark_trip_id', tripId);
+
+        if (bookingError) {
+            console.error('여정 북마크 오류 발생:', bookingError);
+            return NextResponse.json(
+                { error: bookingError?.message },
+                { status: 500 },
+            );
+        }
+
+        if (bookingData.length > 0) {
+            const { error: deleteBookingError } = await supabase
+                .from('tripbookmarks')
+                .delete()
+                .eq('bookmark_trip_id', tripId);
+
+            if (deleteBookingError) {
+                console.error(
+                    '여정 북마크 삭제 오류 발생:',
+                    deleteBookingError,
+                );
+                return NextResponse.json(
+                    { error: deleteBookingError?.message },
+                    { status: 500 },
+                );
+            }
         }
 
         const { error: deleteTripError } = await supabase

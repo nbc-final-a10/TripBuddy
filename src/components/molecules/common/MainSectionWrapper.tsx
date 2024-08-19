@@ -35,7 +35,9 @@ const MainSectionWrapper = ({ children }: MainSectionWrapperProps) => {
                 pathname === '/stories' && 'xl:max-h-[calc(100dvh-100px)]',
                 pathname.startsWith('/chat') && 'xl:min-h-0',
                 pathname === '/onboarding' && 'xl:h-[calc(100dvh-100px)]',
-                pathname.startsWith('/profile') && 'xl:h-[calc(100dvh-100px)]',
+                pathname.startsWith('/profile') &&
+                    !pathname.includes('mytrips') &&
+                    'xl:h-[calc(100dvh-100px)]',
             )}
         >
             <section
