@@ -19,7 +19,7 @@ export async function GET(
         error: PostgrestError | null;
     } = await supabase
         .from('trips')
-        .select('*, contract:contract!contract_contract_trip_id_foreign (*)')
+        .select('*, contract (*)')
         .eq('trip_id', id)
         .maybeSingle();
 

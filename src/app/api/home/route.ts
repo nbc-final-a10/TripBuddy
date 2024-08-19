@@ -78,7 +78,7 @@ export async function GET(req: NextRequest) {
                 .from('trips')
                 .select(
                     // '*, contract:contract!contract_contract_trip_id_foreign (*)',
-                    '*, contract:contract!contract_contract_trip_id_foreign (*)',
+                    '*, contract (*)',
                 )
                 .order('trip_created_at', { ascending: false });
 

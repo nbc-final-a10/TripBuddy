@@ -27,11 +27,10 @@ export function useFilteredTrips(initialFilters: {
 
     useEffect(() => {
         const fetchFilteredTrips = async () => {
-            const { data, error } = await supabase
-                .from('trips')
-                .select(
-                    '*, contract:contract!contract_contract_trip_id_foreign (*)',
-                );
+            const { data, error } = await supabase.from('trips').select(
+                // '*, contract:contract!contract_contract_trip_id_foreign (*)',
+                '*, contract (*)',
+            );
             if (error) {
                 console.error('Fetch Error:', error.message);
                 return;
