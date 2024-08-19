@@ -157,12 +157,6 @@ const MobileHeader: React.FC = () => {
                         className="cursor-pointer fill-black"
                     />
                 )}
-                {/* {isEditTrips && (
-                    <Close
-                        onClick={() => modal.closeModal()}
-                        className="cursor-pointer fill-black"
-                    />
-                )} */}
             </div>
         </header>
     );

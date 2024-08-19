@@ -11,7 +11,6 @@ type MobileHeaderSettingsButtonProps = {
 const MobileHeaderSettingsButton = ({
     uuid,
 }: MobileHeaderSettingsButtonProps) => {
-    // const id = pathname.split('/').pop();
     const { buddy } = useAuth();
     const router = useRouter();
 
@@ -22,7 +21,7 @@ const MobileHeaderSettingsButton = ({
     return (
         <Settings
             className="cursor-pointer"
-            onClick={() => router.push(`/onboarding`)}
+            onClick={() => router.push('/onboarding?funnel=0&mode=first')}
         />
     );
 };
