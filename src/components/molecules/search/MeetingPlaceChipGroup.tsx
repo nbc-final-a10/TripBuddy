@@ -30,7 +30,10 @@ const MeetingPlaceChipGroup: React.FC<MeetingPlaceChipGroupProps> = ({
                         key={place}
                         intent="natural"
                         selected={selectedMeetingPlace === place}
-                        onClick={() => handleMeetingPlaceClick(place)}
+                        onClick={e => {
+                            e.preventDefault();
+                            handleMeetingPlaceClick(place);
+                        }}
                     >
                         {place}
                     </Chip>

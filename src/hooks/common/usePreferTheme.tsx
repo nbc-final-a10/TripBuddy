@@ -9,13 +9,7 @@ import {
     TripTheme,
 } from '@/types/Themes.types';
 import handleChipClick from '@/utils/common/handleChipClick';
-import React, {
-    MouseEvent,
-    ReactNode,
-    useEffect,
-    useRef,
-    useState,
-} from 'react';
+import React, { MouseEvent, useEffect, useRef, useState } from 'react';
 
 type UsePreferThemeProps = {
     mode: 'trip' | 'buddy';
@@ -40,6 +34,7 @@ export const usePreferTheme = ({
     >([]);
 
     const handleThemeChange = (e: MouseEvent<HTMLSpanElement>) => {
+        e.preventDefault();
         const target = e.currentTarget;
         const mutableThemes = themeRef.current?.map(theme => theme.ko);
         handleChipClick(target, mutableThemes, selectedTheme, setSelectedTheme);

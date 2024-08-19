@@ -48,7 +48,9 @@ const SearchBars: React.FC<SearchBarsProps> = ({
             <SearchInput
                 value={searchInput}
                 onKeyDown={handleKeyDown}
-                onChange={e => setSearchInput(e.target.value)}
+                onChange={e => {
+                    setSearchInput(e.target.value);
+                }}
             />
 
             <DateSearchButton

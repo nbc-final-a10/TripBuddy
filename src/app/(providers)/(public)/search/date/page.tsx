@@ -29,11 +29,14 @@ export default function DateSearchPage() {
     };
 
     const handleSelectClick = () => {
+        // console.log('startDate', startDate);
+        // console.log('endDate', endDate);
         if (startDate && endDate) {
-            const query = new URLSearchParams();
-            query.set('startDate', startDate);
-            query.set('endDate', endDate);
-            router.push(`/search?${query.toString()}`);
+            // const query = new URLSearchParams();
+            router.push(`/search?startDate=${startDate}&endDate=${endDate}`);
+            // query.set('startDate', startDate);
+            // query.set('endDate', endDate);
+            // router.push(`/search?${query.toString()}`);
         }
     };
 

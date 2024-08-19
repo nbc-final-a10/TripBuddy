@@ -9,35 +9,41 @@ import supabase from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 
 export type Filters = {
-    searchInput: string;
-    startDateTimestamp: string;
-    endDateTimestamp: string;
+    searchInput: string | null;
+    startDateTimestamp: string | null;
+    endDateTimestamp: string | null;
     thirdLevelLocation: string | null;
     selectedGender: string | null;
-    startAge: number;
-    endAge: number;
+    startAge: number | null;
+    endAge: number | null;
     selectedMeetingPlace: string | null;
-    selectedThemes: string[];
-    selectedBuddyThemes: string[];
+    selectedThemes: string[] | null;
+    selectedBuddyThemes: string[] | null;
 };
 
-const applyFilters = (trips: TripWithContract[], filters: Filters) => {
+export const applyFilters = (trips: TripWithContract[], filters: Filters) => {
     let filteredItems = [...trips];
+
     // 검색어
     if (filters.searchInput && filters.searchInput.trim() !== '') {
         filteredItems = filteredItems.filter(
             (item: TripWithContract) =>
                 item.trip_title
                     .toLowerCase()
-                    .includes(filters.searchInput.toLowerCase()) ||
+                    .includes(filters.searchInput?.toLowerCase() || '') ||
                 item.trip_content
                     .toLowerCase()
-                    .includes(filters.searchInput.toLowerCase()),
+                    .includes(filters.searchInput?.toLowerCase() || ''),
         );
     }
 
     // 날짜
-    if (filters.startDateTimestamp && filters.endDateTimestamp) {
+    if (
+        filters.startDateTimestamp &&
+        filters.endDateTimestamp &&
+        filters.startDateTimestamp !== 'null' &&
+        filters.endDateTimestamp !== 'null'
+    ) {
         const startDate = new Date(filters.startDateTimestamp);
         const endDate = new Date(filters.endDateTimestamp);
 
@@ -59,7 +65,7 @@ const applyFilters = (trips: TripWithContract[], filters: Filters) => {
     }
 
     // 성별
-    if (filters.selectedGender) {
+    if (filters.selectedGender && filters.selectedGender !== 'null') {
         filteredItems = filteredItems.filter(
             (item: TripWithContract) =>
                 item.trip_wanted_sex === filters.selectedGender,
@@ -67,7 +73,10 @@ const applyFilters = (trips: TripWithContract[], filters: Filters) => {
     }
 
     // 만남 장소
-    if (filters.selectedMeetingPlace) {
+    if (
+        filters.selectedMeetingPlace &&
+        filters.selectedMeetingPlace !== 'null'
+    ) {
         filteredItems = filteredItems.filter(
             (item: TripWithContract) =>
                 item.trip_meet_location === filters.selectedMeetingPlace,
@@ -75,16 +84,16 @@ const applyFilters = (trips: TripWithContract[], filters: Filters) => {
     }
 
     // 나이
-    if (filters.startAge !== undefined && filters.endAge !== undefined) {
+    if (filters.startAge !== null && filters.endAge !== null) {
         filteredItems = filteredItems.filter(
             (item: TripWithContract) =>
-                item.trip_start_age >= filters.startAge &&
-                item.trip_end_age <= filters.endAge,
+                item.trip_start_age >= filters.startAge! &&
+                item.trip_end_age <= filters.endAge!,
         );
     }
 
     // 여정 테마
-    if (filters.selectedThemes.length > 0) {
+    if (filters.selectedThemes && filters.selectedThemes.length > 0) {
         filteredItems = filterAndSortTrips(
             filteredItems,
             filters.selectedThemes,
@@ -92,7 +101,7 @@ const applyFilters = (trips: TripWithContract[], filters: Filters) => {
     }
 
     // 버디즈 성향
-    if (filters.selectedBuddyThemes.length > 0) {
+    if (filters.selectedBuddyThemes && filters.selectedBuddyThemes.length > 0) {
         filteredItems = filterAndSortTripsBuddies(
             filteredItems,
             filters.selectedBuddyThemes,
