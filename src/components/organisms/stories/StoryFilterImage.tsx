@@ -64,7 +64,7 @@ const StoryFilterImage: React.FC<StoryFilterImageProps> = ({
             </div>
 
             <div
-                className="relative flex flex-row bottom-0 overflow-x-scroll scrollbar-hidden gap-2 pt-1 pb-2 h-[20%] items-center justify-center"
+                className="relative flex flex-row bottom-0 overflow-x-scroll scrollbar-hidden gap-2 pt-1 pb-2 h-[20%]"
                 ref={filterRef}
             >
                 {filterImage.map(filter => (
