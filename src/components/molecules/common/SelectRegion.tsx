@@ -4,7 +4,6 @@ import { SecondLevel, ThirdLevel } from '@/types/Location.types';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import ThirdLevelSection from '../onboarding/ThirdLevelSection';
-import { useTapScroll } from '@/hooks';
 
 type SelectRegionProps = {
     actions: {

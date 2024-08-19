@@ -230,7 +230,7 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
 
             {mode === 'detail' && (
                 <div className="w-full flex justify-center items-center h-[4px] py-6">
-                    <hr className="hidden xl:block w-[85%] py-0.5 bg-grayscale-color-100/85 border-none mx-auto" />
+                    <hr className="w-full xl:w-[85%] py-0.5 bg-grayscale-color-100/85 border-none mx-auto" />
                 </div>
             )}
 
@@ -241,7 +241,7 @@ const TripDetail: React.FC<TripDetailProps> = ({ id, mode }) => {
 
             {mode === 'detail' && (
                 <div className="w-full flex justify-center items-center h-[4px] py-10">
-                    <hr className="hidden xl:block w-[85%] py-0.5 bg-grayscale-color-100/85 border-none mx-auto" />
+                    <hr className="w-full xl:w-[85%] py-0.5 bg-grayscale-color-100/85 border-none mx-auto" />
                 </div>
             )}
 

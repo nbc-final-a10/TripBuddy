@@ -1,7 +1,7 @@
 import { type AllBuddyTheme, type AllTripTheme } from '@/types/Themes.types';
 import Chip from './Chip';
 import { MouseEvent } from 'react';
-import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 type PreferThemeProps = {
     selectedTheme: string[];
@@ -26,7 +26,7 @@ const PreferTheme = ({
                 {label && <label className="w-full">{label}</label>}
                 {indicate && (
                     <span
-                        className={clsx(
+                        className={twMerge(
                             'text-sm w-full text-gray-500',
                             label ? 'text-right' : 'text-left',
                         )}

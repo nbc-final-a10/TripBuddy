@@ -435,8 +435,8 @@ const TripCard: React.FC<TripCardProps> = ({
             {isBookMarkMutationPending && <DefaultLoader />}
             <div
                 className={clsx(
-                    'bg-white box-border shadow-xl xl:shadow-md',
-                    mode === 'detail' && 'h-fit p-4 xl:w-[60%]',
+                    'bg-white box-border shadow-md',
+                    mode === 'detail' && 'h-fit p-4 xl:w-[60%] shadow-none',
                     mode === 'list' && 'w-[90%] h-fit rounded-lg xl:w-full',
                     mode === 'card' &&
                         'h-[215px] min-h-[215px] rounded-lg min-w-[211px] xl:min-w-[252px]',
