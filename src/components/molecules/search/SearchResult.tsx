@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import SearchPageTitle from '../../atoms/search/SearchPageTitle';
 import HomePageTrips from '../homepage/HomePageTrips';
 import { TripWithContract } from '@/types/Trips.types';
@@ -28,7 +28,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
     const tripsRef = useRef<HTMLDivElement>(null);
     useTapScroll({ refs: [tripsRef] });
 
-    const filteredItems = items.slice(0, visibleFirstItems);
+    const filteredItems = isXL ? items.slice(0, visibleFirstItems) : items;
 
     // 시작 날짜 기준으로 빠른 순으로 정렬
     // 검색 결과 여정은 제외
@@ -42,7 +42,6 @@ const SearchResult: React.FC<SearchResultProps> = ({
         });
 
     console.log('filteredItems: ', filteredItems);
-    console.log('sortItems: ', sortItems);
 
     return (
         <>

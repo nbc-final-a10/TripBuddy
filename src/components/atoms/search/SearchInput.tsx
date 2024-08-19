@@ -22,7 +22,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
                 onKeyDown={onKeyDown}
                 onChange={onChange}
             />
-            <div className="absolute left-3 top-[19px] xl:top-[18px] transform -translate-y-1/2 xl:top-[164px] xl:left-3">
+            <div className="absolute left-3 top-[19px] transform -translate-y-1/2 xl:top-[164px] xl:left-3">
                 <Image
                     src="/svg/HomeSearch.svg"
                     alt="Search"

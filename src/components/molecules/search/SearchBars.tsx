@@ -3,7 +3,7 @@
 import DateSearchButton from '@/components/atoms/search/DateSearchButton';
 import LocationSearchButton from '@/components/atoms/search/LocationSearchButton';
 import SearchInput from '@/components/atoms/search/SearchInput';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 export type SearchBarsProps = {
     searchInput: string;
@@ -38,6 +38,7 @@ const SearchBars: React.FC<SearchBarsProps> = ({
     const handleLocationSelect = () => {
         if (thirdLevelLocation) {
             console.log('선택한 장소:', thirdLevelLocation);
+            console.log('?', location);
             setThirdLevelLocation(thirdLevelLocation);
         }
     };
@@ -47,7 +48,9 @@ const SearchBars: React.FC<SearchBarsProps> = ({
             <SearchInput
                 value={searchInput}
                 onKeyDown={handleKeyDown}
-                onChange={e => setSearchInput(e.target.value)}
+                onChange={e => {
+                    setSearchInput(e.target.value);
+                }}
             />
 
             <DateSearchButton
@@ -59,10 +62,7 @@ const SearchBars: React.FC<SearchBarsProps> = ({
                 }}
             />
 
-            <LocationSearchButton
-                onClick={handleLocationSelect}
-                location={thirdLevelLocation}
-            />
+            <LocationSearchButton onClick={handleLocationSelect} />
 
             <button
                 className="hidden xl:flex xl:w-[140px] xl:px-4 xl:py-2.5 rounded-xl bg-main-color justify-center items-center mx-auto font-semibold text-white text-sm transition-colors duration-200 ease-in-out active:bg-gray-300 whitespace-nowrap"

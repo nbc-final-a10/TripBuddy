@@ -52,16 +52,22 @@ const DateSearchButton: React.FC<DateSearchMainPageProps> = ({
 
     const handleClick = () => {
         // URLSearchParams로 쿼리 파라미터 구성
-        const query = new URLSearchParams();
-        if (startDate) query.set('startDate', startDate);
-        if (endDate) query.set('endDate', endDate);
-        router.push(`/search/date?${query.toString()}`);
+        // const query = new URLSearchParams();
+        // if (startDate) query.set('startDate', startDate);
+        // if (endDate) query.set('endDate', endDate);
+        if (startDate === '' && endDate === '') {
+            router.push('/search/date?startDate=&endDate=');
+        } else {
+            router.push(
+                `/search/date?startDate=${startDate}&endDate=${endDate}`,
+            );
+        }
     };
 
     return (
         <div className="xl:w-[300px] bg-grayscale-color-85 py-1.5 pl-10 rounded-2xl flex box-border">
             <button onClick={handleClick}>
-                <div className="absolute left-8 top-[227px] xl:top-[64px] transform -translate-y-1/2 xl:top-[164px] xl:left-3 xl:left-[643px]">
+                <div className="absolute left-8 top-[227px] transform -translate-y-1/2 xl:top-[164px] xl:left-[643px]">
                     <Image
                         src="/svg/Date.svg"
                         alt="Place"

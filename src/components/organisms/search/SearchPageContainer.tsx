@@ -5,66 +5,105 @@ import SelectAgesRange from '@/components/atoms/write/SelectAgesRange';
 import GenderChipGroup from '@/components/molecules/search/GenderChipGroup';
 import MeetingPlaceChipGroup from '@/components/molecules/search/MeetingPlaceChipGroup';
 import SearchResult from '@/components/molecules/search/SearchResult';
-import { TripWithContract } from '@/types/Trips.types';
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useReducer,
+    useRef,
+    useState,
+} from 'react';
 import SearchBars from '@/components/molecules/search/SearchBars';
 import SearchPageTitle from '@/components/atoms/search/SearchPageTitle';
-import { useThemeReducer } from '@/hooks/SearchPage/useThemeReducer';
+import { usePreferTheme, useSelectRegion } from '@/hooks';
 import {
-    useAgeRange,
-    useDateRange,
-    useGenderSelection,
-    useLocationSelection,
-    useMeetingPlaceSelection,
-} from '@/hooks/SearchPage/useSelectSearchOption';
-import { usePreferTheme } from '@/hooks';
-import { useUrlParams } from '@/hooks/SearchPage/useSearchParams';
-import { useFilteredTrips } from '@/hooks/SearchPage/useFilterSearchOption';
+    applyFilters,
+    Filters,
+} from '@/hooks/SearchPage/useFilterSearchOption';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { BuddyTheme, TripTheme } from '@/types/Themes.types';
+import {
+    TripInfiniteQueryResponse,
+    TripWithContract,
+} from '@/types/Trips.types';
 
-export default function SearchPageContainer() {
-    const { params, updateQueryParams } = useUrlParams();
+export type ThemeAction =
+    | { type: 'SET_TRIP_THEMES'; payload: string[] }
+    | { type: 'SET_BUDDY_THEMES'; payload: string[] }
+    | { type: 'RESET_THEMES' };
 
+type ThemeState = {
+    selectedTripThemes: string[];
+    selectedBuddyThemes: string[];
+};
+
+// 빈 배열로 초기화
+const initialState: ThemeState = {
+    selectedTripThemes: [],
+    selectedBuddyThemes: [],
+};
+
+function themeReducer(state: ThemeState, action: ThemeAction): ThemeState {
+    switch (action.type) {
+        case 'SET_TRIP_THEMES':
+            // selectedThemes 업데이트
+            return { ...state, selectedTripThemes: action.payload };
+        case 'SET_BUDDY_THEMES':
+            // selectedThemes 업데이트
+            return { ...state, selectedBuddyThemes: action.payload };
+        case 'RESET_THEMES':
+            return initialState;
+        default:
+            throw new Error('action type?: ${action.type}');
+    }
+}
+export default function SearchPageContainer({
+    initialTrips,
+}: {
+    initialTrips: TripInfiniteQueryResponse;
+}) {
+    const searchParams = useSearchParams();
+    const router = useRouter();
     const [searchInput, setSearchInput] = useState<string>('');
 
-    const {
-        startDateTimestamp,
-        setStartDateTimestamp,
-        endDateTimestamp,
-        setEndDateTimestamp,
-    } = useDateRange(params);
-
-    const { handleThirdLevelClick, thirdLevelLocation } =
-        useLocationSelection(params);
-
-    const { selectedGender, setSelectedGender } = useGenderSelection();
-
-    const { startAge, setStartAge, endAge, setEndAge } = useAgeRange();
-
-    const { selectedMeetingPlace, setSelectedMeetingPlace } =
-        useMeetingPlaceSelection();
+    const [startDateTimestamp, setStartDateTimestamp] = useState<string>('');
+    const [endDateTimestamp, setEndDateTimestamp] = useState<string>('');
 
     const {
-        selectedThemes: selectedTripThemes,
-        setSelectedThemes: setSelectedTripThemes,
-    } = useThemeReducer();
+        actions: { handleThirdLevelClick },
+        states: { thirdLevelLocation },
+    } = useSelectRegion();
 
-    const {
-        selectedThemes: selectedBuddyThemes,
-        setSelectedThemes: setSelectedBuddyThemes,
-    } = useThemeReducer();
+    const [selectedGender, setSelectedGender] = useState<string | null>(null);
 
-    const [showResult, setShowResult] = useState(false);
+    const [startAge, setStartAge] = useState<number>(20);
+    const [endAge, setEndAge] = useState<number>(70);
+
+    const [selectedMeetingPlace, setSelectedMeetingPlace] = useState<
+        string | null
+    >(null);
+
+    const [state, dispatch] = useReducer<
+        React.Reducer<ThemeState, ThemeAction>
+    >(themeReducer, initialState);
+
+    const [showResult, setShowResult] = useState<boolean | null>(null);
     const [visibleFirstItems, setVisibleFirstItems] = useState(8);
     const [visibleSecondItems, setVisibleSecondItems] = useState(6);
-    const [resultItems, setResultItems] = useState<TripWithContract[]>([]);
-    const [allItems, setAllItems] = useState<TripWithContract[]>([]);
-    const resultRef = useRef<HTMLDivElement>(null);
     const [isXL, setIsXL] = useState<boolean>(false);
+    const [filteredItems, setFilteredItems] = useState<TripWithContract[]>([]);
+    const [filteredAllItems, setFilteredAllItems] = useState<
+        TripWithContract[]
+    >([]);
 
-    const [PreferTripTheme] = usePreferTheme({ mode: 'trip' });
-    const [PreferBuddyTheme] = usePreferTheme({ mode: 'buddy' });
+    const [PreferTripTheme, selectedTripPreferTheme] = usePreferTheme({
+        mode: 'trip',
+    });
+    const [PreferBuddyTheme, selectedBuddyPreferTheme] = usePreferTheme({
+        mode: 'buddy',
+    });
 
-    const filters = {
+    const [filters, setFilters] = useState<Filters>({
         searchInput,
         startDateTimestamp,
         endDateTimestamp,
@@ -73,18 +112,102 @@ export default function SearchPageContainer() {
         startAge,
         endAge,
         selectedMeetingPlace,
-        selectedThemes: selectedTripThemes,
-        selectedBuddyThemes: selectedBuddyThemes,
+        selectedThemes: state.selectedTripThemes,
+        selectedBuddyThemes: state.selectedBuddyThemes,
+    });
+
+    const resultRef = useRef<HTMLDivElement>(null);
+
+    const resetThemes = () => {
+        dispatch({ type: 'RESET_THEMES' });
     };
 
-    const { resultItems: filteredResultItems, allItems: filteredAllItems } =
-        useFilteredTrips(filters);
+    const setSelectedThemes = (
+        value: string[],
+        type: 'SET_TRIP_THEMES' | 'SET_BUDDY_THEMES' | 'RESET_THEMES',
+    ) => {
+        dispatch({
+            type,
+            payload: value,
+        });
+    };
 
-    // 필터링된 데이터를 상태로 설정
+    // const { resultItems: filteredItems, allItems: filteredAllItems } =
+    //     useFilteredTrips(filters);
+
+    const handleShowResult = useCallback(async () => {
+        setFilters({
+            searchInput,
+            startDateTimestamp,
+            endDateTimestamp,
+            thirdLevelLocation,
+            selectedGender,
+            startAge,
+            endAge,
+            selectedMeetingPlace,
+            selectedThemes: state.selectedTripThemes,
+            selectedBuddyThemes: state.selectedBuddyThemes,
+        });
+
+        setShowResult(true);
+    }, [
+        searchInput,
+        startDateTimestamp,
+        endDateTimestamp,
+        thirdLevelLocation,
+        selectedGender,
+        startAge,
+        endAge,
+        selectedMeetingPlace,
+        state.selectedTripThemes,
+        state.selectedBuddyThemes,
+    ]);
+    // enter 누르면 검색 결과 보여주기
+    const handleKeyDown = useCallback(
+        (event: React.KeyboardEvent<HTMLInputElement>) => {
+            if (event.key === 'Enter') {
+                setShowResult(true);
+                handleShowResult();
+            }
+        },
+        [handleShowResult],
+    );
+
+    const loadMoreFirstItems = () => {
+        setVisibleFirstItems(prev => prev + 8);
+    };
+
+    const loadMoreSecondItems = () => {
+        setVisibleSecondItems(prev => prev + 6);
+    };
+
+    const visibleItems = () => {
+        if (showResult) {
+            if (isXL) {
+                return filteredItems.slice(0, visibleFirstItems);
+            } else {
+                return filteredItems;
+            }
+        }
+        return [];
+    };
+
     useEffect(() => {
-        setResultItems(filteredResultItems);
-        setAllItems(filteredAllItems);
-    }, [filteredResultItems, filteredAllItems]);
+        if (showResult === true && resultRef.current) {
+            const offset = 80;
+            // console.log('top ========>', top);
+            setTimeout(() => {
+                let top = 0;
+                if (resultRef.current) {
+                    top =
+                        resultRef.current.getBoundingClientRect().top +
+                        window.scrollY -
+                        offset;
+                }
+                window.scrollTo({ top, behavior: 'smooth' });
+            }, 400);
+        }
+    }, [showResult]); // showResult가 true가 될 때 스크롤 작업 수행
 
     useEffect(() => {
         const handleResize = () => {
@@ -98,78 +221,58 @@ export default function SearchPageContainer() {
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    }, [resultItems.length]);
+    }, []);
 
-    const handleShowResult = async () => {
-        setShowResult(true);
-
-        // 속도 지연
-        // 위에서 offset만큼 떨어진 위치로 스크롤 이동
-        setTimeout(() => {
-            const offset = 40;
-            if (resultRef.current) {
-                const top =
-                    resultRef.current.getBoundingClientRect().top +
-                    window.scrollY -
-                    offset;
-                window.scrollTo({ top, behavior: 'smooth' });
-            }
-        }, 100);
-
-        console.log('filters: ', filters);
-
-        // // 필터 리셋
-        // setSearchInput('');
-        // setStartDateTimestamp('');
-        // setEndDateTimestamp('');
-        // handleThirdLevelClick('');
-        // setSelectedGender(null);
-        // setStartAge(20);
-        // setEndAge(70);
-        // setSelectedMeetingPlace(null);
-        // setSelectedTripThemes([]);
-        // setSelectedBuddyThemes([]);
-
-        // // 쿼리 파라미터 업데이트
-        // updateQueryParams({
-        //     searchInput: '',
-        //     gender: null,
-        //     startAge: 20,
-        //     endAge: 70,
-        //     meetingPlace: null,
-        //     location: null,
-        //     startDate: '',
-        //     endDate: '',
-        //     themes: [],
-        //     buddyThemes: [],
-        // });
-    };
-
-    // enter 누르면 검색 결과 보여주기
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
-            handleShowResult();
+    useLayoutEffect(() => {
+        if (initialTrips) {
+            const allData = initialTrips.trips;
+            const filteredItems = applyFilters(allData, filters);
+            // setFilteredItems(
+            //     filteredItems.length === 0 ? allData : filteredItems,
+            // );
+            setFilteredItems(filteredItems);
+            setFilteredAllItems(allData);
         }
-    };
+        router.push(
+            `/search?searchInput=${filters.searchInput}&startDate=${filters.startDateTimestamp}&endDate=${filters.endDateTimestamp}&location=${filters.thirdLevelLocation}&gender=${filters.selectedGender}&startAge=${filters.startAge}&endAge=${filters.endAge}&meetingPlace=${filters.selectedMeetingPlace}&themes=${filters.selectedThemes}&buddyThemes=${filters.selectedBuddyThemes}`,
+        );
+    }, [router, filters, initialTrips]);
 
-    const loadMoreFirstItems = () => {
-        setVisibleFirstItems(prev => prev + 8);
-    };
+    useLayoutEffect(() => {
+        const searchInput = searchParams.get('searchInput');
+        const startDate = searchParams.get('startDate');
+        const endDate = searchParams.get('endDate');
+        const gender = searchParams.get('gender');
+        const startAge = searchParams.get('startAge');
+        const endAge = searchParams.get('endAge');
+        const meetingPlace = searchParams.get('meetingPlace');
+        const location = searchParams.get('location');
+        const themes = searchParams.getAll('themes');
+        const buddyThemes = searchParams.getAll('buddyThemes');
 
-    const loadMoreSecondItems = () => {
-        setVisibleSecondItems(prev => prev + 6);
-    };
+        const newFilters: Filters = {
+            searchInput,
+            startDateTimestamp: startDate,
+            endDateTimestamp: endDate,
+            selectedGender: gender,
+            startAge: Number(startAge) || 20,
+            endAge: Number(endAge) || 70,
+            selectedMeetingPlace: meetingPlace,
+            thirdLevelLocation: location,
+            selectedThemes: themes,
+            selectedBuddyThemes: buddyThemes,
+        };
 
-    const VisibleItems = () => {
-        if (showResult) {
-            if (isXL) {
-                return resultItems.slice(0, visibleFirstItems);
-            } else {
-                return resultItems;
-            }
-        }
-        return [];
-    };
+        if (newFilters) setFilters(newFilters);
+    }, [searchParams]);
+
+    useEffect(() => {
+        setSelectedThemes(selectedTripPreferTheme, 'SET_TRIP_THEMES');
+    }, [selectedTripPreferTheme]);
+
+    useEffect(() => {
+        setSelectedThemes(selectedBuddyPreferTheme, 'SET_BUDDY_THEMES');
+    }, [selectedBuddyPreferTheme]);
 
     return (
         <div className="p-5 xl:p-0 xl:py-5 bg-white">
@@ -213,37 +316,32 @@ export default function SearchPageContainer() {
                     title="여정 테마"
                     description="3가지를 선택해주세요."
                 />
-                <PreferTripTheme
-                    className="some-class"
-                    setSelectedTheme={setSelectedTripThemes}
-                />
+                <PreferTripTheme className="some-class" />
             </div>
             <div className="my-10">
                 <SearchPageTitle
                     title="버디즈 성향"
                     description="3가지를 선택해주세요."
                 />
-                <PreferBuddyTheme
-                    className="some-class"
-                    setSelectedTheme={setSelectedBuddyThemes}
-                />
+                <PreferBuddyTheme className="some-class" />
             </div>
 
             <button
                 id="result-section"
                 className="flex justify-center items-center mx-auto w-full xl:max-w-[348px] px-28 h-12 rounded-2xl bg-main-color font-semibold text-white text-xl mb-5 xl:mb-10 transition-colors duration-200 ease-in-out active:bg-gray-300 whitespace-nowrap"
                 onClick={() => {
+                    setShowResult(true);
                     handleShowResult();
                 }}
             >
                 검색 결과 보기
             </button>
 
-            {showResult && (
+            {showResult !== null && (
                 <div ref={resultRef}>
                     <SearchResult
-                        items={VisibleItems()}
-                        allTrips={allItems}
+                        items={visibleItems()}
+                        allTrips={filteredAllItems}
                         visibleFirstItems={visibleFirstItems}
                         visibleSecondItems={visibleSecondItems}
                         loadMoreFirstItems={loadMoreFirstItems}
@@ -253,7 +351,7 @@ export default function SearchPageContainer() {
                 </div>
             )}
 
-            <TopButton />
+            <TopButton setShowResult={setShowResult} />
         </div>
     );
 }
