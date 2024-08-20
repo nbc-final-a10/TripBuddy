@@ -28,6 +28,8 @@ export async function POST(request: NextRequest) {
 
     const notificationPayload = await request.json();
 
+    // console.log('notificationPayload ====>', notificationPayload);
+
     const {
         data: notification,
         error,

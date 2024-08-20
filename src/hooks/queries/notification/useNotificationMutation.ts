@@ -7,10 +7,10 @@ export function useNotificationMutation() {
     const queryClient = useQueryClient();
     return useMutation<Notification, Error, PartialNotification>({
         mutationFn: notification => postNotification(notification),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: [QUERY_KEY_NOTIFICATION],
-            });
-        },
+        // onSuccess: () => {
+        //     queryClient.invalidateQueries({
+        //         queryKey: [QUERY_KEY_NOTIFICATION],
+        //     });
+        // },
     });
 }

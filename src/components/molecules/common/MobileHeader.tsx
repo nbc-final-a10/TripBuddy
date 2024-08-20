@@ -108,9 +108,13 @@ const MobileHeader: React.FC = () => {
     };
 
     useEffect(() => {
+        if (isTripDetail) {
+            fetchTrip();
+        } else {
+            setTrip(null);
+        }
         if (!buddy) return;
         if (!uuid) return;
-        if (!isTripDetail) return setTrip(null);
         async function fetchTrip() {
             if (uuid) {
                 const trip = await getTrip(uuid);
@@ -119,8 +123,7 @@ const MobileHeader: React.FC = () => {
                 }
             }
         }
-        fetchTrip();
-    }, [uuid, buddy, isTripDetail]);
+    }, [uuid, buddy, isTripDetail, pathname]);
 
     if (!isShow) return null;
 
