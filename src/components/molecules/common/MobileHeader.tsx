@@ -119,7 +119,7 @@ const MobileHeader: React.FC = () => {
                 }
             }
         }
-        fetchTrip();
+        if (isTripDetail) fetchTrip();
     }, [uuid, buddy, isTripDetail]);
 
     if (!isShow) return null;

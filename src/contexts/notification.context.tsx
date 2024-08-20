@@ -25,7 +25,7 @@ import ContractModal from '@/components/organisms/contract/ContractModal';
 import fetchWrapper from '@/utils/api/fetchWrapper';
 import { Buddy } from '@/types/Auth.types';
 import { showAlert } from '@/utils/ui/openCustomAlert';
-import { useContractQueries } from '@/hooks/queries';
+import { useContractQueries, useNotificationQuery } from '@/hooks/queries';
 
 type NotificationProviderProps = {
     initialNotifications: Notification[] | undefined;
@@ -50,30 +50,41 @@ export const NotificationProvider = ({
 }: PropsWithChildren<NotificationProviderProps>) => {
     const { buddy } = useAuth();
 
+    const {
+        data,
+        isPending: isPendingNotification,
+        error,
+    } = useNotificationQuery();
+
+    const filteredNotifications = data?.filter(
+        notification => notification.notification_receiver === buddy?.buddy_id,
+    );
+    const initial = filteredNotifications || initialNotifications;
+
     const [notifications, setNotifications] = useState<ClassifiedNotification>({
         storyLikes:
-            initialNotifications?.filter(
+            initial?.filter(
                 notification =>
                     notification.notification_type === 'like' &&
                     notification.notification_isRead === false &&
                     notification.notification_sender !== buddy?.buddy_id,
             ) || [],
         follows:
-            initialNotifications?.filter(
+            initial?.filter(
                 notification =>
                     notification.notification_type === 'follow' &&
                     notification.notification_isRead === false &&
                     notification.notification_sender !== buddy?.buddy_id,
             ) || [],
         bookmarks:
-            initialNotifications?.filter(
+            initial?.filter(
                 notification =>
                     notification.notification_type === 'bookmark' &&
                     notification.notification_isRead === false &&
                     notification.notification_sender !== buddy?.buddy_id,
             ) || [],
         contracts:
-            initialNotifications?.filter(
+            initial?.filter(
                 notification =>
                     notification.notification_type === 'contract' &&
                     notification.notification_isRead === false &&
@@ -258,6 +269,43 @@ export const NotificationProvider = ({
         };
     }, [buddy, handleRealTimePostsDelete, handleRealTimePostsInsertUpdate]);
 
+    useEffect(() => {
+        const filteredNotifications = data?.filter(
+            notification =>
+                notification.notification_receiver === buddy?.buddy_id,
+        );
+        setNotifications({
+            storyLikes:
+                filteredNotifications?.filter(
+                    notification =>
+                        notification.notification_type === 'like' &&
+                        notification.notification_isRead === false &&
+                        notification.notification_sender !== buddy?.buddy_id,
+                ) || [],
+            follows:
+                filteredNotifications?.filter(
+                    notification =>
+                        notification.notification_type === 'follow' &&
+                        notification.notification_isRead === false &&
+                        notification.notification_sender !== buddy?.buddy_id,
+                ) || [],
+            bookmarks:
+                filteredNotifications?.filter(
+                    notification =>
+                        notification.notification_type === 'bookmark' &&
+                        notification.notification_isRead === false &&
+                        notification.notification_sender !== buddy?.buddy_id,
+                ) || [],
+            contracts:
+                filteredNotifications?.filter(
+                    notification =>
+                        notification.notification_type === 'contract' &&
+                        notification.notification_isRead === false &&
+                        notification.notification_sender !== buddy?.buddy_id,
+                ) || [],
+        });
+    }, [data, buddy]);
+
     const isPending = queries.some(query => query.isPending);
 
     useEffect(() => {
@@ -352,6 +400,13 @@ export const NotificationProvider = ({
     useEffect(() => {
         console.log('notifications 상태 변경 ====>', notifications);
     }, [notifications]);
+
+    useEffect(() => {
+        if (error) {
+            const message = error.message;
+            showAlert('error', message);
+        }
+    }, [error]);
 
     return (
         <NotificationContext.Provider
