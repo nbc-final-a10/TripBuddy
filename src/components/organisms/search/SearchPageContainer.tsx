@@ -249,6 +249,12 @@ export default function SearchPageContainer({
         setSelectedThemes(selectedBuddyPreferTheme, 'SET_BUDDY_THEMES');
     }, [selectedBuddyPreferTheme]);
 
+    useEffect(() => {
+        if (searchInput) {
+            setFilters(prev => ({ ...prev, searchInput }));
+        }
+    }, [searchInput]);
+
     return (
         <div className="p-5 xl:p-0 xl:py-5 bg-white">
             <SearchBars
