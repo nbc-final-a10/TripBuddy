@@ -24,10 +24,15 @@ export type Filters = {
 export const applyFilters = (trips: TripWithContract[], filters: Filters) => {
     let filteredItems = [...trips];
 
+    // console.log('filteredItems', filteredItems);
     // console.log('filters', filters);
 
     // 검색어
-    if (filters.searchInput && filters.searchInput.trim() !== '') {
+    if (
+        filters.searchInput &&
+        filters.searchInput.trim() !== '' &&
+        filters.searchInput !== 'null'
+    ) {
         filteredItems = filteredItems.filter(
             (item: TripWithContract) =>
                 item.trip_title

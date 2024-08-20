@@ -41,7 +41,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
             );
         });
 
-    // console.log('filteredItems: ', filteredItems);
+    // console.log('filteredItems 결과 ====>', filteredItems);
 
     return (
         <>
