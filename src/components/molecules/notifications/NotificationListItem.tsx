@@ -6,6 +6,8 @@ import { getTimeSinceUpload } from '@/utils/common/getTimeSinceUpload';
 import { Notification } from '@/types/Notification.types';
 import { useRouter } from 'next/navigation';
 import { useNotificationMutation } from '@/hooks/queries';
+import { useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEY_NOTIFICATION } from '@/constants/query.constants';
 
 interface NotificationListItemProps {
     notification: Notification;
@@ -14,6 +16,7 @@ interface NotificationListItemProps {
 const NotificationListItem: React.FC<NotificationListItemProps> = ({
     notification,
 }) => {
+    const queryClient = useQueryClient();
     const timeSinceUpload = getTimeSinceUpload(
         notification.notification_created_at,
     );
@@ -46,8 +49,12 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
                 notification_isRead: true,
             };
             mutateNotification(updatedNotification);
+            // queryClient.invalidateQueries({
+            //     queryKey: [QUERY_KEY_NOTIFICATION],
+            // });
+            router.push(url);
         }
-        router.push(url);
+
         // window.location.href = url; // 알림 누르면 unread 반영되기 위해 새로고침 되도록 임시 설정
     };
 

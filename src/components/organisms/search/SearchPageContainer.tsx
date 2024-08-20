@@ -135,33 +135,8 @@ export default function SearchPageContainer({
     // const { resultItems: filteredItems, allItems: filteredAllItems } =
     //     useFilteredTrips(filters);
 
-    const handleShowResult = useCallback(async () => {
-        setFilters({
-            searchInput,
-            startDateTimestamp,
-            endDateTimestamp,
-            thirdLevelLocation,
-            selectedGender,
-            startAge,
-            endAge,
-            selectedMeetingPlace,
-            selectedThemes: state.selectedTripThemes,
-            selectedBuddyThemes: state.selectedBuddyThemes,
-        });
+    const handleShowResult = useCallback(() => setShowResult(true), []);
 
-        setShowResult(true);
-    }, [
-        searchInput,
-        startDateTimestamp,
-        endDateTimestamp,
-        thirdLevelLocation,
-        selectedGender,
-        startAge,
-        endAge,
-        selectedMeetingPlace,
-        state.selectedTripThemes,
-        state.selectedBuddyThemes,
-    ]);
     // enter 누르면 검색 결과 보여주기
     const handleKeyDown = useCallback(
         (event: React.KeyboardEvent<HTMLInputElement>) => {

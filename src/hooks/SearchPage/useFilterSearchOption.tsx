@@ -24,6 +24,8 @@ export type Filters = {
 export const applyFilters = (trips: TripWithContract[], filters: Filters) => {
     let filteredItems = [...trips];
 
+    // console.log('filters', filters);
+
     // 검색어
     if (filters.searchInput && filters.searchInput.trim() !== '') {
         filteredItems = filteredItems.filter(
@@ -56,7 +58,7 @@ export const applyFilters = (trips: TripWithContract[], filters: Filters) => {
     }
 
     // 장소
-    if (filters.thirdLevelLocation !== null) {
+    if (filters.thirdLevelLocation && filters.thirdLevelLocation !== 'null') {
         filteredItems = filteredItems.filter((item: TripWithContract) =>
             item.trip_final_destination.includes(
                 filters.thirdLevelLocation as string,
@@ -84,7 +86,12 @@ export const applyFilters = (trips: TripWithContract[], filters: Filters) => {
     }
 
     // 나이
-    if (filters.startAge !== null && filters.endAge !== null) {
+    if (
+        filters.startAge !== null &&
+        filters.endAge !== null &&
+        filters.startAge !== 20 &&
+        filters.endAge !== 70
+    ) {
         filteredItems = filteredItems.filter(
             (item: TripWithContract) =>
                 item.trip_start_age >= filters.startAge! &&
@@ -93,7 +100,11 @@ export const applyFilters = (trips: TripWithContract[], filters: Filters) => {
     }
 
     // 여정 테마
-    if (filters.selectedThemes && filters.selectedThemes.length > 0) {
+    if (
+        filters.selectedThemes &&
+        filters.selectedThemes.length > 0 &&
+        filters.selectedThemes.some(theme => theme !== 'null' && theme !== '')
+    ) {
         filteredItems = filterAndSortTrips(
             filteredItems,
             filters.selectedThemes,
@@ -101,7 +112,13 @@ export const applyFilters = (trips: TripWithContract[], filters: Filters) => {
     }
 
     // 버디즈 성향
-    if (filters.selectedBuddyThemes && filters.selectedBuddyThemes.length > 0) {
+    if (
+        filters.selectedBuddyThemes &&
+        filters.selectedBuddyThemes.length > 0 &&
+        filters.selectedBuddyThemes.some(
+            theme => theme !== 'null' && theme !== '',
+        )
+    ) {
         filteredItems = filterAndSortTripsBuddies(
             filteredItems,
             filters.selectedBuddyThemes,

@@ -21,6 +21,7 @@ export async function postNotification(
     try {
         const data = await fetchWrapper<Notification>(url, {
             method: 'POST',
+            cache: 'no-store',
             body: JSON.stringify(notification),
         });
         return data;

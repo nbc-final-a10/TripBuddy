@@ -3,7 +3,7 @@
 import DefaultLoader from '@/components/atoms/common/DefaultLoader';
 import { StoryOverlay, StoryWithBuddies } from '@/types/Story.types';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React, { MouseEvent, useRef, useState, useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Close from '../../../../public/svg/Close.svg';
@@ -26,23 +26,27 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ id, stories }) => {
     const { buddy } = useAuth();
     const router = useRouter();
     const scrollRef = useRef<HTMLDivElement>(null);
-    const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
     const {
         data: queryStories,
         isPending,
         error: selectedStoriesError,
     } = useSpecificStoryQuery(id);
+
     const {
         mutate: deleteStory,
         isPending: isDeleting,
         error: deleteStoryError,
     } = useDeleteStoryMutation();
 
+    const [selectedIndex, setSelectedIndex] = useState<number>(
+        stories.findIndex(story => story.story_id === id),
+    );
+
     useTapScroll({ refs: [scrollRef] });
 
     const [selectedStory, setSelectedStory] = useState<StoryWithBuddies>(
-        stories[0],
+        queryStories ? queryStories[selectedIndex] : stories[0],
     );
 
     const { data: likes, isPending: isLikesPending } = useStoryLikesQuery({
@@ -55,20 +59,10 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ id, stories }) => {
         if (next === 'before') {
             if (selectedIndex > 0) {
                 setSelectedIndex(selectedIndex - 1);
-                setSelectedStory(
-                    !queryStories
-                        ? stories[selectedIndex - 1]
-                        : queryStories[selectedIndex - 1],
-                );
             }
         } else {
             if (selectedIndex < stories.length - 1) {
                 setSelectedIndex(selectedIndex + 1);
-                setSelectedStory(
-                    !queryStories
-                        ? stories[selectedIndex + 1]
-                        : queryStories[selectedIndex + 1],
-                );
             }
         }
     };
@@ -76,7 +70,7 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ id, stories }) => {
     const handleSelectStory = (story: StoryWithBuddies, index: number) => {
         setSelectedStory(story);
         setSelectedIndex(index);
-        router.push(`/stories/${story.buddies.buddy_id}`);
+        router.push(`/stories/${story.story_id}`);
     };
 
     const handleDeleteStory = () => {
@@ -87,6 +81,15 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ id, stories }) => {
     };
 
     useEffect(() => {
+        if (selectedStoriesError || deleteStoryError) {
+            showAlert('error', '스토리를 불러오는데 실패했습니다.');
+        }
+    }, [selectedStoriesError, deleteStoryError]);
+
+    useEffect(() => {
+        if (queryStories) {
+            setSelectedStory(queryStories[selectedIndex]);
+        }
         if (scrollRef.current) {
             const selectedButton = scrollRef.current.children[
                 selectedIndex
@@ -99,20 +102,11 @@ const StoryDetail: React.FC<StoryDetailProps> = ({ id, stories }) => {
                 });
             }
         }
-    }, [selectedIndex]);
+    }, [queryStories, selectedIndex]);
 
     useEffect(() => {
-        if (selectedStoriesError || deleteStoryError) {
-            showAlert('error', '스토리를 불러오는데 실패했습니다.');
-        }
-    }, [selectedStoriesError, deleteStoryError]);
-
-    useEffect(() => {
-        if (queryStories) {
-            setSelectedStory(queryStories[0]);
-            router.push(`/stories/${queryStories[0].story_id}`);
-        }
-    }, [queryStories, router]);
+        router.push(`/stories/${selectedStory.story_id}`);
+    }, [selectedStory, router]);
 
     useEffect(() => {
         if (isLikesPending || isDeleting || isPending) {
