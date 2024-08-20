@@ -206,10 +206,10 @@ const TripCard: React.FC<TripCardProps> = ({
                         buddy.buddy_id,
                     );
                     if (response && response.status === 200) {
-                        console.log('response ====>', response);
-                        queryClient.invalidateQueries({
-                            queryKey: [QUERY_KEY_TRIP, trip.trip_id],
-                        });
+                        // console.log('response ====>', response);
+                        // queryClient.invalidateQueries({
+                        //     queryKey: [QUERY_KEY_TRIP, trip.trip_id],
+                        // });
                         queryClient.invalidateQueries({
                             queryKey: [QUERY_KEY_TRIP_INFINITE],
                         });
