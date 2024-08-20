@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
     const { data: myBookmarkedTrips, error: myBookmarkedTripsError } =
         await supabase
             .from('trips')
-            .select('*')
+            .select('*, contract (*)')
             .in('trip_id', bookmark_trip_ids);
 
     if (myBookmarkedTripsError) {
