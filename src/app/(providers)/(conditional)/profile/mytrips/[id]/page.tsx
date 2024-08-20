@@ -7,6 +7,7 @@ import CreatedTrips from '@/components/molecules/profile/myTrips/CreatedTrips';
 import ParticipatedTrips from '@/components/molecules/profile/myTrips/ParticipatedTrips';
 import { useParams } from 'next/navigation';
 import BookmarkedTrips from '@/components/molecules/profile/myTrips/BookmarkedTrips';
+import { TripWithContract } from '@/types/Trips.types';
 
 export default function MyTrips() {
     const { id } = useParams<{ id: string }>();
@@ -27,7 +28,20 @@ export default function MyTrips() {
                         method: 'GET',
                     },
                 );
-                setTrips(data);
+
+                const bookmarkedTrips = await fetchWrapper<TripWithContract[]>(
+                    `/api/trips/bookmarks?bookmark_buddy_id=${id}`,
+                    {
+                        method: 'GET',
+                    },
+                );
+
+                const newTrips = {
+                    ...data,
+                    bookmarked: bookmarkedTrips,
+                };
+
+                setTrips(newTrips);
             } catch (error) {
                 console.error('Error fetching trips:', error);
             }
@@ -41,6 +55,8 @@ export default function MyTrips() {
         const viewParam = queryParams.get('view');
         setView(viewParam);
     }, [id]);
+
+    console.log(trips);
 
     return (
         <>
