@@ -17,6 +17,7 @@ import {
     PropsWithChildren,
     useCallback,
     useEffect,
+    useMemo,
     useRef,
     useState,
 } from 'react';
@@ -116,46 +117,106 @@ export const NotificationProvider = ({
                 if (payload.new.notification_type === 'like') {
                     setNotifications(prev => {
                         // notification_isRead 값이 false인 경우만 추가
-                        if (payload.new.notification_isRead === false) {
+                        if (
+                            payload.new.notification_isRead === false &&
+                            !prev.storyLikes.some(
+                                notification =>
+                                    notification.notification_id ===
+                                    payload.new.notification_id,
+                            )
+                        ) {
                             return {
                                 ...prev,
                                 storyLikes: [...prev.storyLikes, payload.new],
                             };
                         } else {
-                            return prev;
+                            return {
+                                ...prev,
+                                storyLikes: prev.storyLikes.filter(
+                                    item =>
+                                        item.notification_id !==
+                                        payload.new.notification_id,
+                                ),
+                            };
                         }
                     });
                 }
                 if (payload.new.notification_type === 'follow') {
                     setNotifications(prev => {
-                        if (payload.new.notification_isRead === false) {
+                        if (
+                            payload.new.notification_isRead === false &&
+                            !prev.follows.some(
+                                notification =>
+                                    notification.notification_id ===
+                                    payload.new.notification_id,
+                            )
+                        ) {
                             return {
                                 ...prev,
                                 follows: [...prev.follows, payload.new],
                             };
                         } else {
-                            return prev;
+                            return {
+                                ...prev,
+                                follows: prev.follows.filter(
+                                    item =>
+                                        item.notification_id !==
+                                        payload.new.notification_id,
+                                ),
+                            };
                         }
                     });
                 }
                 if (payload.new.notification_type === 'bookmark') {
                     setNotifications(prev => {
-                        if (payload.new.notification_isRead === false) {
+                        if (
+                            payload.new.notification_isRead === false &&
+                            !prev.bookmarks.some(
+                                notification =>
+                                    notification.notification_id ===
+                                    payload.new.notification_id,
+                            )
+                        ) {
                             return {
                                 ...prev,
                                 bookmarks: [...prev.bookmarks, payload.new],
                             };
                         } else {
-                            return prev;
+                            return {
+                                ...prev,
+                                bookmarks: prev.bookmarks.filter(
+                                    item =>
+                                        item.notification_id !==
+                                        payload.new.notification_id,
+                                ),
+                            };
                         }
                     });
                 }
                 if (payload.new.notification_type === 'contract') {
                     setNotifications(prev => {
-                        return {
-                            ...prev,
-                            contracts: [...prev.contracts, payload.new],
-                        };
+                        if (
+                            payload.new.notification_isRead === false &&
+                            !prev.contracts.some(
+                                notification =>
+                                    notification.notification_id ===
+                                    payload.new.notification_id,
+                            )
+                        ) {
+                            return {
+                                ...prev,
+                                contracts: [...prev.contracts, payload.new],
+                            };
+                        } else {
+                            return {
+                                ...prev,
+                                contracts: prev.contracts.filter(
+                                    item =>
+                                        item.notification_id !==
+                                        payload.new.notification_id,
+                                ),
+                            };
+                        }
                     });
                 }
             }
@@ -188,44 +249,96 @@ export const NotificationProvider = ({
             );
 
             if (notification) {
-                setNotifications(prev => ({
-                    ...prev,
-                    storyLikes: prev.storyLikes.filter(
-                        item =>
-                            item.notification_id !==
-                            payload.old.notification_id,
-                    ),
-                }));
+                setNotifications(prev => {
+                    if (
+                        payload.old.notification_isRead === false &&
+                        !prev.storyLikes.some(
+                            notification =>
+                                notification.notification_id ===
+                                payload.old.notification_id,
+                        )
+                    ) {
+                        return {
+                            ...prev,
+                            storyLikes: prev.storyLikes.filter(
+                                item =>
+                                    item.notification_id !==
+                                    payload.old.notification_id,
+                            ),
+                        };
+                    } else {
+                        return prev;
+                    }
+                });
             }
             if (followNotification) {
-                setNotifications(prev => ({
-                    ...prev,
-                    follows: prev.follows.filter(
-                        item =>
-                            item.notification_id !==
-                            payload.old.notification_id,
-                    ),
-                }));
+                setNotifications(prev => {
+                    if (
+                        payload.old.notification_isRead === false &&
+                        !prev.follows.some(
+                            notification =>
+                                notification.notification_id ===
+                                payload.old.notification_id,
+                        )
+                    ) {
+                        return {
+                            ...prev,
+                            follows: prev.follows.filter(
+                                item =>
+                                    item.notification_id !==
+                                    payload.old.notification_id,
+                            ),
+                        };
+                    } else {
+                        return prev;
+                    }
+                });
             }
             if (bookmarkNotification) {
-                setNotifications(prev => ({
-                    ...prev,
-                    bookmarks: prev.bookmarks.filter(
-                        item =>
-                            item.notification_id !==
-                            payload.old.notification_id,
-                    ),
-                }));
+                setNotifications(prev => {
+                    if (
+                        payload.old.notification_isRead === false &&
+                        !prev.bookmarks.some(
+                            notification =>
+                                notification.notification_id ===
+                                payload.old.notification_id,
+                        )
+                    ) {
+                        return {
+                            ...prev,
+                            bookmarks: prev.bookmarks.filter(
+                                item =>
+                                    item.notification_id !==
+                                    payload.old.notification_id,
+                            ),
+                        };
+                    } else {
+                        return prev;
+                    }
+                });
             }
             if (contractNotification) {
-                setNotifications(prev => ({
-                    ...prev,
-                    contracts: prev.contracts.filter(
-                        item =>
-                            item.notification_id !==
-                            payload.old.notification_id,
-                    ),
-                }));
+                setNotifications(prev => {
+                    if (
+                        payload.old.notification_isRead === false &&
+                        !prev.contracts.some(
+                            notification =>
+                                notification.notification_id ===
+                                payload.old.notification_id,
+                        )
+                    ) {
+                        return {
+                            ...prev,
+                            contracts: prev.contracts.filter(
+                                item =>
+                                    item.notification_id !==
+                                    payload.old.notification_id,
+                            ),
+                        };
+                    } else {
+                        return prev;
+                    }
+                });
             }
         },
         [notifications],

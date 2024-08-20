@@ -49,9 +49,9 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
                 notification_isRead: true,
             };
             mutateNotification(updatedNotification);
-            queryClient.invalidateQueries({
-                queryKey: [QUERY_KEY_NOTIFICATION],
-            });
+            // queryClient.invalidateQueries({
+            //     queryKey: [QUERY_KEY_NOTIFICATION],
+            // });
             router.push(url);
         }
 

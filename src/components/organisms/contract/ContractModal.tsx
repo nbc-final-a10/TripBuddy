@@ -28,7 +28,7 @@ const ContractModal: React.FC<ContractModalProps> = ({
     const [index, setIndex] = useState(0);
     const modal = useModal();
 
-    console.log('queries ====>', queries);
+    // console.log('queries ====>', queries);
 
     const { mutate: mutateNotification, error: notificationError } =
         useNotificationMutation();
@@ -72,6 +72,7 @@ const ContractModal: React.FC<ContractModalProps> = ({
             const newNotification = notifications[index];
             newNotification.notification_isRead = true;
             // console.log('newNotification ====>', newNotification);
+
             mutateNotification(newNotification);
             if (index < notifications.length - 1) setIndex(prev => prev + 1);
             if (index === notifications.length - 1) modal.closeModal();
