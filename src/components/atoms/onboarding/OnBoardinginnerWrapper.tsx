@@ -30,7 +30,7 @@ const OnBoardingInnerWrapper = ({
                     {
                         'justify-start': align === 'start',
                         'justify-end': align === 'end',
-                        'justify-center': align === 'center',
+                        'justify-center xl:justify-start': align === 'center',
                     },
                 ),
                 className,
