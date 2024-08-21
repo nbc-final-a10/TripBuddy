@@ -5,6 +5,7 @@ import { TripWithContract } from '@/types/Trips.types';
 import Image from 'next/image';
 import MascotImage from '@/components/atoms/common/MascotImage';
 import { useTapScroll } from '@/hooks';
+import Link from 'next/link';
 
 type SearchResultProps = {
     items: TripWithContract[];
@@ -99,42 +100,46 @@ const SearchResult: React.FC<SearchResultProps> = ({
                                     key={index}
                                     className="shadow-md w-[335px] h-[93px] rounded-[11px] mx-auto mb-6 xl:mx-0 xl:w-full xl:h-[120px] p-3"
                                 >
-                                    <div className="cursor-pointer flex items-center h-full">
-                                        <div className="bg-grayscale-color-85 rounded-lg w-[60px] h-[60px]">
-                                            {item.trip_thumbnail ? (
-                                                <Image
-                                                    src={item.trip_thumbnail}
-                                                    alt={
-                                                        item.trip_title ||
-                                                        'Thumnail'
-                                                    }
-                                                    width={60}
-                                                    height={60}
-                                                    className="w-[60px] h-[60px] rounded-lg object-cover"
-                                                />
-                                            ) : (
-                                                <MascotImage intent="happy" />
-                                            )}
-                                        </div>
-                                        <div className="flex flex-col justify-between w-[218px] ml-8">
-                                            <span className="text-xs font-bold text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis">
-                                                {item.trip_theme1 &&
-                                                item.trip_theme2 &&
-                                                item.trip_theme3
-                                                    ? `#${item.trip_theme1} #${item.trip_theme2} #${item.trip_theme3}`
-                                                    : '#태그없음'}
-                                            </span>
-                                            <p className="font-semibold truncate mt-1 mb-2.5">
-                                                {item.trip_title}
-                                            </p>
-                                            <div className="flex items-center justify-between w-full mb-1">
-                                                <p className="truncate max-w-[calc(100%-70px)]">
-                                                    {item.trip_content}
+                                    <Link href={`/trips/${item.trip_id}`}>
+                                        <div className="cursor-pointer flex items-center h-full">
+                                            <div className="bg-grayscale-color-85 rounded-lg w-[60px] h-[60px]">
+                                                {item.trip_thumbnail ? (
+                                                    <Image
+                                                        src={
+                                                            item.trip_thumbnail
+                                                        }
+                                                        alt={
+                                                            item.trip_title ||
+                                                            'Thumnail'
+                                                        }
+                                                        width={60}
+                                                        height={60}
+                                                        className="w-[60px] h-[60px] rounded-lg object-cover"
+                                                    />
+                                                ) : (
+                                                    <MascotImage intent="happy" />
+                                                )}
+                                            </div>
+                                            <div className="flex flex-col justify-between w-[218px] ml-8">
+                                                <span className="text-xs font-bold text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis">
+                                                    {item.trip_theme1 &&
+                                                    item.trip_theme2 &&
+                                                    item.trip_theme3
+                                                        ? `#${item.trip_theme1} #${item.trip_theme2} #${item.trip_theme3}`
+                                                        : '#태그없음'}
+                                                </span>
+                                                <p className="font-semibold truncate mt-1 mb-2.5">
+                                                    {item.trip_title}
                                                 </p>
-                                                <span>{`${item.trip_max_buddies_counts}/4`}</span>
+                                                <div className="flex items-center justify-between w-full mb-1">
+                                                    <p className="truncate max-w-[calc(100%-70px)]">
+                                                        {item.trip_content}
+                                                    </p>
+                                                    <span>{`${item.trip_max_buddies_counts}/4`}</span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </Link>
                                 </li>
                             ))}
                     </ul>
