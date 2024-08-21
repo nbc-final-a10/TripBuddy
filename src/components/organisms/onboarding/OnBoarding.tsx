@@ -113,6 +113,7 @@ const OnBoarding: React.FC = () => {
                 setStep(0);
                 return redirectPermanently(buddy.buddy_id);
             }
+            return setStep(1);
         }
         if (step === 2) {
             const jsDate = calenderValue.toDate('UTC'); // 'UTC' 타임존으로 변환
@@ -137,6 +138,7 @@ const OnBoarding: React.FC = () => {
                 setStep(2);
                 return redirectPermanently(buddy.buddy_id);
             }
+            return setStep(3);
         }
         if (step === 3) {
             const result = onBoardingValidation(selectedGender, step);
@@ -147,6 +149,7 @@ const OnBoarding: React.FC = () => {
                 setStep(3);
                 return redirectPermanently(buddy.buddy_id);
             }
+            return setStep(4);
         }
         if (step === 4) {
             const result = onBoardingValidation(
@@ -163,6 +166,7 @@ const OnBoarding: React.FC = () => {
                 setStep(4);
                 return redirectPermanently(buddy.buddy_id);
             }
+            return setStep(5);
         }
         if (step === 5) {
             const result = onBoardingValidation(selectedMbti, step);
@@ -173,6 +177,7 @@ const OnBoarding: React.FC = () => {
                 setStep(5);
                 return redirectPermanently(buddy.buddy_id);
             }
+            return setStep(6);
         }
         if (step === 7) {
             const result = onBoardingValidation(selectedBuddyTheme, step);
@@ -185,6 +190,7 @@ const OnBoarding: React.FC = () => {
                 setStep(7);
                 return redirectPermanently(buddy.buddy_id);
             }
+            return setStep(8);
         }
         if (step === 8) {
             const result = onBoardingValidation(selectedTripTheme, step);
@@ -197,6 +203,7 @@ const OnBoarding: React.FC = () => {
                 setStep(8);
                 return redirectPermanently(buddy.buddy_id);
             }
+            return setStep(9);
         }
         if (step === 9) {
             const result = onBoardingValidation(
@@ -214,15 +221,18 @@ const OnBoarding: React.FC = () => {
                 setStep(9);
                 return redirectPermanently(buddy.buddy_id);
             }
+            return setStep(10);
         }
         if (step === 10) {
             if (selectedFile) {
                 const file = selectedFile;
-                if (file && isEdit)
+                if (file && isEdit) {
                     mutate({
                         buddyInfo: buddyInfoRef.current,
                         imageFile: file,
                     });
+                    return setStep(11);
+                }
             } else {
                 showAlert(
                     'caution',
@@ -232,12 +242,17 @@ const OnBoarding: React.FC = () => {
                             if (isEdit) {
                                 buddyInfoRef.current.buddy_profile_pic = `https://pedixhwyfardtsanotrp.supabase.co/storage/v1/object/public/buddies/profile/default_profile.webp`;
                                 setStep(11);
+                            } else {
+                                setStep(11);
                             }
                         },
                     },
                 );
                 return setStep(10);
             }
+        }
+        if (step === 11) {
+            return setStep(12);
         }
     };
 
@@ -269,13 +284,15 @@ const OnBoarding: React.FC = () => {
 
     useEffect(() => {
         if (isEdit !== null) {
+            console.log('step =====>', step);
+            console.log('stepToDisplay =====>', stepToDisplay);
+            console.log('isEdit =====>', isEdit);
             if (step === stepToDisplay && step <= 11 && isEdit) {
                 router.push(`/onboarding?funnel=${step}&mode=edit`);
-                setStepToDisplay(step);
             } else if (step === stepToDisplay && step <= 11 && !isEdit) {
                 router.push(`/onboarding?funnel=${step}&mode=first`);
-                setStepToDisplay(step);
-            } else if (step === stepToDisplay && step > 11) {
+            }
+            if (step === stepToDisplay && step > 11) {
                 if (!isEdit) buddyInfoRef.current.buddy_isOnBoarding = true;
                 // console.log('최종 버디즈 정보 =====>', buddyInfoRef.current);
                 mutate({
@@ -292,6 +309,7 @@ const OnBoarding: React.FC = () => {
         const mode = searchParams.get('mode');
         if (funnel) setStep(Number(funnel));
         if (mode === 'edit') setIsEdit(true);
+        else setIsEdit(false);
     }, [searchParams, setStep]);
 
     useLayoutEffect(() => {
@@ -305,6 +323,10 @@ const OnBoarding: React.FC = () => {
             setShowComponent(true);
         }
     }, [isEdit, step]);
+
+    useEffect(() => {
+        setStepToDisplay(step);
+    }, [step]);
 
     return (
         <section className="w-full flex flex-col h-[calc(100dvh-57px-54px)] xl:w-[720px] xl:mx-auto xl:h-[calc(100dvh-100px)]">
