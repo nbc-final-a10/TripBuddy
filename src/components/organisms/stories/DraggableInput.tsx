@@ -57,21 +57,30 @@ const DraggableInput = ({
         if (inputRef.current) {
             inputRef.current.style.top = `${position.y + 20}px`;
             setPosition({ x: position.x, y: position.y + 20 });
-            // inputRef.current.focus();
+            inputRef.current.focus();
         }
     };
     const handleDelete = () => {
         setTexts(prev => prev.slice(0, -1));
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
     };
 
     const handleReset = () => {
         setTexts([]);
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
     };
 
     const handleTextColor = () => {
         setTextColor(prev =>
             prev === 'text-white' ? 'text-black' : 'text-white',
         );
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
     };
 
     useLayoutEffect(() => {

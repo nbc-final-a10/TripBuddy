@@ -35,9 +35,11 @@ const OnBoardingInput = forwardRef(
                         className="w-[90%] h-[80px] border-none bg-gray-200"
                         ref={ref as React.LegacyRef<HTMLInputElement>}
                     />
-                    <p className="text-sm text-gray-500">
-                        실명으로 작성해 주세요
-                    </p>
+                    {mode === 'nickname' && (
+                        <p className="text-sm text-gray-500">
+                            실명으로 작성해 주세요
+                        </p>
+                    )}
                 </OnBoardingInnerWrapper>
             </OnBoardingWrapper>
         );
