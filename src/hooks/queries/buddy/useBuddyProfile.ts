@@ -9,6 +9,7 @@ export const fetchBuddyProfile = async (id: string) => {
             `/api/buddyProfile/buddy?id=${id}`,
             {
                 method: 'GET',
+                cache: 'no-store',
             },
         );
         return data;
