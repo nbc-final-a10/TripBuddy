@@ -99,9 +99,6 @@ export const validateStep = async (
         return true;
     }
     if (step === 5) {
-        if (!tripImageFile) {
-            return 'no-image';
-        }
         if (!tripTitle) {
             showAlert('caution', '여정 제목을 입력해 주세요.');
             return false;
@@ -109,6 +106,9 @@ export const validateStep = async (
         if (!tripContent) {
             showAlert('caution', '여정 내용을 입력해 주세요.');
             return false;
+        }
+        if (!tripImageFile) {
+            return 'no-image';
         }
         return true;
     }
