@@ -34,7 +34,7 @@ const ThirdLevelSection: React.FC<ThirdLevelSectionProps> = memo(
                         pathname === '/write' && 'h-[39vh]',
                         pathname.startsWith('/edit') && 'h-[70%] xl:h-[450px]',
                         pathname.startsWith('/onboarding') &&
-                            'h-[44vh] xl:h-[450px]',
+                            'h-[44vh] xl:h-[44vh]',
                         !secondLevelLocation &&
                             'hidden xl:flex xl:min-h-[50vh] xl:h-[50vh]',
                     )}
