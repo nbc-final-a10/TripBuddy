@@ -1,3 +1,4 @@
+'use client';
 import React, { useRef } from 'react';
 import SearchPageTitle from '../../atoms/search/SearchPageTitle';
 import HomePageTrips from '../homepage/HomePageTrips';
@@ -5,6 +6,7 @@ import { TripWithContract } from '@/types/Trips.types';
 import Image from 'next/image';
 import MascotImage from '@/components/atoms/common/MascotImage';
 import { useTapScroll } from '@/hooks';
+import { useRouter } from 'next/navigation';
 
 type SearchResultProps = {
     items: TripWithContract[];
@@ -25,6 +27,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
     loadMoreSecondItems,
     isXL,
 }) => {
+    const router = useRouter();
     const tripsRef = useRef<HTMLDivElement>(null);
     useTapScroll({ refs: [tripsRef] });
 
@@ -98,6 +101,9 @@ const SearchResult: React.FC<SearchResultProps> = ({
                                 <li
                                     key={index}
                                     className="shadow-md w-[335px] h-[93px] rounded-[11px] mx-auto mb-6 xl:mx-0 xl:w-full xl:h-[120px] p-3"
+                                    onClick={() => {
+                                        router.push(`/trips/${item.trip_id}`);
+                                    }}
                                 >
                                     <div className="cursor-pointer flex items-center h-full">
                                         <div className="bg-grayscale-color-85 rounded-lg w-[60px] h-[60px]">
