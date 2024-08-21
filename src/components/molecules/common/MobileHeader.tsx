@@ -38,6 +38,7 @@ const MobileHeader: React.FC = () => {
     const isOnboarding = pathname === '/onboarding';
     const isProfile = pathname.startsWith('/profile/');
     const isEditTrips = pathname.startsWith('/edit/trips');
+    const isEditProfile = pathname.startsWith('/edit/profile');
     const isStoryWrite = pathname === '/write/story';
     const isLocation = pathname === '/search/location';
     const isDate = pathname === '/search/date';
@@ -66,6 +67,7 @@ const MobileHeader: React.FC = () => {
         (isNotification && '알림') ||
         (isRecover && '비밀번호 찾기') ||
         (isEditTrips && '') ||
+        (isEditProfile && '내 정보 수정') ||
         (isRanking && '버디즈');
 
     const isShow =
@@ -86,7 +88,8 @@ const MobileHeader: React.FC = () => {
         isNotification ||
         isRecover ||
         isRanking ||
-        isEditTrips;
+        isEditTrips ||
+        isEditProfile;
 
     const handleBack = () => {
         if (isRecover) {
