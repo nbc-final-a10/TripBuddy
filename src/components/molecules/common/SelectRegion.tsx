@@ -62,7 +62,7 @@ const SelectRegions = forwardRef<HTMLElement, SelectRegionProps>(
                 {/* 도시/대륙 선택 */}
                 <section
                     className={twMerge(
-                        'overflow-x-scroll scrollbar-hidden flex gap-[10px] xl:h-[10%] xl:pb-6 justify-center items-center',
+                        'overflow-x-scroll scrollbar-hidden flex gap-[10px] xl:h-[10%] xl:pb-6 items-center',
                         innerHeight && innerHeight < 659 && 'h-[42px]',
                     )}
                     ref={ref}
