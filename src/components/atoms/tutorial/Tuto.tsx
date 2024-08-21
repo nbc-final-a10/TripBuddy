@@ -1,5 +1,4 @@
 import React from 'react';
-// import DefaultLoader from '../common/DefaultLoader';
 import Image from 'next/image';
 
 type TutoProps = {
@@ -58,23 +57,8 @@ const content = [
 ];
 
 const Tuto: React.FC<TutoProps> = ({ step }) => {
-    // const [isImageLoaded, setIsImageLoaded] = useState(false);
-
-    // useEffect(() => {
-    //     setIsImageLoaded(false);
-    //     const img = new Image();
-    //     img.src = content[step].src;
-    //     img.onload = () => {
-    //         setIsImageLoaded(true);
-    //     };
-    //     img.onerror = () => {
-    //         setIsImageLoaded(false);
-    //     };
-    // }, [step]);
-
     return (
         <div className="relative h-full bg-white pt-[8px]">
-            {/* {!isImageLoaded && <DefaultLoader />} */}
             <div className="relative h-[18%] flex flex-col justify-start items-center xl:h-[23%]">
                 <h1 className="text-center font-bold text-2xl md:text-3xl ">
                     {content[step].title}
